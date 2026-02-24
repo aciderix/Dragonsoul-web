@@ -1,89 +1,118 @@
-import org.teavm.tooling.*;
+import org.teavm.tooling.TeaVMTool;
+import org.teavm.tooling.TeaVMTargetType;
+import org.teavm.vm.TeaVMOptimizationLevel;
 import org.teavm.diagnostics.Problem;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Phase 3.1 — Compile DragonSoul (RPGMain) en JavaScript via TeaVM.
+ *
+ * Utilise le classpath courant (passé par Gradle via -cp) pour inclure :
+ *  - Les stubs (commons-logging, NetworkProvider)
+ *  - Le launcher (DragonSoulLauncher + WebDeviceInfo)
+ *  - Les JARs du jeu (classes1.jar, classes2.jar)
+ *  - La classlib TeaVM
+ *
+ * Exécuté via : gradle buildWeb
+ * Sortie attendue : output/web/classes.js (~2-5 Mo)
+ */
 public class CompileRPGMain {
+
     public static void main(String[] args) throws Exception {
+        String outputDir = System.getProperty("output.dir", "output/web");
+
         long start = System.currentTimeMillis();
-        
+        new File(outputDir).mkdirs();
+
+        System.out.println("=== TeaVM Phase 3.1 — Boot RPGMain ===");
+        System.out.println("Output : " + outputDir);
+
         TeaVMTool tool = new TeaVMTool();
         tool.setTargetType(TeaVMTargetType.JAVASCRIPT);
         tool.setMainClass("DragonSoulLauncher");
-        tool.setTargetDirectory(new File("/tmp/teavm_rpgmain_out"));
-        tool.setLog(new ConsoleTeaVMToolLog(true));
+        tool.setTargetDirectory(new File(outputDir));
         tool.setObfuscated(false);
-        
+        tool.setOptimizationLevel(TeaVMOptimizationLevel.SIMPLE);
+
+        // CLEF : ignorer les classes manquantes (java.net.*, javax.crypto.*, KryoNet, OkHttp...)
+        // Ces classes ne sont utilisees que par le code reseau, pas le rendu.
+        tool.setStrict(false);
+        System.out.println("strict=false active");
+
+        // Construction du classpath depuis java.class.path (fourni par Gradle JavaExec)
+        // On utilise setClassPath() pour eviter les conflits de classloader avec Gradle
+        String classPathStr = System.getProperty("java.class.path");
+        System.out.println("Entrees classpath : " + classPathStr.split(File.pathSeparator).length);
+
         List<File> cp = new ArrayList<>();
-        // 1. Our launcher
-        cp.add(new File("/tmp/teavm_test/classes"));
-        // 2. Web stubs (NetworkProvider, EmptyNetworkProvider) - BEFORE game JARs!
-        cp.add(new File("/tmp/web_stubs/classes"));
-        // 3. Logging stubs
-        cp.add(new File("/tmp/lbq_classes"));
-        // 4. Game JARs
-        cp.add(new File("/tmp/game_classes1.jar"));
-        cp.add(new File("/tmp/game_classes2.jar"));
-        // 5. TeaVM runtime
-        for (File f : new File("/tmp/teavm_libs").listFiles()) {
-            if (f.getName().endsWith(".jar")) cp.add(f);
+        for (String entry : classPathStr.split(File.pathSeparator)) {
+            File f = new File(entry);
+            if (f.exists()) {
+                cp.add(f);
+            }
         }
         tool.setClassPath(cp);
-        
-        try { tool.generate(); } catch (Exception e) { 
-            System.out.println("Exception: " + e.getMessage()); 
+
+        System.out.println("Lancement de la compilation TeaVM...");
+        try {
+            tool.generate();
+        } catch (Exception e) {
+            System.out.println("Exception TeaVM : " + e.getMessage());
+            e.printStackTrace();
         }
-        
+
         long elapsed = (System.currentTimeMillis() - start) / 1000;
-        System.out.println("\n========================================");
-        System.out.println("=== TEAVM COMPILATION RESULTS ===");
-        System.out.println("========================================");
-        System.out.println("Time: " + elapsed + "s");
-        System.out.println("Classes compiled: " + tool.getClasses().size());
-        
-        int severe = 0, warn = 0;
+        System.out.println("\n=== RESULTATS DE COMPILATION ===");
+        System.out.println("Duree : " + elapsed + "s");
+
+        // Rapport des erreurs
+        int severe = 0;
         Map<String, Integer> errorTypes = new TreeMap<>();
-        
+
         for (Problem p : tool.getProblemProvider().getSevereProblems()) {
             severe++;
             String key = p.getText();
             if (p.getParams() != null && p.getParams().length > 0) {
-                key += " [" + p.getParams()[0] + "]";
+                key = key + " [" + p.getParams()[0] + "]";
             }
             errorTypes.merge(key, 1, Integer::sum);
-            
-            if (severe <= 20) {
-                StringBuilder sb = new StringBuilder("  SEVERE: " + p.getText());
+
+            if (severe <= 15) {
+                StringBuilder sb = new StringBuilder("  ERREUR: ").append(p.getText());
                 if (p.getParams() != null) {
                     sb.append(" [");
                     for (Object o : p.getParams()) sb.append(o).append(" ");
                     sb.append("]");
                 }
-                if (p.getLocation() != null) sb.append("\n    @ " + p.getLocation().getMethod());
+                if (p.getLocation() != null && p.getLocation().getMethod() != null) {
+                    sb.append("\n    @ ").append(p.getLocation().getMethod());
+                }
                 System.out.println(sb);
             }
         }
-        
-        for (Problem p : tool.getProblemProvider().getProblems()) {
-            if (!tool.getProblemProvider().getSevereProblems().contains(p)) warn++;
+
+        if (severe > 15) {
+            System.out.println("  ... et " + (severe - 15) + " autres erreurs");
         }
-        
-        if (severe > 20) System.out.println("  ... and " + (severe - 20) + " more severe errors");
-        System.out.println("\nTotal: " + severe + " severe, " + warn + " warnings");
-        
+
+        System.out.println("Total erreurs severes : " + severe);
+
         if (!errorTypes.isEmpty()) {
-            System.out.println("\nError categories:");
+            System.out.println("\nCategories d'erreurs :");
             for (Map.Entry<String, Integer> e : errorTypes.entrySet()) {
                 System.out.println("  " + e.getValue() + "x " + e.getKey());
             }
         }
-        
-        File out = new File("/tmp/teavm_rpgmain_out/classes.js");
+
+        // Verification du JS genere
+        File out = new File(outputDir + "/classes.js");
         if (out.exists() && out.length() > 0) {
             long kb = out.length() / 1024;
-            System.out.println("\n🎉🎉🎉 OUTPUT: " + kb + " KB of JavaScript! 🎉🎉🎉");
+            System.out.println("\nSUCCES : " + kb + " KB de JavaScript genere !");
+            System.out.println("Fichier : " + out.getAbsolutePath());
         } else {
-            System.out.println("\n❌ No JavaScript generated (severe errors block output)");
+            System.out.println("\nECHEC : Aucun JavaScript genere (erreurs bloquantes)");
         }
     }
 }
