@@ -58,12 +58,33 @@ sourceSets {
         // Stubs ASM générés (GdxInitializer.class, WebGL20.class, ...)
         compileClasspath += files("output/stubs")
         runtimeClasspath += files("output/stubs")
+        // Ressources du jeu extraites de l'APK (.tab, .properties)
+        // TeaVM's ClassLoaderNativeGenerator les embed dans jl_ClassLoader_resources
+        runtimeClasspath += files("output/resources")
     }
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+
+// ─── Tâche 1.5 : Extraire les ressources .tab depuis l'APK ──────────────────
+
+val extractGameResources = tasks.register<Copy>("extractGameResources") {
+    description = "Extrait les données de jeu (.tab, .properties) de l'APK vers output/resources"
+
+    from(zipTree("../DragonSoul-Fixed2.apk")) {
+        // Ressources de données du jeu (lues via ClassLoader.getResourceAsStream)
+        include("com/perblue/rpg/game/data/**/*.tab")
+        include("com/perblue/rpg/game/data/**/*.orig")
+        include("com/perblue/rpg/util/localization/**/*.properties")
+    }
+    into("output/resources")
+
+    // Re-extraire seulement si l'APK change
+    inputs.file("../DragonSoul-Fixed2.apk")
+    outputs.dir("output/resources")
 }
 
 // ─── Tâche 1 : Compiler GenerateStubs.java (outil séparé) ───────────────────
@@ -103,8 +124,8 @@ tasks.named("compileJava") {
 
 tasks.register<JavaExec>("buildWeb") {
     group = "build"
-    description = "Compile DragonSoul en JavaScript via TeaVM (Phase 3.2)"
-    dependsOn("classes")
+    description = "Compile DragonSoul en JavaScript via TeaVM (Phase 3.3)"
+    dependsOn("classes", extractGameResources)
 
     mainClass.set("CompileRPGMain")
     classpath = sourceSets["main"].runtimeClasspath
