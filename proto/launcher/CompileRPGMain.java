@@ -25,7 +25,7 @@ public class CompileRPGMain {
         long start = System.currentTimeMillis();
         new File(outputDir).mkdirs();
 
-        System.out.println("=== TeaVM Phase 3.1 — Boot RPGMain ===");
+        System.out.println("=== TeaVM Phase 3.2 — Gdx stubs + game.create() ===");
         System.out.println("Output : " + outputDir);
 
         TeaVMTool tool = new TeaVMTool();
@@ -39,6 +39,11 @@ public class CompileRPGMain {
         // Ces classes ne sont utilisees que par le code reseau, pas le rendu.
         tool.setStrict(false);
         System.out.println("strict=false active");
+
+        // Phase 3.2 : ClassHolderTransformer qui ajoute les méthodes JDK absentes
+        // (Array.newInstance(Class,int[]), UUID(long,long), Thread.getThreadGroup(), etc.)
+        tool.getTransformers().add("JdkFixer");
+        System.out.println("JdkFixer transformer enregistre");
 
         // Construction du classpath depuis java.class.path (fourni par Gradle JavaExec)
         // On utilise setClassPath() pour eviter les conflits de classloader avec Gradle
@@ -57,8 +62,9 @@ public class CompileRPGMain {
         System.out.println("Lancement de la compilation TeaVM...");
         try {
             tool.generate();
-        } catch (Exception e) {
-            System.out.println("Exception TeaVM : " + e.getMessage());
+            System.out.println("tool.generate() termine normalement");
+        } catch (Throwable e) {
+            System.out.println("Exception TeaVM : " + e.getClass().getName() + " - " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -66,7 +72,9 @@ public class CompileRPGMain {
         System.out.println("\n=== RESULTATS DE COMPILATION ===");
         System.out.println("Duree : " + elapsed + "s");
 
-        // Rapport des erreurs
+        // Rapport des erreurs — inclure aussi les problèmes non-sévères
+        System.out.println("Problemes non-severes : " + tool.getProblemProvider().getProblems().size());
+
         int severe = 0;
         Map<String, Integer> errorTypes = new TreeMap<>();
 
