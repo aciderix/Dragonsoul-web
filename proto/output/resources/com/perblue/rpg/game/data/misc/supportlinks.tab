@@ -1,0 +1,26 @@
+	VALUE
+TUTORIAL_EMAIL_ADDRESS	dragonsoul-tutorial-help@perblue.zendesk.com
+TUTORIAL_EMAIL_SUBJECT	Dragonsoul Tutorial Issue
+RECOVERY_EMAIL_ADDRESS	dragonsoul-recovery@perblue.zendesk.com
+RECOVERY_EMAIL_SUBJECT	Dragonsoul Lost Account
+PAYMENT_EMAIL_ADDRESS	dragonsoul-payment@perblue.zendesk.com
+PAYMENT_EMAIL_SUBJECT	Dragonsoul Payment Issue
+OTHER_EMAIL_ADDRESS	dragonsoul-other@perblue.zendesk.com
+OTHER_EMAIL_SUBJECT	Dragonsoul Issue
+COMMUNITY_URL	http://forum.dragonsoulgame.com
+WHATS_NEW_URL	http://redirect.dragonsoulgame.com/DSUpdate
+FAQ_URL	https://perblue.zendesk.com/hc/en-us/categories/200311654-Dragonsoul
+USER_VOICE_BUGS_FORUM	303414
+USER_VOICE_IDEAS_FORUM	303411
+USER_VOICE_URL	dragonsoul.uservoice.com
+FACEBOOK_HOMEPAGE_URL	https://m.facebook.com/dragonsoulgame
+FACEBOOK_PAGE_ID	393592204160239
+REPORT_VIOLATION_EMAIL	dragonsoul-terms-of-use-violations@perblue.zendesk.com
+REPORT_VIOLATION_SUBJECT	Dragonsoul Report
+WAR_GUIDE	http://content.dragonsoulgame.com/DSWarGuidePublic.pdf
+RUNE_GUIDE	http://content.dragonsoulgame.com/DSRuneUpdatePublic.pdf
+DISCOURSE_AUTH_URL	http://discourse.dragonsoulgame.com/pbjwt/go.html
+DISCOURSE_NEWS_AND_FEEDBACK	/
+DISCOURSE_COMMUNITY	/
+LOST_ACCOUNT_FAQ	https://dragonsoul.zendesk.com/hc/en-us/articles/210142346-How-do-I-recover-my-DragonSoul-account
+DISCOURSE_SHARE_IDEA	http://discourse.dragonsoulgame.com/c/feedback

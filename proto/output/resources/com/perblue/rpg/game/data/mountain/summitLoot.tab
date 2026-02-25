@@ -1,0 +1,23 @@
+	EXP_FLASK	EXP_PHILTER	EXP_VIAL	EXP_DECANTER
+1	10 + floor(rand(5))	2 + floor(rand(3))	0	0
+2	10 + floor(rand(6))	6 + floor(rand(5))	2 + floor(rand(4))	0
+3	10 + floor(rand(1))	10 + floor(rand(3))	3 + floor(rand(6))	1 + floor(rand(1))
+4	15 + floor(rand(6))	12 + floor(rand(10))	14 + floor(rand(5))	2 + floor(rand(2))
+5	15 + floor(rand(11))	20 + floor(rand(3))	16 + floor(rand(13))	4 + floor(rand(2))
+6	15 + floor(rand(6))	22 + floor(rand(9))	28 + floor(rand(5))	6 + floor(rand(3))
+7	25 + floor(rand(6))	24 + floor(rand(4))	28 + floor(rand(3))	10 + floor(rand(3))
+8	30 + floor(rand(1))	39 + floor(rand(1))	30 + floor(rand(17))	13 + floor(rand(1))
+9	30 + floor(rand(6))	40 + floor(rand(9))	46 + floor(rand(5))	13 + floor(rand(2))
+10	35 + floor(rand(21))	48 + floor(rand(18))	50 + floor(rand(1))	14 + floor(rand(2))
+11	50 + floor(rand(6))	42 + floor(rand(17))	55 + floor(rand(4))	15 + floor(rand(1))
+12	60 + floor(rand(1))	60 + floor(rand(1))	58 + floor(rand(4))	15 + floor(rand(1))
+13	65 + floor(rand(1))	60 + floor(rand(4))	61 + floor(rand(3))	15 + floor(rand(1))
+14	65 + floor(rand(6))	65 + floor(rand(3))	65 + floor(rand(3))	15 + floor(rand(1))
+15	70 + floor(rand(1))	69 + floor(rand(2))	69 + floor(rand(2))	15 + floor(rand(2))
+16	75 + floor(rand(1))	72 + floor(rand(3))	72 + floor(rand(3))	16 + floor(rand(1))
+17	75 + floor(rand(6))	75 + floor(rand(4))	75 + floor(rand(4))	16 + floor(rand(1))
+18	80 + floor(rand(6))	78 + floor(rand(6))	78 + floor(rand(3))	16 + floor(rand(2))
+19	85 + floor(rand(1))	83 + floor(rand(2))	82 + floor(rand(2))	17 + floor(rand(1))
+20	85 + floor(rand(6))	85 + floor(rand(6))	85 + floor(rand(6))	17 + floor(rand(1))
+21	90 + floor(rand(6))	90 + floor(rand(4))	90 + floor(rand(3))	18 + floor(rand(1))
+22	92 + floor(rand(6))	92 + floor(rand(4))	92 + floor(rand(3))	18 + floor(rand(1))

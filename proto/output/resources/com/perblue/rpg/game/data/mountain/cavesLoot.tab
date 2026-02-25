@@ -1,0 +1,23 @@
+	IRON_ORE	COPPER_ORE	SILVER_ORE	VOLCANIC_ORE	MITHRIL_ORE
+1	6 + floor(rand(1))	0	0	0	0
+2	7 + floor(rand(2))	2 + floor(rand(2))	0	0	0
+3	8 + floor(rand(3))	2 + floor(rand(3))	1 + floor(rand(2))	0	0
+4	10 + floor(rand(3))	4 + floor(rand(3))	3 + floor(rand(2))	0	0
+5	4 + floor(rand(7))	6 + floor(rand(1))	4 + floor(rand(1))	1 + floor(rand(2))	0
+6	18 + floor(rand(1))	10 + floor(rand(1))	4 + floor(rand(3))	2 + floor(rand(1))	0
+7	18 + floor(rand(1))	10 + floor(rand(1))	6 + floor(rand(3))	3 + floor(rand(1))	0
+8	18 + floor(rand(1))	10 + floor(rand(1))	6 + floor(rand(5))	1 + floor(rand(1))	1 + floor(rand(1))
+9	20 + floor(rand(1))	12 + floor(rand(1))	10 + floor(rand(3))	1 + floor(rand(2))	1 + floor(rand(1))
+10	20 + floor(rand(1))	15 + floor(rand(1))	12 + floor(rand(3))	2 + floor(rand(2))	1 + floor(rand(1))
+11	20 + floor(rand(1))	16 + floor(rand(5))	16 + floor(rand(3))	3 + floor(rand(2))	1 + floor(rand(1))
+12	24 + floor(rand(2))	22 + floor(rand(1))	18 + floor(rand(1))	4 + floor(rand(1))	1 + floor(rand(2))
+13	20 + floor(rand(16))	20 + floor(rand(1))	18 + floor(rand(3))	5 + floor(rand(2))	2 + floor(rand(1))
+14	35 + floor(rand(1))	20 + floor(rand(1))	20 + floor(rand(1))	8 + floor(rand(3))	2 + floor(rand(1))
+15	45 + floor(rand(6))	22 + floor(rand(9))	20 + floor(rand(6))	10 + floor(rand(4))	2 + floor(rand(2))
+16	45 + floor(rand(6))	25 + floor(rand(11))	25 + floor(rand(2))	11 + floor(rand(4))	3 + floor(rand(1))
+17	45 + floor(rand(6))	27 + floor(rand(13))	27 + floor(rand(4))	12 + floor(rand(5))	3 + floor(rand(2))
+18	45 + floor(rand(11))	30 + floor(rand(11))	29 + floor(rand(4))	13 + floor(rand(6))	3 + floor(rand(2))
+19	50 + floor(rand(6))	32 + floor(rand(9))	29 + floor(rand(6))	15 + floor(rand(6))	4 + floor(rand(1))
+20	50 + floor(rand(6))	34 + floor(rand(9))	30 + floor(rand(7))	17 + floor(rand(6))	4 + floor(rand(1))
+21	55 + floor(rand(6))	35 + floor(rand(11))	32 + floor(rand(7))	18 + floor(rand(6))	4 + floor(rand(2))
+22	55 + floor(rand(6))	40 + floor(rand(6))	33 + floor(rand(8))	20 + floor(rand(6))	5 + floor(rand(1))

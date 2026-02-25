@@ -3,19 +3,17 @@ import org.teavm.tooling.TeaVMTargetType;
 import org.teavm.vm.TeaVMOptimizationLevel;
 import org.teavm.diagnostics.Problem;
 import java.io.File;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
- * Phase 3.1 — Compile DragonSoul (RPGMain) en JavaScript via TeaVM.
+ * Phase 3.3 — Compile DragonSoul (RPGMain) en JavaScript via TeaVM.
  *
- * Utilise le classpath courant (passé par Gradle via -cp) pour inclure :
- *  - Les stubs (commons-logging, NetworkProvider)
- *  - Le launcher (DragonSoulLauncher + WebDeviceInfo)
- *  - Les JARs du jeu (classes1.jar, classes2.jar)
- *  - La classlib TeaVM
- *
- * Exécuté via : gradle buildWeb
- * Sortie attendue : output/web/classes.js (~2-5 Mo)
+ * Nouveautés Phase 3.3 :
+ *  - output/resources/ (.tab, .properties extraits de l'APK) dans le classpath
+ *    → TeaVM ClassLoaderNativeGenerator les embed dans jl_ClassLoader_resources
+ *  - Post-processing du JS généré : normalise les chemins "path//file" → "path/file"
+ *    (le jeu construit parfois des chemins avec double slash)
  */
 public class CompileRPGMain {
 
@@ -25,7 +23,7 @@ public class CompileRPGMain {
         long start = System.currentTimeMillis();
         new File(outputDir).mkdirs();
 
-        System.out.println("=== TeaVM Phase 3.2 — Gdx stubs + game.create() ===");
+        System.out.println("=== TeaVM Phase 3.3 — Ressources .tab embarquées ===");
         System.out.println("Output : " + outputDir);
 
         TeaVMTool tool = new TeaVMTool();
@@ -55,6 +53,12 @@ public class CompileRPGMain {
             File f = new File(entry);
             if (f.exists()) {
                 cp.add(f);
+            }
+        }
+        // Debug : afficher toutes les entrées classpath
+        for (File f : cp) {
+            if (f.getPath().contains("resources") || f.getPath().contains("stubs")) {
+                System.out.println("  CP entry: " + f.getAbsolutePath());
             }
         }
         tool.setClassPath(cp);
@@ -113,14 +117,43 @@ public class CompileRPGMain {
             }
         }
 
-        // Verification du JS genere
+        // Verification du JS genere + post-processing
         File out = new File(outputDir + "/classes.js");
         if (out.exists() && out.length() > 0) {
             long kb = out.length() / 1024;
             System.out.println("\nSUCCES : " + kb + " KB de JavaScript genere !");
             System.out.println("Fichier : " + out.getAbsolutePath());
+
+            // Vérifier que des ressources ont bien été embarquées
+            String js = Files.readString(out.toPath());
+            int resourceCount = countOccurrences(js, "jl_ClassLoader_resources[\"");
+            System.out.println("Ressources embarquées dans jl_ClassLoader_resources : " + resourceCount);
+
+            // Post-processing Phase 3.3 : normaliser les chemins avec double slash
+            // Le jeu construit parfois "com/perblue/.../campaign/" + "/normalCampaign.tab"
+            // → getResourceAsStream("com/.../campaign//normalCampaign.tab") échoue
+            // Fix : remplacer le lookup direct par un lookup avec normalisation
+            String oldLookup = "$data = jl_ClassLoader_resources[$rt_ustr($name)];";
+            String newLookup = "$data = jl_ClassLoader_resources[$rt_ustr($name).split(\"//\").join(\"/\")];";
+            if (js.contains(oldLookup)) {
+                js = js.replace(oldLookup, newLookup);
+                Files.writeString(out.toPath(), js);
+                System.out.println("Post-process : normalisation // appliquée dans getResourceAsStream");
+            } else {
+                System.out.println("AVERTISSEMENT : pattern getResourceAsStream non trouvé pour post-process");
+            }
         } else {
             System.out.println("\nECHEC : Aucun JavaScript genere (erreurs bloquantes)");
         }
+    }
+
+    private static int countOccurrences(String text, String pattern) {
+        int count = 0;
+        int idx = 0;
+        while ((idx = text.indexOf(pattern, idx)) != -1) {
+            count++;
+            idx += pattern.length();
+        }
+        return count;
     }
 }

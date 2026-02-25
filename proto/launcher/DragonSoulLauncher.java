@@ -29,6 +29,18 @@ public class DragonSoulLauncher {
         } catch (Throwable t) {
             System.out.println("game.create() exception: " + t.getClass().getName());
             System.out.println("  Message: " + t.getMessage());
+            // Phase 3.3 : trace complète pour diagnostiquer les erreurs de parsing .tab
+            Throwable cause = t;
+            while (cause != null) {
+                System.out.println("  Cause: " + cause.getClass().getName() + ": " + cause.getMessage());
+                StackTraceElement[] stack = cause.getStackTrace();
+                if (stack != null) {
+                    for (int i = 0; i < Math.min(stack.length, 8); i++) {
+                        System.out.println("    at " + stack[i]);
+                    }
+                }
+                cause = cause.getCause() == cause ? null : cause.getCause();
+            }
         }
     }
 }

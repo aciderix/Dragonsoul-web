@@ -1,0 +1,5 @@
+	NODE	WEIGHT	QUANTITY	RESULT	BEHAVIOR
+1	REALIZE_KEYSTONE	1	1	<Rune:KSB_$Hero$>	Shuffle & NumOfItems(0,3) & NoExistingDupBonuses(-1)
+2	PICK_NEW_TERTIARY_BONUS_MAJOR	1	1	<Rune:Bonus_MAJOR_3rd>	NoExistingDupBonuses(-1)
+3	PICK_NEW_TERTIARY_BONUS_MINOR	1	1	<Rune:Bonus_minor_3rd>	NoExistingDupBonuses(-1)
+4	PICK_UPGRADE_TERTIARY_BONUS	1	1	<@PickTertiaryBonus>	
