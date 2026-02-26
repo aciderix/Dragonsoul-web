@@ -901,9 +901,17 @@ public class CompileRPGMain {
                 + "};\n";
 
             if (js.contains(protoAnchor) && !js.contains("Fix 15: Add missing getCachedPreferredLanguage")) {
-                js = js.replace(protoAnchor, protoAnchor + protoAdditions);
-                patchCount += 6; // fixes 15, 23, 24, 25, 26, 27
-                System.out.println("  Fix 15+23+24+25+26+27 OK : prototype additions RPGMain/NewRelic/WebDeviceInfo");
+                // Phase 3.8: insert AFTER the closing ]); of the $rt_metadata block
+                // (not after protoAnchor which is inside the $rt_metadata array)
+                int _anchorEnd = js.indexOf(protoAnchor) + protoAnchor.length();
+                int _metaClose = js.indexOf("]);", _anchorEnd);
+                if (_metaClose >= 0) {
+                    js = js.substring(0, _metaClose + 3) + protoAdditions + js.substring(_metaClose + 3);
+                    patchCount += 6; // fixes 15, 23, 24, 25, 26, 27
+                    System.out.println("  Fix 15+23+24+25+26+27 OK : prototype additions RPGMain/NewRelic/WebDeviceInfo");
+                } else {
+                    System.out.println("  Fix 15+23+24+25+26+27 WARN : closing ]); non trouvé après anchor");
+                }
             } else if (js.contains("Fix 15: Add missing getCachedPreferredLanguage")) {
                 System.out.println("  Fix 15+23+24+25+26+27 : déjà appliqués");
             } else {
