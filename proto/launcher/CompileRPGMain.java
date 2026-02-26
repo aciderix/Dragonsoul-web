@@ -186,16 +186,35 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
-            // Fix 4: cbgc_a_h — NPE sur var$0.$f18() quand handle est null
+            // Fix 4: cbgc_a_h — NPE sur var$0.$f9() quand handle est null
             //   Return 512 (valeur neutre) si l'objet est null
+            //   Phase 3.6 : state machine version avec $f9() (anciennement $f18())
             // ------------------------------------------------------------------
             String fix4_old = "cbgc_a_h = var$0 => {\n"
-                             + "    let var$1;\n"
-                             + "    var$1 = Long_lo((var$0.$f18()));";
+                             + "    let var$1, var$2, $ptr, $tmp;\n"
+                             + "    $ptr = 0;\n"
+                             + "    if ($rt_resuming()) {\n"
+                             + "        let $thread = $rt_nativeThread();\n"
+                             + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                             + "    }\n"
+                             + "    main: while (true) { switch ($ptr) {\n"
+                             + "    case 0:\n"
+                             + "        $ptr = 1;\n"
+                             + "    case 1:\n"
+                             + "        $tmp = var$0.$f9();";
             String fix4_new = "cbgc_a_h = var$0 => {\n"
-                             + "    let var$1;\n"
+                             + "    let var$1, var$2, $ptr, $tmp;\n"
                              + "    if (var$0 === null || var$0 === undefined) return 512;\n"
-                             + "    var$1 = Long_lo((var$0.$f18()));";
+                             + "    $ptr = 0;\n"
+                             + "    if ($rt_resuming()) {\n"
+                             + "        let $thread = $rt_nativeThread();\n"
+                             + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                             + "    }\n"
+                             + "    main: while (true) { switch ($ptr) {\n"
+                             + "    case 0:\n"
+                             + "        $ptr = 1;\n"
+                             + "    case 1:\n"
+                             + "        $tmp = var$0.$f9();";
             if (js.contains(fix4_old)) {
                 js = js.replace(fix4_old, fix4_new);
                 patchCount++;
@@ -365,10 +384,10 @@ public class CompileRPGMain {
             // Fix 12a: cbgu_ag__init_ — Pool GDX : si la réflexion échoue (a536=null)
             //   Stocker la classe pour un fallback via Platform.newInstance
             // ------------------------------------------------------------------
-            String fix12a_old = "        if (var$0.$a536 !== null)\n"
+            String fix12a_old = "        if (var$0.$a662 !== null)\n"
                                + "            return;\n"
                                + "        var$5 = new jl_RuntimeException;";
-            String fix12a_new = "        if (var$0.$a536 !== null)\n"
+            String fix12a_new = "        if (var$0.$a662 !== null)\n"
                                + "            return;\n"
                                + "        // Fix 12: fallback — store class ref for otp_Platform_newInstance\n"
                                + "        var$0.$a536_fallbackCls = var$1;\n"
@@ -406,7 +425,7 @@ public class CompileRPGMain {
                                + "    main: while (true) { switch ($ptr) {\n"
                                + "    case 0:\n"
                                + "        // Fix 12: fallback to Platform.newInstance when GDX reflection not available\n"
-                               + "        if ((var$0.$a536 === undefined || var$0.$a536 === null) && var$0.$a536_fallbackCls) {\n"
+                               + "        if ((var$0.$a662 === undefined || var$0.$a662 === null) && var$0.$a536_fallbackCls) {\n"
                                + "            const _cls12 = jl_Class_getPlatformClass(var$0.$a536_fallbackCls);\n"
                                + "            var$2 = otp_Platform_newInstanceImpl(_cls12);\n"
                                + "            if (var$2 === null) {\n"
@@ -535,7 +554,7 @@ public class CompileRPGMain {
                               + "                continue main;\n"
                               + "            }\n"
                               + "            var$2 = new cbgu_l;\n"
-                              + "            var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                              + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                               + "            $ptr = 4;\n"
                               + "            continue main;\n"
                               + "        } catch ($$e) {";
@@ -546,7 +565,7 @@ public class CompileRPGMain {
                               + "            jl_Object_monitorExit(var$0);\n"
                               + "            return null;\n"
                               + "            var$2 = new cbgu_l;\n"
-                              + "            var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                              + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                               + "            $ptr = 4;\n"
                               + "            continue main;\n"
                               + "        } catch ($$e) {";
@@ -563,7 +582,7 @@ public class CompileRPGMain {
             //   Pas d'assets → return null
             // ------------------------------------------------------------------
             String fix18b_old = "                    var$2 = new cbgu_l;\n"
-                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                                + "                    $ptr = 5;\n"
                                + "                    continue main;";
             String fix18b_new = "                    // Fix 18b: asset filename not found → return null instead of throwing\n"
@@ -619,7 +638,7 @@ public class CompileRPGMain {
                                + "                continue main;\n"
                                + "            }\n"
                                + "            var$2 = new cbgu_l;\n"
-                               + "            var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                               + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                                + "            $ptr = 4;\n"
                                + "            continue main;";
             String fix18d_new = "                var$3 = var$0.$assets;\n"
@@ -629,21 +648,26 @@ public class CompileRPGMain {
                                + "            // Fix 18d: assetType not found → return null\n"
                                + "            jl_Object_monitorExit(var$0);\n"
                                + "            return null;";
+            // Fix 18 déjà appliqué à cbga_e_get0 case 2 car le pattern était identique
+            // (String.replace remplace toutes les occurrences dans les deux fonctions)
             if (js.contains(fix18d_old)) {
                 js = js.replace(fix18d_old, fix18d_new);
                 patchCount++;
                 System.out.println("  Fix 18d OK : cbga_e_get0 assetType not found return null");
-            } else if (!js.contains(fix18d_new)) {
+            } else if (js.contains(fix18d_new) || js.contains("// Fix 18: asset type not found")) {
+                System.out.println("  Fix 18d : déjà patché (par Fix 18 ou Fix 18d)");
+                patchCount++;
+            } else {
                 System.out.println("  Fix 18d WARN : pattern cbga_e_get0 assetType non trouvé");
             }
 
             // ------------------------------------------------------------------
             // Fix 18e: cbga_e_get0 — filename non trouvé dans type map → throw (ptr=6)
             // ------------------------------------------------------------------
-            String fix18e_old = "                    var$2 = new cbgu_l;\n"
-                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
-                               + "                    $ptr = 6;\n"
-                               + "                    continue main;";
+            String fix18e_old = "            var$2 = new cbgu_l;\n"
+                               + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
+                               + "            $ptr = 6;\n"
+                               + "            continue main;";
             String fix18e_new = "                    // Fix 18e: asset filename not in type map → return null\n"
                                + "                    jl_Object_monitorExit(var$0);\n"
                                + "                    return null;";
@@ -659,7 +683,7 @@ public class CompileRPGMain {
             // Fix 18f: cbga_e_get0 — inner lookup null → throw (ptr=7)
             // ------------------------------------------------------------------
             String fix18f_old = "                    var$2 = new cbgu_l;\n"
-                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                                + "                    $ptr = 7;\n"
                                + "                    continue main;";
             String fix18f_new = "                    // Fix 18f: inner lookup null → return null\n"
@@ -711,7 +735,7 @@ public class CompileRPGMain {
             //   Pas d'assets → retourner silencieusement
             // ------------------------------------------------------------------
             String fix20_old = "                var$3 = new cbgu_l;\n"
-                              + "                var$1 = (jl_StringBuilder__init_($rt_s(15958))).$append1(var$1);\n"
+                              + "                var$1 = (jl_StringBuilder__init_($rt_s(9519))).$append1(var$1);\n"
                               + "                $ptr = 6;\n"
                               + "                continue main;";
             String fix20_new = "                // Fix 20: atlas not found → silently return (no assets in node.js)\n"
@@ -729,7 +753,7 @@ public class CompileRPGMain {
             //   Le jeu gère Region=null plus loin → return null
             // ------------------------------------------------------------------
             String fix21a_old = "        var$3 = new cbgu_l;\n"
-                               + "        var$1 = (jl_StringBuilder__init_($rt_s(1948))).$append1(var$1);\n"
+                               + "        var$1 = (jl_StringBuilder__init_($rt_s(9515))).$append1(var$1);\n"
                                + "        $ptr = 4;\n"
                                + "        continue main;";
             String fix21a_new = "        // Fix 21a: getRegion not found → return null instead of throwing\n"
@@ -747,7 +771,7 @@ public class CompileRPGMain {
             //   Le jeu gère Drawable=null plus loin → return null
             // ------------------------------------------------------------------
             String fix21b_old = "            var$3 = new cbgu_l;\n"
-                               + "            var$1 = (jl_StringBuilder__init_($rt_s(1946))).$append1(var$1);\n"
+                               + "            var$1 = (jl_StringBuilder__init_($rt_s(9513))).$append1(var$1);\n"
                                + "            $ptr = 8;\n"
                                + "            continue main;";
             String fix21b_new = "            // Fix 21b: getDrawable not found → return null instead of throwing\n"
@@ -797,10 +821,10 @@ public class CompileRPGMain {
 
             // ------------------------------------------------------------------
             // Fixes 15, 23, 24, 25, 26, 27 : Ajout de méthodes prototype manquantes
-            //   Insérer après cpr_RPGMain.prototype.$getCurrentAssetDensity = ...
-            //   (ligne générée par TeaVM pour les méthodes virtuelles)
+            //   Insérer après la fin des métadonnées $rt_metadata de cpr_RPGMain
+            //   Phase 3.6 : ancre mise à jour (TeaVM ne génère plus de prototype.X = séparés)
             // ------------------------------------------------------------------
-            String protoAnchor = "cpr_RPGMain.prototype.$getCurrentAssetDensity = $rt_wrapFunction1(cpr_RPGMain_getCurrentAssetDensity);";
+            String protoAnchor = "\"$startLoadingMainScreen\", $rt_wrapFunction0(cpr_RPGMain_startLoadingMainScreen)],";
             String protoAdditions = "\n"
                 // Fix 15
                 + "// Fix 15: Add missing getCachedPreferredLanguage / setCachedPreferredLanguage to RPGMain prototype\n"
@@ -913,16 +937,35 @@ public class CompileRPGMain {
 
             // ------------------------------------------------------------------
             // Fix 30: cbgc_a_h (FileHandle.length()) — shortcut for _webContent handles
+            //   Phase 3.6 : pattern mis à jour pour la version state machine avec $f9()
             // ------------------------------------------------------------------
             String fix30_old = "cbgc_a_h = var$0 => {\n"
-                + "    let var$1;\n"
+                + "    let var$1, var$2, $ptr, $tmp;\n"
                 + "    if (var$0 === null || var$0 === undefined) return 512;\n"
-                + "    var$1 = Long_lo((var$0.$f18()));";
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = var$0.$f9();";
             String fix30_new = "cbgc_a_h = var$0 => {\n"
-                + "    let var$1;\n"
+                + "    let var$1, var$2, $ptr, $tmp;\n"
                 + "    if (var$0 === null || var$0 === undefined) return 512;\n"
                 + "    if (var$0._webContent !== undefined) return var$0._webContent.length || 512;\n"
-                + "    var$1 = Long_lo((var$0.$f18()));";
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = var$0.$f9();";
             if (!js.contains("_webContent !== undefined) return var$0._webContent.length")) {
                 if (js.contains(fix30_old)) {
                     js = js.replace(fix30_old, fix30_new);
