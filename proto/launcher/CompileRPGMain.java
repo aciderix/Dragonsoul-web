@@ -63,6 +63,11 @@ public class CompileRPGMain {
         }
         tool.setClassPath(cp);
 
+        // Phase 3.6 : Forcer TeaVM à inclure RPGMain.render() (sinon DCE l'enlève)
+        // classesToPreserve marque la classe et toutes ses méthodes virtuelles comme "utilisées"
+        tool.getClassesToPreserve().add("com.perblue.rpg.RPGMain");
+        System.out.println("classesToPreserve: com.perblue.rpg.RPGMain");
+
         System.out.println("Lancement de la compilation TeaVM...");
         try {
             tool.generate();
@@ -281,18 +286,20 @@ public class CompileRPGMain {
 
             // ------------------------------------------------------------------
             // Fix 9: cbggg_t_linkProgram — pas de WebGL → skip le link
-            //   Retourner le handle d'entrée (ou 1 si 0) pour simuler le succès
+            //   Phase 3.6 : NE PAS court-circuiter si window._webGL2Active est vrai
+            //   (le bridge WebGL2 se charge du vrai link GPU)
             // ------------------------------------------------------------------
             String fix9_old = "cbggg_t_linkProgram = (var$0, var$1) => {\n"
                              + "    let var$2, var$3, var$4, $ptr, $tmp;";
             String fix9_new = "cbggg_t_linkProgram = (var$0, var$1) => {\n"
-                             + "    // Fix 9+10: no WebGL in node.js — fake link success for any non-(-1) program handle\n"
-                             + "    if (var$1 !== -1) { return var$1 || 1; }\n"
+                             + "    // Fix 9: no WebGL in node.js — fake link success\n"
+                             + "    // Phase 3.6: skip fake when WebGL2 bridge is active (_webGL2Active flag)\n"
+                             + "    if (var$1 !== -1 && (typeof window === 'undefined' || !window._webGL2Active)) { return var$1 || 1; }\n"
                              + "    let var$2, var$3, var$4, $ptr, $tmp;";
             if (js.contains(fix9_old)) {
                 js = js.replace(fix9_old, fix9_new);
                 patchCount++;
-                System.out.println("  Fix 9 OK : cbggg_t_linkProgram fake success");
+                System.out.println("  Fix 9 OK : cbggg_t_linkProgram WebGL2-aware");
             } else if (!js.contains(fix9_new)) {
                 System.out.println("  Fix 9 WARN : pattern linkProgram non trouvé");
             }
@@ -951,13 +958,16 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
-            // Fix 28: WebGL2 Bridge — injecté DANS le closure TeaVM (Phase 3.5)
+            // Fix 28: WebGL2 Bridge — injecté DANS le closure TeaVM (Phase 3.6)
             //   Handle registry: int ID ↔ WebGL object (shader, program, buffer, tex…)
-            //   Exporte setupWebGL2(canvas), $rt_ustr, $rt_str
+            //   Phase 3.6: + window._webGL2Active flag pour Fix 9
+            //              + export renderFrame() pour la boucle RAF
+            //              + WebGraphics.getDeltaTime()
+            //              + stubs audio + texture placeholder
             // ------------------------------------------------------------------
             String fix28_anchor = "$rt_exports.main = $rt_export_main;\n}));";
             String fix28_bridge =
-                "// =================== WebGL2 Bridge (Phase 3.5) ===================\n"
+                "// =================== WebGL2 Bridge (Phase 3.6) ===================\n"
                 + "// Handle registry: OpenGL ES integer IDs ↔ real WebGL2 objects\n"
                 + "function _setupWebGL2Bridge(canvas) {\n"
                 + "    const gl = canvas && canvas.getContext ? canvas.getContext('webgl2') : null;\n"
@@ -979,7 +989,7 @@ public class CompileRPGMain {
                 + "    P.$glCompileShader   = s      => gl.compileShader(get(s));\n"
                 + "    P.$glDeleteShader    = s      => { gl.deleteShader(get(s)); free(s); };\n"
                 + "    P.$glGetShaderiv     = (s,p,b) => wib(b, 0, gl.getShaderParameter(get(s), p) ? 1 : 0);\n"
-                + "    P.$glGetShaderInfoLog= s      => jstr(gl.getShaderInfoLog(get(s)));\n"
+                + "    P.$glGetShaderInfoLog= s      => jstr(gl.getShaderInfoLog(get(s)) || '');\n"
                 + "    P.$glCreateProgram   = ()     => alloc(gl.createProgram());\n"
                 + "    P.$glAttachShader    = (p,s)  => gl.attachShader(get(p), get(s));\n"
                 + "    P.$glDetachShader    = (p,s)  => gl.detachShader(get(p), get(s));\n"
@@ -988,7 +998,7 @@ public class CompileRPGMain {
                 + "    P.$glUseProgram      = p      => gl.useProgram(p ? get(p) : null);\n"
                 + "    P.$glDeleteProgram   = p      => { gl.deleteProgram(get(p)); free(p); };\n"
                 + "    P.$glGetProgramiv    = (p,pn,b) => wib(b, 0, gl.getProgramParameter(get(p), pn) ? 1 : 0);\n"
-                + "    P.$glGetProgramInfoLog = p    => jstr(gl.getProgramInfoLog(get(p)));\n"
+                + "    P.$glGetProgramInfoLog = p    => jstr(gl.getProgramInfoLog(get(p)) || '');\n"
                 + "    P.$glGetAttribLocation  = (p,n) => gl.getAttribLocation(get(p), str(n));\n"
                 + "    P.$glGetUniformLocation = (p,n) => alloc(gl.getUniformLocation(get(p), str(n)));\n"
                 + "    P.$glGetActiveAttrib    = (p,i,sz,t) => {};\n"
@@ -1009,7 +1019,7 @@ public class CompileRPGMain {
                 + "    P.$glGenBuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createBuffer())); };\n"
                 + "    P.$glBindBuffer    = (t,b) => gl.bindBuffer(t, b ? get(b) : null);\n"
                 + "    P.$glDeleteBuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteBuffer(get(id));free(id);} };\n"
-                + "    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.$data) gl.bufferData(t,data.$data,u); else gl.bufferData(t,sz,u); };\n"
+                + "    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.$data) gl.bufferData(t,data.$data,u); else if(sz>0) gl.bufferData(t,sz,u); };\n"
                 + "    P.$glBufferSubData = (t,off,cnt,data) => { if(data&&data.$data) gl.bufferSubData(t,off,data.$data.subarray(0,cnt)); };\n"
                 + "    P.$glGenVertexArrays    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createVertexArray())); };\n"
                 + "    P.$glBindVertexArray    = v => gl.bindVertexArray(v ? get(v) : null);\n"
@@ -1058,29 +1068,71 @@ public class CompileRPGMain {
                 + "    P.$glGetError    = () => gl.getError();\n"
                 + "    P.$glFinish      = () => gl.finish();\n"
                 + "    P.$glFlush       = () => gl.flush();\n"
+                // WebGraphics: dimensions + timing
                 + "    if (typeof WebGraphics !== 'undefined') {\n"
                 + "        WebGraphics.prototype.$getWidth            = () => canvas.width;\n"
                 + "        WebGraphics.prototype.$getHeight           = () => canvas.height;\n"
                 + "        WebGraphics.prototype.$getBackBufferWidth  = () => canvas.width;\n"
                 + "        WebGraphics.prototype.$getBackBufferHeight = () => canvas.height;\n"
+                + "        // getDeltaTime — returns real elapsed time in seconds (target 60fps)\n"
+                + "        let _lastFrameMs = performance.now();\n"
+                + "        WebGraphics.prototype.$getDeltaTime = function() {\n"
+                + "            const now = performance.now();\n"
+                + "            const dt = Math.min((now - _lastFrameMs) / 1000.0, 0.1); // cap at 100ms\n"
+                + "            _lastFrameMs = now;\n"
+                + "            return dt;\n"
+                + "        };\n"
+                + "        WebGraphics.prototype.$getFramesPerSecond = function() { return 60; };\n"
+                + "        WebGraphics.prototype.$getRawDeltaTime = function() { return this.$getDeltaTime(); };\n"
                 + "    }\n"
-                + "    console.log('[WebGL2 Bridge] Handle registry + full GL coverage actif');\n"
+                // Audio stubs — prevent NPE when game tries to play sounds
+                + "    if (typeof WebAudio !== 'undefined') {\n"
+                + "        // Stub WebAudio methods to prevent crash on sound playback\n"
+                + "        WebAudio.prototype.$newSound = function(file) { return _fakeAudioDevice; };\n"
+                + "        WebAudio.prototype.$newMusic = function(file) { return _fakeAudioDevice; };\n"
+                + "    }\n"
+                + "    var _fakeAudioDevice = {\n"
+                + "        $play: function() {},\n"
+                + "        $stop: function() {},\n"
+                + "        $pause: function() {},\n"
+                + "        $resume: function() {},\n"
+                + "        $dispose: function() {},\n"
+                + "        $setLooping: function(v) {},\n"
+                + "        $setVolume: function(v) {},\n"
+                + "        $setPitch: function(v) {},\n"
+                + "        $setPan: function(p,v) {},\n"
+                + "        $isPlaying: function() { return 0; },\n"
+                + "        $isLooping: function() { return 0; },\n"
+                + "        $getVolume: function() { return 1.0; },\n"
+                + "        $getPosition: function() { return 0.0; },\n"
+                + "        $setPosition: function(p) {},\n"
+                + "        $play0: function(v, p, pan) { return -1; }, // Sound.play(float,float,float)\n"
+                + "    };\n"
+                // Phase 3.6: set flag so Fix 9 lets real GL linkProgram proceed
+                + "    window._webGL2Active = true;\n"
+                + "    console.log('[WebGL2 Bridge] Phase 3.6 actif — rendu GPU activé, boucle RAF prête');\n"
                 + "    return true;\n"
                 + "}\n"
+                // Export renderFrame for RAF loop — calls DragonSoulLauncher.renderFrame()
+                + "$rt_exports.renderFrame = function() {\n"
+                + "    if (typeof DragonSoulLauncher_renderFrame === 'function') {\n"
+                + "        DragonSoulLauncher_renderFrame();\n"
+                + "    }\n"
+                + "};\n"
                 + "$rt_exports.setupWebGL2 = _setupWebGL2Bridge;\n"
                 + "$rt_exports.$rt_ustr = $rt_ustr;\n"
                 + "$rt_exports.$rt_str = $rt_str;\n";
 
-            if (!js.contains("WebGL2 Bridge (Phase 3.5)")) {
+            if (!js.contains("WebGL2 Bridge (Phase 3.6)")) {
                 if (js.contains(fix28_anchor)) {
                     js = js.replace(fix28_anchor, fix28_bridge + fix28_anchor);
                     patchCount++;
-                    System.out.println("  Fix 28 OK : WebGL2 Bridge (Phase 3.5) injecté");
+                    System.out.println("  Fix 28 OK : WebGL2 Bridge Phase 3.6 injecté (renderFrame + _webGL2Active + audio stubs)");
                 } else {
                     System.out.println("  Fix 28 WARN : anchor $rt_exports.main non trouvé");
                 }
             } else {
-                System.out.println("  Fix 28 : WebGL2 Bridge (Phase 3.5) déjà présent");
+                System.out.println("  Fix 28 : WebGL2 Bridge (Phase 3.6) déjà présent");
             }
 
             // ------------------------------------------------------------------

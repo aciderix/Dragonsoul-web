@@ -78,6 +78,16 @@ public class JdkFixer implements org.teavm.model.ClassHolderTransformer {
                 // Type getGenericSuperclass() → return null
                 addInstanceNullMethod(cls, "getGenericSuperclass",
                     ValueType.object("java.lang.reflect.Type"));
+                // URL getResource(String) → return null (utilisé par com.badlogic.gdx.c.a.e())
+                addInstanceNullMethod(cls, "getResource",
+                    new ValueType[]{ValueType.object("java.lang.String")},
+                    ValueType.object("java.net.URL"));
+                break;
+
+            case "java.util.concurrent.ConcurrentLinkedQueue":
+                // size() → 0, remove() → null  (manquants dans le stub/implémentation TeaVM)
+                addInstanceIntZeroMethod(cls, "size", new ValueType[0]);
+                addInstanceNullMethod(cls, "remove", ValueType.object("java.lang.Object"));
                 break;
 
             case "java.lang.reflect.Field":
@@ -383,6 +393,12 @@ public class JdkFixer implements org.teavm.model.ClassHolderTransformer {
 
         // ThreadFactory (référencé comme paramètre)
         submitIfMissing(ctx, newStub("java.util.concurrent.ThreadFactory"));
+
+        // java.sql.Timestamp — utilisé par SettingsScreen et QuickBattleLoadingScreen
+        ClassHolder ts = newStub("java.sql.Timestamp");
+        addConstructorNoOp(ts, new ValueType[]{ValueType.LONG});
+        addInstanceNullMethod(ts, "toString", ValueType.object("java.lang.String"));
+        submitIfMissing(ctx, ts);
 
         // Callable (référencé comme paramètre d'ExecutorService.submit)
         submitIfMissing(ctx, newStub("java.util.concurrent.Callable"));
