@@ -880,126 +880,207 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
-            // Fix 28: WebGL2 Bridge — injecté DANS le closure TeaVM
-            //   Exporte setupWebGL2(canvas) pour connecter les stubs WebGL20
-            //   aux vraies API WebGL2 du navigateur (shader, program, buffer, tex)
-            //   Fonctionne aussi côté Node.js (skip si gl=null)
+            // Fix 29: WebFiles_b ($b92 = Files.internal(String)) → GAME_ASSETS lookup
+            //   window.GAME_ASSETS must be preloaded (game-assets.js) before classes.js
+            //   Returns { _webContent: string } consumed by Fix 30/31
+            // ------------------------------------------------------------------
+            String fix29_old = "WebFiles_b = (var$0, var$1) => {\n    return null;\n}";
+            String fix29_new = "WebFiles_b = (var$0, var$1) => {\n"
+                + "    const _p = $rt_ustr(var$1);\n"
+                + "    if (typeof GAME_ASSETS !== \"undefined\" && GAME_ASSETS[_p] !== undefined) {\n"
+                + "        return { _webContent: GAME_ASSETS[_p] };\n"
+                + "    }\n"
+                + "    return null;\n"
+                + "}";
+            if (!js.contains("GAME_ASSETS")) {
+                if (js.contains(fix29_old)) {
+                    js = js.replace(fix29_old, fix29_new);
+                    patchCount++;
+                    System.out.println("  Fix 29 OK : WebFiles_b → GAME_ASSETS lookup");
+                } else {
+                    System.out.println("  Fix 29 WARN : WebFiles_b pattern not found");
+                }
+            } else {
+                System.out.println("  Fix 29 : WebFiles_b déjà patché");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 30: cbgc_a_h (FileHandle.length()) — shortcut for _webContent handles
+            // ------------------------------------------------------------------
+            String fix30_old = "cbgc_a_h = var$0 => {\n"
+                + "    let var$1;\n"
+                + "    if (var$0 === null || var$0 === undefined) return 512;\n"
+                + "    var$1 = Long_lo((var$0.$f18()));";
+            String fix30_new = "cbgc_a_h = var$0 => {\n"
+                + "    let var$1;\n"
+                + "    if (var$0 === null || var$0 === undefined) return 512;\n"
+                + "    if (var$0._webContent !== undefined) return var$0._webContent.length || 512;\n"
+                + "    var$1 = Long_lo((var$0.$f18()));";
+            if (!js.contains("_webContent !== undefined) return var$0._webContent.length")) {
+                if (js.contains(fix30_old)) {
+                    js = js.replace(fix30_old, fix30_new);
+                    patchCount++;
+                    System.out.println("  Fix 30 OK : cbgc_a_h _webContent shortcut");
+                } else {
+                    System.out.println("  Fix 30 WARN : cbgc_a_h pattern not found");
+                }
+            } else {
+                System.out.println("  Fix 30 : cbgc_a_h déjà patché");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 31: cbgc_a_d (FileHandle.readString()) — shortcut for _webContent handles
+            // ------------------------------------------------------------------
+            String fix31_old = "cbgc_a_d = (var$0, var$1) => {\n"
+                + "    if (var$0 === null || var$0 === undefined) return $rt_s(34);\n"
+                + "    let var$2,";
+            String fix31_new = "cbgc_a_d = (var$0, var$1) => {\n"
+                + "    if (var$0 === null || var$0 === undefined) return $rt_s(34);\n"
+                + "    if (var$0._webContent !== undefined) return $rt_str(var$0._webContent);\n"
+                + "    let var$2,";
+            if (!js.contains("_webContent !== undefined) return $rt_str(var$0._webContent)")) {
+                if (js.contains(fix31_old)) {
+                    js = js.replace(fix31_old, fix31_new);
+                    patchCount++;
+                    System.out.println("  Fix 31 OK : cbgc_a_d _webContent shortcut");
+                } else {
+                    System.out.println("  Fix 31 WARN : cbgc_a_d pattern not found");
+                }
+            } else {
+                System.out.println("  Fix 31 : cbgc_a_d déjà patché");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 28: WebGL2 Bridge — injecté DANS le closure TeaVM (Phase 3.5)
+            //   Handle registry: int ID ↔ WebGL object (shader, program, buffer, tex…)
+            //   Exporte setupWebGL2(canvas), $rt_ustr, $rt_str
             // ------------------------------------------------------------------
             String fix28_anchor = "$rt_exports.main = $rt_export_main;\n}));";
             String fix28_bridge =
-                "// =================== WebGL2 Bridge (Phase 3.4) ===================\n"
-                + "// Injecté par CompileRPGMain.java — remplace les stubs WebGL20\n"
-                + "// par des appels réels au contexte canvas.getContext('webgl2')\n"
+                "// =================== WebGL2 Bridge (Phase 3.5) ===================\n"
+                + "// Handle registry: OpenGL ES integer IDs ↔ real WebGL2 objects\n"
                 + "function _setupWebGL2Bridge(canvas) {\n"
                 + "    const gl = canvas && canvas.getContext ? canvas.getContext('webgl2') : null;\n"
-                + "    if (!gl) {\n"
-                + "        console.warn('[WebGL2 Bridge] WebGL2 non disponible, stubs conservés');\n"
-                + "        return false;\n"
-                + "    }\n"
-                + "    // Écriture dans un IntBuffer TeaVM — utilise $put3(index, value)\n"
-                + "    function writeIntBuf(buf, value) {\n"
-                + "        if (!buf) return;\n"
-                + "        try { buf.$put3(0, value | 0); } catch(e) {\n"
-                + "            try { if (buf.$data) buf.$data[0] = value | 0; } catch(e2) {}\n"
+                + "    if (!gl) { console.warn('[WebGL2 Bridge] WebGL2 non disponible'); return false; }\n"
+                + "    const _handles = [null]; let _nextId = 1;\n"
+                + "    function alloc(obj) { if (!obj) return 0; const id = _nextId++; _handles[id] = obj; return id; }\n"
+                + "    function get(id)    { return _handles[id | 0] || null; }\n"
+                + "    function free(id)   { _handles[id | 0] = null; }\n"
+                + "    function wib(buf, idx, val) {\n"
+                + "        try { buf.$put3(idx, val | 0); } catch(e) {\n"
+                + "            try { if (buf.$data) buf.$data[idx | 0] = val | 0; } catch(e2) {}\n"
                 + "        }\n"
                 + "    }\n"
-                + "    // Conversion TeaVM String → JS String\n"
-                + "    function toJsStr(s) { return s ? ($rt_ustr(s) || '') : ''; }\n"
-                + "\n"
-                + "    // --- Shaders ---\n"
-                + "    WebGL20.prototype.$glCreateShader = function(type) { return gl.createShader(type); };\n"
-                + "    WebGL20.prototype.$glShaderSource = function(s, src) { gl.shaderSource(s, toJsStr(src)); };\n"
-                + "    WebGL20.prototype.$glCompileShader = function(s) { gl.compileShader(s); };\n"
-                + "    WebGL20.prototype.$glDeleteShader = function(s) { gl.deleteShader(s); };\n"
-                + "    WebGL20.prototype.$glGetShaderiv = function(s, pname, params) {\n"
-                + "        writeIntBuf(params, gl.getShaderParameter(s, pname) ? 1 : 0);\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glGetShaderInfoLog = function(s) {\n"
-                + "        return $rt_str(gl.getShaderInfoLog(s) || '');\n"
-                + "    };\n"
-                + "\n"
-                + "    // --- Programs ---\n"
-                + "    WebGL20.prototype.$glCreateProgram = function() { return gl.createProgram(); };\n"
-                + "    WebGL20.prototype.$glAttachShader = function(p, s) { gl.attachShader(p, s); };\n"
-                + "    WebGL20.prototype.$glLinkProgram = function(p) { gl.linkProgram(p); };\n"
-                + "    WebGL20.prototype.$glUseProgram = function(p) { gl.useProgram(p); };\n"
-                + "    WebGL20.prototype.$glDeleteProgram = function(p) { gl.deleteProgram(p); };\n"
-                + "    WebGL20.prototype.$glGetProgramiv = function(p, pname, params) {\n"
-                + "        writeIntBuf(params, gl.getProgramParameter(p, pname) ? 1 : 0);\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glGetProgramInfoLog = function(p) {\n"
-                + "        return $rt_str(gl.getProgramInfoLog(p) || '');\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glGetAttribLocation = function(p, n) {\n"
-                + "        return gl.getAttribLocation(p, toJsStr(n));\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glGetUniformLocation = function(p, n) {\n"
-                + "        return gl.getUniformLocation(p, toJsStr(n));\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glGetActiveAttrib = function(p, i, size, type) {};\n"
-                + "    WebGL20.prototype.$glGetActiveUniform = function(p, i, size, type) {};\n"
-                + "\n"
-                + "    // --- Buffers ---\n"
-                + "    WebGL20.prototype.$glGenBuffer = function() { return gl.createBuffer(); };\n"
-                + "    WebGL20.prototype.$glBindBuffer = function(t, b) { gl.bindBuffer(t, b); };\n"
-                + "    WebGL20.prototype.$glDeleteBuffer = function(b) { gl.deleteBuffer(b); };\n"
-                + "    WebGL20.prototype.$glBufferData = function(t, sz, data, usage) {\n"
-                + "        gl.bufferData(t, data && data.$data ? data.$data : sz, usage);\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glBufferSubData = function(t, off, cnt, data) {\n"
-                + "        if (data && data.$data) gl.bufferSubData(t, off, data.$data.subarray(0, cnt));\n"
-                + "    };\n"
-                + "\n"
-                + "    // --- Textures ---\n"
-                + "    WebGL20.prototype.$glGenTexture = function() { return gl.createTexture(); };\n"
-                + "    WebGL20.prototype.$glBindTexture = function(t, tex) { gl.bindTexture(t, tex); };\n"
-                + "    WebGL20.prototype.$glDeleteTexture = function(tex) { gl.deleteTexture(tex); };\n"
-                + "    WebGL20.prototype.$glTexImage2D = function(t, lvl, ifmt, w, h, bdr, fmt, type, px) {\n"
-                + "        const d = px && px.$data ? new Uint8Array(px.$data.buffer) : null;\n"
-                + "        gl.texImage2D(t, lvl, ifmt, w, h, bdr, fmt, type, d);\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glTexParameterf = function(t, p, v) { gl.texParameterf(t, p, v); };\n"
-                + "    WebGL20.prototype.$glGenerateMipmap = function(t) { gl.generateMipmap(t); };\n"
-                + "    WebGL20.prototype.$glPixelStorei = function(p, v) { gl.pixelStorei(p, v); };\n"
-                + "    WebGL20.prototype.$glCompressedTexImage2D = function(t, lvl, ifmt, w, h, bdr, sz, d) {\n"
-                + "        if (d && d.$data) gl.compressedTexImage2D(t, lvl, ifmt, w, h, bdr, d.$data);\n"
-                + "    };\n"
-                + "\n"
-                + "    // --- Misc ---\n"
-                + "    WebGL20.prototype.$glViewport = function(x, y, w, h) { gl.viewport(x, y, w, h); };\n"
-                + "    WebGL20.prototype.$glGetIntegerv = function(p, buf) {\n"
-                + "        writeIntBuf(buf, gl.getParameter(p) | 0);\n"
-                + "    };\n"
-                + "    WebGL20.prototype.$glUniform1f = function(loc, v) { gl.uniform1f(loc, v); };\n"
-                + "\n"
-                + "    // --- WebGraphics dimensions → canvas réelles ---\n"
-                + "    WebGraphics.prototype.$getWidth = function() { return canvas.width; };\n"
-                + "    WebGraphics.prototype.$getHeight = function() { return canvas.height; };\n"
-                + "    WebGraphics.prototype.$getBackBufferWidth = function() { return canvas.width; };\n"
-                + "    WebGraphics.prototype.$getBackBufferHeight = function() { return canvas.height; };\n"
-                + "    WebGraphics.prototype.$getDensity = function() {\n"
-                + "        return typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;\n"
-                + "    };\n"
-                + "\n"
-                + "    const glMethods = Object.getOwnPropertyNames(WebGL20.prototype)\n"
-                + "        .filter(p => p.startsWith('$gl')).length;\n"
-                + "    console.log('[WebGL2 Bridge] ' + glMethods + ' méthodes GL connectées au contexte réel');\n"
+                + "    function str(s) { return s ? ($rt_ustr(s) || '') : ''; }\n"
+                + "    function jstr(s) { return $rt_str(s || ''); }\n"
+                + "    const P = WebGL20.prototype;\n"
+                + "    P.$glCreateShader    = t      => alloc(gl.createShader(t));\n"
+                + "    P.$glShaderSource    = (s,src) => gl.shaderSource(get(s), str(src));\n"
+                + "    P.$glCompileShader   = s      => gl.compileShader(get(s));\n"
+                + "    P.$glDeleteShader    = s      => { gl.deleteShader(get(s)); free(s); };\n"
+                + "    P.$glGetShaderiv     = (s,p,b) => wib(b, 0, gl.getShaderParameter(get(s), p) ? 1 : 0);\n"
+                + "    P.$glGetShaderInfoLog= s      => jstr(gl.getShaderInfoLog(get(s)));\n"
+                + "    P.$glCreateProgram   = ()     => alloc(gl.createProgram());\n"
+                + "    P.$glAttachShader    = (p,s)  => gl.attachShader(get(p), get(s));\n"
+                + "    P.$glDetachShader    = (p,s)  => gl.detachShader(get(p), get(s));\n"
+                + "    P.$glLinkProgram     = p      => gl.linkProgram(get(p));\n"
+                + "    P.$glValidateProgram = p      => gl.validateProgram(get(p));\n"
+                + "    P.$glUseProgram      = p      => gl.useProgram(p ? get(p) : null);\n"
+                + "    P.$glDeleteProgram   = p      => { gl.deleteProgram(get(p)); free(p); };\n"
+                + "    P.$glGetProgramiv    = (p,pn,b) => wib(b, 0, gl.getProgramParameter(get(p), pn) ? 1 : 0);\n"
+                + "    P.$glGetProgramInfoLog = p    => jstr(gl.getProgramInfoLog(get(p)));\n"
+                + "    P.$glGetAttribLocation  = (p,n) => gl.getAttribLocation(get(p), str(n));\n"
+                + "    P.$glGetUniformLocation = (p,n) => alloc(gl.getUniformLocation(get(p), str(n)));\n"
+                + "    P.$glGetActiveAttrib    = (p,i,sz,t) => {};\n"
+                + "    P.$glGetActiveUniform   = (p,i,sz,t) => {};\n"
+                + "    P.$glUniform1i  = (l,v)       => gl.uniform1i(get(l), v);\n"
+                + "    P.$glUniform1f  = (l,v)       => gl.uniform1f(get(l), v);\n"
+                + "    P.$glUniform2f  = (l,x,y)     => gl.uniform2f(get(l), x, y);\n"
+                + "    P.$glUniform3f  = (l,x,y,z)   => gl.uniform3f(get(l), x, y, z);\n"
+                + "    P.$glUniform4f  = (l,x,y,z,w) => gl.uniform4f(get(l), x, y, z, w);\n"
+                + "    P.$glUniform2i  = (l,x,y)     => gl.uniform2i(get(l), x, y);\n"
+                + "    P.$glUniform4i  = (l,x,y,z,w) => gl.uniform4i(get(l), x, y, z, w);\n"
+                + "    P.$glUniformMatrix4fv = (l,n,t,m) => gl.uniformMatrix4fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
+                + "    P.$glUniformMatrix3fv = (l,n,t,m) => gl.uniformMatrix3fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
+                + "    P.$glUniformMatrix2fv = (l,n,t,m) => gl.uniformMatrix2fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
+                + "    P.$glEnableVertexAttribArray  = l => gl.enableVertexAttribArray(l);\n"
+                + "    P.$glDisableVertexAttribArray = l => gl.disableVertexAttribArray(l);\n"
+                + "    P.$glVertexAttribPointer = (l,sz,t,norm,str,off) => gl.vertexAttribPointer(l,sz,t,!!norm,str,off);\n"
+                + "    P.$glGenBuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createBuffer())); };\n"
+                + "    P.$glBindBuffer    = (t,b) => gl.bindBuffer(t, b ? get(b) : null);\n"
+                + "    P.$glDeleteBuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteBuffer(get(id));free(id);} };\n"
+                + "    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.$data) gl.bufferData(t,data.$data,u); else gl.bufferData(t,sz,u); };\n"
+                + "    P.$glBufferSubData = (t,off,cnt,data) => { if(data&&data.$data) gl.bufferSubData(t,off,data.$data.subarray(0,cnt)); };\n"
+                + "    P.$glGenVertexArrays    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createVertexArray())); };\n"
+                + "    P.$glBindVertexArray    = v => gl.bindVertexArray(v ? get(v) : null);\n"
+                + "    P.$glDeleteVertexArrays = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteVertexArray(get(id));free(id);} };\n"
+                + "    P.$glGenTextures    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createTexture())); };\n"
+                + "    P.$glBindTexture    = (t,tex) => gl.bindTexture(t, tex ? get(tex) : null);\n"
+                + "    P.$glDeleteTextures = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteTexture(get(id));free(id);} };\n"
+                + "    P.$glActiveTexture  = u => gl.activeTexture(u);\n"
+                + "    P.$glTexImage2D     = (t,lv,if_,w,h,b,f,ty,d) => gl.texImage2D(t,lv,if_,w,h,b,f,ty,d&&d.$data?d.$data:null);\n"
+                + "    P.$glTexSubImage2D  = (t,lv,x,y,w,h,f,ty,d) => gl.texSubImage2D(t,lv,x,y,w,h,f,ty,d&&d.$data?d.$data:null);\n"
+                + "    P.$glTexParameteri  = (t,p,v) => gl.texParameteri(t,p,v);\n"
+                + "    P.$glTexParameterf  = (t,p,v) => gl.texParameterf(t,p,v);\n"
+                + "    P.$glGenerateMipmap = t => gl.generateMipmap(t);\n"
+                + "    P.$glPixelStorei    = (p,v) => gl.pixelStorei(p,v);\n"
+                + "    P.$glCompressedTexImage2D = (t,lv,if_,w,h,b,sz,d) => { if(d&&d.$data) gl.compressedTexImage2D(t,lv,if_,w,h,b,d.$data); };\n"
+                + "    P.$glGenFramebuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createFramebuffer())); };\n"
+                + "    P.$glBindFramebuffer    = (t,fb) => gl.bindFramebuffer(t, fb ? get(fb) : null);\n"
+                + "    P.$glDeleteFramebuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteFramebuffer(get(id));free(id);} };\n"
+                + "    P.$glFramebufferTexture2D = (t,at,tt,tex,lv) => gl.framebufferTexture2D(t,at,tt,get(tex),lv);\n"
+                + "    P.$glCheckFramebufferStatus = t => gl.checkFramebufferStatus(t);\n"
+                + "    P.$glGenRenderbuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createRenderbuffer())); };\n"
+                + "    P.$glBindRenderbuffer    = (t,rb) => gl.bindRenderbuffer(t, rb ? get(rb) : null);\n"
+                + "    P.$glDeleteRenderbuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteRenderbuffer(get(id));free(id);} };\n"
+                + "    P.$glRenderbufferStorage  = (t,f,w,h) => gl.renderbufferStorage(t,f,w,h);\n"
+                + "    P.$glFramebufferRenderbuffer = (t,at,rt,rb) => gl.framebufferRenderbuffer(t,at,rt,get(rb));\n"
+                + "    P.$glDrawArrays   = (m,f,c) => gl.drawArrays(m,f,c);\n"
+                + "    P.$glDrawElements = (m,c,t,o) => gl.drawElements(m,c,t,o);\n"
+                + "    P.$glViewport    = (x,y,w,h) => gl.viewport(x,y,w,h);\n"
+                + "    P.$glScissor     = (x,y,w,h) => gl.scissor(x,y,w,h);\n"
+                + "    P.$glEnable      = c => { try { gl.enable(c); } catch(e) {} };\n"
+                + "    P.$glDisable     = c => { try { gl.disable(c); } catch(e) {} };\n"
+                + "    P.$glBlendFunc   = (s,d) => gl.blendFunc(s,d);\n"
+                + "    P.$glBlendFuncSeparate = (sf,df,sa,da) => gl.blendFuncSeparate(sf,df,sa,da);\n"
+                + "    P.$glBlendEquation = eq => gl.blendEquation(eq);\n"
+                + "    P.$glColorMask   = (r,g,b,a) => gl.colorMask(!!r,!!g,!!b,!!a);\n"
+                + "    P.$glDepthMask   = f => gl.depthMask(!!f);\n"
+                + "    P.$glDepthFunc   = f => gl.depthFunc(f);\n"
+                + "    P.$glStencilFunc = (f,r,m) => gl.stencilFunc(f,r,m);\n"
+                + "    P.$glStencilOp   = (f,z,p) => gl.stencilOp(f,z,p);\n"
+                + "    P.$glCullFace    = m => gl.cullFace(m);\n"
+                + "    P.$glClearColor  = (r,g,b,a) => gl.clearColor(r,g,b,a);\n"
+                + "    P.$glClearDepthf = d => gl.clearDepth(d);\n"
+                + "    P.$glClear       = m => gl.clear(m);\n"
+                + "    P.$glLineWidth   = w => { try { gl.lineWidth(w); } catch(e) {} };\n"
+                + "    P.$glGetIntegerv = (p,b) => wib(b, 0, gl.getParameter(p) | 0);\n"
+                + "    P.$glGetError    = () => gl.getError();\n"
+                + "    P.$glFinish      = () => gl.finish();\n"
+                + "    P.$glFlush       = () => gl.flush();\n"
+                + "    if (typeof WebGraphics !== 'undefined') {\n"
+                + "        WebGraphics.prototype.$getWidth            = () => canvas.width;\n"
+                + "        WebGraphics.prototype.$getHeight           = () => canvas.height;\n"
+                + "        WebGraphics.prototype.$getBackBufferWidth  = () => canvas.width;\n"
+                + "        WebGraphics.prototype.$getBackBufferHeight = () => canvas.height;\n"
+                + "    }\n"
+                + "    console.log('[WebGL2 Bridge] Handle registry + full GL coverage actif');\n"
                 + "    return true;\n"
                 + "}\n"
                 + "$rt_exports.setupWebGL2 = _setupWebGL2Bridge;\n"
                 + "$rt_exports.$rt_ustr = $rt_ustr;\n"
                 + "$rt_exports.$rt_str = $rt_str;\n";
 
-            if (!js.contains("WebGL2 Bridge (Phase 3.4)")) {
+            if (!js.contains("WebGL2 Bridge (Phase 3.5)")) {
                 if (js.contains(fix28_anchor)) {
                     js = js.replace(fix28_anchor, fix28_bridge + fix28_anchor);
                     patchCount++;
-                    System.out.println("  Fix 28 OK : WebGL2 Bridge injecté dans la closure TeaVM");
+                    System.out.println("  Fix 28 OK : WebGL2 Bridge (Phase 3.5) injecté");
                 } else {
                     System.out.println("  Fix 28 WARN : anchor $rt_exports.main non trouvé");
                 }
             } else {
-                System.out.println("  Fix 28 : WebGL2 Bridge déjà présent");
+                System.out.println("  Fix 28 : WebGL2 Bridge (Phase 3.5) déjà présent");
             }
 
             // ------------------------------------------------------------------
