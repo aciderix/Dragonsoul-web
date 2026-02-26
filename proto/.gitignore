@@ -1,0 +1,11 @@
+# Gradle build artifacts
+.gradle/
+build/
+
+# Java compiled output (generated, not source)
+*.class
+
+# Gradle wrapper (not needed, using system Gradle)
+gradlew
+gradlew.bat
+gradle/wrapper/

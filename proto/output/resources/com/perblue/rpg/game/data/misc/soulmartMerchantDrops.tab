@@ -1,0 +1,300 @@
+	NODE	WEIGHT	QUANTITY	RESULT	BEHAVIOR
+1	DISPLAY	1	1	<SLOT_A>,<SLOT_B>,<SLOT_B>,<SLOT_B>,<SLOT_B>,<SLOT_B>,<EXP_ITEM>,<GOLD_ITEM>	NoDups
+2	ROOT	1	1	<EXP_ITEM>,<GOLD_ITEM>,<SLOT_A>,<SLOT_B>,<SLOT_B>,<SLOT_B>	
+3	EXP_ITEM	1	1	EXP_DECANTER {CostScalar=0.5}	
+4	EXP_ITEM	1	3	EXP_DECANTER {CostScalar=0.5}	
+5	EXP_ITEM	1	9	EXP_DECANTER {CostScalar=0.5}	
+6	EXP_ITEM	1	27	EXP_DECANTER {CostScalar=0.5}	
+7	GOLD_ITEM	1	1	SILVER_ORE {CostScalar=0.5}	
+8	GOLD_ITEM	1	1	VOLCANIC_ORE {CostScalar=0.5}	
+9	GOLD_ITEM	1	1	MITHRIL_ORE {CostScalar=0.5}	
+10	SLOT_A	1	1	? RunesUnlocked ? <SLOT_A_WITH_RUNES> ? <SLOT_A_NO_RUNES>	
+11	SLOT_A_WITH_RUNES	1	1	<RUNE_THING>	
+12	SLOT_A_NO_RUNES	1	1	<GEAR>	!ContainsUnreleasedItem(-1)
+13	SLOT_B	1	1	<GEAR>	!ContainsUnreleasedItem(-1)
+14	RUNE_THING	50	1	<RUNICITE>	
+15	RUNE_THING	50	1	<OFFERING>	
+16	RUNICITE	50	1	RUNICITE_SHARD	
+17	RUNICITE	35	1	RUNICITE_STONE	
+18	RUNICITE	10	1	RUNICITE_BLOCK	
+19	OFFERING	1	1	OFFERING_<Rune:SET>	
+20	GEAR	1	1	<_GEAR> {CostScalar=1.1}	
+1000	_GEAR	1	1	<G_$TeamLevel$>	!ContainsUnreleasedItem(-1)
+1001	_G_OLD	1	1	? ServerHasOrange ? <_ALL_GEAR> ? <_NO_ORANGE_GEAR>	
+1002	_ALL_GEAR	333	1	<_BLUE_GEAR>	
+1003	_ALL_GEAR	333	1	<_PURPLE_GEAR>	
+1004	_ALL_GEAR	333	1	<_ORANGE_GEAR>	
+1005	_NO_ORANGE_GEAR	333	1	<_BLUE_GEAR>	
+1006	_NO_ORANGE_GEAR	333	1	<_PURPLE_GEAR>	
+1007	_BLUE_GEAR	auto	1	<Gear:BLUE_FULL>	
+1008	_BLUE_GEAR	auto	1	<Gear:BLUE_REEL>	
+1009	_PURPLE_GEAR	auto	1	<Gear:PURPLE_FULL>	
+1010	_PURPLE_GEAR	auto	1	<Gear:PURPLE_REEL>	
+1011	_ORANGE_GEAR	auto	1	<Gear:ORANGE_FULL>	
+1012	_GN_11	2	5	<Gear:ALL_S10_SHARD>,<Gear:ALL_P10_SHARD>	Shuffle & NumOfItems(0,1)
+1013	_GN_11	8	1	<Gear:ALL_S10_REEL>,<Gear:ALL_P10_FULL>	Shuffle & NumOfItems(0,1)
+1014	_GN_11	3	5	<Gear:ALL_S9_SHARD>,<Gear:ALL_P9_SHARD>	Shuffle & NumOfItems(0,1)
+1015	_GN_11	12	1	<Gear:ALL_S9_REEL>,<Gear:ALL_P9_FULL>	Shuffle & NumOfItems(0,1)
+1016	_GN_11	4	5	<Gear:ALL_S8_SHARD>,<Gear:ALL_P8_SHARD>	Shuffle & NumOfItems(0,1)
+1017	_GN_11	16	1	<Gear:ALL_S8_REEL>,<Gear:ALL_P8_FULL>	Shuffle & NumOfItems(0,1)
+1018	_GN_12	2	5	<Gear:ALL_S11_SHARD>,<Gear:ALL_P11_SHARD>	Shuffle & NumOfItems(0,1)
+1019	_GN_12	8	1	<Gear:ALL_S11_REEL>,<Gear:ALL_P11_FULL>	Shuffle & NumOfItems(0,1)
+1020	_GN_12	3	5	<Gear:ALL_S10_SHARD>,<Gear:ALL_P10_SHARD>	Shuffle & NumOfItems(0,1)
+1021	_GN_12	12	1	<Gear:ALL_S10_REEL>,<Gear:ALL_P10_FULL>	Shuffle & NumOfItems(0,1)
+1022	_GN_12	4	5	<Gear:ALL_S9_SHARD>,<Gear:ALL_P9_SHARD>	Shuffle & NumOfItems(0,1)
+1023	_GN_12	16	1	<Gear:ALL_S9_REEL>,<Gear:ALL_P9_FULL>	Shuffle & NumOfItems(0,1)
+1024	_GN_13	2	5	<Gear:ALL_S12_SHARD>,<Gear:ALL_P12_SHARD>	Shuffle & NumOfItems(0,1)
+1025	_GN_13	8	1	<Gear:ALL_S12_REEL>,<Gear:ALL_P12_FULL>	Shuffle & NumOfItems(0,1)
+1026	_GN_13	3	5	<Gear:ALL_S11_SHARD>,<Gear:ALL_P11_SHARD>	Shuffle & NumOfItems(0,1)
+1027	_GN_13	12	1	<Gear:ALL_S11_REEL>,<Gear:ALL_P11_FULL>	Shuffle & NumOfItems(0,1)
+1028	_GN_13	4	5	<Gear:ALL_S10_SHARD>,<Gear:ALL_P10_SHARD>	Shuffle & NumOfItems(0,1)
+1029	_GN_13	16	1	<Gear:ALL_S10_REEL>,<Gear:ALL_P10_FULL>	Shuffle & NumOfItems(0,1)
+1030	_GN_14	2	5	<Gear:ALL_S13_SHARD>,<Gear:ALL_P13_SHARD>	Shuffle & NumOfItems(0,1)
+1031	_GN_14	8	1	<Gear:ALL_S13_REEL>,<Gear:ALL_P13_FULL>	Shuffle & NumOfItems(0,1)
+1032	_GN_14	3	5	<Gear:ALL_S12_SHARD>,<Gear:ALL_P12_SHARD>	Shuffle & NumOfItems(0,1)
+1033	_GN_14	12	1	<Gear:ALL_S12_REEL>,<Gear:ALL_P12_FULL>	Shuffle & NumOfItems(0,1)
+1034	_GN_14	4	5	<Gear:ALL_S11_SHARD>,<Gear:ALL_P11_SHARD>	Shuffle & NumOfItems(0,1)
+1035	_GN_14	16	1	<Gear:ALL_S11_REEL>,<Gear:ALL_P11_FULL>	Shuffle & NumOfItems(0,1)
+1036	_GN_15	2	5	<Gear:ALL_S14_SHARD>,<Gear:ALL_P14_SHARD>	Shuffle & NumOfItems(0,1)
+1037	_GN_15	8	1	<Gear:ALL_S14_REEL>,<Gear:ALL_P14_FULL>	Shuffle & NumOfItems(0,1)
+1038	_GN_15	3	5	<Gear:ALL_S13_SHARD>,<Gear:ALL_P13_SHARD>	Shuffle & NumOfItems(0,1)
+1039	_GN_15	12	1	<Gear:ALL_S13_REEL>,<Gear:ALL_P13_FULL>	Shuffle & NumOfItems(0,1)
+1040	_GN_15	4	5	<Gear:ALL_S12_SHARD>,<Gear:ALL_P12_SHARD>	Shuffle & NumOfItems(0,1)
+1041	_GN_15	16	1	<Gear:ALL_S12_REEL>,<Gear:ALL_P12_FULL>	Shuffle & NumOfItems(0,1)
+1042	_GN_16	2	5	<Gear:ALL_S15_SHARD>,<Gear:ALL_P15_SHARD>	Shuffle & NumOfItems(0,1)
+1043	_GN_16	8	1	<Gear:ALL_S15_REEL>,<Gear:ALL_P15_FULL>	Shuffle & NumOfItems(0,1)
+1044	_GN_16	3	5	<Gear:ALL_S14_SHARD>,<Gear:ALL_P14_SHARD>	Shuffle & NumOfItems(0,1)
+1045	_GN_16	12	1	<Gear:ALL_S14_REEL>,<Gear:ALL_P14_FULL>	Shuffle & NumOfItems(0,1)
+1046	_GN_16	4	5	<Gear:ALL_S13_SHARD>,<Gear:ALL_P13_SHARD>	Shuffle & NumOfItems(0,1)
+1047	_GN_16	16	1	<Gear:ALL_S13_REEL>,<Gear:ALL_P13_FULL>	Shuffle & NumOfItems(0,1)
+1048	_GN_17	2	5	<Gear:ALL_S16_SHARD>,<Gear:ALL_P16_SHARD>	Shuffle & NumOfItems(0,1)
+1049	_GN_17	8	1	<Gear:ALL_S16_REEL>,<Gear:ALL_P16_FULL>	Shuffle & NumOfItems(0,1)
+1050	_GN_17	3	5	<Gear:ALL_S15_SHARD>,<Gear:ALL_P15_SHARD>	Shuffle & NumOfItems(0,1)
+1051	_GN_17	12	1	<Gear:ALL_S15_REEL>,<Gear:ALL_P15_FULL>	Shuffle & NumOfItems(0,1)
+1052	_GN_17	4	5	<Gear:ALL_S14_SHARD>,<Gear:ALL_P14_SHARD>	Shuffle & NumOfItems(0,1)
+1053	_GN_17	16	1	<Gear:ALL_S14_REEL>,<Gear:ALL_P14_FULL>	Shuffle & NumOfItems(0,1)
+1054	_GN_18	2	5	<Gear:ALL_S17_SHARD>,<Gear:ALL_P17_SHARD>	Shuffle & NumOfItems(0,1)
+1055	_GN_18	8	1	<Gear:ALL_S17_REEL>,<Gear:ALL_P17_FULL>	Shuffle & NumOfItems(0,1)
+1056	_GN_18	3	5	<Gear:ALL_S16_SHARD>,<Gear:ALL_P16_SHARD>	Shuffle & NumOfItems(0,1)
+1057	_GN_18	12	1	<Gear:ALL_S16_REEL>,<Gear:ALL_P16_FULL>	Shuffle & NumOfItems(0,1)
+1058	_GN_18	4	5	<Gear:ALL_S15_SHARD>,<Gear:ALL_P15_SHARD>	Shuffle & NumOfItems(0,1)
+1059	_GN_18	16	1	<Gear:ALL_S15_REEL>,<Gear:ALL_P15_FULL>	Shuffle & NumOfItems(0,1)
+1060	_GN_19	2	5	<Gear:ALL_S18_SHARD>,<Gear:ALL_P18_SHARD>	Shuffle & NumOfItems(0,1)
+1061	_GN_19	8	1	<Gear:ALL_S18_REEL>,<Gear:ALL_P18_FULL>	Shuffle & NumOfItems(0,1)
+1062	_GN_19	3	5	<Gear:ALL_S17_SHARD>,<Gear:ALL_P17_SHARD>	Shuffle & NumOfItems(0,1)
+1063	_GN_19	12	1	<Gear:ALL_S17_REEL>,<Gear:ALL_P17_FULL>	Shuffle & NumOfItems(0,1)
+1064	_GN_19	4	5	<Gear:ALL_S16_SHARD>,<Gear:ALL_P16_SHARD>	Shuffle & NumOfItems(0,1)
+1065	_GN_19	16	1	<Gear:ALL_S16_REEL>,<Gear:ALL_P16_FULL>	Shuffle & NumOfItems(0,1)
+1066	_GN_20	2	5	<Gear:ALL_S19_SHARD>,<Gear:ALL_P19_SHARD>	Shuffle & NumOfItems(0,1)
+1067	_GN_20	8	1	<Gear:ALL_S19_REEL>,<Gear:ALL_P19_FULL>	Shuffle & NumOfItems(0,1)
+1068	_GN_20	3	5	<Gear:ALL_S18_SHARD>,<Gear:ALL_P18_SHARD>	Shuffle & NumOfItems(0,1)
+1069	_GN_20	12	1	<Gear:ALL_S18_REEL>,<Gear:ALL_P18_FULL>	Shuffle & NumOfItems(0,1)
+1070	_GN_20	4	5	<Gear:ALL_S17_SHARD>,<Gear:ALL_P17_SHARD>	Shuffle & NumOfItems(0,1)
+1071	_GN_20	16	1	<Gear:ALL_S17_REEL>,<Gear:ALL_P17_FULL>	Shuffle & NumOfItems(0,1)
+1072	_GN_21	2	5	<Gear:ALL_S20_SHARD>,<Gear:ALL_P20_SHARD>	Shuffle & NumOfItems(0,1)
+1073	_GN_21	8	1	<Gear:ALL_S20_REEL>,<Gear:ALL_P20_FULL>	Shuffle & NumOfItems(0,1)
+1074	_GN_21	3	5	<Gear:ALL_S19_SHARD>,<Gear:ALL_P19_SHARD>	Shuffle & NumOfItems(0,1)
+1075	_GN_21	12	1	<Gear:ALL_S19_REEL>,<Gear:ALL_P19_FULL>	Shuffle & NumOfItems(0,1)
+1076	_GN_21	4	5	<Gear:ALL_S18_SHARD>,<Gear:ALL_P18_SHARD>	Shuffle & NumOfItems(0,1)
+1077	_GN_21	16	1	<Gear:ALL_S18_REEL>,<Gear:ALL_P18_FULL>	Shuffle & NumOfItems(0,1)
+1078	_GN_22	2	10	<Gear:ALL_S22_SHARD>,<Gear:ALL_P22_SHARD>	Shuffle & NumOfItems(0,1)
+1079	_GN_22	8	1	<Gear:ALL_S22_REEL>,<Gear:ALL_P22_FULL>	Shuffle & NumOfItems(0,1)
+1080	_GN_22	3	10	<Gear:ALL_S21_SHARD>,<Gear:ALL_P21_SHARD>	Shuffle & NumOfItems(0,1)
+1081	_GN_22	12	1	<Gear:ALL_S21_REEL>,<Gear:ALL_P21_FULL>	Shuffle & NumOfItems(0,1)
+1082	_GN_22	16	10	<Gear:ALL_S20_SHARD>,<Gear:ALL_P20_SHARD>	Shuffle & NumOfItems(0,1)
+1083	_GN_22	2	5	<Gear:ALL_S20_REEL>,<Gear:ALL_P20_FULL>	Shuffle & NumOfItems(0,1)
+1084	_GN_23	2	10	<Gear:ALL_S23_SHARD>,<Gear:ALL_P23_SHARD>,<Gear:ALL_B23_SHARD>	Shuffle & NumOfItems(0,1)
+1085	_GN_23	8	1	<Gear:ALL_S23_REEL>,<Gear:ALL_P23_REEL>,<Gear:ALL_B23_FULL>	Shuffle & NumOfItems(0,1)
+1086	_GN_23	3	10	<Gear:ALL_S22_SHARD>,<Gear:ALL_P22_SHARD>,<Gear:ALL_B22_SHARD>	Shuffle & NumOfItems(0,1)
+1087	_GN_23	12	1	<Gear:ALL_S22_REEL>,<Gear:ALL_P22_FULL>,<Gear:ALL_B22_FULL>	Shuffle & NumOfItems(0,1)
+1088	_GN_23	4	10	<Gear:ALL_S21_SHARD>,<Gear:ALL_P21_SHARD>	Shuffle & NumOfItems(0,1)
+1089	_GN_23	16	1	<Gear:ALL_S21_REEL>,<Gear:ALL_P21_FULL>	Shuffle & NumOfItems(0,1)
+1090	_GN_24	2	10	<Gear:ALL_S24_SHARD>,<Gear:ALL_P24_SHARD>,<Gear:ALL_B24_SHARD>	Shuffle & NumOfItems(0,1)
+1091	_GN_24	8	1	<Gear:ALL_S24_REEL>,<Gear:ALL_P24_REEL>,<Gear:ALL_B24_FULL>	Shuffle & NumOfItems(0,1)
+1092	_GN_24	3	10	<Gear:ALL_S23_SHARD>,<Gear:ALL_P23_SHARD>,<Gear:ALL_B23_SHARD>	Shuffle & NumOfItems(0,1)
+1093	_GN_24	12	1	<Gear:ALL_S23_REEL>,<Gear:ALL_P23_REEL>,<Gear:ALL_B23_FULL>	Shuffle & NumOfItems(0,1)
+1094	_GN_24	4	10	<Gear:ALL_S22_SHARD>,<Gear:ALL_P22_SHARD>,<Gear:ALL_B22_SHARD>	Shuffle & NumOfItems(0,1)
+1095	_GN_24	16	1	<Gear:ALL_S22_REEL>,<Gear:ALL_P22_FULL>,<Gear:ALL_B22_FULL>	Shuffle & NumOfItems(0,1)
+1096	_GN_24	4	10	<Gear:ALL_S21_SHARD>,<Gear:ALL_P21_SHARD>	Shuffle & NumOfItems(0,1)
+1097	_GN_24	16	1	<Gear:ALL_S21_FULL>,<Gear:ALL_P21_FULL>	Shuffle & NumOfItems(0,1)
+1098	_GN_25	2	20	<Gear:ALL_S25_SHARD>,<Gear:ALL_P25_SHARD>,<Gear:ALL_B25_SHARD>	Shuffle & NumOfItems(0,1)
+1099	_GN_25	8	1	<Gear:ALL_S25_REEL>,<Gear:ALL_P25_REEL>,<Gear:ALL_B25_FULL>	Shuffle & NumOfItems(0,1)
+1100	_GN_25	3	20	<Gear:ALL_S24_SHARD>,<Gear:ALL_P24_SHARD>,<Gear:ALL_B24_SHARD>	Shuffle & NumOfItems(0,1)
+1101	_GN_25	12	1	<Gear:ALL_S24_REEL>,<Gear:ALL_P24_REEL>,<Gear:ALL_B24_FULL>	Shuffle & NumOfItems(0,1)
+1102	_GN_25	4	20	<Gear:ALL_S23_SHARD>,<Gear:ALL_P23_SHARD>,<Gear:ALL_B23_SHARD>	Shuffle & NumOfItems(0,1)
+1103	_GN_25	16	1	<Gear:ALL_S23_REEL>,<Gear:ALL_P23_FULL>,<Gear:ALL_B23_FULL>	Shuffle & NumOfItems(0,1)
+1104	_GN_25	4	20	<Gear:ALL_S22_SHARD>,<Gear:ALL_P22_SHARD>,<Gear:ALL_B22_SHARD>	Shuffle & NumOfItems(0,1)
+1105	_GN_25	16	1	<Gear:ALL_S22_REEL>,<Gear:ALL_P22_FULL>,<Gear:ALL_B22_FULL>	Shuffle & NumOfItems(0,1)
+1106	_GN_26	2	20	<Gear:ALL_S26_SHARD>,<Gear:ALL_P26_SHARD>,<Gear:ALL_B26_SHARD>	Shuffle & NumOfItems(0,1)
+1107	_GN_26	8	1	<Gear:ALL_S26_REEL>,<Gear:ALL_P26_REEL>,<Gear:ALL_B26_FULL>	Shuffle & NumOfItems(0,1)
+1108	_GN_26	3	20	<Gear:ALL_S25_SHARD>,<Gear:ALL_P25_SHARD>,<Gear:ALL_B25_SHARD>	Shuffle & NumOfItems(0,1)
+1109	_GN_26	12	1	<Gear:ALL_S25_REEL>,<Gear:ALL_P25_REEL>,<Gear:ALL_B25_FULL>	Shuffle & NumOfItems(0,1)
+1110	_GN_26	4	20	<Gear:ALL_S24_SHARD>,<Gear:ALL_P24_SHARD>,<Gear:ALL_B24_SHARD>	Shuffle & NumOfItems(0,1)
+1111	_GN_26	16	1	<Gear:ALL_S24_REEL>,<Gear:ALL_P24_FULL>,<Gear:ALL_B24_FULL>	Shuffle & NumOfItems(0,1)
+1112	_GN_26	4	20	<Gear:ALL_S23_SHARD>,<Gear:ALL_P23_SHARD>,<Gear:ALL_B23_SHARD>	Shuffle & NumOfItems(0,1)
+1113	_GN_26	16	1	<Gear:ALL_S23_REEL>,<Gear:ALL_P23_FULL>,<Gear:ALL_B23_FULL>	Shuffle & NumOfItems(0,1)
+1114	G_1	1	1	<_G_OLD>	
+1115	G_2	1	1	<_G_OLD>	
+1116	G_3	1	1	<_G_OLD>	
+1117	G_4	1	1	<_G_OLD>	
+1118	G_5	1	1	<_G_OLD>	
+1119	G_6	1	1	<_G_OLD>	
+1120	G_7	1	1	<_G_OLD>	
+1121	G_8	1	1	<_G_OLD>	
+1122	G_9	1	1	<_G_OLD>	
+1123	G_10	1	1	<_G_OLD>	
+1124	G_11	1	1	<_G_OLD>	
+1125	G_12	1	1	<_G_OLD>	
+1126	G_13	1	1	<_G_OLD>	
+1127	G_14	1	1	<_G_OLD>	
+1128	G_15	1	1	<_G_OLD>	
+1129	G_16	1	1	<_G_OLD>	
+1130	G_17	1	1	<_G_OLD>	
+1131	G_18	1	1	<_G_OLD>	
+1132	G_19	1	1	<_G_OLD>	
+1133	G_20	1	1	<_G_OLD>	
+1134	G_21	1	1	<_G_OLD>	
+1135	G_22	1	1	<_G_OLD>	
+1136	G_23	1	1	<_G_OLD>	
+1137	G_24	1	1	<_G_OLD>	
+1138	G_25	1	1	<_G_OLD>	
+1139	G_26	1	1	<_G_OLD>	
+1140	G_27	1	1	<_G_OLD>	
+1141	G_28	1	1	<_G_OLD>	
+1142	G_29	1	1	<_G_OLD>	
+1143	G_30	1	1	<_G_OLD>	
+1144	G_31	1	1	<_G_OLD>	
+1145	G_32	1	1	<_G_OLD>	
+1146	G_33	1	1	<_G_OLD>	
+1147	G_34	1	1	<_G_OLD>	
+1148	G_35	1	1	<_G_OLD>	
+1149	G_36	1	1	<_G_OLD>	
+1150	G_37	1	1	<_G_OLD>	
+1151	G_38	1	1	<_G_OLD>	
+1152	G_39	1	1	<_G_OLD>	
+1153	G_40	1	1	<_G_OLD>	
+1154	G_41	1	1	<_G_OLD>	
+1155	G_42	1	1	<_G_OLD>	
+1156	G_43	1	1	<_G_OLD>	
+1157	G_44	1	1	<_G_OLD>	
+1158	G_45	1	1	<_G_OLD>	
+1159	G_46	1	1	<_G_OLD>	
+1160	G_47	1	1	<_G_OLD>	
+1161	G_48	1	1	<_G_OLD>	
+1162	G_49	1	1	<_G_OLD>	
+1163	G_50	1	1	<_G_OLD>	
+1164	G_51	1	1	<_G_OLD>	
+1165	G_52	1	1	<_G_OLD>	
+1166	G_53	1	1	<_G_OLD>	
+1167	G_54	1	1	<_G_OLD>	
+1168	G_55	1	1	<_G_OLD>	
+1169	G_56	1	1	<_G_OLD>	
+1170	G_57	1	1	<_G_OLD>	
+1171	G_58	1	1	<_G_OLD>	
+1172	G_59	1	1	<_G_OLD>	
+1173	G_60	1	1	<_G_OLD>	
+1174	G_61	1	1	<_G_OLD>	
+1175	G_62	1	1	<_G_OLD>	
+1176	G_63	1	1	<_G_OLD>	
+1177	G_64	1	1	<_G_OLD>	
+1178	G_65	1	1	<_G_OLD>	
+1179	G_66	1	1	<_G_OLD>	
+1180	G_67	1	1	<_G_OLD>	
+1181	G_68	1	1	<_G_OLD>	
+1182	G_69	1	1	<_G_OLD>	
+1183	G_70	1	1	<_G_OLD>	
+1184	G_71	1	1	<_G_OLD>	
+1185	G_72	1	1	<_G_OLD>	
+1186	G_73	1	1	<_G_OLD>	
+1187	G_74	1	1	<_G_OLD>	
+1188	G_75	1	1	<_G_OLD>	
+1189	G_76	1	1	<_GN_11>	
+1190	G_77	1	1	<_GN_11>	
+1191	G_78	1	1	<_GN_11>	
+1192	G_79	1	1	<_GN_11>	
+1193	G_80	1	1	<_GN_11>	
+1194	G_81	1	1	<_GN_12>	
+1195	G_82	1	1	<_GN_12>	
+1196	G_83	1	1	<_GN_12>	
+1197	G_84	1	1	<_GN_12>	
+1198	G_85	1	1	<_GN_12>	
+1199	G_86	1	1	<_GN_13>	
+1200	G_87	1	1	<_GN_13>	
+1201	G_88	1	1	<_GN_13>	
+1202	G_89	1	1	<_GN_13>	
+1203	G_90	1	1	<_GN_13>	
+1204	G_91	1	1	<_GN_14>	
+1205	G_92	1	1	<_GN_14>	
+1206	G_93	1	1	<_GN_14>	
+1207	G_94	1	1	<_GN_14>	
+1208	G_95	1	1	<_GN_14>	
+1209	G_96	1	1	<_GN_15>	
+1210	G_97	1	1	<_GN_15>	
+1211	G_98	1	1	<_GN_15>	
+1212	G_99	1	1	<_GN_15>	
+1213	G_100	1	1	<_GN_15>	
+1214	G_101	1	1	<_GN_16>	
+1215	G_102	1	1	<_GN_16>	
+1216	G_103	1	1	<_GN_16>	
+1217	G_104	1	1	<_GN_16>	
+1218	G_105	1	1	<_GN_16>	
+1219	G_106	1	1	<_GN_16>	
+1220	G_107	1	1	<_GN_16>	
+1221	G_108	1	1	<_GN_16>	
+1222	G_109	1	1	<_GN_16>	
+1223	G_110	1	1	<_GN_16>	
+1224	G_111	1	1	<_GN_17>	
+1225	G_112	1	1	<_GN_17>	
+1226	G_113	1	1	<_GN_17>	
+1227	G_114	1	1	<_GN_17>	
+1228	G_115	1	1	<_GN_17>	
+1229	G_116	1	1	<_GN_17>	
+1230	G_117	1	1	<_GN_17>	
+1231	G_118	1	1	<_GN_17>	
+1232	G_119	1	1	<_GN_17>	
+1233	G_120	1	1	<_GN_17>	
+1234	G_121	1	1	<_GN_18>	
+1235	G_122	1	1	<_GN_18>	
+1236	G_123	1	1	<_GN_18>	
+1237	G_124	1	1	<_GN_18>	
+1238	G_125	1	1	<_GN_18>	
+1239	G_126	1	1	<_GN_19>	
+1240	G_127	1	1	<_GN_19>	
+1241	G_128	1	1	<_GN_19>	
+1242	G_129	1	1	<_GN_19>	
+1243	G_130	1	1	<_GN_19>	
+1244	G_131	1	1	<_GN_20>	
+1245	G_132	1	1	<_GN_20>	
+1246	G_133	1	1	<_GN_20>	
+1247	G_134	1	1	<_GN_20>	
+1248	G_135	1	1	<_GN_20>	
+1249	G_136	1	1	<_GN_21>	
+1250	G_137	1	1	<_GN_21>	
+1251	G_138	1	1	<_GN_21>	
+1252	G_139	1	1	<_GN_21>	
+1253	G_140	1	1	<_GN_21>	
+1254	G_141	1	1	<_GN_22>	
+1255	G_142	1	1	<_GN_22>	
+1256	G_143	1	1	<_GN_22>	
+1257	G_144	1	1	<_GN_22>	
+1258	G_145	1	1	<_GN_22>	
+1259	G_146	1	1	<_GN_23>	
+1260	G_147	1	1	<_GN_23>	
+1261	G_148	1	1	<_GN_23>	
+1262	G_149	1	1	<_GN_23>	
+1263	G_150	1	1	<_GN_23>	
+1264	G_151	1	1	<_GN_24>	
+1265	G_152	1	1	<_GN_24>	
+1266	G_153	1	1	<_GN_24>	
+1267	G_154	1	1	<_GN_24>	
+1268	G_155	1	1	<_GN_24>	
+1269	G_156	1	1	<_GN_25>	
+1270	G_157	1	1	<_GN_25>	
+1271	G_158	1	1	<_GN_25>	
+1272	G_159	1	1	<_GN_25>	
+1273	G_160	1	1	<_GN_25>	
+1274	G_161	1	1	<_GN_26>	
+1275	G_162	1	1	<_GN_26>	
+1276	G_163	1	1	<_GN_26>	
+1277	G_164	1	1	<_GN_26>	
+1278	G_165	1	1	<_GN_26>	
