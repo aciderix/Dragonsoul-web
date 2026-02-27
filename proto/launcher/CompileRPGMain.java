@@ -1730,6 +1730,42 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
+            // Fix 48: BaseScreen.createStep must immediately set loadState0=CREATED
+            // so that ScreenManager can call setScreen() and show the screen.
+            // Without this, loadState0 stays UNINITIALIZED, getScreen() returns null,
+            // and the stage root group has no actors → 0 draw calls, black canvas.
+            // ------------------------------------------------------------------
+            String fix48_old = "cprus_BaseScreen_createStep = (var$0, var$1) => {\n"
+                             + "    let $ptr, $tmp;\n"
+                             + "    $ptr = 0;\n"
+                             + "    if ($rt_resuming()) {\n"
+                             + "        let $thread = $rt_nativeThread();\n"
+                             + "        $ptr = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                             + "    }\n"
+                             + "    main: while (true) { switch ($ptr) {\n"
+                             + "    case 0:\n"
+                             + "        return 0.0;\n"
+                             + "    default: $rt_invalidPointer();\n"
+                             + "    }}\n"
+                             + "    $rt_nativeThread().push(var$0, var$1, $ptr);\n"
+                             + "}";
+            String fix48_new = "cprus_BaseScreen_createStep = (var$0, var$1) => {\n"
+                             + "    // Phase 3.12: immediately signal CREATED so ScreenManager calls setScreen\n"
+                             + "    cprus_BaseScreen$LoadState_$callClinit();\n"
+                             + "    var$0.$loadState0 = cprus_BaseScreen$LoadState_CREATED;\n"
+                             + "    return 1.0;\n"
+                             + "}";
+            if (js.contains(fix48_old) && !js.contains("Phase 3.12")) {
+                js = js.replace(fix48_old, fix48_new);
+                patchCount++;
+                System.out.println("  Fix 48 OK : BaseScreen.createStep → CREATED state");
+            } else if (js.contains("Phase 3.12")) {
+                System.out.println("  Fix 48 : déjà appliqué");
+            } else {
+                System.out.println("  Fix 48 WARN : BaseScreen.createStep pattern not found");
+            }
+
+            // ------------------------------------------------------------------
             // Écriture finale — une seule fois après tous les patches
             // ------------------------------------------------------------------
             Files.writeString(out.toPath(), js);
