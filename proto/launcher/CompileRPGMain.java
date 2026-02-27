@@ -1679,7 +1679,9 @@ public class CompileRPGMain {
                 + "WebDeviceInfo.prototype.$getPlatform = function() { return $rt_s(34); };\n"
                 + "cprus_BaseScreen.prototype.$clearInfoWidget = function() {};\n"
                 + "cpr_RPGMain.prototype.$analyticsTrackScreen = function(name) {};\n"
-                + "cpra_RPGAssetManager.prototype.$cleanCache = function() {};\n";
+                + "cpra_RPGAssetManager.prototype.$cleanCache = function() {};\n"
+                + "cprg_RPGShader.prototype.$setAlphaAtlasDisable = function(v) {};\n"
+                + "cprg_RPGShader.prototype.$setRenderType = function(type) {};\n";
             String fix46_replacement = "]);\n" + fix46_stub + "let $rt_booleanArrayCls";
             if (js.contains(fix46_anchor) && !js.contains("Phase 3.11c: prototype stubs")) {
                 js = js.replace(fix46_anchor, fix46_replacement);
@@ -1689,6 +1691,42 @@ public class CompileRPGMain {
                 System.out.println("  Fix 46 : déjà appliqué");
             } else {
                 System.out.println("  Fix 46 WARN : anchor 'let $rt_booleanArrayCls' non trouvé");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 47: renderFrame must run inside a TeaVM thread context.
+            // Without it, $rt_requireNativeThread() throws
+            // "Suspension point reached from non-threading context".
+            // Wrap $rt_exports.renderFrame with a thread-per-frame approach:
+            // resume a suspended thread, or start a fresh one each frame.
+            // ------------------------------------------------------------------
+            String fix47_old = "$rt_exports.renderFrame = function() {\n"
+                             + "    if (typeof DragonSoulLauncher_renderFrame === 'function') {\n"
+                             + "        DragonSoulLauncher_renderFrame();\n"
+                             + "    }\n"
+                             + "};";
+            String fix47_new = "$rt_exports.renderFrame = (function() {\n"
+                             + "    // Phase 3.11e: renderFrame needs a TeaVM thread context\n"
+                             + "    var _renderThread = null;\n"
+                             + "    return function() {\n"
+                             + "        if (typeof DragonSoulLauncher_renderFrame !== 'function') return;\n"
+                             + "        if (_renderThread !== null && _renderThread.status === 1) {\n"
+                             + "            _renderThread.resume();\n"
+                             + "        } else {\n"
+                             + "            _renderThread = new TeaVMThread(DragonSoulLauncher_renderFrame);\n"
+                             + "            _renderThread.start();\n"
+                             + "        }\n"
+                             + "    };\n"
+                             + "})();\n"
+                             + "$rt_exports.renderFrame_raw = $rt_exports.renderFrame;";
+            if (js.contains(fix47_old) && !js.contains("Phase 3.11e")) {
+                js = js.replace(fix47_old, fix47_new);
+                patchCount++;
+                System.out.println("  Fix 47 OK : renderFrame wrapped with TeaVM thread context");
+            } else if (js.contains("Phase 3.11e")) {
+                System.out.println("  Fix 47 : déjà appliqué");
+            } else {
+                System.out.println("  Fix 47 WARN : $rt_exports.renderFrame pattern not found");
             }
 
             // ------------------------------------------------------------------
