@@ -1654,6 +1654,43 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
+            // Fix 46: prototype stubs AFTER last $rt_metadata — previous Fix 26/27 insertion
+            // was before the NewRelicInstrumentation/WebDeviceInfo/BaseScreen $rt_metadata calls
+            // which replace cls.prototype entirely, wiping any prior prototype assignments.
+            // Solution: insert AFTER "let $rt_booleanArrayCls" (end of all $rt_metadata calls).
+            // ------------------------------------------------------------------
+            String fix46_anchor = "]);\nlet $rt_booleanArrayCls";
+            String fix46_stub = "\n// Phase 3.11c: prototype stubs — AFTER all $rt_metadata calls\n"
+                + "cpr_NewRelicInstrumentation.prototype.$startInteraction = function(name) { return null; };\n"
+                + "cpr_NewRelicInstrumentation.prototype.$endInteraction = function(token) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$recordMetric = function(name, cat, val) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$noticeNetworkRequest = function() {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$noticeNetworkFailure = function() {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$setAttribute = function(k, v) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$setUserId = function(id) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$stopInteraction = function(token) {};\n"
+                + "WebDeviceInfo.prototype.$getDeviceID = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getDeviceName = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getModel = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getOSVersion = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getResolution = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getAppVersion = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getBundleId = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getPlatform = function() { return $rt_s(34); };\n"
+                + "cprus_BaseScreen.prototype.$clearInfoWidget = function() {};\n"
+                + "cpr_RPGMain.prototype.$analyticsTrackScreen = function(name) {};\n";
+            String fix46_replacement = "]);\n" + fix46_stub + "let $rt_booleanArrayCls";
+            if (js.contains(fix46_anchor) && !js.contains("Phase 3.11c: prototype stubs")) {
+                js = js.replace(fix46_anchor, fix46_replacement);
+                patchCount++;
+                System.out.println("  Fix 46 OK : prototype stubs after last $rt_metadata");
+            } else if (js.contains("Phase 3.11c: prototype stubs")) {
+                System.out.println("  Fix 46 : déjà appliqué");
+            } else {
+                System.out.println("  Fix 46 WARN : anchor 'let $rt_booleanArrayCls' non trouvé");
+            }
+
+            // ------------------------------------------------------------------
             // Écriture finale — une seule fois après tous les patches
             // ------------------------------------------------------------------
             Files.writeString(out.toPath(), js);
