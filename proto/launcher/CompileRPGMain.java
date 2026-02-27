@@ -854,6 +854,11 @@ public class CompileRPGMain {
                 + "cpr_RPGMain.prototype.$getYourGuildInfo = function() { return this.$guildInfo3; };\n"
                 + "cpr_RPGMain.prototype.$getFrameRateManager = function() { return this.$frameRateManager; };\n"
                 + "cpr_RPGMain.prototype.$getDeviceInfo = function() { return this.$deviceInfo1; };\n"
+                // Fix 41
+                + "// Fix 41: $getCurrentAssetDensity — absent du prototype TeaVM RPGMain\n"
+                + "//   Appelé dans create() pour choisir le dossier d'assets (HD/XHDI/MDPI)\n"
+                + "//   Sur web on renvoie XHDPI (densité élevée = assets HD)\n"
+                + "cpr_RPGMain.prototype.$getCurrentAssetDensity = function(var$1) { cpr_AssetDensity_$callClinit(); return cpr_AssetDensity_XHDPI; };\n"
                 + "cpr_RPGMain.prototype.$isRestartPending = function() { return 0; };\n"
                 + "cpr_RPGMain.prototype.$setShouldRestart = function(v) {};\n"
                 + "cpr_RPGMain.prototype.$setRequestFullWarInfoOnNextLoad = function(v) { this.$requestFullWarInfoOnNextLoad0 = v; };\n"
@@ -907,15 +912,15 @@ public class CompileRPGMain {
                 int _metaClose = js.indexOf("]);", _anchorEnd);
                 if (_metaClose >= 0) {
                     js = js.substring(0, _metaClose + 3) + protoAdditions + js.substring(_metaClose + 3);
-                    patchCount += 6; // fixes 15, 23, 24, 25, 26, 27
-                    System.out.println("  Fix 15+23+24+25+26+27 OK : prototype additions RPGMain/NewRelic/WebDeviceInfo");
+                    patchCount += 7; // fixes 15, 23, 24, 25, 26, 27, 41
+                    System.out.println("  Fix 15+23+24+25+26+27+41 OK : prototype additions RPGMain/NewRelic/WebDeviceInfo + getCurrentAssetDensity");
                 } else {
-                    System.out.println("  Fix 15+23+24+25+26+27 WARN : closing ]); non trouvé après anchor");
+                    System.out.println("  Fix 15+23+24+25+26+27+41 WARN : closing ]); non trouvé après anchor");
                 }
             } else if (js.contains("Fix 15: Add missing getCachedPreferredLanguage")) {
-                System.out.println("  Fix 15+23+24+25+26+27 : déjà appliqués");
+                System.out.println("  Fix 15+23+24+25+26+27+41 : déjà appliqués");
             } else {
-                System.out.println("  Fix 15+23+24+25+26+27 WARN : anchor prototype getCurrentAssetDensity non trouvé");
+                System.out.println("  Fix 15+23+24+25+26+27+41 WARN : anchor prototype getCurrentAssetDensity non trouvé");
             }
 
             // ------------------------------------------------------------------

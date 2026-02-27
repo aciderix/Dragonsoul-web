@@ -60,6 +60,57 @@ function readStatus(page, id) {
 
   const page = await context.newPage();
 
+  // --- Intercepter $hashCode sur undefined avant le boot TeaVM ---
+  // Cela permet de trouver exactement où le crash se produit
+  await page.addInitScript(() => {
+    // Quand ju_HashMap_putImpl est chargé, on le wrappe pour logger le contexte
+    // On utilise un Proxy sur window pour détecter quand la fonction est définie
+    let _hashCodeTrapped = false;
+    const _origDefProp = Object.defineProperty;
+    Object.defineProperty(window, 'ju_HashMap_putImpl', {
+      configurable: true,
+      set(fn) {
+        _origDefProp(window, 'ju_HashMap_putImpl', {
+          configurable: true, writable: true,
+          value: function($this, $key, $value) {
+            if (!_hashCodeTrapped && ($key === undefined || $key === null && false)) {
+              _hashCodeTrapped = true;
+              console.error('[HASHCODE TRAP] key=undefined in ju_HashMap_putImpl, stack:', new Error().stack);
+            }
+            try {
+              return fn($this, $key, $value);
+            } catch(e) {
+              if (e && e.message && e.message.includes('hashCode')) {
+                console.error('[HASHCODE CRASH] key=' + JSON.stringify($key) + ' type=' + typeof $key + ' stack:', new Error().stack.split('\n').slice(0,8).join('\n'));
+                console.error('[HASHCODE CRASH] error:', e.stack || e.message);
+              }
+              throw e;
+            }
+          }
+        });
+      }
+    });
+    // Aussi pour juc_ConcurrentHashMap_put
+    Object.defineProperty(window, 'juc_ConcurrentHashMap_put', {
+      configurable: true,
+      set(fn) {
+        _origDefProp(window, 'juc_ConcurrentHashMap_put', {
+          configurable: true, writable: true,
+          value: function($this, $key, $value) {
+            try {
+              return fn($this, $key, $value);
+            } catch(e) {
+              if (e && e.message && e.message.includes('hashCode')) {
+                console.error('[CHASHCODE CRASH] key=' + JSON.stringify($key) + ' type=' + typeof $key + ' stack:', new Error().stack.split('\n').slice(0,8).join('\n'));
+              }
+              throw e;
+            }
+          }
+        });
+      }
+    });
+  });
+
   // --- Capturer tous les messages console ---
   page.on('console', (msg) => {
     const type = msg.type();
