@@ -862,7 +862,7 @@ public class CompileRPGMain {
                 + "cpr_RPGMain.prototype.$getWarRedDotInfo = function() { return null; };\n"
                 + "cpr_RPGMain.prototype.$getYourGuildInfo = function() { return this.$guildInfo3; };\n"
                 + "cpr_RPGMain.prototype.$getFrameRateManager = function() { return this.$frameRateManager; };\n"
-                + "cpr_RPGMain.prototype.$getDeviceInfo = function() { return this.$deviceInfo1; };\n"
+                + "cpr_RPGMain.prototype.$getDeviceInfo = function() { return this.$deviceInfo || this.$deviceInfo1; };\n"
                 // Fix 41
                 + "// Fix 41: $getCurrentAssetDensity — absent du prototype TeaVM RPGMain\n"
                 + "//   Appelé dans create() pour choisir le dossier d'assets (HD/XHDI/MDPI)\n"
@@ -1678,7 +1678,8 @@ public class CompileRPGMain {
                 + "WebDeviceInfo.prototype.$getBundleId = function() { return $rt_s(34); };\n"
                 + "WebDeviceInfo.prototype.$getPlatform = function() { return $rt_s(34); };\n"
                 + "cprus_BaseScreen.prototype.$clearInfoWidget = function() {};\n"
-                + "cpr_RPGMain.prototype.$analyticsTrackScreen = function(name) {};\n";
+                + "cpr_RPGMain.prototype.$analyticsTrackScreen = function(name) {};\n"
+                + "cpra_RPGAssetManager.prototype.$cleanCache = function() {};\n";
             String fix46_replacement = "]);\n" + fix46_stub + "let $rt_booleanArrayCls";
             if (js.contains(fix46_anchor) && !js.contains("Phase 3.11c: prototype stubs")) {
                 js = js.replace(fix46_anchor, fix46_replacement);
