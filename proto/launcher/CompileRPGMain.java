@@ -937,7 +937,9 @@ public class CompileRPGMain {
             String fix29_new = "WebFiles_b = (var$0, var$1) => {\n"
                 + "    const _p = $rt_ustr(var$1);\n"
                 + "    if (typeof GAME_ASSETS !== \"undefined\" && GAME_ASSETS[_p] !== undefined) {\n"
-                + "        return { _webContent: GAME_ASSETS[_p] };\n"
+                + "        const _a = GAME_ASSETS[_p];\n"
+                + "        if (typeof _a === \"string\") return { _webContent: _a };\n"
+                + "        return _a;\n"
                 + "    }\n"
                 + "    return null;\n"
                 + "}";
@@ -1453,7 +1455,7 @@ public class CompileRPGMain {
                 + "    function free(id)   { _handles[id | 0] = null; }\n"
                 + "    function wib(buf, idx, val) {\n"
                 + "        try { buf.$put3(idx, val | 0); } catch(e) {\n"
-                + "            try { if (buf.$data) buf.$data[idx | 0] = val | 0; } catch(e2) {}\n"
+                + "            try { const _bd = buf.data || buf.$data; if (_bd) _bd[idx | 0] = val | 0; } catch(e2) {}\n"
                 + "        }\n"
                 + "    }\n"
                 + "    function str(s) { return s ? ($rt_ustr(s) || '') : ''; }\n"
@@ -1486,7 +1488,7 @@ public class CompileRPGMain {
                 + "    P.$glUniform4f  = (l,x,y,z,w) => gl.uniform4f(get(l), x, y, z, w);\n"
                 + "    P.$glUniform2i  = (l,x,y)     => gl.uniform2i(get(l), x, y);\n"
                 + "    P.$glUniform4i  = (l,x,y,z,w) => gl.uniform4i(get(l), x, y, z, w);\n"
-                + "    function fdat(m) { if (!m) return null; const d = m.$data || m; return d instanceof Float32Array ? d : new Float32Array(d); }\n"
+                + "    function fdat(m) { if (!m) return null; const d = m.data; if (!d) return null; return d instanceof Float32Array ? d : new Float32Array(d); }\n"
                 + "    P.$glUniformMatrix4fv = (l,n,t,m) => { const d = fdat(m); if (d) gl.uniformMatrix4fv(get(l), !!t, d); };\n"
                 + "    P.$glUniformMatrix3fv = (l,n,t,m) => { const d = fdat(m); if (d) gl.uniformMatrix3fv(get(l), !!t, d); };\n"
                 + "    P.$glUniformMatrix2fv = (l,n,t,m) => { const d = fdat(m); if (d) gl.uniformMatrix2fv(get(l), !!t, d); };\n"
@@ -1495,31 +1497,31 @@ public class CompileRPGMain {
                 + "    P.$glVertexAttribPointer = (l,sz,t,norm,str,off) => gl.vertexAttribPointer(l,sz,t,!!norm,str,off);\n"
                 + "    P.$glGenBuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createBuffer())); };\n"
                 + "    P.$glBindBuffer    = (t,b) => gl.bindBuffer(t, b ? get(b) : null);\n"
-                + "    P.$glDeleteBuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteBuffer(get(id));free(id);} };\n"
-                + "    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.$data) gl.bufferData(t,data.$data,u); else if(sz>0) gl.bufferData(t,sz,u); };\n"
-                + "    P.$glBufferSubData = (t,off,cnt,data) => { if(data&&data.$data) gl.bufferSubData(t,off,data.$data.subarray(0,cnt)); };\n"
+                + "    P.$glDeleteBuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteBuffer(get(id));free(id);} };\n"
+                + "    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.data) gl.bufferData(t,data.data,u); else if(sz>0) gl.bufferData(t,sz,u); };\n"
+                + "    P.$glBufferSubData = (t,off,cnt,data) => { if(data&&data.data) gl.bufferSubData(t,off,data.data.subarray(0,cnt)); };\n"
                 + "    P.$glGenVertexArrays    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createVertexArray())); };\n"
                 + "    P.$glBindVertexArray    = v => gl.bindVertexArray(v ? get(v) : null);\n"
-                + "    P.$glDeleteVertexArrays = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteVertexArray(get(id));free(id);} };\n"
+                + "    P.$glDeleteVertexArrays = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteVertexArray(get(id));free(id);} };\n"
                 + "    P.$glGenTextures    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createTexture())); };\n"
                 + "    P.$glBindTexture    = (t,tex) => gl.bindTexture(t, tex ? get(tex) : null);\n"
-                + "    P.$glDeleteTextures = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteTexture(get(id));free(id);} };\n"
+                + "    P.$glDeleteTextures = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteTexture(get(id));free(id);} };\n"
                 + "    P.$glActiveTexture  = u => gl.activeTexture(u);\n"
-                + "    P.$glTexImage2D     = (t,lv,if_,w,h,b,f,ty,d) => gl.texImage2D(t,lv,if_,w,h,b,f,ty,d&&d.$data?d.$data:null);\n"
-                + "    P.$glTexSubImage2D  = (t,lv,x,y,w,h,f,ty,d) => gl.texSubImage2D(t,lv,x,y,w,h,f,ty,d&&d.$data?d.$data:null);\n"
+                + "    P.$glTexImage2D     = (t,lv,if_,w,h,b,f,ty,d) => gl.texImage2D(t,lv,if_,w,h,b,f,ty,d&&d.data?d.data:null);\n"
+                + "    P.$glTexSubImage2D  = (t,lv,x,y,w,h,f,ty,d) => gl.texSubImage2D(t,lv,x,y,w,h,f,ty,d&&d.data?d.data:null);\n"
                 + "    P.$glTexParameteri  = (t,p,v) => gl.texParameteri(t,p,v);\n"
                 + "    P.$glTexParameterf  = (t,p,v) => gl.texParameterf(t,p,v);\n"
                 + "    P.$glGenerateMipmap = t => gl.generateMipmap(t);\n"
                 + "    P.$glPixelStorei    = (p,v) => gl.pixelStorei(p,v);\n"
-                + "    P.$glCompressedTexImage2D = (t,lv,if_,w,h,b,sz,d) => { if(d&&d.$data) gl.compressedTexImage2D(t,lv,if_,w,h,b,d.$data); };\n"
+                + "    P.$glCompressedTexImage2D = (t,lv,if_,w,h,b,sz,d) => { const _w=new Uint8Array([255,255,255,255]); if(d&&d.data){try{gl.compressedTexImage2D(t,lv,if_,w,h,b,d.data);}catch(e){gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);}}else{gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);} };\n"
                 + "    P.$glGenFramebuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createFramebuffer())); };\n"
                 + "    P.$glBindFramebuffer    = (t,fb) => gl.bindFramebuffer(t, fb ? get(fb) : null);\n"
-                + "    P.$glDeleteFramebuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteFramebuffer(get(id));free(id);} };\n"
+                + "    P.$glDeleteFramebuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteFramebuffer(get(id));free(id);} };\n"
                 + "    P.$glFramebufferTexture2D = (t,at,tt,tex,lv) => gl.framebufferTexture2D(t,at,tt,get(tex),lv);\n"
                 + "    P.$glCheckFramebufferStatus = t => gl.checkFramebufferStatus(t);\n"
                 + "    P.$glGenRenderbuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createRenderbuffer())); };\n"
                 + "    P.$glBindRenderbuffer    = (t,rb) => gl.bindRenderbuffer(t, rb ? get(rb) : null);\n"
-                + "    P.$glDeleteRenderbuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteRenderbuffer(get(id));free(id);} };\n"
+                + "    P.$glDeleteRenderbuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteRenderbuffer(get(id));free(id);} };\n"
                 + "    P.$glRenderbufferStorage  = (t,f,w,h) => gl.renderbufferStorage(t,f,w,h);\n"
                 + "    P.$glFramebufferRenderbuffer = (t,at,rt,rb) => gl.framebufferRenderbuffer(t,at,rt,get(rb));\n"
                 + "    P.$glDrawArrays   = (m,f,c) => { window._drawCallCount++; gl.drawArrays(m,f,c); };\n"
@@ -1590,6 +1592,15 @@ public class CompileRPGMain {
                 + "    console.log('[WebGL2 Bridge] Phase 3.6 actif — rendu GPU activé, boucle RAF prête');\n"
                 + "    return true;\n"
                 + "}\n"
+                // Fix 45: cbgc_a_b1 (FileHandle.read() → InputStream) — serve _webBytes as ByteArrayInputStream
+                + "// Fix 45: cbgc_a_b1 _webBytes → ByteArrayInputStream\n"
+                + "if (typeof cbgc_a_b1 === 'function') {\n"
+                + "    const _orig_b1 = cbgc_a_b1;\n"
+                + "    cbgc_a_b1 = function(var$0) {\n"
+                + "        if (var$0 && var$0._webBytes) { const _b=var$0._webBytes,_ba=$rt_createByteArray(_b.length),_bd=_ba.data; for(let _i=0;_i<_b.length;_i++) _bd[_i]=_b[_i]; return ji_ByteArrayInputStream__init_0(_ba); }\n"
+                + "        return _orig_b1(var$0);\n"
+                + "    };\n"
+                + "}\n"
                 // Export renderFrame for RAF loop — calls DragonSoulLauncher.renderFrame()
                 + "$rt_exports.renderFrame = function() {\n"
                 + "    if (typeof DragonSoulLauncher_renderFrame === 'function') {\n"
@@ -1610,6 +1621,32 @@ public class CompileRPGMain {
                 }
             } else {
                 System.out.println("  Fix 28 : WebGL2 Bridge (Phase 3.6) déjà présent");
+            }
+
+
+            // ------------------------------------------------------------------
+            // Fix 45: cbgc_a_b1 (FileHandle.read() → InputStream) — _webBytes bypass
+            //   Quand WebFiles_b retourne { _webBytes: Uint8Array }, cbgc_a_b1
+            //   doit servir ces bytes comme ByteArrayInputStream au lieu d'ouvrir
+            //   un vrai fichier (qui n'existe pas en web).
+            // ------------------------------------------------------------------
+            String fix45_old = "cbgc_a_b1 = var$0 => {\n"
+                + "    let var$1, var$2, var$3, var$4, var$5, $$je, $ptr, $tmp;\n"
+                + "    $ptr = 0;";
+            String fix45_new = "cbgc_a_b1 = var$0 => {\n"
+                + "    let var$1, var$2, var$3, var$4, var$5, $$je, $ptr, $tmp;\n"
+                + "    if (var$0 && var$0._webBytes) { const _b=var$0._webBytes,_ba=$rt_createByteArray(_b.length),_bd=_ba.data; for(let _i=0;_i<_b.length;_i++) _bd[_i]=_b[_i]; return ji_ByteArrayInputStream__init_0(_ba); }\n"
+                + "    $ptr = 0;";
+            if (!js.contains("ji_ByteArrayInputStream__init_0(_ba)")) {
+                if (js.contains(fix45_old)) {
+                    js = js.replace(fix45_old, fix45_new);
+                    patchCount++;
+                    System.out.println("  Fix 45 OK : cbgc_a_b1 _webBytes → ByteArrayInputStream");
+                } else {
+                    System.out.println("  Fix 45 WARN : cbgc_a_b1 pattern not found");
+                }
+            } else {
+                System.out.println("  Fix 45 : cbgc_a_b1 déjà patché");
             }
 
             // ------------------------------------------------------------------

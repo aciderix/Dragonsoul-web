@@ -22,5 +22,15 @@
 
     A["shaders/iris-vs.glsl"] = "attribute vec4 a_position;\n\nuniform mat4 u_projTrans;\n\nvoid main()\n{\t\n\tgl_Position =  u_projTrans * a_position;\n}";
 
-    console.log("[Assets] 8 shaders préchargés");
+
+    // Phase 3.11: Boot atlas + ETC1 minimal texture (LoadingScreen)
+    // boot.atlas: text file read via cbgc_a_d (readString) → _webContent
+    A["ETC/XHDPI/ui/boot.atlas"] = "\nboot.etc1\nsize: 1024,512\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\nboot/boot/boot_progress\n  rotate: false\n  xy: 683, 431\n  size: 13, 20\n  split: 2, 2, 6, 6\n  orig: 13, 20\n  offset: 0, 0\n  index: -1\nboot/boot/logo\n  rotate: false\n  xy: 3, 152\n  size: 673, 299\n  orig: 708, 299\n  offset: 17, 0\n  index: -1\nboot/boot/tip\n  rotate: false\n  xy: 3, 3\n  size: 155, 142\n  orig: 155, 142\n  offset: 0, 0\n  index: -1\n";
+    // boot.etc1: minimal 4×4 PKM (soft-decoded by libGDX ETC1 decoder)
+    A["ETC/XHDPI/ui/boot.etc1"] = { _webBytes: new Uint8Array([
+        80,75,77,32,49,48,0,0,   // "PKM " + "10" + type=0
+        0,4,0,4,0,4,0,4,         // encoded 4×4, original 4×4
+        0,0,0,0,0,0,0,0          // ETC1 block all-zero → black 4×4
+    ]) };
+    console.log("[Assets] 8 shaders + boot atlas préchargés");
 })(typeof self !== "undefined" ? self : this);
