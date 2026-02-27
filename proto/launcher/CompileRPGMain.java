@@ -454,6 +454,10 @@ public class CompileRPGMain {
                               + "    if (err === null || err === undefined) { // Fix 13: guard null/undefined thrown exception\n"
                               + "        return $rt_createException($rt_str(\"(JavaScript) null exception thrown\"));\n"
                               + "    }\n"
+                              + "    if (err && err.message && err.message.includes('$hashCode')) { // Fix 13b: hashCode crash debug\n"
+                              + "        const _errInfo = '[HASHCODE CRASH] msg=' + err.message + ' | stack=' + (err.stack ? err.stack.replace(/\\n/g, ' -> ') : 'none');\n"
+                              + "        console.error(_errInfo);\n"
+                              + "    }\n"
                               + "    let ex = err[$rt_javaExceptionProp];";
             if (js.contains(fix13_old)) {
                 js = js.replace(fix13_old, fix13_new);
@@ -480,6 +484,7 @@ public class CompileRPGMain {
                               + "    if (!WebApp._fakePrefs[name]) {\n"
                               + "        WebApp._fakePrefs[name] = {\n"
                               + "            $e: (k) => 0,          // containsKey → false\n"
+                              + "            $e1: (k) => 0,         // contains(key) → false (Fix 45)\n"
                               + "            $a42: (k) => 0,        // getBoolean → false\n"
                               + "            $b: (k) => $rt_s(34),  // getString → \"\"\n"
                               + "            $c: (k) => 0,          // getInteger → 0\n"
@@ -1014,6 +1019,420 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
+            // Fix 42: ju_Objects_hashCode — null guard for undefined
+            //   In Java, all fields are null by default; in JS, some TeaVM stubs
+            //   return undefined instead of null. When undefined is used as a HashMap
+            //   key, ju_Objects_hashCode calls $o.$hashCode() on undefined → crash.
+            //   Fix: treat undefined like null (hashCode = 0) + log the caller.
+            // ------------------------------------------------------------------
+            String fix42_old = "ju_Objects_hashCode = $o => {\n"
+                + "    let var$2, $ptr, $tmp;\n"
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();$o = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        if ($o === null)\n"
+                + "            return 0;\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = $o.$hashCode();";
+            String fix42_new = "ju_Objects_hashCode = $o => {\n"
+                + "    let var$2, $ptr, $tmp;\n"
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();$o = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        if ($o === null || $o === undefined) // Fix 42: undefined n'est pas null en JS\n"
+                + "            return 0;\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = $o.$hashCode();";
+            if (!js.contains("Fix 42: undefined n")) {
+                if (js.contains(fix42_old)) {
+                    js = js.replace(fix42_old, fix42_new);
+                    patchCount++;
+                    System.out.println("  Fix 42 OK : ju_Objects_hashCode undefined guard");
+                } else {
+                    System.out.println("  Fix 42 WARN : ju_Objects_hashCode pattern not found");
+                }
+            } else {
+                System.out.println("  Fix 42 : ju_Objects_hashCode déjà patché");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 43: HashMap/Hashtable — undefined guard on $key.$hashCode()
+            //   Java null checks use `=== null` but in JS, undefined !== null.
+            //   When a stub/classInit returns undefined instead of a proper object,
+            //   any HashMap.put/get with that key crashes at $key.$hashCode().
+            //   Fix: add `|| $key === undefined` to existing null guards.
+            //   Covered functions:
+            //     43a: ju_HashMap_putImpl      (case 0 null guard)
+            //     43b: ju_HashMap_entryByKey   (case 0 null guard)
+            //     43c: ju_HashMap_removeByKey  (case 0 null guard)
+            //     43d: ju_Hashtable_get        (else-if guard before try-block)
+            //     43e: ju_Hashtable_getEntry   (else-if guard before main loop)
+            // ------------------------------------------------------------------
+            if (!js.contains("Fix 43:")) {
+                int fix43Count = 0;
+
+                // --- 43a: ju_HashMap_putImpl ---
+                String fix43a_old =
+                    "ju_HashMap_putImpl = ($this, $key, $value) => {\n"
+                    + "    let $entry, var$4, $result, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$result = $thread.pop();var$4 = $thread.pop();$entry = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null) {";
+                String fix43a_new =
+                    "ju_HashMap_putImpl = ($this, $key, $value) => {\n"
+                    + "    let $entry, var$4, $result, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$result = $thread.pop();var$4 = $thread.pop();$entry = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 43: undefined n'est pas null en JS";
+                if (js.contains(fix43a_old)) {
+                    js = js.replace(fix43a_old, fix43a_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43a OK : ju_HashMap_putImpl undefined guard");
+                } else {
+                    System.out.println("  Fix 43a WARN : ju_HashMap_putImpl pattern not found");
+                }
+
+                // --- 43b: ju_HashMap_entryByKey ---
+                String fix43b_old =
+                    "ju_HashMap_entryByKey = ($this, $key) => {\n"
+                    + "    let $m, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$m = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null) {";
+                String fix43b_new =
+                    "ju_HashMap_entryByKey = ($this, $key) => {\n"
+                    + "    let $m, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$m = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 43: undefined n'est pas null en JS";
+                if (js.contains(fix43b_old)) {
+                    js = js.replace(fix43b_old, fix43b_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43b OK : ju_HashMap_entryByKey undefined guard");
+                } else {
+                    System.out.println("  Fix 43b WARN : ju_HashMap_entryByKey pattern not found");
+                }
+
+                // --- 43c: ju_HashMap_removeByKey ---
+                String fix43c_old =
+                    "ju_HashMap_removeByKey = ($this, $key) => {\n"
+                    + "    let $index, $last, $entry, $entry_0, $hash, var$7, var$8, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();$hash = $thread.pop();$entry_0 = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        $index = 0;\n"
+                    + "        $last = null;\n"
+                    + "        if ($key === null) {";
+                String fix43c_new =
+                    "ju_HashMap_removeByKey = ($this, $key) => {\n"
+                    + "    let $index, $last, $entry, $entry_0, $hash, var$7, var$8, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();$hash = $thread.pop();$entry_0 = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        $index = 0;\n"
+                    + "        $last = null;\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 43: undefined n'est pas null en JS";
+                if (js.contains(fix43c_old)) {
+                    js = js.replace(fix43c_old, fix43c_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43c OK : ju_HashMap_removeByKey undefined guard");
+                } else {
+                    System.out.println("  Fix 43c WARN : ju_HashMap_removeByKey pattern not found");
+                }
+
+                // --- 43d: ju_Hashtable_get (no null check — add else-if guard) ---
+                String fix43d_old =
+                    "ju_Hashtable_get = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {";
+                String fix43d_new =
+                    "ju_Hashtable_get = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    } else if ($key === undefined || $key === null) return null; // Fix 43: guard avant monitorEnter\n"
+                    + "    try {";
+                if (js.contains(fix43d_old)) {
+                    js = js.replace(fix43d_old, fix43d_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43d OK : ju_Hashtable_get undefined guard");
+                } else {
+                    System.out.println("  Fix 43d WARN : ju_Hashtable_get pattern not found");
+                }
+
+                // --- 43e: ju_Hashtable_getEntry (no null check — add else-if guard) ---
+                String fix43e_old =
+                    "ju_Hashtable_getEntry = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {";
+                String fix43e_new =
+                    "ju_Hashtable_getEntry = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    } else if ($key === undefined || $key === null) return null; // Fix 43: guard\n"
+                    + "    main: while (true) { switch ($ptr) {";
+                if (js.contains(fix43e_old)) {
+                    js = js.replace(fix43e_old, fix43e_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43e OK : ju_Hashtable_getEntry undefined guard");
+                } else {
+                    System.out.println("  Fix 43e WARN : ju_Hashtable_getEntry pattern not found");
+                }
+
+                if (fix43Count > 0) patchCount += fix43Count;
+                System.out.println("  Fix 43 : " + fix43Count + "/5 sub-patches applied");
+            } else {
+                System.out.println("  Fix 43 : HashMap/Hashtable undefined guards déjà patchés");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 44: More HashMap/Hashtable/WeakHashMap — remaining undefined guards
+            //   44a: ju_Hashtable_put        — undefined passes $key !== null check
+            //   44b: ju_Hashtable_remove     — no null check before $key.$hashCode()
+            //   44c: ju_LinkedHashMap_getOrDefault — if ($key === null) missing undefined
+            //   44d: ju_WeakHashMap_get      — same
+            //   44e: ju_WeakHashMap_put      — if ($key === null) in if/else, else crashes
+            //   44f: ju_WeakHashMap_remove   — same pattern
+            // ------------------------------------------------------------------
+            if (!js.contains("Fix 44:")) {
+                int fix44Count = 0;
+
+                // --- 44a: ju_Hashtable_put — undefined passes $key !== null ---
+                // Java Hashtable throws NPE for null keys — let undefined also throw NPE
+                String fix44a_old =
+                    "ju_Hashtable_put = ($this, $key, $value) => {\n"
+                    + "    let $hash, var$4, $index, $entry, $result, var$8, var$9, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$index = $thread.pop();var$4 = $thread.pop();$hash = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {\n"
+                    + "        main: while (true) { switch ($ptr) {\n"
+                    + "        case 0:\n"
+                    + "            jl_Object_monitorEnter($this);\n"
+                    + "            if ($rt_suspending()) {\n"
+                    + "                break main;\n"
+                    + "            }\n"
+                    + "            if ($key !== null && $value !== null) {";
+                String fix44a_new =
+                    "ju_Hashtable_put = ($this, $key, $value) => {\n"
+                    + "    let $hash, var$4, $index, $entry, $result, var$8, var$9, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$index = $thread.pop();var$4 = $thread.pop();$hash = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {\n"
+                    + "        main: while (true) { switch ($ptr) {\n"
+                    + "        case 0:\n"
+                    + "            jl_Object_monitorEnter($this);\n"
+                    + "            if ($rt_suspending()) {\n"
+                    + "                break main;\n"
+                    + "            }\n"
+                    + "            if ($key !== null && $key !== undefined && $value !== null && $value !== undefined) { // Fix 44: undefined guard";
+                if (js.contains(fix44a_old)) {
+                    js = js.replace(fix44a_old, fix44a_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44a OK : ju_Hashtable_put undefined guard");
+                } else {
+                    System.out.println("  Fix 44a WARN : ju_Hashtable_put pattern not found");
+                }
+
+                // --- 44b: ju_Hashtable_remove — no null check before $hashCode ---
+                String fix44b_old =
+                    "ju_Hashtable_remove = ($this, $key) => {\n"
+                    + "    let $hash, $index, $last, $entry, $result, var$7, $entry_0, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$entry_0 = $thread.pop();var$7 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {";
+                String fix44b_new =
+                    "ju_Hashtable_remove = ($this, $key) => {\n"
+                    + "    let $hash, $index, $last, $entry, $result, var$7, $entry_0, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$entry_0 = $thread.pop();var$7 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    } else if ($key === undefined || $key === null) return null; // Fix 44: guard avant monitorEnter\n"
+                    + "    try {";
+                if (js.contains(fix44b_old)) {
+                    js = js.replace(fix44b_old, fix44b_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44b OK : ju_Hashtable_remove undefined guard");
+                } else {
+                    System.out.println("  Fix 44b WARN : ju_Hashtable_remove pattern not found");
+                }
+
+                // --- 44c: ju_LinkedHashMap_getOrDefault ---
+                String fix44c_old =
+                    "ju_LinkedHashMap_getOrDefault = ($this, $key, $defaultValue) => {\n"
+                    + "    let $entry, $hash, $index, var$6, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$6 = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$entry = $thread.pop();$defaultValue = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null) {";
+                String fix44c_new =
+                    "ju_LinkedHashMap_getOrDefault = ($this, $key, $defaultValue) => {\n"
+                    + "    let $entry, $hash, $index, var$6, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$6 = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$entry = $thread.pop();$defaultValue = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 44: undefined guard";
+                if (js.contains(fix44c_old)) {
+                    js = js.replace(fix44c_old, fix44c_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44c OK : ju_LinkedHashMap_getOrDefault undefined guard");
+                } else {
+                    System.out.println("  Fix 44c WARN : ju_LinkedHashMap_getOrDefault pattern not found");
+                }
+
+                // --- 44d: ju_WeakHashMap_get ---
+                String fix44d_old =
+                    "ju_WeakHashMap_get = ($this, $key) => {\n"
+                    + "    let $entry, var$3, $index, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$index = $thread.pop();var$3 = $thread.pop();$entry = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        ju_WeakHashMap_poll($this);\n"
+                    + "        if ($key === null) {";
+                String fix44d_new =
+                    "ju_WeakHashMap_get = ($this, $key) => {\n"
+                    + "    let $entry, var$3, $index, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$index = $thread.pop();var$3 = $thread.pop();$entry = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        ju_WeakHashMap_poll($this);\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 44: undefined guard";
+                if (js.contains(fix44d_old)) {
+                    js = js.replace(fix44d_old, fix44d_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44d OK : ju_WeakHashMap_get undefined guard");
+                } else {
+                    System.out.println("  Fix 44d WARN : ju_WeakHashMap_get pattern not found");
+                }
+
+                // --- 44e: ju_WeakHashMap_put — two sites: if/else and ternary ---
+                // Site 1: if ($key === null) ... else { $index = ($key.$hashCode()...
+                String fix44e1_old =
+                    "        if ($key === null) {\n"
+                    + "            $entry = $this.$elementData2.data[0];\n"
+                    + "            while ($entry !== null) {\n"
+                    + "                if ($entry.$isNull)\n"
+                    + "                    break a;\n"
+                    + "                $entry = $entry.$next7;\n"
+                    + "            }\n"
+                    + "        } else {\n"
+                    + "            $index = ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0;";
+                String fix44e1_new =
+                    "        if ($key === null || $key === undefined) { // Fix 44: undefined guard\n"
+                    + "            $entry = $this.$elementData2.data[0];\n"
+                    + "            while ($entry !== null) {\n"
+                    + "                if ($entry.$isNull)\n"
+                    + "                    break a;\n"
+                    + "                $entry = $entry.$next7;\n"
+                    + "            }\n"
+                    + "        } else {\n"
+                    + "            $index = ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0;";
+                if (js.contains(fix44e1_old)) {
+                    js = js.replace(fix44e1_old, fix44e1_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44e1 OK : ju_WeakHashMap_put null check undefined guard");
+                } else {
+                    System.out.println("  Fix 44e1 WARN : ju_WeakHashMap_put if/else pattern not found");
+                }
+
+                // Site 2: ternary rehash $index = $key === null ? 0 : ($key.$hashCode() ...)
+                String fix44e2_old =
+                    "        $index = $key === null ? 0 : ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0;";
+                String fix44e2_new =
+                    "        $index = ($key === null || $key === undefined) ? 0 : ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0; // Fix 44";
+                if (js.contains(fix44e2_old)) {
+                    js = js.replace(fix44e2_old, fix44e2_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44e2 OK : ju_WeakHashMap_put ternary undefined guard");
+                } else {
+                    System.out.println("  Fix 44e2 WARN : ju_WeakHashMap_put ternary pattern not found");
+                }
+
+                if (fix44Count > 0) patchCount += fix44Count;
+                System.out.println("  Fix 44 : " + fix44Count + "/6 sub-patches applied");
+            } else {
+                System.out.println("  Fix 44 : WeakHashMap/LinkedHashMap undefined guards déjà patchés");
+            }
+
+            // ------------------------------------------------------------------
             // Fix 28: WebGL2 Bridge — injecté DANS le closure TeaVM (Phase 3.6)
             //   Handle registry: int ID ↔ WebGL object (shader, program, buffer, tex…)
             //   Phase 3.6: + window._webGL2Active flag pour Fix 9
@@ -1057,8 +1476,8 @@ public class CompileRPGMain {
                 + "    P.$glGetProgramInfoLog = p    => jstr(gl.getProgramInfoLog(get(p)) || '');\n"
                 + "    P.$glGetAttribLocation  = (p,n) => gl.getAttribLocation(get(p), str(n));\n"
                 + "    P.$glGetUniformLocation = (p,n) => alloc(gl.getUniformLocation(get(p), str(n)));\n"
-                + "    P.$glGetActiveAttrib    = (p,i,sz,t) => {};\n"
-                + "    P.$glGetActiveUniform   = (p,i,sz,t) => {};\n"
+                + "    P.$glGetActiveAttrib    = (p,i,sz,t) => { const a = gl.getActiveAttrib(get(p), i); if (!a) return jstr(''); wib(sz, 0, a.size); wib(t, 0, a.type); return jstr(a.name); };\n"
+                + "    P.$glGetActiveUniform   = (p,i,sz,t) => { const u = gl.getActiveUniform(get(p), i); if (!u) return jstr(''); wib(sz, 0, u.size); wib(t, 0, u.type); return jstr(u.name); };\n"
                 + "    P.$glUniform1i  = (l,v)       => gl.uniform1i(get(l), v);\n"
                 + "    P.$glUniform1f  = (l,v)       => gl.uniform1f(get(l), v);\n"
                 + "    P.$glUniform2f  = (l,x,y)     => gl.uniform2f(get(l), x, y);\n"
@@ -1066,9 +1485,10 @@ public class CompileRPGMain {
                 + "    P.$glUniform4f  = (l,x,y,z,w) => gl.uniform4f(get(l), x, y, z, w);\n"
                 + "    P.$glUniform2i  = (l,x,y)     => gl.uniform2i(get(l), x, y);\n"
                 + "    P.$glUniform4i  = (l,x,y,z,w) => gl.uniform4i(get(l), x, y, z, w);\n"
-                + "    P.$glUniformMatrix4fv = (l,n,t,m) => gl.uniformMatrix4fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
-                + "    P.$glUniformMatrix3fv = (l,n,t,m) => gl.uniformMatrix3fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
-                + "    P.$glUniformMatrix2fv = (l,n,t,m) => gl.uniformMatrix2fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
+                + "    function fdat(m) { if (!m) return null; const d = m.$data || m; return d instanceof Float32Array ? d : new Float32Array(d); }\n"
+                + "    P.$glUniformMatrix4fv = (l,n,t,m) => gl.uniformMatrix4fv(get(l), !!t, fdat(m));\n"
+                + "    P.$glUniformMatrix3fv = (l,n,t,m) => gl.uniformMatrix3fv(get(l), !!t, fdat(m));\n"
+                + "    P.$glUniformMatrix2fv = (l,n,t,m) => gl.uniformMatrix2fv(get(l), !!t, fdat(m));\n"
                 + "    P.$glEnableVertexAttribArray  = l => gl.enableVertexAttribArray(l);\n"
                 + "    P.$glDisableVertexAttribArray = l => gl.disableVertexAttribArray(l);\n"
                 + "    P.$glVertexAttribPointer = (l,sz,t,norm,str,off) => gl.vertexAttribPointer(l,sz,t,!!norm,str,off);\n"
