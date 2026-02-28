@@ -186,16 +186,35 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
-            // Fix 4: cbgc_a_h — NPE sur var$0.$f18() quand handle est null
+            // Fix 4: cbgc_a_h — NPE sur var$0.$f9() quand handle est null
             //   Return 512 (valeur neutre) si l'objet est null
+            //   Phase 3.6 : state machine version avec $f9() (anciennement $f18())
             // ------------------------------------------------------------------
             String fix4_old = "cbgc_a_h = var$0 => {\n"
-                             + "    let var$1;\n"
-                             + "    var$1 = Long_lo((var$0.$f18()));";
+                             + "    let var$1, var$2, $ptr, $tmp;\n"
+                             + "    $ptr = 0;\n"
+                             + "    if ($rt_resuming()) {\n"
+                             + "        let $thread = $rt_nativeThread();\n"
+                             + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                             + "    }\n"
+                             + "    main: while (true) { switch ($ptr) {\n"
+                             + "    case 0:\n"
+                             + "        $ptr = 1;\n"
+                             + "    case 1:\n"
+                             + "        $tmp = var$0.$f9();";
             String fix4_new = "cbgc_a_h = var$0 => {\n"
-                             + "    let var$1;\n"
+                             + "    let var$1, var$2, $ptr, $tmp;\n"
                              + "    if (var$0 === null || var$0 === undefined) return 512;\n"
-                             + "    var$1 = Long_lo((var$0.$f18()));";
+                             + "    $ptr = 0;\n"
+                             + "    if ($rt_resuming()) {\n"
+                             + "        let $thread = $rt_nativeThread();\n"
+                             + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                             + "    }\n"
+                             + "    main: while (true) { switch ($ptr) {\n"
+                             + "    case 0:\n"
+                             + "        $ptr = 1;\n"
+                             + "    case 1:\n"
+                             + "        $tmp = var$0.$f9();";
             if (js.contains(fix4_old)) {
                 js = js.replace(fix4_old, fix4_new);
                 patchCount++;
@@ -365,10 +384,10 @@ public class CompileRPGMain {
             // Fix 12a: cbgu_ag__init_ — Pool GDX : si la réflexion échoue (a536=null)
             //   Stocker la classe pour un fallback via Platform.newInstance
             // ------------------------------------------------------------------
-            String fix12a_old = "        if (var$0.$a536 !== null)\n"
+            String fix12a_old = "        if (var$0.$a662 !== null)\n"
                                + "            return;\n"
                                + "        var$5 = new jl_RuntimeException;";
-            String fix12a_new = "        if (var$0.$a536 !== null)\n"
+            String fix12a_new = "        if (var$0.$a662 !== null)\n"
                                + "            return;\n"
                                + "        // Fix 12: fallback — store class ref for otp_Platform_newInstance\n"
                                + "        var$0.$a536_fallbackCls = var$1;\n"
@@ -406,7 +425,7 @@ public class CompileRPGMain {
                                + "    main: while (true) { switch ($ptr) {\n"
                                + "    case 0:\n"
                                + "        // Fix 12: fallback to Platform.newInstance when GDX reflection not available\n"
-                               + "        if ((var$0.$a536 === undefined || var$0.$a536 === null) && var$0.$a536_fallbackCls) {\n"
+                               + "        if ((var$0.$a662 === undefined || var$0.$a662 === null) && var$0.$a536_fallbackCls) {\n"
                                + "            const _cls12 = jl_Class_getPlatformClass(var$0.$a536_fallbackCls);\n"
                                + "            var$2 = otp_Platform_newInstanceImpl(_cls12);\n"
                                + "            if (var$2 === null) {\n"
@@ -435,6 +454,10 @@ public class CompileRPGMain {
                               + "    if (err === null || err === undefined) { // Fix 13: guard null/undefined thrown exception\n"
                               + "        return $rt_createException($rt_str(\"(JavaScript) null exception thrown\"));\n"
                               + "    }\n"
+                              + "    if (err && err.message && err.message.includes('$hashCode')) { // Fix 13b: hashCode crash debug\n"
+                              + "        const _errInfo = '[HASHCODE CRASH] msg=' + err.message + ' | stack=' + (err.stack ? err.stack.replace(/\\n/g, ' -> ') : 'none');\n"
+                              + "        console.error(_errInfo);\n"
+                              + "    }\n"
                               + "    let ex = err[$rt_javaExceptionProp];";
             if (js.contains(fix13_old)) {
                 js = js.replace(fix13_old, fix13_new);
@@ -461,6 +484,7 @@ public class CompileRPGMain {
                               + "    if (!WebApp._fakePrefs[name]) {\n"
                               + "        WebApp._fakePrefs[name] = {\n"
                               + "            $e: (k) => 0,          // containsKey → false\n"
+                              + "            $e1: (k) => 0,         // contains(key) → false (Fix 45)\n"
                               + "            $a42: (k) => 0,        // getBoolean → false\n"
                               + "            $b: (k) => $rt_s(34),  // getString → \"\"\n"
                               + "            $c: (k) => 0,          // getInteger → 0\n"
@@ -476,6 +500,10 @@ public class CompileRPGMain {
                               + "            $remove: (k) => WebApp._fakePrefs[name],\n"
                               + "            $a9: () => {},                              // flush()\n"
                               + "            $b33: (k) => 0,                            // getInteger(key) → 0\n"
+                              + "            $a115: (k, v) => WebApp._fakePrefs[name],  // putInteger(key, value) — Fix 3.11b\n"
+                              + "            $a41: (k) => 0,                             // getBoolean(key) → false\n"
+                              + "            $b79: (k) => 0,                             // getInteger(key) → 0\n"
+                              + "            $a43b: () => {},                            // flush() variant\n"
                               + "        };\n"
                               + "    }\n"
                               + "    return WebApp._fakePrefs[name];\n"
@@ -535,7 +563,7 @@ public class CompileRPGMain {
                               + "                continue main;\n"
                               + "            }\n"
                               + "            var$2 = new cbgu_l;\n"
-                              + "            var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                              + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                               + "            $ptr = 4;\n"
                               + "            continue main;\n"
                               + "        } catch ($$e) {";
@@ -546,7 +574,7 @@ public class CompileRPGMain {
                               + "            jl_Object_monitorExit(var$0);\n"
                               + "            return null;\n"
                               + "            var$2 = new cbgu_l;\n"
-                              + "            var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                              + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                               + "            $ptr = 4;\n"
                               + "            continue main;\n"
                               + "        } catch ($$e) {";
@@ -563,7 +591,7 @@ public class CompileRPGMain {
             //   Pas d'assets → return null
             // ------------------------------------------------------------------
             String fix18b_old = "                    var$2 = new cbgu_l;\n"
-                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                                + "                    $ptr = 5;\n"
                                + "                    continue main;";
             String fix18b_new = "                    // Fix 18b: asset filename not found → return null instead of throwing\n"
@@ -619,7 +647,7 @@ public class CompileRPGMain {
                                + "                continue main;\n"
                                + "            }\n"
                                + "            var$2 = new cbgu_l;\n"
-                               + "            var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                               + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                                + "            $ptr = 4;\n"
                                + "            continue main;";
             String fix18d_new = "                var$3 = var$0.$assets;\n"
@@ -629,21 +657,26 @@ public class CompileRPGMain {
                                + "            // Fix 18d: assetType not found → return null\n"
                                + "            jl_Object_monitorExit(var$0);\n"
                                + "            return null;";
+            // Fix 18 déjà appliqué à cbga_e_get0 case 2 car le pattern était identique
+            // (String.replace remplace toutes les occurrences dans les deux fonctions)
             if (js.contains(fix18d_old)) {
                 js = js.replace(fix18d_old, fix18d_new);
                 patchCount++;
                 System.out.println("  Fix 18d OK : cbga_e_get0 assetType not found return null");
-            } else if (!js.contains(fix18d_new)) {
+            } else if (js.contains(fix18d_new) || js.contains("// Fix 18: asset type not found")) {
+                System.out.println("  Fix 18d : déjà patché (par Fix 18 ou Fix 18d)");
+                patchCount++;
+            } else {
                 System.out.println("  Fix 18d WARN : pattern cbga_e_get0 assetType non trouvé");
             }
 
             // ------------------------------------------------------------------
             // Fix 18e: cbga_e_get0 — filename non trouvé dans type map → throw (ptr=6)
             // ------------------------------------------------------------------
-            String fix18e_old = "                    var$2 = new cbgu_l;\n"
-                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
-                               + "                    $ptr = 6;\n"
-                               + "                    continue main;";
+            String fix18e_old = "            var$2 = new cbgu_l;\n"
+                               + "            var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
+                               + "            $ptr = 6;\n"
+                               + "            continue main;";
             String fix18e_new = "                    // Fix 18e: asset filename not in type map → return null\n"
                                + "                    jl_Object_monitorExit(var$0);\n"
                                + "                    return null;";
@@ -659,7 +692,7 @@ public class CompileRPGMain {
             // Fix 18f: cbga_e_get0 — inner lookup null → throw (ptr=7)
             // ------------------------------------------------------------------
             String fix18f_old = "                    var$2 = new cbgu_l;\n"
-                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(1237))).$append1(var$1);\n"
+                               + "                    var$1 = (jl_StringBuilder__init_($rt_s(10973))).$append1(var$1);\n"
                                + "                    $ptr = 7;\n"
                                + "                    continue main;";
             String fix18f_new = "                    // Fix 18f: inner lookup null → return null\n"
@@ -711,7 +744,7 @@ public class CompileRPGMain {
             //   Pas d'assets → retourner silencieusement
             // ------------------------------------------------------------------
             String fix20_old = "                var$3 = new cbgu_l;\n"
-                              + "                var$1 = (jl_StringBuilder__init_($rt_s(15958))).$append1(var$1);\n"
+                              + "                var$1 = (jl_StringBuilder__init_($rt_s(9519))).$append1(var$1);\n"
                               + "                $ptr = 6;\n"
                               + "                continue main;";
             String fix20_new = "                // Fix 20: atlas not found → silently return (no assets in node.js)\n"
@@ -729,7 +762,7 @@ public class CompileRPGMain {
             //   Le jeu gère Region=null plus loin → return null
             // ------------------------------------------------------------------
             String fix21a_old = "        var$3 = new cbgu_l;\n"
-                               + "        var$1 = (jl_StringBuilder__init_($rt_s(1948))).$append1(var$1);\n"
+                               + "        var$1 = (jl_StringBuilder__init_($rt_s(9515))).$append1(var$1);\n"
                                + "        $ptr = 4;\n"
                                + "        continue main;";
             String fix21a_new = "        // Fix 21a: getRegion not found → return null instead of throwing\n"
@@ -747,7 +780,7 @@ public class CompileRPGMain {
             //   Le jeu gère Drawable=null plus loin → return null
             // ------------------------------------------------------------------
             String fix21b_old = "            var$3 = new cbgu_l;\n"
-                               + "            var$1 = (jl_StringBuilder__init_($rt_s(1946))).$append1(var$1);\n"
+                               + "            var$1 = (jl_StringBuilder__init_($rt_s(9513))).$append1(var$1);\n"
                                + "            $ptr = 8;\n"
                                + "            continue main;";
             String fix21b_new = "            // Fix 21b: getDrawable not found → return null instead of throwing\n"
@@ -797,10 +830,10 @@ public class CompileRPGMain {
 
             // ------------------------------------------------------------------
             // Fixes 15, 23, 24, 25, 26, 27 : Ajout de méthodes prototype manquantes
-            //   Insérer après cpr_RPGMain.prototype.$getCurrentAssetDensity = ...
-            //   (ligne générée par TeaVM pour les méthodes virtuelles)
+            //   Insérer après la fin des métadonnées $rt_metadata de cpr_RPGMain
+            //   Phase 3.6 : ancre mise à jour (TeaVM ne génère plus de prototype.X = séparés)
             // ------------------------------------------------------------------
-            String protoAnchor = "cpr_RPGMain.prototype.$getCurrentAssetDensity = $rt_wrapFunction1(cpr_RPGMain_getCurrentAssetDensity);";
+            String protoAnchor = "\"$startLoadingMainScreen\", $rt_wrapFunction0(cpr_RPGMain_startLoadingMainScreen)],";
             String protoAdditions = "\n"
                 // Fix 15
                 + "// Fix 15: Add missing getCachedPreferredLanguage / setCachedPreferredLanguage to RPGMain prototype\n"
@@ -829,7 +862,12 @@ public class CompileRPGMain {
                 + "cpr_RPGMain.prototype.$getWarRedDotInfo = function() { return null; };\n"
                 + "cpr_RPGMain.prototype.$getYourGuildInfo = function() { return this.$guildInfo3; };\n"
                 + "cpr_RPGMain.prototype.$getFrameRateManager = function() { return this.$frameRateManager; };\n"
-                + "cpr_RPGMain.prototype.$getDeviceInfo = function() { return this.$deviceInfo1; };\n"
+                + "cpr_RPGMain.prototype.$getDeviceInfo = function() { return this.$deviceInfo || this.$deviceInfo1; };\n"
+                // Fix 41
+                + "// Fix 41: $getCurrentAssetDensity — absent du prototype TeaVM RPGMain\n"
+                + "//   Appelé dans create() pour choisir le dossier d'assets (HD/XHDI/MDPI)\n"
+                + "//   Sur web on renvoie XHDPI (densité élevée = assets HD)\n"
+                + "cpr_RPGMain.prototype.$getCurrentAssetDensity = function(var$1) { cpr_AssetDensity_$callClinit(); return cpr_AssetDensity_XHDPI; };\n"
                 + "cpr_RPGMain.prototype.$isRestartPending = function() { return 0; };\n"
                 + "cpr_RPGMain.prototype.$setShouldRestart = function(v) {};\n"
                 + "cpr_RPGMain.prototype.$setRequestFullWarInfoOnNextLoad = function(v) { this.$requestFullWarInfoOnNextLoad0 = v; };\n"
@@ -877,13 +915,21 @@ public class CompileRPGMain {
                 + "};\n";
 
             if (js.contains(protoAnchor) && !js.contains("Fix 15: Add missing getCachedPreferredLanguage")) {
-                js = js.replace(protoAnchor, protoAnchor + protoAdditions);
-                patchCount += 6; // fixes 15, 23, 24, 25, 26, 27
-                System.out.println("  Fix 15+23+24+25+26+27 OK : prototype additions RPGMain/NewRelic/WebDeviceInfo");
+                // Phase 3.8: insert AFTER the closing ]); of the $rt_metadata block
+                // (not after protoAnchor which is inside the $rt_metadata array)
+                int _anchorEnd = js.indexOf(protoAnchor) + protoAnchor.length();
+                int _metaClose = js.indexOf("]);", _anchorEnd);
+                if (_metaClose >= 0) {
+                    js = js.substring(0, _metaClose + 3) + protoAdditions + js.substring(_metaClose + 3);
+                    patchCount += 7; // fixes 15, 23, 24, 25, 26, 27, 41
+                    System.out.println("  Fix 15+23+24+25+26+27+41 OK : prototype additions RPGMain/NewRelic/WebDeviceInfo + getCurrentAssetDensity");
+                } else {
+                    System.out.println("  Fix 15+23+24+25+26+27+41 WARN : closing ]); non trouvé après anchor");
+                }
             } else if (js.contains("Fix 15: Add missing getCachedPreferredLanguage")) {
-                System.out.println("  Fix 15+23+24+25+26+27 : déjà appliqués");
+                System.out.println("  Fix 15+23+24+25+26+27+41 : déjà appliqués");
             } else {
-                System.out.println("  Fix 15+23+24+25+26+27 WARN : anchor prototype getCurrentAssetDensity non trouvé");
+                System.out.println("  Fix 15+23+24+25+26+27+41 WARN : anchor prototype getCurrentAssetDensity non trouvé");
             }
 
             // ------------------------------------------------------------------
@@ -895,7 +941,9 @@ public class CompileRPGMain {
             String fix29_new = "WebFiles_b = (var$0, var$1) => {\n"
                 + "    const _p = $rt_ustr(var$1);\n"
                 + "    if (typeof GAME_ASSETS !== \"undefined\" && GAME_ASSETS[_p] !== undefined) {\n"
-                + "        return { _webContent: GAME_ASSETS[_p] };\n"
+                + "        const _a = GAME_ASSETS[_p];\n"
+                + "        if (typeof _a === \"string\") return { _webContent: _a };\n"
+                + "        return _a;\n"
                 + "    }\n"
                 + "    return null;\n"
                 + "}";
@@ -913,16 +961,35 @@ public class CompileRPGMain {
 
             // ------------------------------------------------------------------
             // Fix 30: cbgc_a_h (FileHandle.length()) — shortcut for _webContent handles
+            //   Phase 3.6 : pattern mis à jour pour la version state machine avec $f9()
             // ------------------------------------------------------------------
             String fix30_old = "cbgc_a_h = var$0 => {\n"
-                + "    let var$1;\n"
+                + "    let var$1, var$2, $ptr, $tmp;\n"
                 + "    if (var$0 === null || var$0 === undefined) return 512;\n"
-                + "    var$1 = Long_lo((var$0.$f18()));";
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = var$0.$f9();";
             String fix30_new = "cbgc_a_h = var$0 => {\n"
-                + "    let var$1;\n"
+                + "    let var$1, var$2, $ptr, $tmp;\n"
                 + "    if (var$0 === null || var$0 === undefined) return 512;\n"
                 + "    if (var$0._webContent !== undefined) return var$0._webContent.length || 512;\n"
-                + "    var$1 = Long_lo((var$0.$f18()));";
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = var$0.$f9();";
             if (!js.contains("_webContent !== undefined) return var$0._webContent.length")) {
                 if (js.contains(fix30_old)) {
                     js = js.replace(fix30_old, fix30_new);
@@ -958,6 +1025,420 @@ public class CompileRPGMain {
             }
 
             // ------------------------------------------------------------------
+            // Fix 42: ju_Objects_hashCode — null guard for undefined
+            //   In Java, all fields are null by default; in JS, some TeaVM stubs
+            //   return undefined instead of null. When undefined is used as a HashMap
+            //   key, ju_Objects_hashCode calls $o.$hashCode() on undefined → crash.
+            //   Fix: treat undefined like null (hashCode = 0) + log the caller.
+            // ------------------------------------------------------------------
+            String fix42_old = "ju_Objects_hashCode = $o => {\n"
+                + "    let var$2, $ptr, $tmp;\n"
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();$o = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        if ($o === null)\n"
+                + "            return 0;\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = $o.$hashCode();";
+            String fix42_new = "ju_Objects_hashCode = $o => {\n"
+                + "    let var$2, $ptr, $tmp;\n"
+                + "    $ptr = 0;\n"
+                + "    if ($rt_resuming()) {\n"
+                + "        let $thread = $rt_nativeThread();\n"
+                + "        $ptr = $thread.pop();var$2 = $thread.pop();$o = $thread.pop();\n"
+                + "    }\n"
+                + "    main: while (true) { switch ($ptr) {\n"
+                + "    case 0:\n"
+                + "        if ($o === null || $o === undefined) // Fix 42: undefined n'est pas null en JS\n"
+                + "            return 0;\n"
+                + "        $ptr = 1;\n"
+                + "    case 1:\n"
+                + "        $tmp = $o.$hashCode();";
+            if (!js.contains("Fix 42: undefined n")) {
+                if (js.contains(fix42_old)) {
+                    js = js.replace(fix42_old, fix42_new);
+                    patchCount++;
+                    System.out.println("  Fix 42 OK : ju_Objects_hashCode undefined guard");
+                } else {
+                    System.out.println("  Fix 42 WARN : ju_Objects_hashCode pattern not found");
+                }
+            } else {
+                System.out.println("  Fix 42 : ju_Objects_hashCode déjà patché");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 43: HashMap/Hashtable — undefined guard on $key.$hashCode()
+            //   Java null checks use `=== null` but in JS, undefined !== null.
+            //   When a stub/classInit returns undefined instead of a proper object,
+            //   any HashMap.put/get with that key crashes at $key.$hashCode().
+            //   Fix: add `|| $key === undefined` to existing null guards.
+            //   Covered functions:
+            //     43a: ju_HashMap_putImpl      (case 0 null guard)
+            //     43b: ju_HashMap_entryByKey   (case 0 null guard)
+            //     43c: ju_HashMap_removeByKey  (case 0 null guard)
+            //     43d: ju_Hashtable_get        (else-if guard before try-block)
+            //     43e: ju_Hashtable_getEntry   (else-if guard before main loop)
+            // ------------------------------------------------------------------
+            if (!js.contains("Fix 43:")) {
+                int fix43Count = 0;
+
+                // --- 43a: ju_HashMap_putImpl ---
+                String fix43a_old =
+                    "ju_HashMap_putImpl = ($this, $key, $value) => {\n"
+                    + "    let $entry, var$4, $result, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$result = $thread.pop();var$4 = $thread.pop();$entry = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null) {";
+                String fix43a_new =
+                    "ju_HashMap_putImpl = ($this, $key, $value) => {\n"
+                    + "    let $entry, var$4, $result, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$result = $thread.pop();var$4 = $thread.pop();$entry = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 43: undefined n'est pas null en JS";
+                if (js.contains(fix43a_old)) {
+                    js = js.replace(fix43a_old, fix43a_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43a OK : ju_HashMap_putImpl undefined guard");
+                } else {
+                    System.out.println("  Fix 43a WARN : ju_HashMap_putImpl pattern not found");
+                }
+
+                // --- 43b: ju_HashMap_entryByKey ---
+                String fix43b_old =
+                    "ju_HashMap_entryByKey = ($this, $key) => {\n"
+                    + "    let $m, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$m = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null) {";
+                String fix43b_new =
+                    "ju_HashMap_entryByKey = ($this, $key) => {\n"
+                    + "    let $m, $hash, $index, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$m = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 43: undefined n'est pas null en JS";
+                if (js.contains(fix43b_old)) {
+                    js = js.replace(fix43b_old, fix43b_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43b OK : ju_HashMap_entryByKey undefined guard");
+                } else {
+                    System.out.println("  Fix 43b WARN : ju_HashMap_entryByKey pattern not found");
+                }
+
+                // --- 43c: ju_HashMap_removeByKey ---
+                String fix43c_old =
+                    "ju_HashMap_removeByKey = ($this, $key) => {\n"
+                    + "    let $index, $last, $entry, $entry_0, $hash, var$7, var$8, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();$hash = $thread.pop();$entry_0 = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        $index = 0;\n"
+                    + "        $last = null;\n"
+                    + "        if ($key === null) {";
+                String fix43c_new =
+                    "ju_HashMap_removeByKey = ($this, $key) => {\n"
+                    + "    let $index, $last, $entry, $entry_0, $hash, var$7, var$8, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();$hash = $thread.pop();$entry_0 = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        $index = 0;\n"
+                    + "        $last = null;\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 43: undefined n'est pas null en JS";
+                if (js.contains(fix43c_old)) {
+                    js = js.replace(fix43c_old, fix43c_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43c OK : ju_HashMap_removeByKey undefined guard");
+                } else {
+                    System.out.println("  Fix 43c WARN : ju_HashMap_removeByKey pattern not found");
+                }
+
+                // --- 43d: ju_Hashtable_get (no null check — add else-if guard) ---
+                String fix43d_old =
+                    "ju_Hashtable_get = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {";
+                String fix43d_new =
+                    "ju_Hashtable_get = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    } else if ($key === undefined || $key === null) return null; // Fix 43: guard avant monitorEnter\n"
+                    + "    try {";
+                if (js.contains(fix43d_old)) {
+                    js = js.replace(fix43d_old, fix43d_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43d OK : ju_Hashtable_get undefined guard");
+                } else {
+                    System.out.println("  Fix 43d WARN : ju_Hashtable_get pattern not found");
+                }
+
+                // --- 43e: ju_Hashtable_getEntry (no null check — add else-if guard) ---
+                String fix43e_old =
+                    "ju_Hashtable_getEntry = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {";
+                String fix43e_new =
+                    "ju_Hashtable_getEntry = ($this, $key) => {\n"
+                    + "    let $hash, $index, $entry, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$entry = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    } else if ($key === undefined || $key === null) return null; // Fix 43: guard\n"
+                    + "    main: while (true) { switch ($ptr) {";
+                if (js.contains(fix43e_old)) {
+                    js = js.replace(fix43e_old, fix43e_new);
+                    fix43Count++;
+                    System.out.println("  Fix 43e OK : ju_Hashtable_getEntry undefined guard");
+                } else {
+                    System.out.println("  Fix 43e WARN : ju_Hashtable_getEntry pattern not found");
+                }
+
+                if (fix43Count > 0) patchCount += fix43Count;
+                System.out.println("  Fix 43 : " + fix43Count + "/5 sub-patches applied");
+            } else {
+                System.out.println("  Fix 43 : HashMap/Hashtable undefined guards déjà patchés");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 44: More HashMap/Hashtable/WeakHashMap — remaining undefined guards
+            //   44a: ju_Hashtable_put        — undefined passes $key !== null check
+            //   44b: ju_Hashtable_remove     — no null check before $key.$hashCode()
+            //   44c: ju_LinkedHashMap_getOrDefault — if ($key === null) missing undefined
+            //   44d: ju_WeakHashMap_get      — same
+            //   44e: ju_WeakHashMap_put      — if ($key === null) in if/else, else crashes
+            //   44f: ju_WeakHashMap_remove   — same pattern
+            // ------------------------------------------------------------------
+            if (!js.contains("Fix 44:")) {
+                int fix44Count = 0;
+
+                // --- 44a: ju_Hashtable_put — undefined passes $key !== null ---
+                // Java Hashtable throws NPE for null keys — let undefined also throw NPE
+                String fix44a_old =
+                    "ju_Hashtable_put = ($this, $key, $value) => {\n"
+                    + "    let $hash, var$4, $index, $entry, $result, var$8, var$9, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$index = $thread.pop();var$4 = $thread.pop();$hash = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {\n"
+                    + "        main: while (true) { switch ($ptr) {\n"
+                    + "        case 0:\n"
+                    + "            jl_Object_monitorEnter($this);\n"
+                    + "            if ($rt_suspending()) {\n"
+                    + "                break main;\n"
+                    + "            }\n"
+                    + "            if ($key !== null && $value !== null) {";
+                String fix44a_new =
+                    "ju_Hashtable_put = ($this, $key, $value) => {\n"
+                    + "    let $hash, var$4, $index, $entry, $result, var$8, var$9, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$index = $thread.pop();var$4 = $thread.pop();$hash = $thread.pop();$value = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {\n"
+                    + "        main: while (true) { switch ($ptr) {\n"
+                    + "        case 0:\n"
+                    + "            jl_Object_monitorEnter($this);\n"
+                    + "            if ($rt_suspending()) {\n"
+                    + "                break main;\n"
+                    + "            }\n"
+                    + "            if ($key !== null && $key !== undefined && $value !== null && $value !== undefined) { // Fix 44: undefined guard";
+                if (js.contains(fix44a_old)) {
+                    js = js.replace(fix44a_old, fix44a_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44a OK : ju_Hashtable_put undefined guard");
+                } else {
+                    System.out.println("  Fix 44a WARN : ju_Hashtable_put pattern not found");
+                }
+
+                // --- 44b: ju_Hashtable_remove — no null check before $hashCode ---
+                String fix44b_old =
+                    "ju_Hashtable_remove = ($this, $key) => {\n"
+                    + "    let $hash, $index, $last, $entry, $result, var$7, $entry_0, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$entry_0 = $thread.pop();var$7 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    try {";
+                String fix44b_new =
+                    "ju_Hashtable_remove = ($this, $key) => {\n"
+                    + "    let $hash, $index, $last, $entry, $result, var$7, $entry_0, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();$entry_0 = $thread.pop();var$7 = $thread.pop();$result = $thread.pop();$entry = $thread.pop();$last = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    } else if ($key === undefined || $key === null) return null; // Fix 44: guard avant monitorEnter\n"
+                    + "    try {";
+                if (js.contains(fix44b_old)) {
+                    js = js.replace(fix44b_old, fix44b_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44b OK : ju_Hashtable_remove undefined guard");
+                } else {
+                    System.out.println("  Fix 44b WARN : ju_Hashtable_remove pattern not found");
+                }
+
+                // --- 44c: ju_LinkedHashMap_getOrDefault ---
+                String fix44c_old =
+                    "ju_LinkedHashMap_getOrDefault = ($this, $key, $defaultValue) => {\n"
+                    + "    let $entry, $hash, $index, var$6, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$6 = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$entry = $thread.pop();$defaultValue = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null) {";
+                String fix44c_new =
+                    "ju_LinkedHashMap_getOrDefault = ($this, $key, $defaultValue) => {\n"
+                    + "    let $entry, $hash, $index, var$6, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$6 = $thread.pop();$index = $thread.pop();$hash = $thread.pop();$entry = $thread.pop();$defaultValue = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 44: undefined guard";
+                if (js.contains(fix44c_old)) {
+                    js = js.replace(fix44c_old, fix44c_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44c OK : ju_LinkedHashMap_getOrDefault undefined guard");
+                } else {
+                    System.out.println("  Fix 44c WARN : ju_LinkedHashMap_getOrDefault pattern not found");
+                }
+
+                // --- 44d: ju_WeakHashMap_get ---
+                String fix44d_old =
+                    "ju_WeakHashMap_get = ($this, $key) => {\n"
+                    + "    let $entry, var$3, $index, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$index = $thread.pop();var$3 = $thread.pop();$entry = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        ju_WeakHashMap_poll($this);\n"
+                    + "        if ($key === null) {";
+                String fix44d_new =
+                    "ju_WeakHashMap_get = ($this, $key) => {\n"
+                    + "    let $entry, var$3, $index, var$5, $ptr, $tmp;\n"
+                    + "    $ptr = 0;\n"
+                    + "    if ($rt_resuming()) {\n"
+                    + "        let $thread = $rt_nativeThread();\n"
+                    + "        $ptr = $thread.pop();var$5 = $thread.pop();$index = $thread.pop();var$3 = $thread.pop();$entry = $thread.pop();$key = $thread.pop();$this = $thread.pop();\n"
+                    + "    }\n"
+                    + "    main: while (true) { switch ($ptr) {\n"
+                    + "    case 0:\n"
+                    + "        ju_WeakHashMap_poll($this);\n"
+                    + "        if ($key === null || $key === undefined) { // Fix 44: undefined guard";
+                if (js.contains(fix44d_old)) {
+                    js = js.replace(fix44d_old, fix44d_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44d OK : ju_WeakHashMap_get undefined guard");
+                } else {
+                    System.out.println("  Fix 44d WARN : ju_WeakHashMap_get pattern not found");
+                }
+
+                // --- 44e: ju_WeakHashMap_put — two sites: if/else and ternary ---
+                // Site 1: if ($key === null) ... else { $index = ($key.$hashCode()...
+                String fix44e1_old =
+                    "        if ($key === null) {\n"
+                    + "            $entry = $this.$elementData2.data[0];\n"
+                    + "            while ($entry !== null) {\n"
+                    + "                if ($entry.$isNull)\n"
+                    + "                    break a;\n"
+                    + "                $entry = $entry.$next7;\n"
+                    + "            }\n"
+                    + "        } else {\n"
+                    + "            $index = ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0;";
+                String fix44e1_new =
+                    "        if ($key === null || $key === undefined) { // Fix 44: undefined guard\n"
+                    + "            $entry = $this.$elementData2.data[0];\n"
+                    + "            while ($entry !== null) {\n"
+                    + "                if ($entry.$isNull)\n"
+                    + "                    break a;\n"
+                    + "                $entry = $entry.$next7;\n"
+                    + "            }\n"
+                    + "        } else {\n"
+                    + "            $index = ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0;";
+                if (js.contains(fix44e1_old)) {
+                    js = js.replace(fix44e1_old, fix44e1_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44e1 OK : ju_WeakHashMap_put null check undefined guard");
+                } else {
+                    System.out.println("  Fix 44e1 WARN : ju_WeakHashMap_put if/else pattern not found");
+                }
+
+                // Site 2: ternary rehash $index = $key === null ? 0 : ($key.$hashCode() ...)
+                String fix44e2_old =
+                    "        $index = $key === null ? 0 : ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0;";
+                String fix44e2_new =
+                    "        $index = ($key === null || $key === undefined) ? 0 : ($key.$hashCode() & 2147483647) % $this.$elementData2.data.length | 0; // Fix 44";
+                if (js.contains(fix44e2_old)) {
+                    js = js.replace(fix44e2_old, fix44e2_new);
+                    fix44Count++;
+                    System.out.println("  Fix 44e2 OK : ju_WeakHashMap_put ternary undefined guard");
+                } else {
+                    System.out.println("  Fix 44e2 WARN : ju_WeakHashMap_put ternary pattern not found");
+                }
+
+                if (fix44Count > 0) patchCount += fix44Count;
+                System.out.println("  Fix 44 : " + fix44Count + "/6 sub-patches applied");
+            } else {
+                System.out.println("  Fix 44 : WeakHashMap/LinkedHashMap undefined guards déjà patchés");
+            }
+
+            // ------------------------------------------------------------------
             // Fix 28: WebGL2 Bridge — injecté DANS le closure TeaVM (Phase 3.6)
             //   Handle registry: int ID ↔ WebGL object (shader, program, buffer, tex…)
             //   Phase 3.6: + window._webGL2Active flag pour Fix 9
@@ -978,19 +1459,20 @@ public class CompileRPGMain {
                 + "    function free(id)   { _handles[id | 0] = null; }\n"
                 + "    function wib(buf, idx, val) {\n"
                 + "        try { buf.$put3(idx, val | 0); } catch(e) {\n"
-                + "            try { if (buf.$data) buf.$data[idx | 0] = val | 0; } catch(e2) {}\n"
+                + "            try { const _bd = buf.data || buf.$data; if (_bd) _bd[idx | 0] = val | 0; } catch(e2) {}\n"
                 + "        }\n"
                 + "    }\n"
                 + "    function str(s) { return s ? ($rt_ustr(s) || '') : ''; }\n"
                 + "    function jstr(s) { return $rt_str(s || ''); }\n"
                 + "    const P = WebGL20.prototype;\n"
-                + "    P.$glCreateShader    = t      => alloc(gl.createShader(t));\n"
+                + "    window._shaderCount = 0; window._programCount = 0; window._drawCallCount = 0;\n"
+                + "    P.$glCreateShader    = t      => { window._shaderCount++; return alloc(gl.createShader(t)); };\n"
                 + "    P.$glShaderSource    = (s,src) => gl.shaderSource(get(s), str(src));\n"
                 + "    P.$glCompileShader   = s      => gl.compileShader(get(s));\n"
                 + "    P.$glDeleteShader    = s      => { gl.deleteShader(get(s)); free(s); };\n"
                 + "    P.$glGetShaderiv     = (s,p,b) => wib(b, 0, gl.getShaderParameter(get(s), p) ? 1 : 0);\n"
                 + "    P.$glGetShaderInfoLog= s      => jstr(gl.getShaderInfoLog(get(s)) || '');\n"
-                + "    P.$glCreateProgram   = ()     => alloc(gl.createProgram());\n"
+                + "    P.$glCreateProgram   = ()     => { window._programCount++; return alloc(gl.createProgram()); };\n"
                 + "    P.$glAttachShader    = (p,s)  => gl.attachShader(get(p), get(s));\n"
                 + "    P.$glDetachShader    = (p,s)  => gl.detachShader(get(p), get(s));\n"
                 + "    P.$glLinkProgram     = p      => gl.linkProgram(get(p));\n"
@@ -1001,8 +1483,8 @@ public class CompileRPGMain {
                 + "    P.$glGetProgramInfoLog = p    => jstr(gl.getProgramInfoLog(get(p)) || '');\n"
                 + "    P.$glGetAttribLocation  = (p,n) => gl.getAttribLocation(get(p), str(n));\n"
                 + "    P.$glGetUniformLocation = (p,n) => alloc(gl.getUniformLocation(get(p), str(n)));\n"
-                + "    P.$glGetActiveAttrib    = (p,i,sz,t) => {};\n"
-                + "    P.$glGetActiveUniform   = (p,i,sz,t) => {};\n"
+                + "    P.$glGetActiveAttrib    = (p,i,sz,t) => { const a = gl.getActiveAttrib(get(p), i); if (!a) return jstr(''); wib(sz, 0, a.size); wib(t, 0, a.type); return jstr(a.name); };\n"
+                + "    P.$glGetActiveUniform   = (p,i,sz,t) => { const u = gl.getActiveUniform(get(p), i); if (!u) return jstr(''); wib(sz, 0, u.size); wib(t, 0, u.type); return jstr(u.name); };\n"
                 + "    P.$glUniform1i  = (l,v)       => gl.uniform1i(get(l), v);\n"
                 + "    P.$glUniform1f  = (l,v)       => gl.uniform1f(get(l), v);\n"
                 + "    P.$glUniform2f  = (l,x,y)     => gl.uniform2f(get(l), x, y);\n"
@@ -1010,43 +1492,44 @@ public class CompileRPGMain {
                 + "    P.$glUniform4f  = (l,x,y,z,w) => gl.uniform4f(get(l), x, y, z, w);\n"
                 + "    P.$glUniform2i  = (l,x,y)     => gl.uniform2i(get(l), x, y);\n"
                 + "    P.$glUniform4i  = (l,x,y,z,w) => gl.uniform4i(get(l), x, y, z, w);\n"
-                + "    P.$glUniformMatrix4fv = (l,n,t,m) => gl.uniformMatrix4fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
-                + "    P.$glUniformMatrix3fv = (l,n,t,m) => gl.uniformMatrix3fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
-                + "    P.$glUniformMatrix2fv = (l,n,t,m) => gl.uniformMatrix2fv(get(l), !!t, m && m.$data ? m.$data : m);\n"
+                + "    function fdat(m) { if (!m) return null; const d = m.data; if (!d) return null; return d instanceof Float32Array ? d : new Float32Array(d); }\n"
+                + "    P.$glUniformMatrix4fv = (l,n,t,m) => { const d = fdat(m); if (d) gl.uniformMatrix4fv(get(l), !!t, d); };\n"
+                + "    P.$glUniformMatrix3fv = (l,n,t,m) => { const d = fdat(m); if (d) gl.uniformMatrix3fv(get(l), !!t, d); };\n"
+                + "    P.$glUniformMatrix2fv = (l,n,t,m) => { const d = fdat(m); if (d) gl.uniformMatrix2fv(get(l), !!t, d); };\n"
                 + "    P.$glEnableVertexAttribArray  = l => gl.enableVertexAttribArray(l);\n"
                 + "    P.$glDisableVertexAttribArray = l => gl.disableVertexAttribArray(l);\n"
                 + "    P.$glVertexAttribPointer = (l,sz,t,norm,str,off) => gl.vertexAttribPointer(l,sz,t,!!norm,str,off);\n"
                 + "    P.$glGenBuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createBuffer())); };\n"
                 + "    P.$glBindBuffer    = (t,b) => gl.bindBuffer(t, b ? get(b) : null);\n"
-                + "    P.$glDeleteBuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteBuffer(get(id));free(id);} };\n"
-                + "    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.$data) gl.bufferData(t,data.$data,u); else if(sz>0) gl.bufferData(t,sz,u); };\n"
-                + "    P.$glBufferSubData = (t,off,cnt,data) => { if(data&&data.$data) gl.bufferSubData(t,off,data.$data.subarray(0,cnt)); };\n"
+                + "    P.$glDeleteBuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteBuffer(get(id));free(id);} };\n"
+                + "    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.data) gl.bufferData(t,data.data,u); else if(sz>0) gl.bufferData(t,sz,u); };\n"
+                + "    P.$glBufferSubData = (t,off,cnt,data) => { if(data&&data.data) gl.bufferSubData(t,off,data.data.subarray(0,cnt)); };\n"
                 + "    P.$glGenVertexArrays    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createVertexArray())); };\n"
                 + "    P.$glBindVertexArray    = v => gl.bindVertexArray(v ? get(v) : null);\n"
-                + "    P.$glDeleteVertexArrays = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteVertexArray(get(id));free(id);} };\n"
+                + "    P.$glDeleteVertexArrays = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteVertexArray(get(id));free(id);} };\n"
                 + "    P.$glGenTextures    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createTexture())); };\n"
                 + "    P.$glBindTexture    = (t,tex) => gl.bindTexture(t, tex ? get(tex) : null);\n"
-                + "    P.$glDeleteTextures = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteTexture(get(id));free(id);} };\n"
+                + "    P.$glDeleteTextures = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteTexture(get(id));free(id);} };\n"
                 + "    P.$glActiveTexture  = u => gl.activeTexture(u);\n"
-                + "    P.$glTexImage2D     = (t,lv,if_,w,h,b,f,ty,d) => gl.texImage2D(t,lv,if_,w,h,b,f,ty,d&&d.$data?d.$data:null);\n"
-                + "    P.$glTexSubImage2D  = (t,lv,x,y,w,h,f,ty,d) => gl.texSubImage2D(t,lv,x,y,w,h,f,ty,d&&d.$data?d.$data:null);\n"
+                + "    P.$glTexImage2D     = (t,lv,if_,w,h,b,f,ty,d) => gl.texImage2D(t,lv,if_,w,h,b,f,ty,d&&d.data?d.data:null);\n"
+                + "    P.$glTexSubImage2D  = (t,lv,x,y,w,h,f,ty,d) => gl.texSubImage2D(t,lv,x,y,w,h,f,ty,d&&d.data?d.data:null);\n"
                 + "    P.$glTexParameteri  = (t,p,v) => gl.texParameteri(t,p,v);\n"
                 + "    P.$glTexParameterf  = (t,p,v) => gl.texParameterf(t,p,v);\n"
                 + "    P.$glGenerateMipmap = t => gl.generateMipmap(t);\n"
                 + "    P.$glPixelStorei    = (p,v) => gl.pixelStorei(p,v);\n"
-                + "    P.$glCompressedTexImage2D = (t,lv,if_,w,h,b,sz,d) => { if(d&&d.$data) gl.compressedTexImage2D(t,lv,if_,w,h,b,d.$data); };\n"
+                + "    P.$glCompressedTexImage2D = (t,lv,if_,w,h,b,sz,d) => { const _w=new Uint8Array([255,255,255,255]); if(d&&d.data){try{gl.compressedTexImage2D(t,lv,if_,w,h,b,d.data);}catch(e){gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);}}else{gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);} };\n"
                 + "    P.$glGenFramebuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createFramebuffer())); };\n"
                 + "    P.$glBindFramebuffer    = (t,fb) => gl.bindFramebuffer(t, fb ? get(fb) : null);\n"
-                + "    P.$glDeleteFramebuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteFramebuffer(get(id));free(id);} };\n"
+                + "    P.$glDeleteFramebuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteFramebuffer(get(id));free(id);} };\n"
                 + "    P.$glFramebufferTexture2D = (t,at,tt,tex,lv) => gl.framebufferTexture2D(t,at,tt,get(tex),lv);\n"
                 + "    P.$glCheckFramebufferStatus = t => gl.checkFramebufferStatus(t);\n"
                 + "    P.$glGenRenderbuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createRenderbuffer())); };\n"
                 + "    P.$glBindRenderbuffer    = (t,rb) => gl.bindRenderbuffer(t, rb ? get(rb) : null);\n"
-                + "    P.$glDeleteRenderbuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.$data?b.$data[i]:0;gl.deleteRenderbuffer(get(id));free(id);} };\n"
+                + "    P.$glDeleteRenderbuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteRenderbuffer(get(id));free(id);} };\n"
                 + "    P.$glRenderbufferStorage  = (t,f,w,h) => gl.renderbufferStorage(t,f,w,h);\n"
                 + "    P.$glFramebufferRenderbuffer = (t,at,rt,rb) => gl.framebufferRenderbuffer(t,at,rt,get(rb));\n"
-                + "    P.$glDrawArrays   = (m,f,c) => gl.drawArrays(m,f,c);\n"
-                + "    P.$glDrawElements = (m,c,t,o) => gl.drawElements(m,c,t,o);\n"
+                + "    P.$glDrawArrays   = (m,f,c) => { window._drawCallCount++; gl.drawArrays(m,f,c); };\n"
+                + "    P.$glDrawElements = (m,c,t,o) => { window._drawCallCount++; gl.drawElements(m,c,t,o); };\n"
                 + "    P.$glViewport    = (x,y,w,h) => gl.viewport(x,y,w,h);\n"
                 + "    P.$glScissor     = (x,y,w,h) => gl.scissor(x,y,w,h);\n"
                 + "    P.$glEnable      = c => { try { gl.enable(c); } catch(e) {} };\n"
@@ -1113,6 +1596,15 @@ public class CompileRPGMain {
                 + "    console.log('[WebGL2 Bridge] Phase 3.6 actif — rendu GPU activé, boucle RAF prête');\n"
                 + "    return true;\n"
                 + "}\n"
+                // Fix 45: cbgc_a_b1 (FileHandle.read() → InputStream) — serve _webBytes as ByteArrayInputStream
+                + "// Fix 45: cbgc_a_b1 _webBytes → ByteArrayInputStream\n"
+                + "if (typeof cbgc_a_b1 === 'function') {\n"
+                + "    const _orig_b1 = cbgc_a_b1;\n"
+                + "    cbgc_a_b1 = function(var$0) {\n"
+                + "        if (var$0 && var$0._webBytes) { const _b=var$0._webBytes,_ba=$rt_createByteArray(_b.length),_bd=_ba.data; for(let _i=0;_i<_b.length;_i++) _bd[_i]=_b[_i]; return ji_ByteArrayInputStream__init_0(_ba); }\n"
+                + "        return _orig_b1(var$0);\n"
+                + "    };\n"
+                + "}\n"
                 // Export renderFrame for RAF loop — calls DragonSoulLauncher.renderFrame()
                 + "$rt_exports.renderFrame = function() {\n"
                 + "    if (typeof DragonSoulLauncher_renderFrame === 'function') {\n"
@@ -1133,6 +1625,144 @@ public class CompileRPGMain {
                 }
             } else {
                 System.out.println("  Fix 28 : WebGL2 Bridge (Phase 3.6) déjà présent");
+            }
+
+
+            // ------------------------------------------------------------------
+            // Fix 45: cbgc_a_b1 (FileHandle.read() → InputStream) — _webBytes bypass
+            //   Quand WebFiles_b retourne { _webBytes: Uint8Array }, cbgc_a_b1
+            //   doit servir ces bytes comme ByteArrayInputStream au lieu d'ouvrir
+            //   un vrai fichier (qui n'existe pas en web).
+            // ------------------------------------------------------------------
+            String fix45_old = "cbgc_a_b1 = var$0 => {\n"
+                + "    let var$1, var$2, var$3, var$4, var$5, $$je, $ptr, $tmp;\n"
+                + "    $ptr = 0;";
+            String fix45_new = "cbgc_a_b1 = var$0 => {\n"
+                + "    let var$1, var$2, var$3, var$4, var$5, $$je, $ptr, $tmp;\n"
+                + "    if (var$0 && var$0._webBytes) { const _b=var$0._webBytes,_ba=$rt_createByteArray(_b.length),_bd=_ba.data; for(let _i=0;_i<_b.length;_i++) _bd[_i]=_b[_i]; return ji_ByteArrayInputStream__init_0(_ba); }\n"
+                + "    $ptr = 0;";
+            if (!js.contains("ji_ByteArrayInputStream__init_0(_ba)")) {
+                if (js.contains(fix45_old)) {
+                    js = js.replace(fix45_old, fix45_new);
+                    patchCount++;
+                    System.out.println("  Fix 45 OK : cbgc_a_b1 _webBytes → ByteArrayInputStream");
+                } else {
+                    System.out.println("  Fix 45 WARN : cbgc_a_b1 pattern not found");
+                }
+            } else {
+                System.out.println("  Fix 45 : cbgc_a_b1 déjà patché");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 46: prototype stubs AFTER last $rt_metadata — previous Fix 26/27 insertion
+            // was before the NewRelicInstrumentation/WebDeviceInfo/BaseScreen $rt_metadata calls
+            // which replace cls.prototype entirely, wiping any prior prototype assignments.
+            // Solution: insert AFTER "let $rt_booleanArrayCls" (end of all $rt_metadata calls).
+            // ------------------------------------------------------------------
+            String fix46_anchor = "]);\nlet $rt_booleanArrayCls";
+            String fix46_stub = "\n// Phase 3.11c: prototype stubs — AFTER all $rt_metadata calls\n"
+                + "cpr_NewRelicInstrumentation.prototype.$startInteraction = function(name) { return null; };\n"
+                + "cpr_NewRelicInstrumentation.prototype.$endInteraction = function(token) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$recordMetric = function(name, cat, val) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$noticeNetworkRequest = function() {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$noticeNetworkFailure = function() {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$setAttribute = function(k, v) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$setUserId = function(id) {};\n"
+                + "cpr_NewRelicInstrumentation.prototype.$stopInteraction = function(token) {};\n"
+                + "WebDeviceInfo.prototype.$getDeviceID = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getDeviceName = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getModel = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getOSVersion = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getResolution = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getAppVersion = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getBundleId = function() { return $rt_s(34); };\n"
+                + "WebDeviceInfo.prototype.$getPlatform = function() { return $rt_s(34); };\n"
+                + "cprus_BaseScreen.prototype.$clearInfoWidget = function() {};\n"
+                + "cpr_RPGMain.prototype.$analyticsTrackScreen = function(name) {};\n"
+                + "cpra_RPGAssetManager.prototype.$cleanCache = function() {};\n"
+                + "cprg_RPGShader.prototype.$setAlphaAtlasDisable = function(v) {};\n"
+                + "cprg_RPGShader.prototype.$setRenderType = function(type) {};\n";
+            String fix46_replacement = "]);\n" + fix46_stub + "let $rt_booleanArrayCls";
+            if (js.contains(fix46_anchor) && !js.contains("Phase 3.11c: prototype stubs")) {
+                js = js.replace(fix46_anchor, fix46_replacement);
+                patchCount++;
+                System.out.println("  Fix 46 OK : prototype stubs after last $rt_metadata");
+            } else if (js.contains("Phase 3.11c: prototype stubs")) {
+                System.out.println("  Fix 46 : déjà appliqué");
+            } else {
+                System.out.println("  Fix 46 WARN : anchor 'let $rt_booleanArrayCls' non trouvé");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 47: renderFrame must run inside a TeaVM thread context.
+            // Without it, $rt_requireNativeThread() throws
+            // "Suspension point reached from non-threading context".
+            // Wrap $rt_exports.renderFrame with a thread-per-frame approach:
+            // resume a suspended thread, or start a fresh one each frame.
+            // ------------------------------------------------------------------
+            String fix47_old = "$rt_exports.renderFrame = function() {\n"
+                             + "    if (typeof DragonSoulLauncher_renderFrame === 'function') {\n"
+                             + "        DragonSoulLauncher_renderFrame();\n"
+                             + "    }\n"
+                             + "};";
+            String fix47_new = "$rt_exports.renderFrame = (function() {\n"
+                             + "    // Phase 3.11e: renderFrame needs a TeaVM thread context\n"
+                             + "    var _renderThread = null;\n"
+                             + "    return function() {\n"
+                             + "        if (typeof DragonSoulLauncher_renderFrame !== 'function') return;\n"
+                             + "        if (_renderThread !== null && _renderThread.status === 1) {\n"
+                             + "            _renderThread.resume();\n"
+                             + "        } else {\n"
+                             + "            _renderThread = new TeaVMThread(DragonSoulLauncher_renderFrame);\n"
+                             + "            _renderThread.start();\n"
+                             + "        }\n"
+                             + "    };\n"
+                             + "})();\n"
+                             + "$rt_exports.renderFrame_raw = $rt_exports.renderFrame;";
+            if (js.contains(fix47_old) && !js.contains("Phase 3.11e")) {
+                js = js.replace(fix47_old, fix47_new);
+                patchCount++;
+                System.out.println("  Fix 47 OK : renderFrame wrapped with TeaVM thread context");
+            } else if (js.contains("Phase 3.11e")) {
+                System.out.println("  Fix 47 : déjà appliqué");
+            } else {
+                System.out.println("  Fix 47 WARN : $rt_exports.renderFrame pattern not found");
+            }
+
+            // ------------------------------------------------------------------
+            // Fix 48: BaseScreen.createStep must immediately set loadState0=CREATED
+            // so that ScreenManager can call setScreen() and show the screen.
+            // Without this, loadState0 stays UNINITIALIZED, getScreen() returns null,
+            // and the stage root group has no actors → 0 draw calls, black canvas.
+            // ------------------------------------------------------------------
+            String fix48_old = "cprus_BaseScreen_createStep = (var$0, var$1) => {\n"
+                             + "    let $ptr, $tmp;\n"
+                             + "    $ptr = 0;\n"
+                             + "    if ($rt_resuming()) {\n"
+                             + "        let $thread = $rt_nativeThread();\n"
+                             + "        $ptr = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();\n"
+                             + "    }\n"
+                             + "    main: while (true) { switch ($ptr) {\n"
+                             + "    case 0:\n"
+                             + "        return 0.0;\n"
+                             + "    default: $rt_invalidPointer();\n"
+                             + "    }}\n"
+                             + "    $rt_nativeThread().push(var$0, var$1, $ptr);\n"
+                             + "}";
+            String fix48_new = "cprus_BaseScreen_createStep = (var$0, var$1) => {\n"
+                             + "    // Phase 3.12: immediately signal CREATED so ScreenManager calls setScreen\n"
+                             + "    cprus_BaseScreen$LoadState_$callClinit();\n"
+                             + "    var$0.$loadState0 = cprus_BaseScreen$LoadState_CREATED;\n"
+                             + "    return 1.0;\n"
+                             + "}";
+            if (js.contains(fix48_old) && !js.contains("Phase 3.12")) {
+                js = js.replace(fix48_old, fix48_new);
+                patchCount++;
+                System.out.println("  Fix 48 OK : BaseScreen.createStep → CREATED state");
+            } else if (js.contains("Phase 3.12")) {
+                System.out.println("  Fix 48 : déjà appliqué");
+            } else {
+                System.out.println("  Fix 48 WARN : BaseScreen.createStep pattern not found");
             }
 
             // ------------------------------------------------------------------

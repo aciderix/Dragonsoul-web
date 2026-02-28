@@ -1,0 +1,980 @@
+﻿2026-02-26T22:46:37.7645166Z ##[debug]Starting: browser-test
+2026-02-26T22:46:37.7669202Z ##[debug]Cleaning runner temp folder: /home/runner/work/_temp
+2026-02-26T22:46:37.7781821Z ##[debug]Starting: Set up job
+2026-02-26T22:46:37.7783783Z Current runner version: '2.331.0'
+2026-02-26T22:46:37.7805358Z ##[group]Runner Image Provisioner
+2026-02-26T22:46:37.7806101Z Hosted Compute Agent
+2026-02-26T22:46:37.7806781Z Version: 20260213.493
+2026-02-26T22:46:37.7807352Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-02-26T22:46:37.7808054Z Build Date: 2026-02-13T00:28:41Z
+2026-02-26T22:46:37.7808844Z Worker ID: {c7dbd4ae-3ce5-4c4c-962b-429e0a2d172b}
+2026-02-26T22:46:37.7809511Z Azure Region: westus
+2026-02-26T22:46:37.7810062Z ##[endgroup]
+2026-02-26T22:46:37.7811480Z ##[group]Operating System
+2026-02-26T22:46:37.7812107Z Ubuntu
+2026-02-26T22:46:37.7812752Z 24.04.3
+2026-02-26T22:46:37.7813288Z LTS
+2026-02-26T22:46:37.7813735Z ##[endgroup]
+2026-02-26T22:46:37.7814270Z ##[group]Runner Image
+2026-02-26T22:46:37.7814856Z Image: ubuntu-24.04
+2026-02-26T22:46:37.7815608Z Version: 20260224.36.1
+2026-02-26T22:46:37.7816717Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260224.36/images/ubuntu/Ubuntu2404-Readme.md
+2026-02-26T22:46:37.7818033Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260224.36
+2026-02-26T22:46:37.7818962Z ##[endgroup]
+2026-02-26T22:46:37.7820086Z ##[group]GITHUB_TOKEN Permissions
+2026-02-26T22:46:37.7821920Z Contents: read
+2026-02-26T22:46:37.7822737Z Metadata: read
+2026-02-26T22:46:37.7823336Z Packages: read
+2026-02-26T22:46:37.7823876Z ##[endgroup]
+2026-02-26T22:46:37.7825923Z Secret source: Actions
+2026-02-26T22:46:37.7826817Z ##[debug]Primary repository: aciderix/Dragonsoul-web
+2026-02-26T22:46:37.7827579Z Prepare workflow directory
+2026-02-26T22:46:37.7914956Z ##[debug]Creating pipeline directory: '/home/runner/work/Dragonsoul-web'
+2026-02-26T22:46:37.7918512Z ##[debug]Creating workspace directory: '/home/runner/work/Dragonsoul-web/Dragonsoul-web'
+2026-02-26T22:46:37.7920283Z ##[debug]Update context data
+2026-02-26T22:46:37.7923890Z ##[debug]Evaluating job-level environment variables
+2026-02-26T22:46:37.8156082Z ##[debug]Evaluating job container
+2026-02-26T22:46:37.8159914Z ##[debug]Evaluating job service containers
+2026-02-26T22:46:37.8162967Z ##[debug]Evaluating job defaults
+2026-02-26T22:46:37.8190306Z Prepare all required actions
+2026-02-26T22:46:37.8237346Z Getting action download info
+2026-02-26T22:46:38.3105365Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-02-26T22:46:38.3136727Z ##[debug]Copied action archive '/opt/actionarchivecache/actions_checkout/34e114876b0b11c390a56381ad16ebd13914f8d5.tar.gz' to '/home/runner/work/_actions/_temp_afa02197-721a-4561-88d5-6107d89b0a40/d96fa069-decf-4897-9b24-aa507aca0b97.tar.gz'
+2026-02-26T22:46:38.4342938Z ##[debug]Unwrap 'actions-checkout-34e1148' to '/home/runner/work/_actions/actions/checkout/v4'
+2026-02-26T22:46:38.4472656Z ##[debug]Archive '/home/runner/work/_actions/_temp_afa02197-721a-4561-88d5-6107d89b0a40/d96fa069-decf-4897-9b24-aa507aca0b97.tar.gz' has been unzipped into '/home/runner/work/_actions/actions/checkout/v4'.
+2026-02-26T22:46:38.4597602Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-02-26T22:46:38.5002458Z ##[debug]Copied action archive '/opt/actionarchivecache/actions_setup-node/49933ea5288caeca8642d1e84afbd3f7d6820020.tar.gz' to '/home/runner/work/_actions/_temp_6afc8348-b9eb-48d1-ad43-35bbe54c07c3/d97aafc0-0437-4525-8271-276308f269b4.tar.gz'
+2026-02-26T22:46:38.5706864Z ##[debug]Unwrap 'actions-setup-node-49933ea' to '/home/runner/work/_actions/actions/setup-node/v4'
+2026-02-26T22:46:38.5984686Z ##[debug]Archive '/home/runner/work/_actions/_temp_6afc8348-b9eb-48d1-ad43-35bbe54c07c3/d97aafc0-0437-4525-8271-276308f269b4.tar.gz' has been unzipped into '/home/runner/work/_actions/actions/setup-node/v4'.
+2026-02-26T22:46:38.6035525Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-02-26T22:46:38.6100291Z ##[debug]Copied action archive '/opt/actionarchivecache/actions_upload-artifact/ea165f8d65b6e75b540449e92b4886f43607fa02.tar.gz' to '/home/runner/work/_actions/_temp_3328ec97-22d5-4442-8ce9-4e815fd326d4/af24fc90-099d-4d03-a738-fbeb6973b417.tar.gz'
+2026-02-26T22:46:38.6861869Z ##[debug]Unwrap 'actions-upload-artifact-ea165f8' to '/home/runner/work/_actions/actions/upload-artifact/v4'
+2026-02-26T22:46:38.7210339Z ##[debug]Archive '/home/runner/work/_actions/_temp_3328ec97-22d5-4442-8ce9-4e815fd326d4/af24fc90-099d-4d03-a738-fbeb6973b417.tar.gz' has been unzipped into '/home/runner/work/_actions/actions/upload-artifact/v4'.
+2026-02-26T22:46:38.7279212Z ##[debug]action.yml for action: '/home/runner/work/_actions/actions/checkout/v4/action.yml'.
+2026-02-26T22:46:38.8181707Z ##[debug]action.yml for action: '/home/runner/work/_actions/actions/setup-node/v4/action.yml'.
+2026-02-26T22:46:38.8245580Z ##[debug]action.yml for action: '/home/runner/work/_actions/actions/upload-artifact/v4/action.yml'.
+2026-02-26T22:46:38.8366169Z ##[debug]Set step '__actions_checkout' display name to: 'Checkout repo'
+2026-02-26T22:46:38.8369710Z ##[debug]Set step '__actions_setup-node' display name to: 'Setup Node.js'
+2026-02-26T22:46:38.8371642Z ##[debug]Set step '__run' display name to: 'Install Playwright'
+2026-02-26T22:46:38.8373643Z ##[debug]Set step '__run_2' display name to: 'Start HTTP server'
+2026-02-26T22:46:38.8375520Z ##[debug]Set step '__run_3' display name to: 'Run Playwright test'
+2026-02-26T22:46:38.8377479Z ##[debug]Set step '__actions_upload-artifact' display name to: 'Upload test artifacts'
+2026-02-26T22:46:38.8378329Z Complete job name: browser-test
+2026-02-26T22:46:38.8407460Z ##[debug]Collect running processes for tracking orphan processes.
+2026-02-26T22:46:38.8634247Z ##[debug]Finishing: Set up job
+2026-02-26T22:46:38.8775314Z ##[debug]Evaluating condition for step: 'Checkout repo'
+2026-02-26T22:46:38.8816834Z ##[debug]Evaluating: success()
+2026-02-26T22:46:38.8821637Z ##[debug]Evaluating success:
+2026-02-26T22:46:38.8838045Z ##[debug]=> true
+2026-02-26T22:46:38.8845096Z ##[debug]Result: true
+2026-02-26T22:46:38.8874576Z ##[debug]Starting: Checkout repo
+2026-02-26T22:46:38.8951058Z ##[debug]Register post job cleanup for action: actions/checkout@v4
+2026-02-26T22:46:38.9032686Z ##[debug]Loading inputs
+2026-02-26T22:46:38.9046381Z ##[debug]Evaluating: github.repository
+2026-02-26T22:46:38.9047660Z ##[debug]Evaluating Index:
+2026-02-26T22:46:38.9049630Z ##[debug]..Evaluating github:
+2026-02-26T22:46:38.9050901Z ##[debug]..=> Object
+2026-02-26T22:46:38.9057076Z ##[debug]..Evaluating String:
+2026-02-26T22:46:38.9058017Z ##[debug]..=> 'repository'
+2026-02-26T22:46:38.9062779Z ##[debug]=> 'aciderix/Dragonsoul-web'
+2026-02-26T22:46:38.9064516Z ##[debug]Result: 'aciderix/Dragonsoul-web'
+2026-02-26T22:46:38.9069012Z ##[debug]Evaluating: github.token
+2026-02-26T22:46:38.9069532Z ##[debug]Evaluating Index:
+2026-02-26T22:46:38.9070003Z ##[debug]..Evaluating github:
+2026-02-26T22:46:38.9070495Z ##[debug]..=> Object
+2026-02-26T22:46:38.9070924Z ##[debug]..Evaluating String:
+2026-02-26T22:46:38.9071388Z ##[debug]..=> 'token'
+2026-02-26T22:46:38.9072165Z ##[debug]=> '***'
+2026-02-26T22:46:38.9072978Z ##[debug]Result: '***'
+2026-02-26T22:46:38.9091747Z ##[debug]Loading env
+2026-02-26T22:46:38.9161757Z ##[group]Run actions/checkout@v4
+2026-02-26T22:46:38.9162799Z with:
+2026-02-26T22:46:38.9163232Z   repository: aciderix/Dragonsoul-web
+2026-02-26T22:46:38.9163932Z   token: ***
+2026-02-26T22:46:38.9164294Z   ssh-strict: true
+2026-02-26T22:46:38.9164680Z   ssh-user: git
+2026-02-26T22:46:38.9165063Z   persist-credentials: true
+2026-02-26T22:46:38.9165492Z   clean: true
+2026-02-26T22:46:38.9165873Z   sparse-checkout-cone-mode: true
+2026-02-26T22:46:38.9166344Z   fetch-depth: 1
+2026-02-26T22:46:38.9166719Z   fetch-tags: false
+2026-02-26T22:46:38.9167131Z   show-progress: true
+2026-02-26T22:46:38.9167515Z   lfs: false
+2026-02-26T22:46:38.9167872Z   submodules: false
+2026-02-26T22:46:38.9168528Z   set-safe-directory: true
+2026-02-26T22:46:38.9169266Z ##[endgroup]
+2026-02-26T22:46:39.0244396Z ##[debug]GITHUB_WORKSPACE = '/home/runner/work/Dragonsoul-web/Dragonsoul-web'
+2026-02-26T22:46:39.0246910Z ##[debug]qualified repository = 'aciderix/Dragonsoul-web'
+2026-02-26T22:46:39.0248724Z ##[debug]ref = 'refs/heads/claude/resume-web-game-port-kWNty'
+2026-02-26T22:46:39.0250567Z ##[debug]commit = '6df6d48c9df1cf3441962562702ff46f8d26e55c'
+2026-02-26T22:46:39.0252241Z ##[debug]clean = true
+2026-02-26T22:46:39.0253887Z ##[debug]filter = undefined
+2026-02-26T22:46:39.0255181Z ##[debug]fetch depth = 1
+2026-02-26T22:46:39.0256432Z ##[debug]fetch tags = false
+2026-02-26T22:46:39.0257680Z ##[debug]show progress = true
+2026-02-26T22:46:39.0259023Z ##[debug]lfs = false
+2026-02-26T22:46:39.0260206Z ##[debug]submodules = false
+2026-02-26T22:46:39.0261573Z ##[debug]recursive submodules = false
+2026-02-26T22:46:39.0263164Z ##[debug]GitHub Host URL = 
+2026-02-26T22:46:39.0265367Z ::add-matcher::/home/runner/work/_actions/actions/checkout/v4/dist/problem-matcher.json
+2026-02-26T22:46:39.0371347Z ##[debug]Added matchers: 'checkout-git'. Problem matchers scan action output for known warning or error strings and report these inline.
+2026-02-26T22:46:39.0379042Z Syncing repository: aciderix/Dragonsoul-web
+2026-02-26T22:46:39.0381054Z ::group::Getting Git version info
+2026-02-26T22:46:39.0382739Z ##[group]Getting Git version info
+2026-02-26T22:46:39.0383528Z Working directory is '/home/runner/work/Dragonsoul-web/Dragonsoul-web'
+2026-02-26T22:46:39.0384652Z ##[debug]Getting git version
+2026-02-26T22:46:39.0385118Z [command]/usr/bin/git version
+2026-02-26T22:46:39.0456258Z git version 2.53.0
+2026-02-26T22:46:39.0481279Z ##[debug]0
+2026-02-26T22:46:39.0482808Z ##[debug]git version 2.53.0
+2026-02-26T22:46:39.0483603Z ##[debug]
+2026-02-26T22:46:39.0485606Z ##[debug]Set git useragent to: git/2.53.0 (github-actions-checkout)
+2026-02-26T22:46:39.0487567Z ::endgroup::
+2026-02-26T22:46:39.0488341Z ##[endgroup]
+2026-02-26T22:46:39.0495742Z ::add-mask::***
+2026-02-26T22:46:39.0504148Z Temporarily overriding HOME='/home/runner/work/_temp/a207f6bf-7427-416f-9a00-dec4355e6a8d' before making global git config changes
+2026-02-26T22:46:39.0506552Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-26T22:46:39.0521323Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Dragonsoul-web/Dragonsoul-web
+2026-02-26T22:46:39.0564631Z ##[debug]0
+2026-02-26T22:46:39.0565762Z ##[debug]
+2026-02-26T22:46:39.0571213Z Deleting the contents of '/home/runner/work/Dragonsoul-web/Dragonsoul-web'
+2026-02-26T22:46:39.0575927Z ::group::Initializing the repository
+2026-02-26T22:46:39.0576876Z ##[group]Initializing the repository
+2026-02-26T22:46:39.0581663Z [command]/usr/bin/git init /home/runner/work/Dragonsoul-web/Dragonsoul-web
+2026-02-26T22:46:39.0741649Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-02-26T22:46:39.0744238Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-02-26T22:46:39.0746946Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-02-26T22:46:39.0749616Z hint: call:
+2026-02-26T22:46:39.0750091Z hint:
+2026-02-26T22:46:39.0751551Z hint: 	git config --global init.defaultBranch <name>
+2026-02-26T22:46:39.0754320Z hint:
+2026-02-26T22:46:39.0756093Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-02-26T22:46:39.0759352Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-02-26T22:46:39.0760916Z hint:
+2026-02-26T22:46:39.0762756Z hint: 	git branch -m <name>
+2026-02-26T22:46:39.0764403Z hint:
+2026-02-26T22:46:39.0766120Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-02-26T22:46:39.0769569Z Initialized empty Git repository in /home/runner/work/Dragonsoul-web/Dragonsoul-web/.git/
+2026-02-26T22:46:39.0774100Z ##[debug]0
+2026-02-26T22:46:39.0776784Z ##[debug]Initialized empty Git repository in /home/runner/work/Dragonsoul-web/Dragonsoul-web/.git/
+2026-02-26T22:46:39.0778684Z ##[debug]
+2026-02-26T22:46:39.0782646Z [command]/usr/bin/git remote add origin https://github.com/aciderix/Dragonsoul-web
+2026-02-26T22:46:39.0823491Z ##[debug]0
+2026-02-26T22:46:39.0824644Z ##[debug]
+2026-02-26T22:46:39.0825858Z ::endgroup::
+2026-02-26T22:46:39.0826461Z ##[endgroup]
+2026-02-26T22:46:39.0827681Z ::group::Disabling automatic garbage collection
+2026-02-26T22:46:39.0828774Z ##[group]Disabling automatic garbage collection
+2026-02-26T22:46:39.0829938Z [command]/usr/bin/git config --local gc.auto 0
+2026-02-26T22:46:39.0861803Z ##[debug]0
+2026-02-26T22:46:39.0863218Z ##[debug]
+2026-02-26T22:46:39.0864329Z ::endgroup::
+2026-02-26T22:46:39.0864938Z ##[endgroup]
+2026-02-26T22:46:39.0866097Z ::group::Setting up auth
+2026-02-26T22:46:39.0866834Z ##[group]Setting up auth
+2026-02-26T22:46:39.0872749Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-26T22:46:39.0902859Z ##[debug]1
+2026-02-26T22:46:39.0909284Z ##[debug]
+2026-02-26T22:46:39.0911325Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-26T22:46:39.1305666Z ##[debug]0
+2026-02-26T22:46:39.1306430Z ##[debug]
+2026-02-26T22:46:39.1312103Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-26T22:46:39.1339007Z ##[debug]1
+2026-02-26T22:46:39.1339867Z ##[debug]
+2026-02-26T22:46:39.1344476Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-26T22:46:39.1583499Z ##[debug]0
+2026-02-26T22:46:39.1584955Z ##[debug]
+2026-02-26T22:46:39.1592803Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-02-26T22:46:39.1624441Z ##[debug]1
+2026-02-26T22:46:39.1625590Z ##[debug]
+2026-02-26T22:46:39.1631250Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-02-26T22:46:39.1884132Z ##[debug]0
+2026-02-26T22:46:39.1885481Z ##[debug]
+2026-02-26T22:46:39.1893909Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-02-26T22:46:39.1924125Z ##[debug]0
+2026-02-26T22:46:39.1926059Z ##[debug]
+2026-02-26T22:46:39.1933106Z ::endgroup::
+2026-02-26T22:46:39.1933793Z ##[endgroup]
+2026-02-26T22:46:39.1934988Z ::group::Fetching the repository
+2026-02-26T22:46:39.1935873Z ##[group]Fetching the repository
+2026-02-26T22:46:39.1944416Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +6df6d48c9df1cf3441962562702ff46f8d26e55c:refs/remotes/origin/claude/resume-web-game-port-kWNty
+2026-02-26T22:46:47.0116500Z From https://github.com/aciderix/Dragonsoul-web
+2026-02-26T22:46:47.0117959Z  * [new ref]         6df6d48c9df1cf3441962562702ff46f8d26e55c -> origin/claude/resume-web-game-port-kWNty
+2026-02-26T22:46:47.0151769Z ##[debug]0
+2026-02-26T22:46:47.0152698Z ##[debug]
+2026-02-26T22:46:47.0153275Z ::endgroup::
+2026-02-26T22:46:47.0153518Z ##[endgroup]
+2026-02-26T22:46:47.0153966Z ::group::Determining the checkout info
+2026-02-26T22:46:47.0154294Z ##[group]Determining the checkout info
+2026-02-26T22:46:47.0155331Z ::endgroup::
+2026-02-26T22:46:47.0155733Z ##[endgroup]
+2026-02-26T22:46:47.0160404Z [command]/usr/bin/git sparse-checkout disable
+2026-02-26T22:46:47.0199349Z ##[debug]0
+2026-02-26T22:46:47.0200082Z ##[debug]
+2026-02-26T22:46:47.0203817Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-02-26T22:46:47.0230174Z ##[debug]0
+2026-02-26T22:46:47.0230914Z ##[debug]
+2026-02-26T22:46:47.0231501Z ::group::Checking out the ref
+2026-02-26T22:46:47.0231821Z ##[group]Checking out the ref
+2026-02-26T22:46:47.0235132Z [command]/usr/bin/git checkout --progress --force -B claude/resume-web-game-port-kWNty refs/remotes/origin/claude/resume-web-game-port-kWNty
+2026-02-26T22:46:47.6380765Z Switched to a new branch 'claude/resume-web-game-port-kWNty'
+2026-02-26T22:46:47.6382069Z branch 'claude/resume-web-game-port-kWNty' set up to track 'origin/claude/resume-web-game-port-kWNty'.
+2026-02-26T22:46:47.6433240Z ##[debug]0
+2026-02-26T22:46:47.6434173Z ##[debug]branch 'claude/resume-web-game-port-kWNty' set up to track 'origin/claude/resume-web-game-port-kWNty'.
+2026-02-26T22:46:47.6434736Z ##[debug]
+2026-02-26T22:46:47.6435192Z ::endgroup::
+2026-02-26T22:46:47.6435427Z ##[endgroup]
+2026-02-26T22:46:47.6477479Z ##[debug]0
+2026-02-26T22:46:47.6479331Z ##[debug]commit 6df6d48c9df1cf3441962562702ff46f8d26e55c
+2026-02-26T22:46:47.6480018Z ##[debug]Author: Claude <noreply@anthropic.com>
+2026-02-26T22:46:47.6480686Z ##[debug]Date:   Thu Feb 26 22:41:29 2026 +0000
+2026-02-26T22:46:47.6481222Z ##[debug]
+2026-02-26T22:46:47.6483553Z ##[debug]    Phase 3.9: GitHub Actions headless browser test avec Playwright
+2026-02-26T22:46:47.6484314Z ##[debug]    
+2026-02-26T22:46:47.6485063Z ##[debug]    - Ajout .github/workflows/browser-test.yml : CI qui tourne sur ubuntu-latest
+2026-02-26T22:46:47.6486165Z ##[debug]      avec Playwright + Chromium SwiftShader (WebGL2 software renderer, sans GPU)
+2026-02-26T22:46:47.6487200Z ##[debug]    - Ajout .github/scripts/browser-test.js : script de test complet qui :
+2026-02-26T22:46:47.6487872Z ##[debug]      * Capture tous les console.log/warn/error du jeu
+2026-02-26T22:46:47.6488391Z ##[debug]      * Lit les status indicators (st-webgl, st-bridge, st-create, st-render)
+2026-02-26T22:46:47.6488994Z ##[debug]      * Prend 4 screenshots (initial, après create(), après 10s, après 25s)
+2026-02-26T22:46:47.6489633Z ##[debug]      * Compte les draw calls WebGL (shaders, programs, drawArrays/drawElements)
+2026-02-26T22:46:47.6491222Z ##[debug]      * Génère un rapport JSON + logs complets uploadés comme artifact CI
+2026-02-26T22:46:47.6492145Z ##[debug]    - Se déclenche automatiquement sur push vers claude/**
+2026-02-26T22:46:47.6493039Z ##[debug]    
+2026-02-26T22:46:47.6493621Z ##[debug]    https://claude.ai/code/session_01QimdvjCpiCvimJyE2XMqxm
+2026-02-26T22:46:47.6494886Z ##[debug]
+2026-02-26T22:46:47.6495390Z [command]/usr/bin/git log -1 --format=%H
+2026-02-26T22:46:47.6514146Z 6df6d48c9df1cf3441962562702ff46f8d26e55c
+2026-02-26T22:46:47.6518674Z ##[debug]0
+2026-02-26T22:46:47.6519440Z ##[debug]6df6d48c9df1cf3441962562702ff46f8d26e55c
+2026-02-26T22:46:47.6519967Z ##[debug]
+2026-02-26T22:46:47.6528094Z ##[debug]Unsetting HOME override
+2026-02-26T22:46:47.6539034Z ::remove-matcher owner=checkout-git::
+2026-02-26T22:46:47.6550328Z ##[debug]Removed matchers: 'checkout-git'
+2026-02-26T22:46:47.6612821Z ##[debug]Node Action run completed with exit code 0
+2026-02-26T22:46:47.6646158Z ##[debug]Save intra-action state isPost = true
+2026-02-26T22:46:47.6646608Z ##[debug]Save intra-action state setSafeDirectory = true
+2026-02-26T22:46:47.6647133Z ##[debug]Save intra-action state repositoryPath = /home/runner/work/Dragonsoul-web/Dragonsoul-web
+2026-02-26T22:46:47.6650876Z ##[debug]Set output commit = 6df6d48c9df1cf3441962562702ff46f8d26e55c
+2026-02-26T22:46:47.6651798Z ##[debug]Set output ref = refs/heads/claude/resume-web-game-port-kWNty
+2026-02-26T22:46:47.6657667Z ##[debug]Finishing: Checkout repo
+2026-02-26T22:46:47.6670317Z ##[debug]Evaluating condition for step: 'Setup Node.js'
+2026-02-26T22:46:47.6674334Z ##[debug]Evaluating: success()
+2026-02-26T22:46:47.6674696Z ##[debug]Evaluating success:
+2026-02-26T22:46:47.6675098Z ##[debug]=> true
+2026-02-26T22:46:47.6675513Z ##[debug]Result: true
+2026-02-26T22:46:47.6676235Z ##[debug]Starting: Setup Node.js
+2026-02-26T22:46:47.6705538Z ##[debug]Register post job cleanup for action: actions/setup-node@v4
+2026-02-26T22:46:47.6719386Z ##[debug]Loading inputs
+2026-02-26T22:46:47.6744326Z ##[debug]Evaluating: (((github.server_url == 'https://github.com') && github.token) || '')
+2026-02-26T22:46:47.6744881Z ##[debug]Evaluating Or:
+2026-02-26T22:46:47.6747350Z ##[debug]..Evaluating And:
+2026-02-26T22:46:47.6749104Z ##[debug]....Evaluating Equal:
+2026-02-26T22:46:47.6750100Z ##[debug]......Evaluating Index:
+2026-02-26T22:46:47.6750366Z ##[debug]........Evaluating github:
+2026-02-26T22:46:47.6750677Z ##[debug]........=> Object
+2026-02-26T22:46:47.6750995Z ##[debug]........Evaluating String:
+2026-02-26T22:46:47.6751266Z ##[debug]........=> 'server_url'
+2026-02-26T22:46:47.6751602Z ##[debug]......=> 'https://github.com'
+2026-02-26T22:46:47.6751956Z ##[debug]......Evaluating String:
+2026-02-26T22:46:47.6752214Z ##[debug]......=> 'https://github.com'
+2026-02-26T22:46:47.6755569Z ##[debug]....=> true
+2026-02-26T22:46:47.6756004Z ##[debug]....Evaluating Index:
+2026-02-26T22:46:47.6756273Z ##[debug]......Evaluating github:
+2026-02-26T22:46:47.6756541Z ##[debug]......=> Object
+2026-02-26T22:46:47.6756783Z ##[debug]......Evaluating String:
+2026-02-26T22:46:47.6757033Z ##[debug]......=> 'token'
+2026-02-26T22:46:47.6757587Z ##[debug]....=> '***'
+2026-02-26T22:46:47.6757947Z ##[debug]..=> '***'
+2026-02-26T22:46:47.6758480Z ##[debug]=> '***'
+2026-02-26T22:46:47.6763221Z ##[debug]Expanded: ((('https://github.com' == 'https://github.com') && '***') || '')
+2026-02-26T22:46:47.6763762Z ##[debug]Result: '***'
+2026-02-26T22:46:47.6767382Z ##[debug]Loading env
+2026-02-26T22:46:47.6836730Z ##[group]Run actions/setup-node@v4
+2026-02-26T22:46:47.6837003Z with:
+2026-02-26T22:46:47.6837189Z   node-version: 22
+2026-02-26T22:46:47.6837391Z   always-auth: false
+2026-02-26T22:46:47.6837591Z   check-latest: false
+2026-02-26T22:46:47.6837951Z   token: ***
+2026-02-26T22:46:47.6838125Z ##[endgroup]
+2026-02-26T22:46:47.8589549Z ##[debug]isExplicit: 
+2026-02-26T22:46:47.8590503Z ##[debug]explicit? false
+2026-02-26T22:46:47.8601599Z ##[debug]isExplicit: 20.20.0
+2026-02-26T22:46:47.8602541Z ##[debug]explicit? true
+2026-02-26T22:46:47.8615552Z ##[debug]isExplicit: 22.22.0
+2026-02-26T22:46:47.8616361Z ##[debug]explicit? true
+2026-02-26T22:46:47.8619965Z ##[debug]isExplicit: 24.13.1
+2026-02-26T22:46:47.8625018Z ##[debug]explicit? true
+2026-02-26T22:46:47.8625703Z ##[debug]evaluating 3 versions
+2026-02-26T22:46:47.8649171Z ##[debug]matched: 22.22.0
+2026-02-26T22:46:47.8650068Z ##[debug]checking cache: /opt/hostedtoolcache/node/22.22.0/x64
+2026-02-26T22:46:47.8651003Z ##[debug]Found tool in cache node 22.22.0 x64
+2026-02-26T22:46:47.8651643Z Found in cache @ /opt/hostedtoolcache/node/22.22.0/x64
+2026-02-26T22:46:47.8658357Z ::group::Environment details
+2026-02-26T22:46:47.8658849Z ##[group]Environment details
+2026-02-26T22:46:50.2502231Z node: v22.22.0
+2026-02-26T22:46:50.2503095Z npm: 10.9.4
+2026-02-26T22:46:50.2503409Z yarn: 1.22.22
+2026-02-26T22:46:50.2504704Z ::endgroup::
+2026-02-26T22:46:50.2505045Z ##[endgroup]
+2026-02-26T22:46:50.2510536Z ##[add-matcher]/home/runner/work/_actions/actions/setup-node/v4/.github/tsc.json
+2026-02-26T22:46:50.2533866Z ##[debug]Added matchers: 'tsc'. Problem matchers scan action output for known warning or error strings and report these inline.
+2026-02-26T22:46:50.2535246Z ##[add-matcher]/home/runner/work/_actions/actions/setup-node/v4/.github/eslint-stylish.json
+2026-02-26T22:46:50.2545145Z ##[debug]Added matchers: 'eslint-stylish'. Problem matchers scan action output for known warning or error strings and report these inline.
+2026-02-26T22:46:50.2546660Z ##[add-matcher]/home/runner/work/_actions/actions/setup-node/v4/.github/eslint-compact.json
+2026-02-26T22:46:50.2550119Z ##[debug]Added matchers: 'eslint-compact'. Problem matchers scan action output for known warning or error strings and report these inline.
+2026-02-26T22:46:50.2577767Z ##[debug]Node Action run completed with exit code 0
+2026-02-26T22:46:50.2580877Z ##[debug]Set output node-version = v22.22.0
+2026-02-26T22:46:50.2581560Z ##[debug]Finishing: Setup Node.js
+2026-02-26T22:46:50.2589409Z ##[debug]Evaluating condition for step: 'Install Playwright'
+2026-02-26T22:46:50.2591406Z ##[debug]Evaluating: success()
+2026-02-26T22:46:50.2591762Z ##[debug]Evaluating success:
+2026-02-26T22:46:50.2592503Z ##[debug]=> true
+2026-02-26T22:46:50.2593283Z ##[debug]Result: true
+2026-02-26T22:46:50.2594217Z ##[debug]Starting: Install Playwright
+2026-02-26T22:46:50.2605739Z ##[debug]Loading inputs
+2026-02-26T22:46:50.2607060Z ##[debug]Loading env
+2026-02-26T22:46:50.2622175Z ##[group]Run npm init -y
+2026-02-26T22:46:50.2622986Z [36;1mnpm init -y[0m
+2026-02-26T22:46:50.2623212Z [36;1mnpm install @playwright/test[0m
+2026-02-26T22:46:50.2623529Z [36;1mnpx playwright install chromium --with-deps[0m
+2026-02-26T22:46:50.2715685Z shell: /usr/bin/bash -e {0}
+2026-02-26T22:46:50.2715936Z ##[endgroup]
+2026-02-26T22:46:50.2784116Z ##[debug]/usr/bin/bash -e /home/runner/work/_temp/8e7cb650-89aa-4783-9a1c-316d8aa30bf3.sh
+2026-02-26T22:46:52.1744299Z Wrote to /home/runner/work/Dragonsoul-web/Dragonsoul-web/package.json:
+2026-02-26T22:46:52.1744977Z 
+2026-02-26T22:46:52.1745174Z {
+2026-02-26T22:46:52.1745572Z   "name": "dragonsoul-web",
+2026-02-26T22:46:52.1746059Z   "version": "1.0.0",
+2026-02-26T22:46:52.1746461Z   "description": "",
+2026-02-26T22:46:52.1746887Z   "main": "index.js",
+2026-02-26T22:46:52.1747291Z   "scripts": {
+2026-02-26T22:46:52.1747849Z     "test": "echo \"Error: no test specified\" && exit 1"
+2026-02-26T22:46:52.1748428Z   },
+2026-02-26T22:46:52.1748761Z   "repository": {
+2026-02-26T22:46:52.1749153Z     "type": "git",
+2026-02-26T22:46:52.1749773Z     "url": "git+https://github.com/aciderix/Dragonsoul-web.git"
+2026-02-26T22:46:52.1750406Z   },
+2026-02-26T22:46:52.1750723Z   "keywords": [],
+2026-02-26T22:46:52.1751103Z   "author": "",
+2026-02-26T22:46:52.1751495Z   "license": "ISC",
+2026-02-26T22:46:52.1751873Z   "bugs": {
+2026-02-26T22:46:52.1752772Z     "url": "https://github.com/aciderix/Dragonsoul-web/issues"
+2026-02-26T22:46:52.1753432Z   },
+2026-02-26T22:46:52.1754020Z   "homepage": "https://github.com/aciderix/Dragonsoul-web#readme"
+2026-02-26T22:46:52.1754708Z }
+2026-02-26T22:46:52.1754906Z 
+2026-02-26T22:46:52.1754924Z 
+2026-02-26T22:46:52.1754947Z 
+2026-02-26T22:46:53.7488229Z 
+2026-02-26T22:46:53.7489028Z added 3 packages, and audited 4 packages in 1s
+2026-02-26T22:46:53.7496722Z 
+2026-02-26T22:46:53.7497192Z found 0 vulnerabilities
+2026-02-26T22:46:54.7842127Z Installing dependencies...
+2026-02-26T22:46:54.7916368Z Switching to root user to install dependencies...
+2026-02-26T22:46:54.9164332Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-02-26T22:46:54.9559026Z Hit:6 https://packages.microsoft.com/repos/azure-cli noble InRelease
+2026-02-26T22:46:54.9577719Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-02-26T22:46:54.9581878Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-02-26T22:46:54.9588353Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-02-26T22:46:54.9660160Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-02-26T22:46:54.9743976Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-02-26T22:46:55.2688012Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [97.6 kB]
+2026-02-26T22:46:55.2814036Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [11.4 kB]
+2026-02-26T22:46:55.2889504Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [76.6 kB]
+2026-02-26T22:46:55.3288792Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1800 kB]
+2026-02-26T22:46:55.3416849Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [331 kB]
+2026-02-26T22:46:55.3441661Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [175 kB]
+2026-02-26T22:46:55.3504507Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [16.5 kB]
+2026-02-26T22:46:55.3513367Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1558 kB]
+2026-02-26T22:46:55.3619498Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [316 kB]
+2026-02-26T22:46:55.3627152Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [386 kB]
+2026-02-26T22:46:55.3705001Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [32.7 kB]
+2026-02-26T22:46:55.3715189Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2735 kB]
+2026-02-26T22:46:55.3875527Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [630 kB]
+2026-02-26T22:46:55.4404671Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+2026-02-26T22:46:55.4414982Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+2026-02-26T22:46:55.4428425Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7292 B]
+2026-02-26T22:46:55.4439093Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [10.5 kB]
+2026-02-26T22:46:55.4449653Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+2026-02-26T22:46:55.4466004Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+2026-02-26T22:46:55.4895983Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1494 kB]
+2026-02-26T22:46:55.4978748Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [240 kB]
+2026-02-26T22:46:55.5004156Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+2026-02-26T22:46:55.5013933Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [9932 B]
+2026-02-26T22:46:55.5025770Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [961 kB]
+2026-02-26T22:46:55.5090911Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [218 kB]
+2026-02-26T22:46:55.5100283Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [74.2 kB]
+2026-02-26T22:46:55.5117440Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [20.1 kB]
+2026-02-26T22:46:55.5559563Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2568 kB]
+2026-02-26T22:46:55.5702824Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [596 kB]
+2026-02-26T22:46:55.5746947Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+2026-02-26T22:46:55.5759678Z Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [208 B]
+2026-02-26T22:47:01.9938932Z Fetched 14.8 MB in 2s (7536 kB/s)
+2026-02-26T22:47:02.9384447Z Reading package lists...
+2026-02-26T22:47:02.9676555Z Reading package lists...
+2026-02-26T22:47:03.2142080Z Building dependency tree...
+2026-02-26T22:47:03.2149855Z Reading state information...
+2026-02-26T22:47:03.4621051Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.2).
+2026-02-26T22:47:03.4622239Z libasound2t64 set to manually installed.
+2026-02-26T22:47:03.4623564Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-02-26T22:47:03.4624304Z libatk-bridge2.0-0t64 set to manually installed.
+2026-02-26T22:47:03.4625017Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-02-26T22:47:03.4625646Z libatk1.0-0t64 set to manually installed.
+2026-02-26T22:47:03.4626308Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-02-26T22:47:03.4626951Z libatspi2.0-0t64 set to manually installed.
+2026-02-26T22:47:03.4627576Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-02-26T22:47:03.4628827Z libcairo2 set to manually installed.
+2026-02-26T22:47:03.4629950Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.9).
+2026-02-26T22:47:03.4630790Z libcups2t64 set to manually installed.
+2026-02-26T22:47:03.4631562Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-02-26T22:47:03.4632737Z libdbus-1-3 set to manually installed.
+2026-02-26T22:47:03.4633346Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.1).
+2026-02-26T22:47:03.4633904Z libdrm2 set to manually installed.
+2026-02-26T22:47:03.4634461Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.1).
+2026-02-26T22:47:03.4635007Z libgbm1 set to manually installed.
+2026-02-26T22:47:03.4635538Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-02-26T22:47:03.4636061Z libnspr4 set to manually installed.
+2026-02-26T22:47:03.4636580Z libnss3 is already the newest version (2:3.98-1build1).
+2026-02-26T22:47:03.4637214Z libnss3 set to manually installed.
+2026-02-26T22:47:03.4638174Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-02-26T22:47:03.4639021Z libpango-1.0-0 set to manually installed.
+2026-02-26T22:47:03.4639570Z libx11-6 is already the newest version (2:1.8.7-1build1).
+2026-02-26T22:47:03.4640084Z libx11-6 set to manually installed.
+2026-02-26T22:47:03.4640578Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-02-26T22:47:03.4640999Z libxcb1 set to manually installed.
+2026-02-26T22:47:03.4641408Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-02-26T22:47:03.4641821Z libxcomposite1 set to manually installed.
+2026-02-26T22:47:03.4642245Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-02-26T22:47:03.4642794Z libxdamage1 set to manually installed.
+2026-02-26T22:47:03.4643192Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-02-26T22:47:03.4643559Z libxext6 set to manually installed.
+2026-02-26T22:47:03.4643941Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-02-26T22:47:03.4644334Z libxfixes3 set to manually installed.
+2026-02-26T22:47:03.4644740Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-02-26T22:47:03.4645134Z libxkbcommon0 set to manually installed.
+2026-02-26T22:47:03.4645544Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-02-26T22:47:03.4645927Z libxrandr2 set to manually installed.
+2026-02-26T22:47:03.4646601Z xvfb is already the newest version (2:21.1.12-1ubuntu1.5).
+2026-02-26T22:47:03.4647377Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-02-26T22:47:03.4647949Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-02-26T22:47:03.4648370Z libfontconfig1 set to manually installed.
+2026-02-26T22:47:03.4648806Z libfreetype6 is already the newest version (2.13.2+dfsg-1build3).
+2026-02-26T22:47:03.4649212Z libfreetype6 set to manually installed.
+2026-02-26T22:47:03.4649628Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-02-26T22:47:03.4650036Z fonts-liberation set to manually installed.
+2026-02-26T22:47:03.4650442Z The following additional packages will be installed:
+2026-02-26T22:47:03.4650949Z   gir1.2-glib-2.0 libglib2.0-bin libglib2.0-data xfonts-encodings xfonts-utils
+2026-02-26T22:47:03.4651347Z Suggested packages:
+2026-02-26T22:47:03.4651565Z   low-memory-monitor
+2026-02-26T22:47:03.4651782Z Recommended packages:
+2026-02-26T22:47:03.4652029Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-02-26T22:47:03.5154427Z The following NEW packages will be installed:
+2026-02-26T22:47:03.5155155Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-02-26T22:47:03.5167585Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-02-26T22:47:03.5168185Z   xfonts-utils
+2026-02-26T22:47:03.5175062Z The following packages will be upgraded:
+2026-02-26T22:47:03.5185686Z   gir1.2-glib-2.0 libglib2.0-0t64 libglib2.0-bin libglib2.0-data
+2026-02-26T22:47:03.5409694Z 4 upgraded, 9 newly installed, 0 to remove and 28 not upgraded.
+2026-02-26T22:47:03.5410512Z Need to get 23.0 MB of archives.
+2026-02-26T22:47:03.5410998Z After this operation, 79.5 MB of additional disk space will be used.
+2026-02-26T22:47:03.5411550Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-02-26T22:47:03.7646792Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-02-26T22:47:03.9307971Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglib2.0-data all 2.80.0-6ubuntu3.8 [49.6 kB]
+2026-02-26T22:47:03.9969496Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglib2.0-bin amd64 2.80.0-6ubuntu3.8 [97.9 kB]
+2026-02-26T22:47:04.0648064Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 gir1.2-glib-2.0 amd64 2.80.0-6ubuntu3.8 [183 kB]
+2026-02-26T22:47:04.1320080Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglib2.0-0t64 amd64 2.80.0-6ubuntu3.8 [1545 kB]
+2026-02-26T22:47:04.2208098Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-02-26T22:47:04.4251235Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-02-26T22:47:04.4918197Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-02-26T22:47:04.6463107Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-02-26T22:47:04.9423158Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-02-26T22:47:05.0250519Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-02-26T22:47:05.0925836Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-02-26T22:47:05.1682069Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-02-26T22:47:05.6306417Z Fetched 23.0 MB in 2s (13.9 MB/s)
+2026-02-26T22:47:05.6688760Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-02-26T22:47:05.7637259Z (Reading database ... 
+2026-02-26T22:47:05.7638176Z (Reading database ... 5%
+2026-02-26T22:47:05.7638866Z (Reading database ... 10%
+2026-02-26T22:47:05.7639473Z (Reading database ... 15%
+2026-02-26T22:47:05.7639964Z (Reading database ... 20%
+2026-02-26T22:47:05.7640334Z (Reading database ... 25%
+2026-02-26T22:47:05.7640877Z (Reading database ... 30%
+2026-02-26T22:47:05.7641230Z (Reading database ... 35%
+2026-02-26T22:47:05.7641577Z (Reading database ... 40%
+2026-02-26T22:47:05.7641931Z (Reading database ... 45%
+2026-02-26T22:47:05.7642555Z (Reading database ... 50%
+2026-02-26T22:47:05.8168074Z (Reading database ... 55%
+2026-02-26T22:47:05.9729779Z (Reading database ... 60%
+2026-02-26T22:47:06.0539150Z (Reading database ... 65%
+2026-02-26T22:47:06.1316215Z (Reading database ... 70%
+2026-02-26T22:47:06.2352798Z (Reading database ... 75%
+2026-02-26T22:47:06.5871689Z (Reading database ... 80%
+2026-02-26T22:47:07.1807828Z (Reading database ... 85%
+2026-02-26T22:47:07.6301841Z (Reading database ... 90%
+2026-02-26T22:47:08.1834331Z (Reading database ... 95%
+2026-02-26T22:47:08.1834925Z (Reading database ... 100%
+2026-02-26T22:47:08.1835902Z (Reading database ... 218749 files and directories currently installed.)
+2026-02-26T22:47:08.1889424Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-02-26T22:47:08.2045704Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-02-26T22:47:08.4551759Z Preparing to unpack .../01-libglib2.0-data_2.80.0-6ubuntu3.8_all.deb ...
+2026-02-26T22:47:08.4587338Z Unpacking libglib2.0-data (2.80.0-6ubuntu3.8) over (2.80.0-6ubuntu3.7) ...
+2026-02-26T22:47:08.5069716Z Preparing to unpack .../02-libglib2.0-bin_2.80.0-6ubuntu3.8_amd64.deb ...
+2026-02-26T22:47:08.5099354Z Unpacking libglib2.0-bin (2.80.0-6ubuntu3.8) over (2.80.0-6ubuntu3.7) ...
+2026-02-26T22:47:08.6227827Z Preparing to unpack .../03-gir1.2-glib-2.0_2.80.0-6ubuntu3.8_amd64.deb ...
+2026-02-26T22:47:08.6256382Z Unpacking gir1.2-glib-2.0:amd64 (2.80.0-6ubuntu3.8) over (2.80.0-6ubuntu3.7) ...
+2026-02-26T22:47:08.6807985Z Preparing to unpack .../04-libglib2.0-0t64_2.80.0-6ubuntu3.8_amd64.deb ...
+2026-02-26T22:47:08.6930285Z Unpacking libglib2.0-0t64:amd64 (2.80.0-6ubuntu3.8) over (2.80.0-6ubuntu3.7) ...
+2026-02-26T22:47:08.7518377Z Selecting previously unselected package fonts-freefont-ttf.
+2026-02-26T22:47:08.7688032Z Preparing to unpack .../05-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-02-26T22:47:08.7698729Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-02-26T22:47:08.8645838Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-02-26T22:47:08.8808936Z Preparing to unpack .../06-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-02-26T22:47:08.8819452Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-02-26T22:47:08.9059266Z Selecting previously unselected package fonts-unifont.
+2026-02-26T22:47:08.9222829Z Preparing to unpack .../07-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-02-26T22:47:08.9233529Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-02-26T22:47:09.0599490Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-02-26T22:47:09.0770167Z Preparing to unpack .../08-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-02-26T22:47:09.0933054Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-02-26T22:47:09.5671495Z Selecting previously unselected package xfonts-encodings.
+2026-02-26T22:47:09.5836954Z Preparing to unpack .../09-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-02-26T22:47:09.5847858Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-02-26T22:47:09.6186457Z Selecting previously unselected package xfonts-utils.
+2026-02-26T22:47:09.6353277Z Preparing to unpack .../10-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-02-26T22:47:09.6364679Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-02-26T22:47:09.7453500Z Selecting previously unselected package xfonts-cyrillic.
+2026-02-26T22:47:09.7619277Z Preparing to unpack .../11-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-02-26T22:47:09.7630366Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-02-26T22:47:09.8031095Z Selecting previously unselected package xfonts-scalable.
+2026-02-26T22:47:09.8203189Z Preparing to unpack .../12-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-02-26T22:47:09.8214156Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-02-26T22:47:09.8711306Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-02-26T22:47:09.8856100Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-02-26T22:47:09.8889072Z Setting up libglib2.0-0t64:amd64 (2.80.0-6ubuntu3.8) ...
+2026-02-26T22:47:09.9131348Z Setting up libglib2.0-data (2.80.0-6ubuntu3.8) ...
+2026-02-26T22:47:09.9157808Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-02-26T22:47:09.9184892Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-02-26T22:47:09.9214065Z Setting up gir1.2-glib-2.0:amd64 (2.80.0-6ubuntu3.8) ...
+2026-02-26T22:47:09.9243765Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-02-26T22:47:09.9322180Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-02-26T22:47:09.9342212Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-02-26T22:47:09.9407448Z Setting up libglib2.0-bin (2.80.0-6ubuntu3.8) ...
+2026-02-26T22:47:09.9439438Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-02-26T22:47:09.9495396Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-02-26T22:47:09.9967499Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-02-26T22:47:10.0275104Z Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+2026-02-26T22:47:10.0929543Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-02-26T22:47:10.1111690Z Not building database; man-db/auto-update is not 'true'.
+2026-02-26T22:47:10.1128936Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-02-26T22:47:11.3945761Z 
+2026-02-26T22:47:11.3948460Z Running kernel seems to be up-to-date.
+2026-02-26T22:47:11.3951257Z 
+2026-02-26T22:47:11.3951703Z Restarting services...
+2026-02-26T22:47:11.4484744Z  systemctl restart packagekit.service php8.3-fpm.service polkit.service udisks2.service
+2026-02-26T22:47:11.6165701Z 
+2026-02-26T22:47:11.6166663Z Service restarts being deferred:
+2026-02-26T22:47:11.6167717Z  systemctl restart ModemManager.service
+2026-02-26T22:47:11.6168637Z  systemctl restart networkd-dispatcher.service
+2026-02-26T22:47:11.6170307Z 
+2026-02-26T22:47:11.6170823Z No containers need to be restarted.
+2026-02-26T22:47:11.6171480Z 
+2026-02-26T22:47:11.6178638Z No user sessions are running outdated binaries.
+2026-02-26T22:47:11.6179037Z 
+2026-02-26T22:47:11.6179559Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-02-26T22:47:12.7980517Z Downloading Chrome for Testing 145.0.7632.6 (playwright chromium v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+2026-02-26T22:47:12.9979798Z |                                                                                |   0% of 167.3 MiB
+2026-02-26T22:47:13.3413563Z |■■■■■■■■                                                                        |  10% of 167.3 MiB
+2026-02-26T22:47:13.6709776Z |■■■■■■■■■■■■■■■■                                                                |  20% of 167.3 MiB
+2026-02-26T22:47:14.0136119Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 167.3 MiB
+2026-02-26T22:47:14.3147025Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 167.3 MiB
+2026-02-26T22:47:14.6511799Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 167.3 MiB
+2026-02-26T22:47:14.9890238Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 167.3 MiB
+2026-02-26T22:47:15.2988584Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 167.3 MiB
+2026-02-26T22:47:15.5974505Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 167.3 MiB
+2026-02-26T22:47:15.8863772Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 167.3 MiB
+2026-02-26T22:47:16.1739827Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 167.3 MiB
+2026-02-26T22:47:18.9258011Z Chrome for Testing 145.0.7632.6 (playwright chromium v1208) downloaded to /home/runner/.cache/ms-playwright/chromium-1208
+2026-02-26T22:47:18.9262602Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+2026-02-26T22:47:19.2240657Z |                                                                                |   0% of 2.3 MiB
+2026-02-26T22:47:19.2316556Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+2026-02-26T22:47:19.2417515Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+2026-02-26T22:47:19.2441801Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+2026-02-26T22:47:19.2466783Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+2026-02-26T22:47:19.2484280Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+2026-02-26T22:47:19.2500272Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+2026-02-26T22:47:19.2517800Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+2026-02-26T22:47:19.2534486Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+2026-02-26T22:47:19.2549947Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+2026-02-26T22:47:19.2563758Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+2026-02-26T22:47:19.3175784Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+2026-02-26T22:47:19.3180184Z Downloading Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-headless-shell-linux64.zip
+2026-02-26T22:47:19.5468401Z |                                                                                |   0% of 110.9 MiB
+2026-02-26T22:47:19.7715878Z |■■■■■■■■                                                                        |  10% of 110.9 MiB
+2026-02-26T22:47:19.9546079Z |■■■■■■■■■■■■■■■■                                                                |  20% of 110.9 MiB
+2026-02-26T22:47:20.1285232Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 110.9 MiB
+2026-02-26T22:47:20.2945204Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 110.9 MiB
+2026-02-26T22:47:20.4617472Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 110.9 MiB
+2026-02-26T22:47:20.6276468Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 110.9 MiB
+2026-02-26T22:47:20.7999054Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 110.9 MiB
+2026-02-26T22:47:20.9658862Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 110.9 MiB
+2026-02-26T22:47:21.1442722Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 110.9 MiB
+2026-02-26T22:47:21.3377142Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 110.9 MiB
+2026-02-26T22:47:23.3665178Z Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1208
+2026-02-26T22:47:23.3886236Z ##[debug]Finishing: Install Playwright
+2026-02-26T22:47:23.3893516Z ##[debug]Evaluating condition for step: 'Start HTTP server'
+2026-02-26T22:47:23.3895627Z ##[debug]Evaluating: success()
+2026-02-26T22:47:23.3896059Z ##[debug]Evaluating success:
+2026-02-26T22:47:23.3896734Z ##[debug]=> true
+2026-02-26T22:47:23.3897046Z ##[debug]Result: true
+2026-02-26T22:47:23.3897612Z ##[debug]Starting: Start HTTP server
+2026-02-26T22:47:23.3905507Z ##[debug]Loading inputs
+2026-02-26T22:47:23.3906686Z ##[debug]Loading env
+2026-02-26T22:47:23.3911201Z ##[group]Run python3 -m http.server 8080 --directory proto/output/web/ &
+2026-02-26T22:47:23.3911725Z [36;1mpython3 -m http.server 8080 --directory proto/output/web/ &[0m
+2026-02-26T22:47:23.3912096Z [36;1mecho "HTTP server PID: $!"[0m
+2026-02-26T22:47:23.3914280Z [36;1m# Wait for server to be ready[0m
+2026-02-26T22:47:23.3914714Z [36;1mfor i in {1..10}; do[0m
+2026-02-26T22:47:23.3915170Z [36;1m  curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/ | grep -q 200 && break[0m
+2026-02-26T22:47:23.3915664Z [36;1m  echo "Waiting for server... ($i/10)"[0m
+2026-02-26T22:47:23.3915922Z [36;1m  sleep 1[0m
+2026-02-26T22:47:23.3916100Z [36;1mdone[0m
+2026-02-26T22:47:23.3916426Z [36;1mcurl -s -o /dev/null -w "Server HTTP status: %{http_code}\n" http://localhost:8080/[0m
+2026-02-26T22:47:23.3968501Z shell: /usr/bin/bash -e {0}
+2026-02-26T22:47:23.3968763Z ##[endgroup]
+2026-02-26T22:47:23.4022221Z ##[debug]/usr/bin/bash -e /home/runner/work/_temp/a41287fa-ccb6-4cfe-9005-690234792dcf.sh
+2026-02-26T22:47:23.4047773Z HTTP server PID: 3144
+2026-02-26T22:47:23.4118360Z Waiting for server... (1/10)
+2026-02-26T22:47:24.4313738Z 127.0.0.1 - - [26/Feb/2026 22:47:24] "GET / HTTP/1.1" 200 -
+2026-02-26T22:47:24.4381979Z 127.0.0.1 - - [26/Feb/2026 22:47:24] "GET / HTTP/1.1" 200 -
+2026-02-26T22:47:24.4385845Z Server HTTP status: 200
+2026-02-26T22:47:29.4413163Z ##[debug]Finishing: Start HTTP server
+2026-02-26T22:47:29.4422826Z ##[debug]Evaluating condition for step: 'Run Playwright test'
+2026-02-26T22:47:29.4424886Z ##[debug]Evaluating: success()
+2026-02-26T22:47:29.4425358Z ##[debug]Evaluating success:
+2026-02-26T22:47:29.4425877Z ##[debug]=> true
+2026-02-26T22:47:29.4426289Z ##[debug]Result: true
+2026-02-26T22:47:29.4426935Z ##[debug]Starting: Run Playwright test
+2026-02-26T22:47:29.4438370Z ##[debug]Loading inputs
+2026-02-26T22:47:29.4439507Z ##[debug]Loading env
+2026-02-26T22:47:29.4443699Z ##[group]Run node .github/scripts/browser-test.js
+2026-02-26T22:47:29.4444061Z [36;1mnode .github/scripts/browser-test.js[0m
+2026-02-26T22:47:29.4493396Z shell: /usr/bin/bash -e {0}
+2026-02-26T22:47:29.4493659Z ##[endgroup]
+2026-02-26T22:47:29.4541587Z ##[debug]/usr/bin/bash -e /home/runner/work/_temp/58143b79-2d4b-4953-90a8-8ada3050199b.sh
+2026-02-26T22:47:30.0596357Z [2026-02-26T22:47:30.058Z] === DragonSoul Playwright Test ===
+2026-02-26T22:47:30.0598421Z [2026-02-26T22:47:30.059Z] URL: http://localhost:8080/
+2026-02-26T22:47:30.0599354Z [2026-02-26T22:47:30.059Z] Durée du test: 45s
+2026-02-26T22:47:31.4860631Z [2026-02-26T22:47:31.485Z] Navigation vers http://localhost:8080/
+2026-02-26T22:47:31.5047429Z [2026-02-26T22:47:31.504Z]    [LOG] [Assets] 8 shaders préchargés
+2026-02-26T22:47:33.5723406Z [2026-02-26T22:47:33.571Z] HTTP response: 200
+2026-02-26T22:47:33.5724357Z [2026-02-26T22:47:33.572Z] Attente du chargement de classes.js (83MB)...
+2026-02-26T22:47:33.6349170Z [2026-02-26T22:47:33.634Z]    [LOG] [WebGL2 Bridge] Phase 3.6 actif — rendu GPU activé, boucle RAF prête
+2026-02-26T22:47:33.6365198Z [2026-02-26T22:47:33.636Z]    [LOG] DragonSoul Web - Phase 3.6
+2026-02-26T22:47:33.6370449Z [2026-02-26T22:47:33.636Z]    [LOG] Gdx singleton initialise
+2026-02-26T22:47:33.6500642Z [2026-02-26T22:47:33.649Z]    [LOG] [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:33.6543488Z [2026-02-26T22:47:33.654Z]    [LOG] RPGMain instancie
+2026-02-26T22:47:33.6548208Z [2026-02-26T22:47:33.654Z]    [LOG] Appel de game.create()...
+2026-02-26T22:47:33.6566798Z [2026-02-26T22:47:33.656Z]    [LOG] [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:33.7742091Z [2026-02-26T22:47:33.773Z]    [LOG] [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:33.7748056Z [2026-02-26T22:47:33.774Z]    [LOG] [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:33.9870023Z [2026-02-26T22:47:33.986Z]    [LOG] [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.2719998Z [2026-02-26T22:47:34.271Z]    [LOG] [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.5052973Z [2026-02-26T22:47:34.504Z]    [LOG] game.create() exception: java.lang.RuntimeException
+2026-02-26T22:47:34.5056192Z [2026-02-26T22:47:34.504Z]    [LOG]   Message: (JavaScript) TypeError: cpr_RPG_app.$getCurrentAssetDensity is not a function
+2026-02-26T22:47:34.5057932Z [2026-02-26T22:47:34.505Z]    [LOG]   Cause: java.lang.RuntimeException: (JavaScript) TypeError: cpr_RPG_app.$getCurrentAssetDensity is not a function
+2026-02-26T22:47:34.5400393Z [2026-02-26T22:47:34.539Z] ⚠️  [WARN] [.WebGL-0x26840013de00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+2026-02-26T22:47:34.5431853Z [2026-02-26T22:47:34.542Z] ✅ classes.js chargé — window.main disponible
+2026-02-26T22:47:34.5847275Z [2026-02-26T22:47:34.584Z] Screenshot: screenshot-00-initial.png
+2026-02-26T22:47:34.5848205Z [2026-02-26T22:47:34.584Z] Attente de game.create()...
+2026-02-26T22:47:34.5901695Z [2026-02-26T22:47:34.589Z] game.create() status: {"text":"EXCEPTION","className":"status-value fail"}
+2026-02-26T22:47:34.6319956Z [2026-02-26T22:47:34.631Z] Screenshot: screenshot-01-after-create.png
+2026-02-26T22:47:34.6386417Z [2026-02-26T22:47:34.638Z] Status indicators: {
+2026-02-26T22:47:34.6386964Z   "st-webgl": {
+2026-02-26T22:47:34.6387293Z     "text": "OK",
+2026-02-26T22:47:34.6387668Z     "className": "status-value ok"
+2026-02-26T22:47:34.6388075Z   },
+2026-02-26T22:47:34.6389070Z   "st-bridge": {
+2026-02-26T22:47:34.6389426Z     "text": "OK",
+2026-02-26T22:47:34.6389814Z     "className": "status-value ok"
+2026-02-26T22:47:34.6390231Z   },
+2026-02-26T22:47:34.6390512Z   "st-create": {
+2026-02-26T22:47:34.6390860Z     "text": "EXCEPTION",
+2026-02-26T22:47:34.6391318Z     "className": "status-value fail"
+2026-02-26T22:47:34.6391779Z   },
+2026-02-26T22:47:34.6392078Z   "st-render": {
+2026-02-26T22:47:34.6392618Z     "text": "waiting...",
+2026-02-26T22:47:34.6393069Z     "className": "status-value pending"
+2026-02-26T22:47:34.6393465Z   },
+2026-02-26T22:47:34.6393730Z   "st-frames": {
+2026-02-26T22:47:34.6394005Z     "text": "0",
+2026-02-26T22:47:34.6394323Z     "className": "status-value info"
+2026-02-26T22:47:34.6394692Z   }
+2026-02-26T22:47:34.6394972Z }
+2026-02-26T22:47:34.6401164Z [2026-02-26T22:47:34.639Z] === Contenu du log in-page ===
+2026-02-26T22:47:34.6402545Z [2026-02-26T22:47:34.640Z]   [Assets] 8 shaders préchargés
+2026-02-26T22:47:34.6403528Z [2026-02-26T22:47:34.640Z]   WebGL2: WebGL 2.0 (OpenGL ES 3.0 Chromium)
+2026-02-26T22:47:34.6404880Z [2026-02-26T22:47:34.640Z]   [WebGL2 Bridge] Phase 3.6 actif — rendu GPU activé, boucle RAF prête
+2026-02-26T22:47:34.6429304Z [2026-02-26T22:47:34.640Z]   Bridge WebGL2 Phase 3.6 actif
+2026-02-26T22:47:34.6430095Z [2026-02-26T22:47:34.640Z]   DragonSoul Web - Phase 3.6
+2026-02-26T22:47:34.6430821Z [2026-02-26T22:47:34.640Z]   Gdx singleton initialise
+2026-02-26T22:47:34.6431701Z [2026-02-26T22:47:34.640Z]   [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.6432697Z [2026-02-26T22:47:34.640Z]   RPGMain instancie
+2026-02-26T22:47:34.6433344Z [2026-02-26T22:47:34.640Z]   Appel de game.create()...
+2026-02-26T22:47:34.6433903Z [2026-02-26T22:47:34.640Z]   [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.6434498Z [2026-02-26T22:47:34.640Z]   [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.6435036Z [2026-02-26T22:47:34.640Z]   [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.6435589Z [2026-02-26T22:47:34.640Z]   [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.6436149Z [2026-02-26T22:47:34.640Z]   [ERROR] com.perblue.common.h.a: Problem geting log
+2026-02-26T22:47:34.6436727Z [2026-02-26T22:47:34.640Z]   game.create() exception: java.lang.RuntimeException
+2026-02-26T22:47:34.6437803Z [2026-02-26T22:47:34.640Z]     Message: (JavaScript) TypeError: cpr_RPG_app.$getCurrentAssetDensity is not a function
+2026-02-26T22:47:34.6438826Z [2026-02-26T22:47:34.640Z]     Cause: java.lang.RuntimeException: (JavaScript) TypeError: cpr_RPG_app.$getCurrentAssetDensity is not a function
+2026-02-26T22:47:34.6439782Z [2026-02-26T22:47:34.640Z]   game.create() exception: Cannot read properties of null (reading '$render1')
+2026-02-26T22:47:34.6440546Z [2026-02-26T22:47:34.640Z]   TypeError: Cannot read properties of null (reading '$render1')
+2026-02-26T22:47:34.6441275Z [2026-02-26T22:47:34.640Z]       at cpr_RPGMain_render (http://localhost:8080/classes.js:581309:15)
+2026-02-26T22:47:34.6441991Z [2026-02-26T22:47:34.640Z]       at cpr_RPGMain.$render1 (http://localhost:8080/classes.js:23:12)
+2026-02-26T22:47:34.6442991Z [2026-02-26T22:47:34.640Z]       at DragonSoulLauncher_renderFrame (http://localhost:8080/classes.js:348842:15)
+2026-02-26T22:47:34.6443786Z [2026-02-26T22:47:34.640Z]       at DragonSoulLauncher_main (http://localhost:8080/classes.js:348708:9)
+2026-02-26T22:47:34.6444512Z [2026-02-26T22:47:34.640Z]       at TeaVMThread.runner (http://localhost:8080/classes.js:52:11)
+2026-02-26T22:47:34.6445037Z [2026-02-26T22:47:34.640Z] === Fin du log in-page ===
+2026-02-26T22:47:34.6445467Z [2026-02-26T22:47:34.640Z] Attente 10s pour le render loop...
+2026-02-26T22:47:44.6441390Z [2026-02-26T22:47:44.643Z] render() status après 10s: {"text":"waiting...","className":"status-value pending"}
+2026-02-26T22:47:44.6442665Z [2026-02-26T22:47:44.643Z] frames count: {"text":"0","className":"status-value info"}
+2026-02-26T22:47:44.6816475Z [2026-02-26T22:47:44.681Z] Screenshot: screenshot-02-after-10s.png
+2026-02-26T22:47:44.6817476Z [2026-02-26T22:47:44.681Z] Attente 15s supplémentaires...
+2026-02-26T22:47:59.6855235Z [2026-02-26T22:47:59.684Z] render() status final: {"text":"waiting...","className":"status-value pending"}
+2026-02-26T22:47:59.6857000Z [2026-02-26T22:47:59.684Z] frames count final: {"text":"0","className":"status-value info"}
+2026-02-26T22:47:59.7315546Z [2026-02-26T22:47:59.731Z] Screenshot: screenshot-03-final.png
+2026-02-26T22:47:59.7341978Z [2026-02-26T22:47:59.733Z] WebGL stats: {"shaderCount":0,"programCount":0,"drawCallCount":0}
+2026-02-26T22:47:59.7343469Z [2026-02-26T22:47:59.733Z] Rapport JSON: /tmp/dragonsoul-test/report.json
+2026-02-26T22:47:59.7344563Z [2026-02-26T22:47:59.733Z] Logs complets: /tmp/dragonsoul-test/console.log
+2026-02-26T22:47:59.7345390Z [2026-02-26T22:47:59.733Z] 
+2026-02-26T22:47:59.7347215Z [2026-02-26T22:47:59.733Z] ========== RÉSUMÉ DU TEST ==========
+2026-02-26T22:47:59.7360631Z [2026-02-26T22:47:59.733Z] WebGL2:      OK
+2026-02-26T22:47:59.7361274Z [2026-02-26T22:47:59.733Z] Bridge:      OK
+2026-02-26T22:47:59.7361882Z [2026-02-26T22:47:59.733Z] create():    EXCEPTION
+2026-02-26T22:47:59.7362756Z [2026-02-26T22:47:59.733Z] render():    waiting...
+2026-02-26T22:47:59.7363354Z [2026-02-26T22:47:59.733Z] Frames:      0
+2026-02-26T22:47:59.7370687Z [2026-02-26T22:47:59.733Z] Draw calls:  0
+2026-02-26T22:47:59.7371325Z [2026-02-26T22:47:59.733Z] Erreurs JS:  0
+2026-02-26T22:47:59.7371855Z [2026-02-26T22:47:59.733Z] Shaders GL:  0
+2026-02-26T22:47:59.7372582Z [2026-02-26T22:47:59.733Z] Programs GL: 0
+2026-02-26T22:47:59.7373272Z [2026-02-26T22:47:59.733Z] =====================================
+2026-02-26T22:47:59.7374356Z [2026-02-26T22:47:59.733Z] ❌ TEST ÉCHOUÉ — voir les erreurs ci-dessus
+2026-02-26T22:47:59.7796247Z ##[debug]Finishing: Run Playwright test
+2026-02-26T22:47:59.7806632Z ##[debug]Evaluating condition for step: 'Upload test artifacts'
+2026-02-26T22:47:59.7809478Z ##[debug]Evaluating: always()
+2026-02-26T22:47:59.7809842Z ##[debug]Evaluating always:
+2026-02-26T22:47:59.7810632Z ##[debug]=> true
+2026-02-26T22:47:59.7810992Z ##[debug]Result: true
+2026-02-26T22:47:59.7811561Z ##[debug]Starting: Upload test artifacts
+2026-02-26T22:47:59.7847167Z ##[debug]Loading inputs
+2026-02-26T22:47:59.7851478Z ##[debug]Evaluating: format('dragonsoul-browser-test-{0}', github.sha)
+2026-02-26T22:47:59.7852097Z ##[debug]Evaluating format:
+2026-02-26T22:47:59.7856103Z ##[debug]..Evaluating String:
+2026-02-26T22:47:59.7856428Z ##[debug]..=> 'dragonsoul-browser-test-{0}'
+2026-02-26T22:47:59.7868740Z ##[debug]..Evaluating Index:
+2026-02-26T22:47:59.7869010Z ##[debug]....Evaluating github:
+2026-02-26T22:47:59.7869271Z ##[debug]....=> Object
+2026-02-26T22:47:59.7869505Z ##[debug]....Evaluating String:
+2026-02-26T22:47:59.7869740Z ##[debug]....=> 'sha'
+2026-02-26T22:47:59.7870087Z ##[debug]..=> '6df6d48c9df1cf3441962562702ff46f8d26e55c'
+2026-02-26T22:47:59.7871201Z ##[debug]=> 'dragonsoul-browser-test-6df6d48c9df1cf3441962562702ff46f8d26e55c'
+2026-02-26T22:47:59.7871800Z ##[debug]Result: 'dragonsoul-browser-test-6df6d48c9df1cf3441962562702ff46f8d26e55c'
+2026-02-26T22:47:59.7875703Z ##[debug]Loading env
+2026-02-26T22:47:59.7879369Z ##[group]Run actions/upload-artifact@v4
+2026-02-26T22:47:59.7879608Z with:
+2026-02-26T22:47:59.7879902Z   name: dragonsoul-browser-test-6df6d48c9df1cf3441962562702ff46f8d26e55c
+2026-02-26T22:47:59.7880289Z   path: /tmp/dragonsoul-test/
+
+2026-02-26T22:47:59.7880521Z   retention-days: 7
+2026-02-26T22:47:59.7880714Z   if-no-files-found: warn
+2026-02-26T22:47:59.7880913Z   compression-level: 6
+2026-02-26T22:47:59.7881098Z   overwrite: false
+2026-02-26T22:47:59.7881282Z   include-hidden-files: false
+2026-02-26T22:47:59.7881494Z ##[endgroup]
+2026-02-26T22:48:00.0050159Z ##[debug]followSymbolicLinks 'true'
+2026-02-26T22:48:00.0051263Z ##[debug]implicitDescendants 'true'
+2026-02-26T22:48:00.0052237Z ##[debug]omitBrokenSymbolicLinks 'true'
+2026-02-26T22:48:00.0053604Z ##[debug]excludeHiddenFiles 'true'
+2026-02-26T22:48:00.0074524Z ##[debug]followSymbolicLinks 'true'
+2026-02-26T22:48:00.0075503Z ##[debug]implicitDescendants 'true'
+2026-02-26T22:48:00.0076414Z ##[debug]matchDirectories 'true'
+2026-02-26T22:48:00.0077347Z ##[debug]omitBrokenSymbolicLinks 'true'
+2026-02-26T22:48:00.0078278Z ##[debug]excludeHiddenFiles 'true'
+2026-02-26T22:48:00.0080230Z ##[debug]Search path '/tmp/dragonsoul-test'
+2026-02-26T22:48:00.0137901Z ##[debug]Removing /tmp/dragonsoul-test from rawSearchResults because it is a directory
+2026-02-26T22:48:00.0139168Z ##[debug]File:/tmp/dragonsoul-test/console.log was found using the provided searchPath
+2026-02-26T22:48:00.0140528Z ##[debug]File:/tmp/dragonsoul-test/report.json was found using the provided searchPath
+2026-02-26T22:48:00.0142990Z ##[debug]File:/tmp/dragonsoul-test/screenshot-00-initial.png was found using the provided searchPath
+2026-02-26T22:48:00.0144617Z ##[debug]File:/tmp/dragonsoul-test/screenshot-01-after-create.png was found using the provided searchPath
+2026-02-26T22:48:00.0146015Z ##[debug]File:/tmp/dragonsoul-test/screenshot-02-after-10s.png was found using the provided searchPath
+2026-02-26T22:48:00.0147320Z ##[debug]File:/tmp/dragonsoul-test/screenshot-03-final.png was found using the provided searchPath
+2026-02-26T22:48:00.0148356Z With the provided path, there will be 6 files uploaded
+2026-02-26T22:48:00.0149373Z ##[debug]Root artifact directory is /tmp/dragonsoul-test
+2026-02-26T22:48:00.0153818Z Artifact name is valid!
+2026-02-26T22:48:00.0156153Z Root directory input is valid!
+2026-02-26T22:48:00.0179771Z ##[debug]Workflow Run Backend ID: 0b76422a-2ca5-4163-ba3c-6082cf5914a3
+2026-02-26T22:48:00.0183186Z ##[debug]Workflow Job Run Backend ID: 319805f1-dbec-5191-a651-7fd7f39945a9
+2026-02-26T22:48:00.0205002Z ##[debug][Request] CreateArtifact https://results-receiver.actions.githubusercontent.com/twirp/github.actions.results.api.v1.ArtifactService/CreateArtifact
+2026-02-26T22:48:00.2819482Z ##[debug][Response] - 200
+2026-02-26T22:48:00.2827082Z ##[debug]Headers: {
+2026-02-26T22:48:00.2827523Z ##[debug]  "content-length": "581",
+2026-02-26T22:48:00.2828128Z ##[debug]  "content-type": "application/json",
+2026-02-26T22:48:00.2828763Z ##[debug]  "date": "Thu, 26 Feb 2026 22:48:00 GMT",
+2026-02-26T22:48:00.2829348Z ##[debug]  "x-github-backend": "Kubernetes",
+2026-02-26T22:48:00.2829973Z ##[debug]  "x-github-request-id": "DBC0:515C3:5DC043:69CEF2:69A0CDA0"
+2026-02-26T22:48:00.2831014Z ##[debug]}
+2026-02-26T22:48:00.2832100Z ::add-mask::***
+2026-02-26T22:48:00.2834580Z ::add-mask::***
+2026-02-26T22:48:00.2836026Z ##[debug]Body: {
+2026-02-26T22:48:00.2836378Z ##[debug]  "ok": true,
+2026-02-26T22:48:00.2840642Z ##[debug]  "signed_upload_url": "https://productionresultssa18.blob.core.windows.net/actions-results/0b76422a-2ca5-4163-ba3c-6082cf5914a3/workflow-job-run-319805f1-dbec-5191-a651-7fd7f39945a9/artifacts/0cb2a022a2a84ff6f7d12be97985bfa5e7f23d5777c6249f766ec7381495f7c3.zip?se=2026-02-26T23%3A48%3A00Z&sig=***&ske=2026-02-27T01%3A40%3A59Z&skoid=ca7593d4-ee42-46cd-af88-8b886a2f84eb&sks=b&skt=2026-02-26T21%3A40%3A59Z&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skv=2025-11-05&sp=cw&spr=https&sr=b&st=2026-02-26T22%3A47%3A55Z&sv=2025-11-05"
+2026-02-26T22:48:00.2844745Z ##[debug]}
+2026-02-26T22:48:00.2845767Z ##[debug]Creating Artifact archive with compressionLevel: 6
+2026-02-26T22:48:00.2846840Z ##[debug]Zip write high watermark value 8388608
+2026-02-26T22:48:00.2847967Z ##[debug]Zip read high watermark value 8388608
+2026-02-26T22:48:00.2905137Z ##[debug]Uploading artifact zip to blob storage with maxConcurrency: 5, bufferSize: 8388608
+2026-02-26T22:48:00.2916036Z Beginning upload of artifact content to blob storage
+2026-02-26T22:48:00.3188735Z ##[debug]Zip stream for upload has ended.
+2026-02-26T22:48:00.3191902Z ##[debug]Zip stream for upload has finished.
+2026-02-26T22:48:00.7717333Z Uploaded bytes 93263
+2026-02-26T22:48:00.8556283Z Finished uploading artifact content to blob storage!
+2026-02-26T22:48:00.8558805Z SHA256 digest of uploaded artifact zip is bac7051d838085cca4cc9e2658254c2cf0aecb5ca96a64916a29df7a005f0893
+2026-02-26T22:48:00.8560533Z Finalizing artifact upload
+2026-02-26T22:48:00.8564648Z ##[debug][Request] FinalizeArtifact https://results-receiver.actions.githubusercontent.com/twirp/github.actions.results.api.v1.ArtifactService/FinalizeArtifact
+2026-02-26T22:48:01.0266003Z ##[debug][Response] - 200
+2026-02-26T22:48:01.0266696Z ##[debug]Headers: {
+2026-02-26T22:48:01.0267075Z ##[debug]  "content-length": "39",
+2026-02-26T22:48:01.0267780Z ##[debug]  "content-type": "application/json",
+2026-02-26T22:48:01.0268546Z ##[debug]  "date": "Thu, 26 Feb 2026 22:48:00 GMT",
+2026-02-26T22:48:01.0269036Z ##[debug]  "x-github-backend": "Kubernetes",
+2026-02-26T22:48:01.0269612Z ##[debug]  "x-github-request-id": "DBC0:515C3:5DC25F:69D165:69A0CDA0"
+2026-02-26T22:48:01.0270151Z ##[debug]}
+2026-02-26T22:48:01.0270646Z ##[debug]Body: {
+2026-02-26T22:48:01.0270958Z ##[debug]  "ok": true,
+2026-02-26T22:48:01.0271293Z ##[debug]  "artifact_id": "5681601138"
+2026-02-26T22:48:01.0271872Z ##[debug]}
+2026-02-26T22:48:01.0275048Z Artifact dragonsoul-browser-test-6df6d48c9df1cf3441962562702ff46f8d26e55c.zip successfully finalized. Artifact ID 5681601138
+2026-02-26T22:48:01.0277181Z Artifact dragonsoul-browser-test-6df6d48c9df1cf3441962562702ff46f8d26e55c has been successfully uploaded! Final size is 93263 bytes. Artifact ID is 5681601138
+2026-02-26T22:48:01.0279739Z Artifact download URL: https://github.com/aciderix/Dragonsoul-web/actions/runs/22464357232/artifacts/5681601138
+2026-02-26T22:48:01.0365128Z ##[debug]Node Action run completed with exit code 0
+2026-02-26T22:48:01.0368552Z ##[debug]Set output artifact-id = 5681601138
+2026-02-26T22:48:01.0369409Z ##[debug]Set output artifact-digest = bac7051d838085cca4cc9e2658254c2cf0aecb5ca96a64916a29df7a005f0893
+2026-02-26T22:48:01.0371027Z ##[debug]Set output artifact-url = https://github.com/aciderix/Dragonsoul-web/actions/runs/22464357232/artifacts/5681601138
+2026-02-26T22:48:01.0372012Z ##[debug]Finishing: Upload test artifacts
+2026-02-26T22:48:01.0381191Z ##[debug]Evaluating condition for step: 'Post Setup Node.js'
+2026-02-26T22:48:01.0383589Z ##[debug]Evaluating: success()
+2026-02-26T22:48:01.0383980Z ##[debug]Evaluating success:
+2026-02-26T22:48:01.0384512Z ##[debug]=> true
+2026-02-26T22:48:01.0384836Z ##[debug]Result: true
+2026-02-26T22:48:01.0385415Z ##[debug]Starting: Post Setup Node.js
+2026-02-26T22:48:01.0411311Z ##[debug]Loading inputs
+2026-02-26T22:48:01.0417001Z ##[debug]Evaluating: (((github.server_url == 'https://github.com') && github.token) || '')
+2026-02-26T22:48:01.0417498Z ##[debug]Evaluating Or:
+2026-02-26T22:48:01.0417737Z ##[debug]..Evaluating And:
+2026-02-26T22:48:01.0417969Z ##[debug]....Evaluating Equal:
+2026-02-26T22:48:01.0418205Z ##[debug]......Evaluating Index:
+2026-02-26T22:48:01.0418441Z ##[debug]........Evaluating github:
+2026-02-26T22:48:01.0418736Z ##[debug]........=> Object
+2026-02-26T22:48:01.0418984Z ##[debug]........Evaluating String:
+2026-02-26T22:48:01.0419230Z ##[debug]........=> 'server_url'
+2026-02-26T22:48:01.0419596Z ##[debug]......=> 'https://github.com'
+2026-02-26T22:48:01.0419875Z ##[debug]......Evaluating String:
+2026-02-26T22:48:01.0420152Z ##[debug]......=> 'https://github.com'
+2026-02-26T22:48:01.0420429Z ##[debug]....=> true
+2026-02-26T22:48:01.0420634Z ##[debug]....Evaluating Index:
+2026-02-26T22:48:01.0420881Z ##[debug]......Evaluating github:
+2026-02-26T22:48:01.0421122Z ##[debug]......=> Object
+2026-02-26T22:48:01.0421367Z ##[debug]......Evaluating String:
+2026-02-26T22:48:01.0421598Z ##[debug]......=> 'token'
+2026-02-26T22:48:01.0422033Z ##[debug]....=> '***'
+2026-02-26T22:48:01.0423099Z ##[debug]..=> '***'
+2026-02-26T22:48:01.0423513Z ##[debug]=> '***'
+2026-02-26T22:48:01.0424171Z ##[debug]Expanded: ((('https://github.com' == 'https://github.com') && '***') || '')
+2026-02-26T22:48:01.0424650Z ##[debug]Result: '***'
+2026-02-26T22:48:01.0427260Z ##[debug]Loading env
+2026-02-26T22:48:01.0430989Z Post job cleanup.
+2026-02-26T22:48:01.2019131Z ##[debug]Caching for '' is not supported
+2026-02-26T22:48:01.2088275Z ##[debug]Node Action run completed with exit code 0
+2026-02-26T22:48:01.2090930Z ##[debug]Finishing: Post Setup Node.js
+2026-02-26T22:48:01.2098795Z ##[debug]Evaluating condition for step: 'Post Checkout repo'
+2026-02-26T22:48:01.2100640Z ##[debug]Evaluating: always()
+2026-02-26T22:48:01.2101023Z ##[debug]Evaluating always:
+2026-02-26T22:48:01.2101388Z ##[debug]=> true
+2026-02-26T22:48:01.2101748Z ##[debug]Result: true
+2026-02-26T22:48:01.2102543Z ##[debug]Starting: Post Checkout repo
+2026-02-26T22:48:01.2134988Z ##[debug]Loading inputs
+2026-02-26T22:48:01.2136165Z ##[debug]Evaluating: github.repository
+2026-02-26T22:48:01.2136453Z ##[debug]Evaluating Index:
+2026-02-26T22:48:01.2136689Z ##[debug]..Evaluating github:
+2026-02-26T22:48:01.2136943Z ##[debug]..=> Object
+2026-02-26T22:48:01.2137169Z ##[debug]..Evaluating String:
+2026-02-26T22:48:01.2137404Z ##[debug]..=> 'repository'
+2026-02-26T22:48:01.2137735Z ##[debug]=> 'aciderix/Dragonsoul-web'
+2026-02-26T22:48:01.2138025Z ##[debug]Result: 'aciderix/Dragonsoul-web'
+2026-02-26T22:48:01.2139702Z ##[debug]Evaluating: github.token
+2026-02-26T22:48:01.2140006Z ##[debug]Evaluating Index:
+2026-02-26T22:48:01.2140231Z ##[debug]..Evaluating github:
+2026-02-26T22:48:01.2140476Z ##[debug]..=> Object
+2026-02-26T22:48:01.2140705Z ##[debug]..Evaluating String:
+2026-02-26T22:48:01.2140934Z ##[debug]..=> 'token'
+2026-02-26T22:48:01.2141359Z ##[debug]=> '***'
+2026-02-26T22:48:01.2141678Z ##[debug]Result: '***'
+2026-02-26T22:48:01.2151918Z ##[debug]Loading env
+2026-02-26T22:48:01.2156071Z Post job cleanup.
+2026-02-26T22:48:01.3136809Z ##[debug]Getting git version
+2026-02-26T22:48:01.3151958Z [command]/usr/bin/git version
+2026-02-26T22:48:01.3195648Z git version 2.53.0
+2026-02-26T22:48:01.3219127Z ##[debug]0
+2026-02-26T22:48:01.3220073Z ##[debug]git version 2.53.0
+2026-02-26T22:48:01.3220483Z ##[debug]
+2026-02-26T22:48:01.3221248Z ##[debug]Set git useragent to: git/2.53.0 (github-actions-checkout)
+2026-02-26T22:48:01.3225642Z ::add-mask::***
+2026-02-26T22:48:01.3244046Z Temporarily overriding HOME='/home/runner/work/_temp/98e6d786-7302-4180-80b1-cfb42c091126' before making global git config changes
+2026-02-26T22:48:01.3245987Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-26T22:48:01.3260006Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Dragonsoul-web/Dragonsoul-web
+2026-02-26T22:48:01.3293354Z ##[debug]0
+2026-02-26T22:48:01.3293955Z ##[debug]
+2026-02-26T22:48:01.3300178Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-26T22:48:01.3329389Z ##[debug]1
+2026-02-26T22:48:01.3330385Z ##[debug]
+2026-02-26T22:48:01.3335468Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-26T22:48:01.3606632Z ##[debug]0
+2026-02-26T22:48:01.3607257Z ##[debug]
+2026-02-26T22:48:01.3615959Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-26T22:48:01.3642971Z http.https://github.com/.extraheader
+2026-02-26T22:48:01.3649163Z ##[debug]0
+2026-02-26T22:48:01.3649838Z ##[debug]http.https://github.com/.extraheader
+2026-02-26T22:48:01.3650327Z ##[debug]
+2026-02-26T22:48:01.3656174Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-02-26T22:48:01.3683075Z ##[debug]0
+2026-02-26T22:48:01.3683461Z ##[debug]
+2026-02-26T22:48:01.3688483Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-26T22:48:01.3948174Z ##[debug]0
+2026-02-26T22:48:01.3949189Z ##[debug]
+2026-02-26T22:48:01.3957014Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-02-26T22:48:01.3985935Z ##[debug]1
+2026-02-26T22:48:01.3986581Z ##[debug]
+2026-02-26T22:48:01.3993067Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-02-26T22:48:01.4233626Z ##[debug]0
+2026-02-26T22:48:01.4234430Z ##[debug]
+2026-02-26T22:48:01.4235564Z ##[debug]Unsetting HOME override
+2026-02-26T22:48:01.4309975Z ##[debug]Node Action run completed with exit code 0
+2026-02-26T22:48:01.4313916Z ##[debug]Finishing: Post Checkout repo
+2026-02-26T22:48:01.4358896Z ##[debug]Starting: Complete job
+2026-02-26T22:48:01.4360664Z Uploading runner diagnostic logs
+2026-02-26T22:48:01.4372774Z ##[debug]Starting diagnostic file upload.
+2026-02-26T22:48:01.4373109Z ##[debug]Setting up diagnostic log folders.
+2026-02-26T22:48:01.4374836Z ##[debug]Creating diagnostic log files folder.
+2026-02-26T22:48:01.4383601Z ##[debug]Copying 1 worker diagnostic logs.
+2026-02-26T22:48:01.4392154Z ##[debug]Copying 1 runner diagnostic logs.
+2026-02-26T22:48:01.4393637Z ##[debug]Zipping diagnostic files.
+2026-02-26T22:48:01.4473767Z ##[debug]Uploading diagnostic metadata file.
+2026-02-26T22:48:01.4504275Z ##[debug]Diagnostic file upload complete.
+2026-02-26T22:48:01.4504843Z Completed runner diagnostic log upload
+2026-02-26T22:48:01.4505152Z Cleaning up orphan processes
+2026-02-26T22:48:01.5005058Z Terminate orphan process: pid (3144) (python3)
+2026-02-26T22:48:01.5006853Z ##[debug]Finishing: Complete job
+2026-02-26T22:48:01.5037928Z ##[debug]Finishing: browser-test
