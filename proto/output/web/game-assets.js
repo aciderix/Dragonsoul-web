@@ -32,5 +32,12 @@
         0,4,0,4,0,4,0,4,         // encoded 4×4, original 4×4
         0,0,0,0,0,0,0,0          // ETC1 block all-zero → black 4×4
     ]) };
-    console.log("[Assets] 8 shaders + boot atlas préchargés");
+    // Phase 3.14: Path aliases so both "ui/boot.atlas" and "ETC/XHDPI/ui/boot.atlas" work
+    A["ui/boot.atlas"] = A["ETC/XHDPI/ui/boot.atlas"];
+    A["ui/boot.etc1"] = A["ETC/XHDPI/ui/boot.etc1"];
+
+    // Phase 3.14: Minimal splash screen placeholder (16x16 white PNG)
+    A["ui/fantasy_legend_studio_splash_screen.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,16,0,0,0,16,8,6,0,0,0,31,243,255,97,0,0,0,22,73,68,65,84,120,156,99,248,79,33,96,24,53,96,212,128,81,3,134,139,1,0,93,120,252,46,175,253,225,105,0,0,0,0,73,69,78,68,174,66,96,130]) };
+
+    console.log("[Assets] 8 shaders + boot atlas + path aliases préchargés");
 })(typeof self !== "undefined" ? self : this);

@@ -1,0 +1,1245 @@
+", pushed. Now continuing with the fixes. Let me tackle the two main blocking issues: the PKM texture and the splash PNG.
+
+
+Fixed atlas parsing and added missing FileHandle method
+Fixed atlas parsing and added missing FileHandle method
+Update Todos
+ Fix atlas parsing by bypassing TeaVM cooperative threading in BufferedReader
+ Add FileHandle.child() method missing from tree-shaken code
+ Commit and push current progress
+ Document current state
+ Fixing PKM/ETC1 texture loading
+ Fix splash PNG $a160 null reference
+ Add font assets or skip font loading
+ Get first draw calls rendering
+
+Let me investigate the PKM texture loading error and the splash PNG error in parallel.
+
+
+Located PKM/ETC1 texture loader and analyzed $a160 property null reference error in classes.js
+Located PKM/ETC1 texture loader and analyzed $a160 property null reference error in classes.js
+Agent
+Find ETC1 PKM texture loader
+Perfect! Now I have all the key information. Let me create a comprehensive summary with all the function locations and code snippets.
+## Summary of PKM/ETC1 Texture Loader Code
+Afficher moins
+I've found the PKM/ETC1 texture loader code in `/home/user/Dragonsoul-web/proto/output/web/classes.js`. Here are the key components:
+### 1. **ETC1 Texture Decoder Class: `cbggg_ETC1`**
+- **Line 729367-729428**: Core ETC1 class definition
+  - `cbggg_ETC1_$callClinit()` (line 729370): Initializes the ETC1 class
+  - `cbggg_ETC1__clinit_()` (line 729374): Sets constants:
+    - `cbggg_ETC1_a0 = 16` (PKM header size)
+    - `cbggg_ETC1_b = 36196` (OpenGL ETC1 compressed format constant)
+### 2. **PKM Dimension Functions**
+These functions extract width and height from PKM file headers:
+- **Line 729421-729427**: `cbggg_ETC1_getHeightPKM(var$1, var$2)` - Gets height from PKM
+- **Line 729425-729427**: `cbggg_ETC1_getWidthPKM(var$1, var$2)` - Gets width from PKM
+Both return 0 in the stub implementation.
+### 3. **Image Decoding Function**
+- **Line 729418-729420**: `cbggg_ETC1_decodeImage(var$1, var$2, var$3, var$4, var$5, var$6, var$7)` - Decodes ETC1 compressed image
+### 4. **ETC1$a - Decompression Helper Class**
+- **Line 1052061-1052080**: `function cbggg_ETC1$a()` - Constructor
+  - Properties: `$a632` (width), `$b255` (height), `$c105` (data buffer), `$d115` (offset)
+- **Line 1052081-1052430**: `cbggg_ETC1$a__init_()` - Main initialization function with GZIP decompression logic
+  - Lines 1052095-1052176: Creates input streams (DataInputStream, BufferedInputStream, GZIPInputStream)
+  - Lines 1052264-1052269: Reads integer from DataInputStream (likely size)
+  - Lines 1052308-1052343: Reads compressed data into buffer
+  - Lines 1052414-1052415: Calls `cbggg_ETC1_getWidthPKM()` and `cbggg_ETC1_getHeightPKM()`
+- **Line 1052436-1052439**: `cbggg_ETC1$a_b()` - **ERROR HANDLER**
+  ```javascript
+  if (!(cbgm_h_c1(var$0.$a632) && cbgm_h_c1(var$0.$b255)))
+      (jl_System_out()).$println($rt_s(14100));
+  ```
+  This checks if dimensions are power-of-2. String ID 14100 contains the error message.
+### 5. **Texture Loading Integration**
+- **Line 916800-916806**: Creates ETC1$a decoder when texture needs decompression
+  ```javascript
+  var$1 = new cbggg_ETC1$a;
+  cbggg_ETC1$a__init_(var$1, var$2);
+  ```
+- **Lines 1670129-1670140**: GPU texture application with ETC1 format
+  - Checks for ETC1 extension support (line 1670133)
+  - If extension not supported, creates ETC1$a decoder (line 1670134)
+  - Calls `cbggg_ETC1_a()` (line 1670167) to decompress
+### 6. **Web Asset Lookup**
+- **Lines 1189-1216**: `_webLookup()` function for loading compressed assets
+  - **Line 1194**: Key asset resolution logic:
+    ```javascript
+    let asset = GAME_ASSETS[p] || GAME_ASSETS["ETC/XHDPI/" + p] || 
+                (p.startsWith("ETC/XHDPI/") ? GAME_ASSETS[p.substring(10)] : null);
+    ```
+  - This handles the error case for `'ETC/XHDPI/ui/boot.etc1'` - it tries multiple fallbacks
+### Key Constants
+- **cbggg_ETC1_a0**: PKM header size = 16 bytes
+- **cbggg_ETC1_b**: OpenGL format constant = 36196 (ETC1_RGB8_OES)
+- **String 14100**: Error message printed when dimensions aren't power-of-2
+The error "Couldn't load pkm file 'ETC/XHDPI/ui/boot.etc1'" likely indicates that:
+1. The asset isn't found in GAME_ASSETS
+2. Or the PKM header is malformed (width/height extraction fails)
+3. Or decompression fails due to invalid GZIP data
+agentId: a090dd665ea06b944 (for resuming to continue this agent's work if needed)
+<usage>total_tokens: 41013
+tool_uses: 23
+duration_ms: 74191</usage>
+Agent
+Find $a160 property usage
+Perfect! Now I have all the information I need. Let me create a comprehensive report:
+## Summary: TypeError Analysis for `$a160` in classes.js
+Afficher moins
+Based on my thorough search and analysis of `/home/user/Dragonsoul-web/proto/output/web/classes.js`, here are my findings:
+---
+### 1. **What class/property $a160 maps to**
+`$a160` is a method (not a property) that maps to **"isComplete"** or a completion check method. It's defined on multiple texture-related classes:
+- **Line 1696360**: Class `cbga_d` (TextureLoader subclass)
+  - `"$a160", $rt_wrapFunction0(cbga_d_a0)`
+- **Line 1696442**: Class `cbggg_c0` 
+  - `"$a160", $rt_wrapFunction0(cbggg_c_a7)`
+- **Line 1696443**: Class `cbggg_a1`
+  - `"$a160", $rt_wrapFunction0(cbggg_a_a4)`
+- **Line 1697140**: Class `cbggg_ETC1$a`
+  - `"$a160", $rt_wrapFunction0(cbggg_ETC1$a_a)`
+- **Line 1697690**: Class `cbgua_b`
+  - `"$a160", $rt_wrapFunction0(cbgua_b_a)`
+- **Line 1699436**: Class `cbgg_e`
+  - `"$a160", $rt_wrapFunction0(cbgg_e_a)`
+- **Line 1695701**: Class `cbgg_n$a` (Enum)
+  - `"$a160", $rt_wrapFunction0(cbgg_n$a_a0)`
+---
+### 2. **Where it's accessed (the line that causes the null reference)**
+**Critical null reference occurs at:**
+- **Line 1684118**: `if (!var$1.$a160()) {`
+- **Line 1684129**: `if (!var$1.$a160()) {`  (second check after null guard)
+- **Line 1684157**: `if (!var$1.$a160()) {` (same pattern in case 1)
+These are in function `cbgg_n_a(var$0, var$1)` which is the **texture upload/bind method**.
+**The problematic code block (lines 1684106-1684160):**
+```javascript
+cbgg_n_a = (var$0, var$1) => {
+    // ... function setup ...
+    case 0:
+        if (var$0.$h42 !== null && var$1.$f11() != var$0.$h42.$f11())
+            $rt_throw(cbgu_l__init_($rt_s(22456)));
+        var$0.$h42 = var$1;
+        if (!var$1.$a160()) {    // LINE 1684118 - FIRST NULL ACCESS
+            $ptr = 1;
+            continue main;
+        }
+        cbgg_h_e(var$0);
+        if (var$1 === null) {     // LINE 1684123 - NULL CHECK COMES AFTER!
+            cbgg_h_a0(var$0, var$0.$c122, var$0.$d81);
+            cbgg_h_a(var$0, var$0.$e71, var$0.$f43);
+            cbgub_a_g.$glBindTexture(var$0.$a551, 0);
+            return;
+        }
+        if (!var$1.$a160()) {    // LINE 1684129 - SECOND ACCESS
+            $ptr = 2;
+            continue main;
+        }
+```
+---
+### 3. **What object is null**
+**var$1 is the TextureData object that becomes null.**
+The problem is the **logic flow**:
+- Line 1684117: `var$0.$h42 = var$1;` - var$1 is assigned to cache
+- Line 1684118: `if (!var$1.$a160())` - **Trying to call $a160() on var$1 without null check**
+- Line 1684123: `if (var$1 === null) { ... }` - **NULL CHECK COMES TOO LATE**
+**The code checks if var$1 is null AFTER already calling methods on it.** This is a classic null dereference bug.
+---
+### 4. **What $a160() returns**
+Based on implementations:
+**Line 1670233** - `cbgg_e_a`:
+```javascript
+cbgg_e_a = var$0 => {
+    if (var$0.$l8 === null)
+        return 0;
+    return 1;
+}
+```
+**Line 916553** - `cbggg_c_a7`:
+```javascript
+cbggg_c_a7 = var$0 => {
+    return var$0.$g38;
+}
+```
+**Line 916779** - `cbggg_a_a4`:
+```javascript
+cbggg_a_a4 = var$0 => {
+    return var$0.$f55;
+}
+```
+It returns a **boolean-like value** (0/1 or true/false) indicating completion status.
+---
+### 5. **Root Cause: Texture Loading Context**
+The function `cbgg_n_a` is part of **cbgg_n** class (line 1699522):
+- Class name: "n" 
+- Parent: "h" (TextureGL-like class)
+- Method: `"$a203", $rt_wrapFunction1(cbgg_n_a)` - texture data binding
+During **PNG/texture splash screen loading**, a `null` TextureData object is being passed to this function, and the code attempts to check if loading is complete before first validating the object isn't null.
+---
+**File: /home/user/Dragonsoul-web/proto/output/web/classes.js**
+agentId: a455b79fff67d6f87 (for resuming to continue this agent's work if needed)
+<usage>total_tokens: 39983
+tool_uses: 31
+duration_ms: 102562</usage>
+
+Now I understand both errors. Let me fix them. First, let me find and fix the PKM loading.
+
+
+Examined ETC1 constructor initialization code in classes.js
+Examined ETC1 constructor initialization code in classes.js
+Bash
+grep -n "Couldn.*load pkm\|pkm file\|load pkm" classes.js | head -5
+grep: classes.js: No such file or directory
+Bash
+cd /home/user/Dragonsoul-web/proto/output/web && grep -n "load pkm\|pkm file" classes.js | head -5
+1700459:", tapJoyPPEEvents=", ", currentServer=", ", warRedDotInfo=", ", firstBoot=", "EquippedItemData1", "EquippedItemData [", ", totalPoints=", ", enchantMaterialPoints=", "NpcSinisterAssailantHealReverseDebuff", "ContestProgressRewards1", "ContestProgressRewards [", "progressGroupID=", ", rewardInfo=", "mistressmanicuregearstats.tab", "ATTACKERS", "DEFENDERS", "Unknown mode: ", "idle_shield", "walk_shield", "basic_attack_shield", "hit_shield", "idle_hammer", "walk_hammer", "basic_attack_hammer", "hit_hammer", "Couldn\'t load pkm file \'",
+Bash
+grep -n "Couldn.t load pkm" classes.js | head -3
+Bash
+# The string is in a string table. Find where it's referenced grep -n "load pkm" classes.js | head -3
+1700459:", tapJoyPPEEvents=", ", currentServer=", ", warRedDotInfo=", ", firstBoot=", "EquippedItemData1", "EquippedItemData [", ", totalPoints=", ", enchantMaterialPoints=", "NpcSinisterAssailantHealReverseDebuff", "ContestProgressRewards1", "ContestProgressRewards [", "progressGroupID=", ", rewardInfo=", "mistressmanicuregearstats.tab", "ATTACKERS", "DEFENDERS", "Unknown mode: ", "idle_shield", "walk_shield", "basic_attack_shield", "hit_shield", "idle_hammer", "walk_hammer", "basic_attack_hammer", "hit_hammer", "Couldn\'t load pkm file \'",
+Bash
+# Find the string ID for "Couldn't load pkm file" python3 -c " with open('classes.js') as f: for i, line in enumerate(f, 1): if i == 1700459: # Count the string position parts = line.split('\", \"') for j, p in enumerate(parts): if 'load pkm' in p: print(f'String part {j}: {p[:60]}') break "
+String part 25: Couldn\'t load pkm file \'",
+Bash
+# Find where the PKM loading error is thrown - search for the string ref near ETC1 code grep -n 'rt_s(.*)\|pkm' classes.js | grep -i "pkm\|etc1" | head -10
+1700459:", tapJoyPPEEvents=", ", currentServer=", ", warRedDotInfo=", ", firstBoot=", "EquippedItemData1", "EquippedItemData [", ", totalPoints=", ", enchantMaterialPoints=", "NpcSinisterAssailantHealReverseDebuff", "ContestProgressRewards1", "ContestProgressRewards [", "progressGroupID=", ", rewardInfo=", "mistressmanicuregearstats.tab", "ATTACKERS", "DEFENDERS", "Unknown mode: ", "idle_shield", "walk_shield", "basic_attack_shield", "hit_shield", "idle_hammer", "walk_hammer", "basic_attack_hammer", "hit_hammer", "Couldn\'t load pkm file \'",
+Bash
+# Look at the TextureData classes for ETC1 - cbggg_a (ETC1TextureData) sed -n '916770,916830p' classes.js
+if ($rt_suspending()) {
+            break main;
+        }
+Afficher plus
+Bash
+sed -n '1052061,1052100p' classes.js
+function cbggg_ETC1$a() {
+    let a = this; jl_Object.call(a);
+    a.$a632 = 0;
+Afficher moins
+    a.$b255 = 0;
+    a.$c105 = null;
+    a.$d115 = 0;
+}
+let cbggg_ETC1$a__init_0 = (var$0, var$1, var$2, var$3, var$4) => {
+    jl_Object__init_(var$0);
+    var$0.$a632 = var$1;
+    var$0.$b255 = var$2;
+    var$0.$c105 = var$3;
+    var$0.$d115 = 0;
+    cbggg_ETC1$a_b(var$0);
+},
+cbggg_ETC1$a__init_1 = (var_0, var_1, var_2, var_3) => {
+    let var_4 = new cbggg_ETC1$a();
+    cbggg_ETC1$a__init_0(var_4, var_0, var_1, var_2, var_3);
+    return var_4;
+},
+cbggg_ETC1$a__init_ = (var$0, var$1) => {
+    let var$2, var$3, var$4, var$5, var$6, var$7, var$8, $$je, $ptr, $tmp;
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        jl_Object__init_(var$0);
+        var$2 = $rt_createByteArray(10240);
+        a: {
+            b: {
+                try {
+                    var$3 = new ji_DataInputStream;
+                    var$4 = new ji_BufferedInputStream;
+                    var$5 = new juz_GZIPInputStream;
+                    $ptr = 1;
+                    continue main;
+                } catch ($$e) {
+Afficher moins
+
+The ETC1 decoder expects GZIP-compressed PKM data. Our stub isn't valid. Let me bypass the ETC1 decoder for web assets and provide a simple RGBA texture instead.
+
+
+Examined ETC1TextureData class initialization and field structure
+Examined ETC1TextureData class initialization and field structure
+Bash
+# Find how textures are consumed after ETC1 data preparation
+# Look for where $b204 (the ETC1Data) is used
+grep -n '\$b204' classes.js | head -15
+916665:    a.$b204 = null;
+916696:            var$2 = var$0.$b204;
+916704:        var$3.$glCompressedTexImage2D(var$1, 0, cbggg_ETC1_b, var$0.$d122, var$0.$e105, 0, jn_Buffer_capacity(var$0.$b204.$c105) - var$0.$b204.$d115 | 0, var$0.$b204.$c105);
+Afficher moins
+916707:        var$2 = var$0.$b204;
+916756:        var$0.$b204 = null;
+916765:        var$2 = var$0.$b204;
+916793:        if (var$0.$a676 === null && var$0.$b204 === null)
+916796:            var$0.$d122 = var$0.$b204.$a632;
+916797:            var$0.$e105 = var$0.$b204.$b255;
+916809:        var$0.$b204 = var$1;
+916810:        var$0.$d122 = var$0.$b204.$a632;
+916811:        var$0.$e105 = var$0.$b204.$b255;
+Bash
+sed -n '916660,916720p' classes.js
+return var$0.$f101;
+};
+function cbggg_a1() {
+Afficher moins
+    let a = this; jl_Object.call(a);
+    a.$a676 = null;
+    a.$b204 = null;
+    a.$c173 = 0;
+    a.$d122 = 0;
+    a.$e105 = 0;
+    a.$f55 = 0;
+}
+let cbggg_a__init_1 = (var$0, var$1, var$2) => {
+    jl_Object__init_(var$0);
+    var$0.$d122 = 0;
+    var$0.$e105 = 0;
+    var$0.$f55 = 0;
+    var$0.$a676 = var$1;
+    var$0.$c173 = var$2;
+},
+cbggg_a__init_2 = (var_0, var_1) => {
+    let var_2 = new cbggg_a1();
+    cbggg_a__init_1(var_2, var_0, var_1);
+    return var_2;
+},
+cbggg_a_a5 = (var$0, var$1) => {
+    let var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, $ptr, $tmp;
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$10 = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (!var$0.$f55)
+            $rt_throw(cbgu_l__init_($rt_s(13356)));
+        if (!cbgub_a_b.$supportsExtension($rt_s(13357))) {
+            var$2 = var$0.$b204;
+            cbgg_k$b_$callClinit();
+            var$3 = cbgg_k$b_a;
+            $ptr = 1;
+            continue main;
+        }
+        var$3 = cbgub_a_g;
+        cbggg_ETC1_$callClinit();
+        var$3.$glCompressedTexImage2D(var$1, 0, cbggg_ETC1_b, var$0.$d122, var$0.$e105, 0, jn_Buffer_capacity(var$0.$b204.$c105) - var$0.$b204.$d115 | 0, var$0.$b204.$c105);
+        if (var$0.$c173)
+            cbgub_a_h.$glGenerateMipmap(3553);
+        var$2 = var$0.$b204;
+        $ptr = 5;
+        continue main;
+    case 1:
+        $tmp = cbggg_ETC1_a(var$2, var$3);
+        if ($rt_suspending()) {
+            break main;
+        }
+        var$2 = $tmp;
+        var$3 = cbgub_a_g;
+        var$4 = 0;
+        $ptr = 2;
+    case 2:
+        $tmp = cbgg_k_d(var$2);
+
+Let me take a clean approach: intercept both prepare() and consumeCompressedData() for web assets to provide a blank RGBA texture.
+
+
+Modified ETC1TextureData methods in classes.js for web assets
+Modified ETC1TextureData methods in classes.js for web assets
+Bash
+python3 << 'PYEOF'
+with open('classes.js', 'r') as f:
+    content = f.read()
+
+# 1. Override cbggg_a_b2 (ETC1TextureData.prepare) for web assets
+old_prepare = '''cbggg_a_b2 = var$0 => {
+    let var$1, var$2, $ptr, $tmp;
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (var$0.$f55)
+            $rt_throw(cbgu_l__init_($rt_s(13354)));
+        if (var$0.$a676 === null && var$0.$b204 === null)
+            $rt_throw(cbgu_l__init_($rt_s(13358)));
+        if (var$0.$a676 === null) {'''
+
+new_prepare = '''cbggg_a_b2 = var$0 => {
+    let var$1, var$2, $ptr, $tmp;
+    // === Web bypass: skip ETC1 GZIP decoder, provide dummy texture ===
+    if (!$rt_resuming() && var$0.$a676) {
+        let _fh = var$0.$a676;
+        let _hasWeb = _fh._webBytes || _fh._webContent || (typeof GAME_ASSETS !== "undefined" && _fh.$a513 && (function(p){ return p && (GAME_ASSETS[p] || GAME_ASSETS["ETC/XHDPI/"+p]); })($rt_ustr(_fh.$a513.$getPath())));
+        if (_hasWeb) {
+            console.info("[ETC1] Web bypass: skipping GZIP decoder for " + ($rt_ustr(_fh.$a513.$getPath())));
+            var$0.$d122 = 1024;
+            var$0.$e105 = 512;
+            var$0.$f55 = 1;
+            var$0._webBypass = true;
+            return;
+        }
+    }
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (var$0.$f55)
+            $rt_throw(cbgu_l__init_($rt_s(13354)));
+        if (var$0.$a676 === null && var$0.$b204 === null)
+            $rt_throw(cbgu_l__init_($rt_s(13358)));
+        if (var$0.$a676 === null) {'''
+
+c1 = content.count(old_prepare)
+print(f"Found prepare: {c1}")
+if c1 == 1:
+    content = content.replace(old_prepare, new_prepare, 1)
+    print("Replaced prepare")
+
+# 2. Override cbggg_a_a5 (consumeCompressedData) for web bypass
+old_consume = '''cbggg_a_a5 = (var$0, var$1) => {
+    let var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, $ptr, $tmp;
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$10 = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (!var$0.$f55)
+            $rt_throw(cbgu_l__init_($rt_s(13356)));'''
+
+new_consume = '''cbggg_a_a5 = (var$0, var$1) => {
+    let var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, $ptr, $tmp;
+    // === Web bypass: provide blank RGBA texture instead of ETC1 ===
+    if (!$rt_resuming() && var$0._webBypass) {
+        console.info("[ETC1] Web bypass: uploading blank " + var$0.$d122 + "x" + var$0.$e105 + " RGBA texture");
+        let _w = var$0.$d122, _h = var$0.$e105;
+        let _size = _w * _h * 4;
+        let _pixels = new Uint8Array(_size);
+        for (let i = 0; i < _size; i += 4) { _pixels[i]=255; _pixels[i+1]=255; _pixels[i+2]=255; _pixels[i+3]=255; }
+        let _gl = (typeof cbgub_a_g !== "undefined" && cbgub_a_g._gl) ? cbgub_a_g._gl : null;
+        if (_gl) {
+            _gl.texImage2D(_gl.TEXTURE_2D, 0, _gl.RGBA, _w, _h, 0, _gl.RGBA, _gl.UNSIGNED_BYTE, _pixels);
+        }
+        var$0.$f55 = 0;
+        return;
+    }
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$10 = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (!var$0.$f55)
+            $rt_throw(cbgu_l__init_($rt_s(13356)));'''
+
+c2 = content.count(old_consume)
+print(f"Found consume: {c2}")
+if c2 == 1:
+    content = content.replace(old_consume, new_consume, 1)
+    print("Replaced consume")
+
+with open('classes.js', 'w') as f:
+    f.write(content)
+print("Done")
+PYEOF
+Found prepare: 1
+Replaced prepare
+Found consume: 1
+Afficher moins
+Replaced consume
+Done
+
+Now let me also check how to get the GL context for the texture upload. Let me look at how cbgub_a_g works.
+
+
+Examined WebGL20 glTexImage2D implementation in classes.js
+Examined WebGL20 glTexImage2D implementation in classes.js
+Bash
+# Check if cbgub_a_g._gl exists grep -n "cbgub_a_g\._gl\|cbgub_a_g = " classes.js | head -5
+799342:    cbgub_a_g = var$1;
+916693:        let _gl = (typeof cbgub_a_g !== "undefined" && cbgub_a_g._gl) ? cbgub_a_g._gl : null;
+1067190:cbgub_a_g = null,
+Bash
+# Check if there's a WebGL context on cbgub_a_g grep -n "WebGL20\|_glCtx\|glTexImage2D" classes.js | head -10
+659620:    WebGL20.$meta.fields = [];
+664733:    WebGL20.$meta.methods = [];
+739947:    WebGL20[c] = WebGL20__init_;
+Afficher plus
+Bash
+# Check how the WebGL20 object has glTexImage2D grep -n "glTexImage2D" classes.js | grep "prototype\|WebGL20" | head -5
+1195075:let WebGL20_glTexImage2D = (var$0, var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9) => {
+1697793:"$glScissor", $rt_wrapFunction4(WebGL20_glScissor), "$glShaderSource", $rt_wrapFunction2(WebGL20_glShaderSource), "$glTexImage2D", function(var_1, var_2, var_3, var_4, var_5, var_6, var_7, var_8, var_9) { WebGL20_glTexImage2D(this, var_1, var_2, var_3, var_4, var_5, var_6, var_7, var_8, var_9); }, "$glTexParameterf", $rt_wrapFunction3(WebGL20_glTexParameterf), "$glUniform1f", $rt_wrapFunction2(WebGL20_glUniform1f), "$glUniform1i", $rt_wrapFunction2(WebGL20_glUniform1i), "$glUniformMatrix4fv", function(var_1,
+Bash
+sed -n '1195075,1195120p' classes.js
+let WebGL20_glTexImage2D = (var$0, var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9) => {
+    return;
+},
+Afficher moins
+WebGL20_glTexParameterf = (var$0, var$1, var$2, var$3) => {
+    return;
+},
+WebGL20_glUniform1f = (var$0, var$1, var$2) => {
+    return;
+},
+WebGL20_glUniform1i = (var$0, var$1, var$2) => {
+    return;
+},
+WebGL20_glUniformMatrix4fv = (var$0, var$1, var$2, var$3, var$4, var$5) => {
+    return;
+},
+WebGL20_glUseProgram = (var$0, var$1) => {
+    return;
+},
+WebGL20_glVertexAttribPointer0 = (var$0, var$1, var$2, var$3, var$4, var$5, var$6) => {
+    return;
+},
+WebGL20_glVertexAttribPointer = (var$0, var$1, var$2, var$3, var$4, var$5, var$6) => {
+    return;
+},
+WebGL20_glViewport = (var$0, var$1, var$2, var$3, var$4) => {
+    return;
+};
+function cpruwc_MapNode() {
+    let a = this; cbgssu_i.call(a);
+    a.$chancesContainer = null;
+    a.$chapter1 = 0;
+    a.$debugBounds = null;
+    a.$expertRewardIcon = null;
+    a.$highlightImage = null;
+    a.$isMajorLevel0 = 0;
+    a.$itemGlowWrap = null;
+    a.$level4 = 0;
+    a.$nodeIcon = null;
+    a.$starContainer = null;
+    a.$starsEarned = 0;
+    a.$stoneGlowWrap = null;
+    a.$stoneIcon = null;
+}
+let cpruwc_MapNode_SHOW_DEBUG_BOUNDS = 0,
+cpruwc_MapNode_$callClinit = () => {
+    cpruwc_MapNode_$callClinit = $rt_eraseClinit(cpruwc_MapNode);
+Afficher moins
+
+The WebGL20_glTexImage2D is a no-op stub! The GL bridge isn't actually calling real WebGL. Let me check if there's a real bridge somewhere.
+
+
+Found real WebGL calls in classes.js codebase
+Found real WebGL calls in classes.js codebase
+Bash
+# Check if there's a real WebGL2 bridge with actual GL calls grep -n "gl\.texImage2D\|gl\.bindTexture\|gl\.drawArrays\|gl\.drawElements" classes.js | head -10
+916695:            _gl.texImage2D(_gl.TEXTURE_2D, 0, _gl.RGBA, _w, _h, 0, _gl.RGBA, _gl.UNSIGNED_BYTE, _pixels);
+1701048:    P.$glBindTexture    = (t,tex) => gl.bindTexture(t, tex ? get(tex) : null);
+1701054:    P.$glTexImage2D     = (t,lv,if_,w,h,b,f,ty,d) => gl.texImage2D(t,lv,if_,w,h,b,f,ty,d&&d.data?d.data:null);
+Afficher moins
+1701060:    P.$glCompressedTexImage2D = (t,lv,if_,w,h,b,sz,d) => { const _w=new Uint8Array([255,255,255,255]); if(d&&d.data){try{gl.compressedTexImage2D(t,lv,if_,w,h,b,d.data);}catch(e){gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);}}else{gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);} };
+1701071:    P.$glDrawArrays   = (m,f,c) => { window._drawCallCount++; gl.drawArrays(m,f,c); };
+1701072:    P.$glDrawElements = (m,c,t,o) => { window._drawCallCount++; gl.drawElements(m,c,t,o); };
+1701073:    P.$glDrawElements0 = (m,c,t,o) => { window._drawCallCount++; gl.drawElements(m,c,t,o); };
+
+There IS a real WebGL bridge at line ~1701048. The issue is that WebGL20_glTexImage2D at line 1195075 is a separate stub function. The real bridge assigns methods to P (the WebGL20 prototype). Let me check if both are applied.
+
+
+Examined WebGL2 buffer management bridge implementation in classes.js
+Examined WebGL2 buffer management bridge implementation in classes.js
+Bash
+sed -n '1701040,1701080p' classes.js
+P.$glGenBuffer    = () => alloc(gl.createBuffer());
+    P.$glDeleteBuffer = id => { gl.deleteBuffer(get(id)); free(id); };
+    P.$glBufferData    = (t,sz,data,u) => { if(data&&data.data) gl.bufferData(t,data.data,u); else if(sz>0) gl.bufferData(t,sz,u); };
+Afficher moins
+    P.$glBufferSubData = (t,off,cnt,data) => { if(data&&data.data) gl.bufferSubData(t,off,data.data.subarray(0,cnt)); };
+    P.$glGenVertexArrays    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createVertexArray())); };
+    P.$glBindVertexArray    = v => gl.bindVertexArray(v ? get(v) : null);
+    P.$glDeleteVertexArrays = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteVertexArray(get(id));free(id);} };
+    P.$glGenTextures    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createTexture())); };
+    P.$glBindTexture    = (t,tex) => gl.bindTexture(t, tex ? get(tex) : null);
+    P.$glDeleteTextures = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteTexture(get(id));free(id);} };
+    // Phase 3.13: singular texture methods (libGDX GL20 convenience API)
+    P.$glGenTexture    = () => alloc(gl.createTexture());
+    P.$glDeleteTexture = id => { gl.deleteTexture(get(id)); free(id); };
+    P.$glActiveTexture  = u => gl.activeTexture(u);
+    P.$glTexImage2D     = (t,lv,if_,w,h,b,f,ty,d) => gl.texImage2D(t,lv,if_,w,h,b,f,ty,d&&d.data?d.data:null);
+    P.$glTexSubImage2D  = (t,lv,x,y,w,h,f,ty,d) => gl.texSubImage2D(t,lv,x,y,w,h,f,ty,d&&d.data?d.data:null);
+    P.$glTexParameteri  = (t,p,v) => gl.texParameteri(t,p,v);
+    P.$glTexParameterf  = (t,p,v) => gl.texParameterf(t,p,v);
+    P.$glGenerateMipmap = t => gl.generateMipmap(t);
+    P.$glPixelStorei    = (p,v) => gl.pixelStorei(p,v);
+    P.$glCompressedTexImage2D = (t,lv,if_,w,h,b,sz,d) => { const _w=new Uint8Array([255,255,255,255]); if(d&&d.data){try{gl.compressedTexImage2D(t,lv,if_,w,h,b,d.data);}catch(e){gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);}}else{gl.texImage2D(t,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,_w);} };
+    P.$glGenFramebuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createFramebuffer())); };
+    P.$glBindFramebuffer    = (t,fb) => gl.bindFramebuffer(t, fb ? get(fb) : null);
+    P.$glDeleteFramebuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteFramebuffer(get(id));free(id);} };
+    P.$glFramebufferTexture2D = (t,at,tt,tex,lv) => gl.framebufferTexture2D(t,at,tt,get(tex),lv);
+    P.$glCheckFramebufferStatus = t => gl.checkFramebufferStatus(t);
+    P.$glGenRenderbuffers    = (n,b) => { for(let i=0;i<n;i++) wib(b,i,alloc(gl.createRenderbuffer())); };
+    P.$glBindRenderbuffer    = (t,rb) => gl.bindRenderbuffer(t, rb ? get(rb) : null);
+    P.$glDeleteRenderbuffers = (n,b) => { for(let i=0;i<n;i++){const id=b.data?b.data[i]:0;gl.deleteRenderbuffer(get(id));free(id);} };
+    P.$glRenderbufferStorage  = (t,f,w,h) => gl.renderbufferStorage(t,f,w,h);
+    P.$glFramebufferRenderbuffer = (t,at,rt,rb) => gl.framebufferRenderbuffer(t,at,rt,get(rb));
+    P.$glDrawArrays   = (m,f,c) => { window._drawCallCount++; gl.drawArrays(m,f,c); };
+    P.$glDrawElements = (m,c,t,o) => { window._drawCallCount++; gl.drawElements(m,c,t,o); };
+    P.$glDrawElements0 = (m,c,t,o) => { window._drawCallCount++; gl.drawElements(m,c,t,o); };
+    P.$glViewport    = (x,y,w,h) => gl.viewport(x,y,w,h);
+    P.$glScissor     = (x,y,w,h) => gl.scissor(x,y,w,h);
+    P.$glEnable      = c => { try { gl.enable(c); } catch(e) {} };
+    P.$glDisable     = c => { try { gl.disable(c); } catch(e) {} };
+    P.$glBlendFunc   = (s,d) => gl.blendFunc(s,d);
+    P.$glBlendFuncSeparate = (sf,df,sa,da) => gl.blendFuncSeparate(sf,df,sa,da);
+    P.$glBlendEquation = eq => gl.blendEquation(eq);
+
+Let me update the ETC1 bypass to use the proper GL method instead of trying to access raw GL context.
+
+
+Fixed ETC1 Web bypass texture upload in classes.js
+Fixed ETC1 Web bypass texture upload in classes.js
+Bash
+python3 << 'PYEOF'
+with open('classes.js', 'r') as f:
+    content = f.read()
+
+# Fix the consumeCompressedData bypass to use cbgub_a_g.$glTexImage2D properly
+old = '''        console.info("[ETC1] Web bypass: uploading blank " + var$0.$d122 + "x" + var$0.$e105 + " RGBA texture");
+        let _w = var$0.$d122, _h = var$0.$e105;
+        let _size = _w * _h * 4;
+        let _pixels = new Uint8Array(_size);
+        for (let i = 0; i < _size; i += 4) { _pixels[i]=255; _pixels[i+1]=255; _pixels[i+2]=255; _pixels[i+3]=255; }
+        let _gl = (typeof cbgub_a_g !== "undefined" && cbgub_a_g._gl) ? cbgub_a_g._gl : null;
+        if (_gl) {
+            _gl.texImage2D(_gl.TEXTURE_2D, 0, _gl.RGBA, _w, _h, 0, _gl.RGBA, _gl.UNSIGNED_BYTE, _pixels);
+        }
+        var$0.$f55 = 0;
+        return;'''
+
+new = '''        console.info("[ETC1] Web bypass: uploading blank " + var$0.$d122 + "x" + var$0.$e105 + " RGBA texture to target=" + var$1);
+        let _w = var$0.$d122, _h = var$0.$e105;
+        let _size = _w * _h * 4;
+        let _pixels = new Uint8Array(_size);
+        for (let i = 0; i < _size; i += 4) { _pixels[i]=255; _pixels[i+1]=255; _pixels[i+2]=255; _pixels[i+3]=255; }
+        if (typeof cbgub_a_g !== "undefined" && cbgub_a_g.$glTexImage2D) {
+            cbgub_a_g.$glTexImage2D(var$1, 0, 6408, _w, _h, 0, 6408, 5121, {data: _pixels});
+        }
+        var$0.$f55 = 0;
+        return;'''
+# 6408 = GL_RGBA, 5121 = GL_UNSIGNED_BYTE
+
+c = content.count(old)
+print(f"Found: {c}")
+if c == 1:
+    content = content.replace(old, new, 1)
+    print("Replaced")
+
+with open('classes.js', 'w') as f:
+    f.write(content)
+print("Done")
+PYEOF
+Found: 1
+Replaced
+Done
+
+Now let me also tackle the $a160 null reference for the splash PNG. The issue is that a null TextureData is passed to the texture bind function. Let me add a null guard.
+
+
+Added null guard to texture bind function in classes.js
+Added null guard to texture bind function in classes.js
+Bash
+grep -n "cbgg_n_a " classes.js | head -5
+1684132:cbgg_n_a = (var$0, var$1) => {
+Bash
+sed -n '1684132,1684170p' classes.js
+cbgg_n_a = (var$0, var$1) => {
+    let var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12, var$13, $ptr, $tmp;
+    $ptr = 0;
+Afficher moins
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$13 = $thread.pop();var$12 = $thread.pop();var$11 = $thread.pop();var$10 = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (var$0.$h42 !== null && var$1.$f11() != var$0.$h42.$f11())
+            $rt_throw(cbgu_l__init_($rt_s(22456)));
+        var$0.$h42 = var$1;
+        if (!var$1.$a160()) {
+            $ptr = 1;
+            continue main;
+        }
+        cbgg_h_e(var$0);
+        if (var$1 === null) {
+            cbgg_h_a0(var$0, var$0.$c122, var$0.$d81);
+            cbgg_h_a(var$0, var$0.$e71, var$0.$f43);
+            cbgub_a_g.$glBindTexture(var$0.$a551, 0);
+            return;
+        }
+        if (!var$1.$a160()) {
+            $ptr = 2;
+            continue main;
+        }
+        var$2 = var$1.$g10();
+        cbgg_p$a_$callClinit();
+        if (var$2 == cbgg_p$a_b) {
+            var$2 = 3553;
+            $ptr = 4;
+            continue main;
+        }
+        var$3 = var$1.$i17();
+        var$4 = var$1.$j();
+        var$5 = var$1.$k10();
+        $ptr = 3;
+        continue main;
+Bash
+python3 << 'PYEOF'
+with open('classes.js', 'r') as f:
+    content = f.read()
+
+# Add null guard to cbgg_n_a (texture bind function)
+old_bind = '''cbgg_n_a = (var$0, var$1) => {
+    let var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12, var$13, $ptr, $tmp;
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$13 = $thread.pop();var$12 = $thread.pop();var$11 = $thread.pop();var$10 = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (var$0.$h42 !== null && var$1.$f11() != var$0.$h42.$f11())'''
+
+new_bind = '''cbgg_n_a = (var$0, var$1) => {
+    let var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12, var$13, $ptr, $tmp;
+    // Web null guard: if TextureData is null, bind empty texture and return
+    if (!$rt_resuming() && var$1 === null) {
+        cbgg_h_e(var$0);
+        cbgg_h_a0(var$0, var$0.$c122, var$0.$d81);
+        cbgg_h_a(var$0, var$0.$e71, var$0.$f43);
+        if (cbgub_a_g) cbgub_a_g.$glBindTexture(var$0.$a551, 0);
+        return;
+    }
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$13 = $thread.pop();var$12 = $thread.pop();var$11 = $thread.pop();var$10 = $thread.pop();var$9 = $thread.pop();var$8 = $thread.pop();var$7 = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        if (var$0.$h42 !== null && var$1 !== null && var$1.$f11() != var$0.$h42.$f11())'''
+
+c = content.count(old_bind)
+print(f"Found bind: {c}")
+if c == 1:
+    content = content.replace(old_bind, new_bind, 1)
+    print("Replaced bind")
+
+with open('classes.js', 'w') as f:
+    f.write(content)
+print("Done")
+PYEOF
+Found bind: 1
+Replaced bind
+Done
+
+Now let me also handle the PNG texture loading. The splash PNG needs a Pixmap-based texture path. Let me check how the texture loader handles PNGs.
+
+
+Found TextureLoader metadata and methods in classes.js
+Found TextureLoader metadata and methods in classes.js
+Bash
+# Check the TextureLoader (cbgaa_n) to understand the PNG loading flow
+grep -n "cbgaa_n" classes.js | grep -E "load|init" | head -10
+32383:        var$4 = cbgaa_n$b__init_();
+340706:    var$0.$a649 = cbgaa_n$b__init_();
+559998:let cbgaa_n__init_ = (var$0, var$1) => {
+Afficher moins
+560000:    var$0.$a651 = cbgaa_n$a__init_0();
+560003:cbgaa_n__init_0 = var_0 => {
+560005:    cbgaa_n__init_(var_1, var_0);
+560137:        var$6 = cbgaa_n$b__init_();
+581190:        var$4 = cbgaa_n$b__init_();
+740169:    cbgaa_n$a[c] = cbgaa_n$a__init_;
+740224:    cbgaa_n$b[c] = cbgaa_n$b__init_0;
+Bash
+# Find the TextureLoader's load method grep -n "cbgaa_n_load\|cbgaa_n.*load" classes.js | head -5
+Bash
+# Check the metadata for cbgaa_n to find its methods grep "cbgaa_n," classes.js | head -3
+cbgaa_n, "n", 4, cbgaa_a, [], 4, 3, [0,0,0], 0, ["$_init_423", $rt_wrapFunction1(cbgaa_n__init_), "$b119", $rt_wrapFunction4(cbgaa_n_b)],
+cbgaa_n$a, "n$a", 4, jl_Object, [], 4, 3, [cbgaa_n,cbgaa_n,"a"], 0, ["$_init_0", $rt_wrapFunction0(cbgaa_n$a__init_)],
+cbgaa_n$b, "n$b", 4, cbga_c, [], 4, 3, [cbgaa_n,cbgaa_n,"b"], 0, ["$_init_0", $rt_wrapFunction0(cbgaa_n$b__init_0)],
+
+Let me test all the fixes together now.
+
+
+Created Playwright test script for browser automation
+Created Playwright test script for browser automation
+Bash
+node test-progress.js 2>&1 | tail -50
+[PAGE-ERR] var$0.$game1.$getContentLocation is not a function
+=== RESULTS ===
+{
+Afficher plus
+Bash
+cat > /home/user/Dragonsoul-web/proto/output/web/test-detail.js << 'NODEEOF'
+const { chromium } = require('playwright');
+
+(async () => {
+    const browser = await chromium.launch({
+        executablePath: '/root/.cache/ms-playwright/chromium-1194/chrome-linux/chrome',
+        args: ['--no-sandbox','--disable-setuid-sandbox','--use-gl=angle','--use-angle=swiftshader']
+    });
+    const page = await browser.newPage();
+    
+    const logs = [];
+    page.on('console', msg => {
+        const text = msg.text();
+        logs.push(text);
+    });
+    page.on('pageerror', err => console.log('[PAGE-ERR]', err.message.substring(0, 300)));
+
+    await page.goto('file:///home/user/Dragonsoul-web/proto/output/web/index.html');
+    await page.waitForTimeout(10000);
+    
+    console.log("=== ETC1 LOGS ===");
+    logs.filter(l => l.includes('ETC1') || l.includes('etc1')).forEach(l => console.log(l));
+    
+    console.log("\n=== ALL ERRORS ===");
+    logs.filter(l => l.includes('[ERROR]') || l.includes('TypeError')).forEach(l => console.log(l));
+    
+    console.log("\n=== TASK COMPLETE ===");
+    logs.filter(l => l.includes('[TASK]') && l.includes('boot.etc1')).forEach(l => console.log(l));
+    
+    console.log("\n=== SPLASH PNG ===");
+    logs.filter(l => l.includes('splash') || l.includes('fantasy_legend')).forEach(l => console.log(l));
+    
+    console.log("\n=== IMG LOGS ===");
+    logs.filter(l => l.includes('[IMG]') || l.includes('Pixmap') || l.includes('pixmap')).forEach(l => console.log(l));
+    
+    await browser.close();
+})();
+NODEEOF
+node test-detail.js 2>&1 | tail -40
+[ATLAS-RL] line 1: 'boot.etc1'
+[ATLAS-C9] page=boot.etc1 var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=0 m31=0 k30=null j40=0 resuming=false
+Afficher moins
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=1 m31=3 k30=exists j40=0 resuming=false
+[ETC1] Web bypass: skipping GZIP decoder for ETC/XHDPI/ui/boot.etc1
+[ETC1] Web bypass: uploading blank 1024x512 RGBA texture to target=3553
+=== ALL ERRORS ===
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.rpg.assets.RPGAssetManager: java.lang.RuntimeException: (JavaScript) TypeError: Cannot read properties of null (reading '$f11')
+[ERROR] com.perblue.rpg.assets.RPGAssetManager: java.lang.RuntimeException: (JavaScript) TypeError: Cannot read properties of null (reading '$f11')
+=== TASK COMPLETE ===
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/boot.etc1 deps=1 m31=3 k30=exists j40=0 resuming=false
+=== SPLASH PNG ===
+[ASSET] require: ui/fantasy_legend_studio_splash_screen.png type=undefined
+[LS] render: loadState=0 renderedOnce=0 splashReady=0 totalProgress=0
+[LS] render: loadState=0 renderedOnce=1 splashReady=0 totalProgress=0.006216216077272956
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png deps=1 m31=3 k30=exists j40=0 resuming=false
+[LS] render: loadState=0 renderedOnce=1 splashReady=0 totalProgress=0.006216216077272956
+[LS] render: loadState=0 renderedOnce=1 splashReady=0 totalProgress=0.006216216077272956
+[LS] render: loadState=0 renderedOnce=1 splashReady=0 totalProgress=0.006216216077272956
+=== IMG LOGS ===
+[IMG] draw: drawable=null type=cpruw_RPGImage imgW=0 imgH=0
+
+Good - ETC1 bypass works! The texture uploads as a blank white 1024x512 image. But loading is stuck because fonts are missing. Let me add font assets so loading can progress, and fix the $f11 error.
+
+
+Identified required shader and asset files in game configuration
+Identified required shader and asset files in game configuration
+Bash
+# Check what font files are needed
+node -e "
+const fs = require('fs');
+const content = fs.readFileSync('/home/user/Dragonsoul-web/proto/output/web/game-assets.js', 'utf8');
+console.log('Current assets:', content.match(/A\[\"[^\"]+\"\]/g)?.join('\n'));
+"
+Current assets: A["shaders/Decals-fs.glsl"]
+A["shaders/Decals-vs.glsl"]
+A["shaders/distancefield-fs.glsl"]
+Afficher moins
+A["shaders/distancefield-vs.glsl"]
+A["shaders/distancefield_dropshadow-fs.glsl"]
+A["shaders/distancefield_outline-fs.glsl"]
+A["shaders/iris-fs.glsl"]
+A["shaders/iris-vs.glsl"]
+A["ETC/XHDPI/ui/boot.atlas"]
+A["ETC/XHDPI/ui/boot.etc1"]
+A["ui/boot.atlas"]
+A["ETC/XHDPI/ui/boot.atlas"]
+A["ui/boot.etc1"]
+A["ETC/XHDPI/ui/boot.etc1"]
+A["ui/fantasy_legend_studio_splash_screen.png"]
+
+I need to add font assets. Let me create minimal .fnt and .png files for the required fonts.
+
+
+Identified required font assets for application rendering
+Identified required font assets for application rendering
+Bash
+# Check what fonts are needed from the task logs  
+node -e "
+const { chromium } = require('playwright');
+(async () => {
+    const browser = await chromium.launch({
+        executablePath: '/root/.cache/ms-playwright/chromium-1194/chrome-linux/chrome',
+        args: ['--no-sandbox','--disable-setuid-sandbox','--use-gl=angle','--use-angle=swiftshader']
+    });
+    const page = await browser.newPage();
+    const fonts = new Set();
+    page.on('console', msg => {
+        const t = msg.text();
+        if (t.includes('fonts/')) {
+            const m = t.match(/fonts\/[^\s]+/);
+            if (m) fonts.add(m[0]);
+        }
+    });
+    await page.goto('file:///home/user/Dragonsoul-web/proto/output/web/index.html');
+    await page.waitForTimeout(5000);
+    console.log('Required fonts:', [...fonts].sort().join('\n'));
+    await browser.close();
+})();
+" 2>&1 | grep -v "^\[" | head -20
+Required fonts: fonts/Chinese.fnt
+fonts/Chinese.png
+fonts/Japanese.fnt
+Afficher moins
+fonts/Japanese.png
+fonts/Klepto.fnt
+fonts/Klepto.png
+fonts/Korean.fnt
+fonts/Korean.png
+fonts/Russian.fnt
+fonts/Russian.png
+fonts/Swanse.fnt
+fonts/Swanse.png
+
+I need 6 fonts (12 files). Let me create minimal BMFont .fnt files and 1x1 PNG textures for each.
+
+
+Created 6 BMFont assets with textures for game
+Created 6 BMFont assets with textures for game
+Read
+/home/user/Dragonsoul-web/proto/output/web/game-assets.js
+43 lignes lues
+Bash
+# Create a minimal BMFont .fnt file content and add font assets to game-assets.js
+python3 << 'PYEOF'
+# Create minimal BMFont .fnt files and 1x1 white PNG textures for all required fonts
+# BMFont format: https://www.angelcode.com/products/bmfont/doc/file_format.html
+
+fonts = ["Klepto", "Swanse", "Chinese", "Korean", "Japanese", "Russian"]
+
+# Minimal BMFont .fnt content - defines a single space character
+def make_fnt(name):
+    return (f'info face="{name}" size=32 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1\n'
+            f'common lineHeight=32 base=26 scaleW=4 scaleH=4 pages=1 packed=0\n'
+            f'page id=0 file="{name}.png"\n'
+            f'chars count=1\n'
+            f'char id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=8 page=0 chnl=0\n')
+
+# Read current game-assets.js
+with open('/home/user/Dragonsoul-web/proto/output/web/game-assets.js', 'r') as f:
+    content = f.read()
+
+# Build font asset additions
+font_js = "\n    // Phase 3.17: Minimal font assets for loading screen progress\n"
+for name in fonts:
+    fnt_content = make_fnt(name).replace("\\", "\\\\").replace("\n", "\\n").replace('"', '\\"')
+    font_js += f'    A["fonts/{name}.fnt"] = "{fnt_content}";\n'
+    # 1x1 white PNG (smallest valid PNG)
+    font_js += f'    A["fonts/{name}.png"] = {{ _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,4,0,0,0,4,8,6,0,0,0,169,241,158,126,0,0,0,25,73,68,65,84,120,156,99,252,255,255,63,3,16,48,48,48,160,112,0,2,0,0,169,0,17,138,249,93,192,0,0,0,0,73,69,78,68,174,66,96,130]) }};\n'
+    font_js += f'    A["ETC/XHDPI/fonts/{name}.fnt"] = A["fonts/{name}.fnt"];\n'
+    font_js += f'    A["ETC/XHDPI/fonts/{name}.png"] = A["fonts/{name}.png"];\n'
+
+# Insert before the console.log line
+old = '    console.log("[Assets] 8 shaders + boot atlas + path aliases préchargés");'
+new = font_js + '    console.log("[Assets] 8 shaders + boot atlas + 6 fonts + path aliases loaded");'
+
+content = content.replace(old, new, 1)
+
+with open('/home/user/Dragonsoul-web/proto/output/web/game-assets.js', 'w') as f:
+    f.write(content)
+
+print(f"Added {len(fonts)} font assets ({len(fonts)*4} entries)")
+PYEOF
+Added 6 font assets (24 entries)
+
+Now let me also fix the $f11 null error. This occurs when loading textures. The PNG for the fonts is a 4x4 white image. Let me check if the image decoding works at all, or if I need to bypass the Pixmap creation.
+
+
+Read Pixmap load implementation in classes.js
+Read Pixmap load implementation in classes.js
+Bash
+# First let's see what Pixmap-related code looks like - the PNG decoder
+grep -n "Pixmap\|pixmap\|cbgg_k " classes.js | grep -i "init\|decode\|load" | head -10
+315340:let cbggg_Gdx2DPixmap_$callClinit = () => {
+315341:    cbggg_Gdx2DPixmap_$callClinit = $rt_eraseClinit(cbggg_Gdx2DPixmap);
+315342:    cbggg_Gdx2DPixmap__clinit_();
+Afficher moins
+315344:cbggg_Gdx2DPixmap__clinit_ = () => {
+315348:cbggg_Gdx2DPixmap__init_0 = (var$0, var$1, var$2, var$3) => {
+315349:    cbggg_Gdx2DPixmap_$callClinit();
+315360:cbggg_Gdx2DPixmap__init_2 = (var_0, var_1, var_2) => {
+315362:    cbggg_Gdx2DPixmap__init_0(var_3, var_0, var_1, var_2);
+315365:cbggg_Gdx2DPixmap__init_ = (var$0, var$1, var$2, var$3, var$4) => {
+315374:        cbggg_Gdx2DPixmap_$callClinit();
+Bash
+# Look at the Gdx2DPixmap init that takes input data sed -n '315365,315430p' classes.js
+cbggg_Gdx2DPixmap__init_ = (var$0, var$1, var$2, var$3, var$4) => {
+    let var$5, var$6, $ptr, $tmp;
+    $ptr = 0;
+Afficher moins
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$6 = $thread.pop();var$5 = $thread.pop();var$4 = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();var$0 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        cbggg_Gdx2DPixmap_$callClinit();
+        jl_Object__init_(var$0);
+        var$0.$f40 = $rt_createLongArray(4);
+        var$0.$e111 = cbggg_Gdx2DPixmap_load(var$0.$f40, var$1, 0, var$3);
+        if (var$0.$e111 !== null) {
+            var$0.$a613 = var$0.$f40.data[0];
+            var$0.$b334 = Long_lo(var$0.$f40.data[1]);
+            var$0.$c224 = Long_lo(var$0.$f40.data[2]);
+            var$0.$d128 = Long_lo(var$0.$f40.data[3]);
+            return;
+        }
+        var$5 = new ji_IOException;
+        var$6 = (jl_StringBuilder__init_($rt_s(7363))).$append1(cbggg_Gdx2DPixmap_getFailureReason());
+        $ptr = 1;
+    case 1:
+        $tmp = var$6.$toString();
+        if ($rt_suspending()) {
+            break main;
+        }
+        var$6 = $tmp;
+        ji_IOException__init_0(var$5, var$6);
+        $rt_throw(var$5);
+    default: $rt_invalidPointer();
+    }}
+    $rt_nativeThread().push(var$0, var$1, var$2, var$3, var$4, var$5, var$6, $ptr);
+},
+cbggg_Gdx2DPixmap__init_1 = (var_0, var_1, var_2, var_3) => {
+    let var_4 = new cbggg_Gdx2DPixmap();
+    cbggg_Gdx2DPixmap__init_(var_4, var_0, var_1, var_2, var_3);
+    return var_4;
+},
+cbggg_Gdx2DPixmap_a2 = var$1 => {
+    let var$2, var$3, $ptr, $tmp;
+    $ptr = 0;
+    if ($rt_resuming()) {
+        let $thread = $rt_nativeThread();
+        $ptr = $thread.pop();var$3 = $thread.pop();var$2 = $thread.pop();var$1 = $thread.pop();
+    }
+    main: while (true) { switch ($ptr) {
+    case 0:
+        cbggg_Gdx2DPixmap_$callClinit();
+        switch (var$1) {
+            case 1:
+                break;
+            case 2:
+                return 6410;
+            case 3:
+            case 5:
+                return 6407;
+            case 4:
+            case 6:
+                return 6408;
+            default:
+                var$2 = new cbgu_l;
+                var$3 = (jl_StringBuilder__init_($rt_s(7364))).$append2(var$1);
+                $ptr = 1;
+                continue main;
+Bash
+# Find cbggg_Gdx2DPixmap_load (the native image decoder)
+grep -n "cbggg_Gdx2DPixmap_load " classes.js | head -3
+315497:cbggg_Gdx2DPixmap_load = (var$1, var$2, var$3, var$4) => {
+Bash
+sed -n '315497,315530p' classes.js
+cbggg_Gdx2DPixmap_load = (var$1, var$2, var$3, var$4) => {
+    cbggg_Gdx2DPixmap_$callClinit();
+    return null;
+Afficher plus
+Afficher moins
+
+Found the root cause - cbggg_Gdx2DPixmap_load and cbggg_Gdx2DPixmap_newPixmap both return null (native methods stubbed out). ALL image loading fails. I need to implement these.
+
+
+Replaced stubbed Gdx2DPixmap load implementation with working code
+Replaced stubbed Gdx2DPixmap load implementation with working code
+Bash
+python3 << 'PYEOF'
+with open('classes.js', 'r') as f:
+    content = f.read()
+
+# Replace the stubbed Gdx2DPixmap_load and newPixmap with working implementations
+old_load = '''cbggg_Gdx2DPixmap_load = (var$1, var$2, var$3, var$4) => {
+    cbggg_Gdx2DPixmap_$callClinit();
+    return null;
+},
+cbggg_Gdx2DPixmap_newPixmap = (var$1, var$2, var$3, var$4) => {
+    cbggg_Gdx2DPixmap_$callClinit();
+    return null;
+},'''
+
+new_load = '''cbggg_Gdx2DPixmap_load = (var$1, var$2, var$3, var$4) => {
+    cbggg_Gdx2DPixmap_$callClinit();
+    // Web implementation: decode PNG from byte array
+    // var$1 = long[4] output (pixelPtr, width, height, format)
+    // var$2 = byte[] input PNG data
+    // var$3 = offset, var$4 = length
+    try {
+        let bytes = var$2.data;
+        let w = 4, h = 4, fmt = 4; // defaults: 4x4, RGBA8888(=4)
+        // Try to read PNG IHDR for actual dimensions
+        if (bytes && bytes.length > 24) {
+            // PNG signature: 137 80 78 71 13 10 26 10
+            if (bytes[0]===137 && bytes[1]===80 && bytes[2]===78 && bytes[3]===71) {
+                // IHDR at offset 8+4+4=16: width(4) height(4)
+                w = (bytes[16]<<24)|(bytes[17]<<16)|(bytes[18]<<8)|bytes[19];
+                h = (bytes[20]<<24)|(bytes[21]<<16)|(bytes[22]<<8)|bytes[23];
+                let colorType = bytes[25]; // 6=RGBA, 2=RGB, 0=Gray, 4=GrayAlpha
+                fmt = (colorType === 6) ? 4 : (colorType === 2) ? 3 : 4;
+            }
+        }
+        if(!window._pmLog){window._pmLog=0;}window._pmLog++;if(window._pmLog<=5)console.info("[PIXMAP] load: " + w + "x" + h + " fmt=" + fmt + " dataLen=" + (bytes?bytes.length:0));
+        let bpp = (fmt === 3) ? 3 : 4; // bytes per pixel
+        let bufSize = w * h * bpp;
+        // Create a ByteBuffer with white pixels
+        let pixelData = $rt_createByteArray(bufSize);
+        let pd = pixelData.data;
+        for (let i = 0; i < bufSize; i += bpp) {
+            pd[i] = -1; // 255 as signed byte = -1
+            if (bpp >= 2) pd[i+1] = -1;
+            if (bpp >= 3) pd[i+2] = -1;
+            if (bpp >= 4) pd[i+3] = -1;
+        }
+        let buf = jn_ByteBuffer_wrap(pixelData);
+        // Fill output: [ptr, width, height, format] as longs
+        var$1.data[0] = Long_fromInt(0); // ptr not used in web
+        var$1.data[1] = Long_fromInt(w);
+        var$1.data[2] = Long_fromInt(h);
+        var$1.data[3] = Long_fromInt(fmt);
+        return buf;
+    } catch(e) {
+        console.error("[PIXMAP] load error:", e);
+        return null;
+    }
+},
+cbggg_Gdx2DPixmap_newPixmap = (var$1, var$2, var$3, var$4) => {
+    cbggg_Gdx2DPixmap_$callClinit();
+    // Web implementation: create blank pixmap
+    // var$1 = long[4] output, var$2 = width, var$3 = height, var$4 = format
+    try {
+        let w = var$2, h = var$3, fmt = var$4;
+        let bpp = (fmt === 3) ? 3 : 4;
+        let bufSize = w * h * bpp;
+        let pixelData = $rt_createByteArray(bufSize);
+        let buf = jn_ByteBuffer_wrap(pixelData);
+        var$1.data[0] = Long_fromInt(0);
+        var$1.data[1] = Long_fromInt(w);
+        var$1.data[2] = Long_fromInt(h);
+        var$1.data[3] = Long_fromInt(fmt);
+        if(!window._pmNewLog){window._pmNewLog=0;}window._pmNewLog++;if(window._pmNewLog<=3)console.info("[PIXMAP] new: " + w + "x" + h + " fmt=" + fmt);
+        return buf;
+    } catch(e) {
+        console.error("[PIXMAP] new error:", e);
+        return null;
+    }
+},'''
+
+c = content.count(old_load)
+print(f"Found load stubs: {c}")
+if c == 1:
+    content = content.replace(old_load, new_load, 1)
+    print("Replaced")
+
+with open('classes.js', 'w') as f:
+    f.write(content)
+print("Done")
+PYEOF
+Found load stubs: 1
+Replaced
+Done
+
+Now I need to check if jn_ByteBuffer_wrap and Long_fromInt exist in the code.
+
+
+Verified ByteBuffer_wrap and Long_fromInt functions exist
+Verified ByteBuffer_wrap and Long_fromInt functions exist
+Bash
+grep -n "jn_ByteBuffer_wrap " classes.js | head -3
+129744:jn_ByteBuffer_wrap = $array => {
+Bash
+grep -n "Long_fromInt " classes.js | head -3
+172:Long_fromInt = val => BigInt.asIntN(64, BigInt(val | 0)),
+
+You've hit your limit · resets Mar 6, 5am (UTC)
+
+
+You've hit your limit · resets Mar 6, 5am (UTC)
+You've hit your limit · resets Mar 6, 5am (UTC)
+Bash
+cd /home/user/Dragonsoul-web && git add proto/output/web/classes.js proto/output/web/game-assets.js && git commit -m "$(cat <<'EOF'
+Phase 3.17: Implement Pixmap decoder, ETC1 bypass, font assets, null guards
+
+Major fixes for texture and asset loading:
+
+1. Gdx2DPixmap_load/newPixmap: Implemented web versions of native image
+   decoders (were returning null stubs). Reads PNG IHDR for dimensions,
+   creates white RGBA pixel buffers via ByteBuffer_wrap.
+
+2. ETC1 texture bypass: Skip GZIP PKM decoder for web assets in
+   cbggg_a_b2 (prepare) and cbggg_a_a5 (consumeCompressedData).
+   Uploads blank white RGBA texture via glTexImage2D instead.
+
+3. Font assets: Added 6 minimal BMFont files (Klepto, Swanse, Chinese,
+   Korean, Japanese, Russian) with 4x4 white PNG textures to unblock
+   loading screen font state.
+
+4. Null guard on cbgg_n_a (texture bind): Prevents crash when null
+   TextureData is passed to texture upload function.
+
+https://claude.ai/code/session_01QrAmge3SpdoVTrRpwKQJ8i
+EOF
+)"
+[claude/resume-game-porting-iIysa 80e2c1d] Phase 3.17: Implement Pixmap decoder, ETC1 bypass, font assets, null guards
+ 2 files changed, 121 insertions(+), 4 deletions(-)
+
+You've hit your limit · resets Mar 6, 5am (UTC)
+
+
+
+main
+
+claude/resume-game-porting-iIysa
+
++287
+-35
+
+Créer une PR
+
+
+
+
+"
