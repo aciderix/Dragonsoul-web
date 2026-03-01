@@ -39,5 +39,32 @@
     // Phase 3.14: Minimal splash screen placeholder (16x16 white PNG)
     A["ui/fantasy_legend_studio_splash_screen.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,16,0,0,0,16,8,6,0,0,0,31,243,255,97,0,0,0,22,73,68,65,84,120,156,99,248,79,33,96,24,53,96,212,128,81,3,134,139,1,0,93,120,252,46,175,253,225,105,0,0,0,0,73,69,78,68,174,66,96,130]) };
 
-    console.log("[Assets] 8 shaders + boot atlas + path aliases préchargés");
+
+
+    // Phase 3.17: Minimal font assets for loading screen progress
+    A["fonts/Klepto.fnt"] = "info face=\"Klepto\" size=32 bold=0 italic=0 charset=\"\" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1\ncommon lineHeight=32 base=26 scaleW=4 scaleH=4 pages=1 packed=0\npage id=0 file=\"Klepto.png\"\nchars count=1\nchar id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=8 page=0 chnl=0\n";
+    A["fonts/Klepto.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,4,0,0,0,4,8,6,0,0,0,169,241,158,126,0,0,0,25,73,68,65,84,120,156,99,252,255,255,63,3,16,48,48,48,160,112,0,2,0,0,169,0,17,138,249,93,192,0,0,0,0,73,69,78,68,174,66,96,130]) };
+    A["ETC/XHDPI/fonts/Klepto.fnt"] = A["fonts/Klepto.fnt"];
+    A["ETC/XHDPI/fonts/Klepto.png"] = A["fonts/Klepto.png"];
+    A["fonts/Swanse.fnt"] = "info face=\"Swanse\" size=32 bold=0 italic=0 charset=\"\" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1\ncommon lineHeight=32 base=26 scaleW=4 scaleH=4 pages=1 packed=0\npage id=0 file=\"Swanse.png\"\nchars count=1\nchar id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=8 page=0 chnl=0\n";
+    A["fonts/Swanse.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,4,0,0,0,4,8,6,0,0,0,169,241,158,126,0,0,0,25,73,68,65,84,120,156,99,252,255,255,63,3,16,48,48,48,160,112,0,2,0,0,169,0,17,138,249,93,192,0,0,0,0,73,69,78,68,174,66,96,130]) };
+    A["ETC/XHDPI/fonts/Swanse.fnt"] = A["fonts/Swanse.fnt"];
+    A["ETC/XHDPI/fonts/Swanse.png"] = A["fonts/Swanse.png"];
+    A["fonts/Chinese.fnt"] = "info face=\"Chinese\" size=32 bold=0 italic=0 charset=\"\" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1\ncommon lineHeight=32 base=26 scaleW=4 scaleH=4 pages=1 packed=0\npage id=0 file=\"Chinese.png\"\nchars count=1\nchar id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=8 page=0 chnl=0\n";
+    A["fonts/Chinese.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,4,0,0,0,4,8,6,0,0,0,169,241,158,126,0,0,0,25,73,68,65,84,120,156,99,252,255,255,63,3,16,48,48,48,160,112,0,2,0,0,169,0,17,138,249,93,192,0,0,0,0,73,69,78,68,174,66,96,130]) };
+    A["ETC/XHDPI/fonts/Chinese.fnt"] = A["fonts/Chinese.fnt"];
+    A["ETC/XHDPI/fonts/Chinese.png"] = A["fonts/Chinese.png"];
+    A["fonts/Korean.fnt"] = "info face=\"Korean\" size=32 bold=0 italic=0 charset=\"\" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1\ncommon lineHeight=32 base=26 scaleW=4 scaleH=4 pages=1 packed=0\npage id=0 file=\"Korean.png\"\nchars count=1\nchar id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=8 page=0 chnl=0\n";
+    A["fonts/Korean.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,4,0,0,0,4,8,6,0,0,0,169,241,158,126,0,0,0,25,73,68,65,84,120,156,99,252,255,255,63,3,16,48,48,48,160,112,0,2,0,0,169,0,17,138,249,93,192,0,0,0,0,73,69,78,68,174,66,96,130]) };
+    A["ETC/XHDPI/fonts/Korean.fnt"] = A["fonts/Korean.fnt"];
+    A["ETC/XHDPI/fonts/Korean.png"] = A["fonts/Korean.png"];
+    A["fonts/Japanese.fnt"] = "info face=\"Japanese\" size=32 bold=0 italic=0 charset=\"\" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1\ncommon lineHeight=32 base=26 scaleW=4 scaleH=4 pages=1 packed=0\npage id=0 file=\"Japanese.png\"\nchars count=1\nchar id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=8 page=0 chnl=0\n";
+    A["fonts/Japanese.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,4,0,0,0,4,8,6,0,0,0,169,241,158,126,0,0,0,25,73,68,65,84,120,156,99,252,255,255,63,3,16,48,48,48,160,112,0,2,0,0,169,0,17,138,249,93,192,0,0,0,0,73,69,78,68,174,66,96,130]) };
+    A["ETC/XHDPI/fonts/Japanese.fnt"] = A["fonts/Japanese.fnt"];
+    A["ETC/XHDPI/fonts/Japanese.png"] = A["fonts/Japanese.png"];
+    A["fonts/Russian.fnt"] = "info face=\"Russian\" size=32 bold=0 italic=0 charset=\"\" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1\ncommon lineHeight=32 base=26 scaleW=4 scaleH=4 pages=1 packed=0\npage id=0 file=\"Russian.png\"\nchars count=1\nchar id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=8 page=0 chnl=0\n";
+    A["fonts/Russian.png"] = { _webBytes: new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,4,0,0,0,4,8,6,0,0,0,169,241,158,126,0,0,0,25,73,68,65,84,120,156,99,252,255,255,63,3,16,48,48,48,160,112,0,2,0,0,169,0,17,138,249,93,192,0,0,0,0,73,69,78,68,174,66,96,130]) };
+    A["ETC/XHDPI/fonts/Russian.fnt"] = A["fonts/Russian.fnt"];
+    A["ETC/XHDPI/fonts/Russian.png"] = A["fonts/Russian.png"];
+    console.log("[Assets] 8 shaders + boot atlas + 6 fonts + path aliases loaded");
 })(typeof self !== "undefined" ? self : this);
