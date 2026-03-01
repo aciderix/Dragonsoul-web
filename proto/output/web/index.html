@@ -296,6 +296,7 @@
                 renderErrors++;
                 if (renderErrors <= 5) {
                     addLog('render() erreur: ' + e.message, 'log-error');
+                    if (e.stack) addLog(e.stack.split('\n').slice(0,8).join(' | '), 'log-error');
                 }
                 if (renderErrors > 20) {
                     cancelAnimationFrame(_rafId);
