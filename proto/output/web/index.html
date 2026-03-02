@@ -134,7 +134,7 @@
 </head>
 <body>
     <h1>&#x1F409; DragonSoul Web</h1>
-    <div class="subtitle">Phase 3.6 — Boucle RAF + shaders linkés sur GPU + audio stubé</div>
+    <div class="subtitle">Phase 3.7 — Textures PNG décodées depuis GAME_ASSETS</div>
 
     <div id="status-bar">
         <div class="status-item">
@@ -309,8 +309,41 @@
         requestAnimationFrame(loop);
     }
 
+    // ─── PNG Preloader ────────────────────────────────────────────────────────
+    async function preloadTextures() {
+        if (typeof GAME_ASSETS === 'undefined') return;
+        window.GAME_ASSETS_RGBA = {};
+        const paths = Object.keys(GAME_ASSETS);
+        let decoded = 0, skipped = 0;
+        for (const path of paths) {
+            const asset = GAME_ASSETS[path];
+            if (!asset || !asset._webBytes) continue;
+            const lp = path.toLowerCase();
+            if (!lp.endsWith('.png')) continue;
+            try {
+                const blob = new Blob([asset._webBytes], {type: 'image/png'});
+                const bmp = await createImageBitmap(blob);
+                const canvas = new OffscreenCanvas(bmp.width, bmp.height);
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(bmp, 0, 0);
+                const imgData = ctx.getImageData(0, 0, bmp.width, bmp.height);
+                // Store as plain Uint8Array (RGBA, premultiplied alpha from browser)
+                GAME_ASSETS_RGBA[path] = {
+                    data: new Uint8Array(imgData.data.buffer),
+                    width: bmp.width,
+                    height: bmp.height
+                };
+                decoded++;
+            } catch(e) {
+                skipped++;
+                if (skipped <= 3) console.warn('[PRELOAD] PNG decode failed: ' + path + ' — ' + e.message);
+            }
+        }
+        console.info('[PRELOAD] PNG textures decoded: ' + decoded + ' OK, ' + skipped + ' skipped');
+    }
+
     // ─── Main boot sequence ───────────────────────────────────────────────────
-    window.addEventListener('load', function() {
+    window.addEventListener('load', async function() {
         const canvas = document.getElementById('game-canvas');
 
         // 1. Check WebGL2 support
@@ -376,9 +409,19 @@
             };
         }
 
+        setOverlay('Décodage des textures PNG...');
+
+        // 3. Pre-decode PNG textures from GAME_ASSETS (needed for synchronous texture loading)
+        try {
+            await preloadTextures();
+            addLog('PNG textures pré-décodées dans GAME_ASSETS_RGBA', 'log-ok');
+        } catch(e) {
+            addLog('WARN preloadTextures: ' + e.message, 'log-warn');
+        }
+
         setOverlay('Lancement game.create()...');
 
-        // 3. Run main() — calls game.create() + first renderFrame()
+        // 4. Run main() — calls game.create() + first renderFrame()
         setStatus('st-create', 'running...', 'pending');
         setStatus('st-render', 'waiting...', 'pending');
         try {
