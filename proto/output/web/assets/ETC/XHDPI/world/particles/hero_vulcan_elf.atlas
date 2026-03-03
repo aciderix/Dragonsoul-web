@@ -1,0 +1,321 @@
+
+hero_vulcan_elf.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Puff
+  rotate: false
+  xy: 501, 293
+  size: 192, 189
+  orig: 200, 200
+  offset: 6, 8
+  index: -1
+audio
+  rotate: false
+  xy: 757, 691
+  size: 178, 150
+  orig: 200, 163
+  offset: 12, 0
+  index: 68
+audio
+  rotate: false
+  xy: 700, 300
+  size: 178, 137
+  orig: 200, 163
+  offset: 12, 4
+  index: 131
+audio
+  rotate: false
+  xy: 885, 300
+  size: 178, 137
+  orig: 200, 163
+  offset: 12, 21
+  index: 95
+audio
+  rotate: false
+  xy: 1017, 838
+  size: 178, 59
+  orig: 200, 163
+  offset: 12, 57
+  index: 104
+audio
+  rotate: false
+  xy: 1202, 853
+  size: 178, 44
+  orig: 200, 163
+  offset: 12, 58
+  index: 77
+audio
+  rotate: false
+  xy: 267, 3
+  size: 178, 30
+  orig: 200, 163
+  offset: 12, 68
+  index: 113
+audio
+  rotate: false
+  xy: 1070, 317
+  size: 178, 105
+  orig: 200, 163
+  offset: 12, 31
+  index: 140
+audio
+  rotate: false
+  xy: 738, 25
+  size: 178, 21
+  orig: 200, 163
+  offset: 12, 72
+  index: 122
+audio
+  rotate: false
+  xy: 923, 12
+  size: 178, 34
+  orig: 200, 163
+  offset: 12, 67
+  index: 128
+audio
+  rotate: false
+  xy: 1255, 344
+  size: 178, 78
+  orig: 200, 163
+  offset: 12, 42
+  index: 86
+behind_glow
+  rotate: false
+  xy: 3, 15
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+dot
+  rotate: false
+  xy: 1912, 887
+  size: 79, 66
+  orig: 79, 66
+  offset: 0, 0
+  index: -1
+fireworks
+  rotate: false
+  xy: 506, 489
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+fireworks_oval
+  rotate: false
+  xy: 3, 485
+  size: 233, 300
+  orig: 308, 300
+  offset: 35, 0
+  index: -1
+graph
+  rotate: false
+  xy: 713, 444
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 10
+graph
+  rotate: false
+  xy: 870, 444
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 11
+graph
+  rotate: false
+  xy: 267, 40
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 12
+graph
+  rotate: false
+  xy: 424, 40
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 13
+graph
+  rotate: false
+  xy: 581, 46
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 14
+graph
+  rotate: false
+  xy: 738, 53
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 15
+graph
+  rotate: false
+  xy: 895, 53
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 16
+graph
+  rotate: false
+  xy: 1052, 53
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 17
+graph
+  rotate: false
+  xy: 1027, 591
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 18
+graph
+  rotate: false
+  xy: 1184, 591
+  size: 150, 240
+  orig: 150, 240
+  offset: 0, 0
+  index: 19
+graph_side
+  rotate: false
+  xy: 510, 691
+  size: 240, 150
+  orig: 240, 150
+  offset: 0, 0
+  index: -1
+impact
+  rotate: false
+  xy: 1162, 429
+  size: 167, 155
+  orig: 167, 167
+  offset: 0, 6
+  index: -1
+laser
+  rotate: false
+  xy: 1524, 901
+  size: 188, 52
+  orig: 200, 52
+  offset: 5, 0
+  index: -1
+laser2
+  rotate: false
+  xy: 3, 960
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 0
+laser2
+  rotate: false
+  xy: 3, 904
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 1
+laser2
+  rotate: false
+  xy: 510, 960
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 2
+laser2
+  rotate: false
+  xy: 3, 848
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 3
+laser2
+  rotate: false
+  xy: 510, 904
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 4
+laser2
+  rotate: false
+  xy: 1017, 960
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 5
+laser2
+  rotate: false
+  xy: 3, 792
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 6
+laser2
+  rotate: false
+  xy: 510, 848
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 7
+laser2
+  rotate: false
+  xy: 1017, 904
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 8
+laser2
+  rotate: false
+  xy: 1524, 960
+  size: 500, 49
+  orig: 500, 75
+  offset: 0, 13
+  index: 9
+pHealPillar
+  rotate: false
+  xy: 210, 5
+  size: 50, 210
+  orig: 50, 210
+  offset: 0, 0
+  index: -1
+particle
+  rotate: false
+  xy: 942, 810
+  size: 32, 31
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+radiation_d01
+  rotate: false
+  xy: 266, 287
+  size: 228, 235
+  orig: 256, 256
+  offset: 14, 12
+  index: -1
+ring
+  rotate: false
+  xy: 1719, 890
+  size: 186, 63
+  orig: 200, 84
+  offset: 7, 14
+  index: -1
+ring_round
+  rotate: false
+  xy: 243, 529
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 1
+rings
+  rotate: false
+  xy: 3, 222
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 1
+round
+  rotate: false
+  xy: 1027, 456
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1

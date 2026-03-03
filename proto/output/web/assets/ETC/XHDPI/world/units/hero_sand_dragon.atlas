@@ -1,0 +1,139 @@
+
+hero_sand_dragon.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back_leg-b
+  rotate: false
+  xy: 892, 172
+  size: 68, 65
+  orig: 68, 65
+  offset: 0, 0
+  index: -1
+back_leg-f
+  rotate: false
+  xy: 892, 172
+  size: 68, 65
+  orig: 68, 65
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 3, 108
+  size: 214, 129
+  orig: 214, 129
+  offset: 0, 0
+  index: -1
+eye-b
+  rotate: false
+  xy: 209, 55
+  size: 19, 14
+  orig: 19, 14
+  offset: 0, 0
+  index: -1
+eye-f
+  rotate: false
+  xy: 967, 125
+  size: 28, 18
+  orig: 28, 18
+  offset: 0, 0
+  index: -1
+eyebrow-b
+  rotate: false
+  xy: 967, 150
+  size: 22, 50
+  orig: 22, 50
+  offset: 0, 0
+  index: -1
+eyebrow-f
+  rotate: false
+  xy: 368, 114
+  size: 64, 50
+  orig: 64, 50
+  offset: 0, 0
+  index: -1
+eyeclosed-b
+  rotate: false
+  xy: 209, 76
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+eyeclosed-f
+  rotate: false
+  xy: 967, 207
+  size: 43, 30
+  orig: 43, 30
+  offset: 0, 0
+  index: -1
+front_leg-b
+  rotate: false
+  xy: 224, 171
+  size: 225, 66
+  orig: 225, 66
+  offset: 0, 0
+  index: -1
+front_leg-f
+  rotate: false
+  xy: 719, 143
+  size: 82, 94
+  orig: 82, 94
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 456, 152
+  size: 131, 85
+  orig: 131, 85
+  offset: 0, 0
+  index: -1
+jaw
+  rotate: false
+  xy: 224, 114
+  size: 137, 50
+  orig: 137, 50
+  offset: 0, 0
+  index: -1
+jaw_teeth-f
+  rotate: false
+  xy: 892, 125
+  size: 68, 40
+  orig: 68, 40
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 996, 187
+  size: 7, 13
+  orig: 7, 13
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 439, 146
+  size: 8, 18
+  orig: 8, 18
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 594, 135
+  size: 118, 102
+  orig: 118, 102
+  offset: 0, 0
+  index: -1
+wing-b
+  rotate: false
+  xy: 808, 145
+  size: 77, 92
+  orig: 77, 92
+  offset: 0, 0
+  index: -1
+wing-f
+  rotate: false
+  xy: 3, 3
+  size: 199, 98
+  orig: 199, 98
+  offset: 0, 0
+  index: -1

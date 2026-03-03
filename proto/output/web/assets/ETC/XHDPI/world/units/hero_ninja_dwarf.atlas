@@ -1,0 +1,216 @@
+
+hero_ninja_dwarf.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+angry_eyebrows
+  rotate: false
+  xy: 632, 107
+  size: 53, 29
+  orig: 53, 29
+  offset: 0, 0
+  index: -1
+beard
+  rotate: false
+  xy: 687, 159
+  size: 111, 93
+  orig: 111, 93
+  offset: 0, 0
+  index: -1
+can
+  rotate: false
+  xy: 692, 65
+  size: 57, 87
+  orig: 57, 87
+  offset: 0, 0
+  index: -1
+can_blur_overhead_swing
+  rotate: false
+  xy: 351, 198
+  size: 186, 54
+  orig: 186, 54
+  offset: 0, 0
+  index: -1
+r_to_l_can_blur_overhead
+  rotate: false
+  xy: 351, 198
+  size: 186, 54
+  orig: 186, 54
+  offset: 0, 0
+  index: -1
+can_in_hand
+  rotate: false
+  xy: 544, 112
+  size: 81, 62
+  orig: 81, 62
+  offset: 0, 0
+  index: -1
+chain_attached_to_can
+  rotate: false
+  xy: 413, 57
+  size: 8, 16
+  orig: 8, 16
+  offset: 0, 0
+  index: -1
+chain_front
+  rotate: false
+  xy: 873, 139
+  size: 13, 22
+  orig: 13, 22
+  offset: 0, 0
+  index: -1
+chain_side
+  rotate: false
+  xy: 509, 112
+  size: 6, 18
+  orig: 6, 18
+  offset: 0, 0
+  index: -1
+closed_eyes
+  rotate: false
+  xy: 542, 87
+  size: 46, 18
+  orig: 46, 18
+  offset: 0, 0
+  index: -1
+eye_ball_left
+  rotate: false
+  xy: 227, 3
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+eye_ball_right
+  rotate: false
+  xy: 240, 3
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+eye_white
+  rotate: false
+  xy: 484, 22
+  size: 51, 28
+  orig: 51, 28
+  offset: 0, 0
+  index: -1
+face_without_eye
+  rotate: false
+  xy: 227, 113
+  size: 117, 139
+  orig: 117, 139
+  offset: 0, 0
+  index: -1
+forearm-b
+  rotate: false
+  xy: 413, 15
+  size: 64, 35
+  orig: 64, 35
+  offset: 0, 0
+  index: -1
+forearm-f
+  rotate: false
+  xy: 756, 95
+  size: 53, 57
+  orig: 53, 57
+  offset: 0, 0
+  index: -1
+happy_closed_eyes
+  rotate: false
+  xy: 756, 55
+  size: 55, 33
+  orig: 55, 33
+  offset: 0, 0
+  index: -1
+head_ribbon
+  rotate: false
+  xy: 227, 16
+  size: 115, 90
+  orig: 115, 90
+  offset: 0, 0
+  index: -1
+l_to_r_can_blur_overhead
+  rotate: false
+  xy: 351, 137
+  size: 186, 54
+  orig: 186, 54
+  offset: 0, 0
+  index: -1
+leg-b
+  rotate: false
+  xy: 805, 168
+  size: 103, 84
+  orig: 103, 84
+  offset: 0, 0
+  index: -1
+leg-f
+  rotate: false
+  xy: 431, 57
+  size: 71, 73
+  orig: 71, 73
+  offset: 0, 0
+  index: -1
+pant_knot
+  rotate: false
+  xy: 816, 105
+  size: 50, 56
+  orig: 50, 56
+  offset: 0, 0
+  index: -1
+shocked_eyebrows
+  rotate: false
+  xy: 632, 143
+  size: 48, 31
+  orig: 48, 31
+  offset: 0, 0
+  index: -1
+sword-b
+  rotate: false
+  xy: 349, 8
+  size: 57, 65
+  orig: 57, 65
+  offset: 0, 0
+  index: -1
+sword-f
+  rotate: false
+  xy: 998, 151
+  size: 19, 101
+  orig: 19, 101
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 3, 3
+  size: 217, 249
+  orig: 217, 249
+  offset: 0, 0
+  index: -1
+upperarm-b
+  rotate: false
+  xy: 915, 165
+  size: 76, 87
+  orig: 76, 87
+  offset: 0, 0
+  index: -1
+upperarm-f
+  rotate: false
+  xy: 544, 181
+  size: 136, 71
+  orig: 136, 71
+  offset: 0, 0
+  index: -1
+wrist-b
+  rotate: false
+  xy: 351, 80
+  size: 73, 50
+  orig: 73, 50
+  offset: 0, 0
+  index: -1
+wrist-f
+  rotate: false
+  xy: 818, 54
+  size: 50, 44
+  orig: 50, 44
+  offset: 0, 0
+  index: -1

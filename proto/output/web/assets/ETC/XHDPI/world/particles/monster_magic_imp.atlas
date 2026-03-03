@@ -1,0 +1,125 @@
+
+monster_magic_imp.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+barrier
+  rotate: false
+  xy: 1332, 252
+  size: 167, 102
+  orig: 167, 111
+  offset: 0, 5
+  index: -1
+body
+  rotate: false
+  xy: 1362, 361
+  size: 200, 135
+  orig: 200, 139
+  offset: 0, 4
+  index: -1
+cloud4
+  rotate: false
+  xy: 758, 312
+  size: 188, 184
+  orig: 188, 184
+  offset: 0, 0
+  index: -1
+ear-f
+  rotate: false
+  xy: 1743, 310
+  size: 150, 186
+  orig: 152, 188
+  offset: 1, 1
+  index: -1
+enexplosion
+  rotate: false
+  xy: 277, 279
+  size: 267, 217
+  orig: 267, 217
+  offset: 0, 0
+  index: -1
+eyebrow-f
+  rotate: false
+  xy: 1900, 259
+  size: 111, 102
+  orig: 113, 104
+  offset: 1, 1
+  index: -1
+fire_ring
+  rotate: false
+  xy: 277, 201
+  size: 200, 71
+  orig: 200, 71
+  offset: 0, 0
+  index: -1
+fireworks
+  rotate: false
+  xy: 3, 3
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+impact
+  rotate: false
+  xy: 1569, 341
+  size: 167, 155
+  orig: 167, 167
+  offset: 0, 6
+  index: -1
+leg-b
+  rotate: false
+  xy: 1900, 368
+  size: 129, 128
+  orig: 131, 130
+  offset: 1, 1
+  index: -1
+lensflare
+  rotate: false
+  xy: 1125, 277
+  size: 200, 94
+  orig: 200, 102
+  offset: 0, 4
+  index: -1
+lower_arm-b
+  rotate: false
+  xy: 953, 310
+  size: 165, 186
+  orig: 167, 188
+  offset: 1, 1
+  index: -1
+magic_sphere
+  rotate: false
+  xy: 551, 302
+  size: 200, 194
+  orig: 200, 200
+  offset: 0, 2
+  index: -1
+pCloud1
+  rotate: false
+  xy: 484, 176
+  size: 77, 96
+  orig: 77, 96
+  offset: 0, 0
+  index: -1
+pDirt
+  rotate: false
+  xy: 568, 241
+  size: 65, 54
+  orig: 65, 57
+  offset: 0, 2
+  index: -1
+wing-f
+  rotate: false
+  xy: 3, 205
+  size: 267, 291
+  orig: 269, 293
+  offset: 1, 1
+  index: -1
+yellowball
+  rotate: false
+  xy: 1125, 378
+  size: 230, 118
+  orig: 230, 121
+  offset: 0, 3
+  index: -1

@@ -1,0 +1,97 @@
+
+hero_vampire_dragon.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm-b
+  rotate: false
+  xy: 3, 22
+  size: 200, 97
+  orig: 200, 97
+  offset: 0, 0
+  index: -1
+arm-f
+  rotate: false
+  xy: 479, 319
+  size: 215, 182
+  orig: 215, 182
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 3, 126
+  size: 257, 375
+  orig: 257, 375
+  offset: 0, 0
+  index: -1
+eye-b
+  rotate: false
+  xy: 210, 95
+  size: 12, 24
+  orig: 12, 24
+  offset: 0, 0
+  index: -1
+eye-f
+  rotate: false
+  xy: 479, 277
+  size: 33, 35
+  orig: 33, 35
+  offset: 0, 0
+  index: -1
+eyes_closed-b
+  rotate: false
+  xy: 701, 320
+  size: 13, 24
+  orig: 13, 24
+  offset: 0, 0
+  index: -1
+eyes_closed-f
+  rotate: false
+  xy: 946, 465
+  size: 35, 36
+  orig: 35, 36
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 267, 89
+  size: 145, 181
+  orig: 145, 181
+  offset: 0, 0
+  index: -1
+jaw
+  rotate: false
+  xy: 419, 170
+  size: 84, 100
+  orig: 84, 100
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 419, 151
+  size: 6, 12
+  orig: 6, 12
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 3, 3
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 267, 277
+  size: 205, 224
+  orig: 205, 224
+  offset: 0, 0
+  index: -1
+wing-b
+  rotate: false
+  xy: 701, 351
+  size: 238, 150
+  orig: 238, 150
+  offset: 0, 0
+  index: -1

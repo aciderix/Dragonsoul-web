@@ -1,0 +1,209 @@
+
+hero_red_shaman.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm_lower-b
+  rotate: false
+  xy: 457, 25
+  size: 58, 102
+  orig: 58, 102
+  offset: 0, 0
+  index: -1
+arm_lower-f
+  rotate: false
+  xy: 724, 180
+  size: 85, 72
+  orig: 85, 72
+  offset: 0, 0
+  index: -1
+arm_upper-b
+  rotate: false
+  xy: 522, 93
+  size: 23, 57
+  orig: 23, 57
+  offset: 0, 0
+  index: -1
+arm_upper-f
+  rotate: false
+  xy: 965, 46
+  size: 47, 66
+  orig: 47, 66
+  offset: 0, 0
+  index: -1
+belt
+  rotate: false
+  xy: 965, 3
+  size: 38, 36
+  orig: 38, 36
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 895, 17
+  size: 63, 235
+  orig: 63, 235
+  offset: 0, 0
+  index: -1
+botton
+  rotate: false
+  xy: 1010, 10
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+cape-b
+  rotate: false
+  xy: 185, 76
+  size: 177, 176
+  orig: 177, 176
+  offset: 0, 0
+  index: -1
+cape-f
+  rotate: false
+  xy: 3, 63
+  size: 175, 189
+  orig: 175, 189
+  offset: 0, 0
+  index: -1
+cape_extn-b
+  rotate: false
+  xy: 622, 178
+  size: 95, 74
+  orig: 95, 74
+  offset: 0, 0
+  index: -1
+cape_extn-f
+  rotate: false
+  xy: 369, 134
+  size: 142, 118
+  orig: 142, 118
+  offset: 0, 0
+  index: -1
+eye_closed-b
+  rotate: false
+  xy: 79, 40
+  size: 31, 16
+  orig: 31, 16
+  offset: 0, 0
+  index: -1
+eye_closed-f
+  rotate: false
+  xy: 552, 97
+  size: 23, 16
+  orig: 23, 16
+  offset: 0, 0
+  index: -1
+eyeball-b
+  rotate: false
+  xy: 1010, 27
+  size: 10, 12
+  orig: 10, 12
+  offset: 0, 0
+  index: -1
+eyeball-f
+  rotate: false
+  xy: 622, 157
+  size: 20, 14
+  orig: 20, 14
+  offset: 0, 0
+  index: -1
+eyebrow-b
+  rotate: false
+  xy: 35, 4
+  size: 11, 14
+  orig: 11, 14
+  offset: 0, 0
+  index: -1
+eyebrow-f
+  rotate: false
+  xy: 3, 3
+  size: 25, 15
+  orig: 25, 15
+  offset: 0, 0
+  index: -1
+feet-b
+  rotate: false
+  xy: 584, 124
+  size: 17, 26
+  orig: 17, 26
+  offset: 0, 0
+  index: -1
+feet-f
+  rotate: false
+  xy: 3, 25
+  size: 36, 31
+  orig: 36, 31
+  offset: 0, 0
+  index: -1
+glow
+  rotate: false
+  xy: 369, 73
+  size: 81, 54
+  orig: 81, 54
+  offset: 0, 0
+  index: -1
+head_mouth_closed
+  rotate: false
+  xy: 965, 119
+  size: 53, 61
+  orig: 53, 61
+  offset: 0, 0
+  index: -1
+head_mouth_open
+  rotate: false
+  xy: 965, 187
+  size: 53, 65
+  orig: 53, 65
+  offset: 0, 0
+  index: -1
+hood-b
+  rotate: false
+  xy: 816, 179
+  size: 72, 73
+  orig: 72, 73
+  offset: 0, 0
+  index: -1
+hood-f
+  rotate: false
+  xy: 518, 157
+  size: 97, 95
+  orig: 97, 95
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 522, 58
+  size: 20, 28
+  orig: 20, 28
+  offset: 0, 0
+  index: -1
+palm-b
+  rotate: false
+  xy: 552, 120
+  size: 25, 30
+  orig: 25, 30
+  offset: 0, 0
+  index: -1
+pam-f
+  rotate: false
+  xy: 46, 25
+  size: 26, 31
+  orig: 26, 31
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 79, 26
+  size: 6, 7
+  orig: 6, 7
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 522, 43
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1

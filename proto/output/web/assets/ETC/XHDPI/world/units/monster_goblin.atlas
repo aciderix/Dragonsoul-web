@@ -1,0 +1,293 @@
+
+monster_goblin.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm_lower-b
+  rotate: false
+  xy: 470, 123
+  size: 48, 41
+  orig: 48, 41
+  offset: 0, 0
+  index: -1
+arm_lower-f
+  rotate: false
+  xy: 982, 192
+  size: 34, 55
+  orig: 34, 55
+  offset: 0, 0
+  index: -1
+arm_upper-b
+  rotate: false
+  xy: 920, 182
+  size: 55, 65
+  orig: 55, 65
+  offset: 0, 0
+  index: -1
+arm_upper-f
+  rotate: false
+  xy: 761, 182
+  size: 77, 65
+  orig: 77, 65
+  offset: 0, 0
+  index: -1
+chain01
+  rotate: false
+  xy: 195, 62
+  size: 6, 11
+  orig: 6, 11
+  offset: 0, 0
+  index: -1
+chain03
+  rotate: false
+  xy: 195, 62
+  size: 6, 11
+  orig: 6, 11
+  offset: 0, 0
+  index: -1
+chain05
+  rotate: false
+  xy: 195, 62
+  size: 6, 11
+  orig: 6, 11
+  offset: 0, 0
+  index: -1
+chain07
+  rotate: false
+  xy: 195, 62
+  size: 6, 11
+  orig: 6, 11
+  offset: 0, 0
+  index: -1
+chain09
+  rotate: false
+  xy: 195, 62
+  size: 6, 11
+  orig: 6, 11
+  offset: 0, 0
+  index: -1
+chain02
+  rotate: false
+  xy: 274, 117
+  size: 9, 14
+  orig: 9, 14
+  offset: 0, 0
+  index: -1
+chain04
+  rotate: false
+  xy: 274, 117
+  size: 9, 14
+  orig: 9, 14
+  offset: 0, 0
+  index: -1
+chain06
+  rotate: false
+  xy: 274, 117
+  size: 9, 14
+  orig: 9, 14
+  offset: 0, 0
+  index: -1
+chain08
+  rotate: false
+  xy: 274, 117
+  size: 9, 14
+  orig: 9, 14
+  offset: 0, 0
+  index: -1
+ear-f
+  rotate: false
+  xy: 469, 83
+  size: 26, 33
+  orig: 26, 33
+  offset: 0, 0
+  index: -1
+eye_closed-b
+  rotate: false
+  xy: 741, 177
+  size: 9, 10
+  orig: 9, 10
+  offset: 0, 0
+  index: -1
+eye_closed-f
+  rotate: false
+  xy: 35, 9
+  size: 22, 12
+  orig: 22, 12
+  offset: 0, 0
+  index: -1
+eyeball-b
+  rotate: false
+  xy: 210, 82
+  size: 9, 8
+  orig: 9, 8
+  offset: 0, 0
+  index: -1
+eyeball-f
+  rotate: false
+  xy: 118, 29
+  size: 21, 9
+  orig: 21, 9
+  offset: 0, 0
+  index: -1
+foot-b
+  rotate: false
+  xy: 118, 45
+  size: 70, 28
+  orig: 70, 28
+  offset: 0, 0
+  index: -1
+foot-f
+  rotate: false
+  xy: 210, 97
+  size: 57, 34
+  orig: 57, 34
+  offset: 0, 0
+  index: -1
+head_mouth_closed
+  rotate: false
+  xy: 562, 178
+  size: 86, 69
+  orig: 86, 69
+  offset: 0, 0
+  index: -1
+head_mouth_open
+  rotate: false
+  xy: 470, 171
+  size: 85, 76
+  orig: 85, 76
+  offset: 0, 0
+  index: -1
+helmet
+  rotate: false
+  xy: 210, 138
+  size: 79, 109
+  orig: 79, 109
+  offset: 0, 0
+  index: -1
+knee_spike
+  rotate: false
+  xy: 296, 124
+  size: 42, 24
+  orig: 42, 24
+  offset: 0, 0
+  index: -1
+loin_cloth-b
+  rotate: false
+  xy: 845, 176
+  size: 68, 71
+  orig: 68, 71
+  offset: 0, 0
+  index: -1
+loin_cloth-f
+  rotate: false
+  xy: 655, 194
+  size: 99, 53
+  orig: 99, 53
+  offset: 0, 0
+  index: -1
+lower_leg-b
+  rotate: false
+  xy: 700, 155
+  size: 34, 32
+  orig: 34, 32
+  offset: 0, 0
+  index: -1
+lower_leg-f
+  rotate: false
+  xy: 431, 101
+  size: 31, 32
+  orig: 31, 32
+  offset: 0, 0
+  index: -1
+palm-f
+  rotate: false
+  xy: 614, 137
+  size: 43, 34
+  orig: 43, 34
+  offset: 0, 0
+  index: -1
+palm_overlay-b
+  rotate: false
+  xy: 3, 3
+  size: 25, 18
+  orig: 25, 18
+  offset: 0, 0
+  index: -1
+palm_underlay-b
+  rotate: false
+  xy: 389, 106
+  size: 35, 27
+  orig: 35, 27
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 502, 110
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 64, 15
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+shoulder-f
+  rotate: false
+  xy: 296, 155
+  size: 90, 92
+  orig: 90, 92
+  offset: 0, 0
+  index: -1
+skull_knee
+  rotate: false
+  xy: 664, 149
+  size: 29, 38
+  orig: 29, 38
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 118, 80
+  size: 85, 167
+  orig: 85, 167
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 3, 28
+  size: 108, 219
+  orig: 108, 219
+  offset: 0, 0
+  index: -1
+upper_leg-b
+  rotate: false
+  xy: 345, 118
+  size: 37, 30
+  orig: 37, 30
+  offset: 0, 0
+  index: -1
+upper_leg-f
+  rotate: false
+  xy: 525, 121
+  size: 33, 43
+  orig: 33, 43
+  offset: 0, 0
+  index: -1
+weapon_ball
+  rotate: false
+  xy: 565, 125
+  size: 42, 46
+  orig: 42, 46
+  offset: 0, 0
+  index: -1
+weapon_blur
+  rotate: false
+  xy: 393, 140
+  size: 70, 107
+  orig: 70, 107
+  offset: 0, 0
+  index: -1

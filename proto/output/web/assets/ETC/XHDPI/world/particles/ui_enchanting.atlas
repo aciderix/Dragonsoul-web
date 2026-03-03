@@ -1,0 +1,104 @@
+
+ui_enchanting.png
+size: 2048,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+enchanting_glow
+  rotate: false
+  xy: 369, 4
+  size: 88, 88
+  orig: 98, 100
+  offset: 5, 7
+  index: -1
+enchanting_slot
+  rotate: false
+  xy: 207, 86
+  size: 155, 156
+  orig: 164, 168
+  offset: 4, 11
+  index: -1
+shimmer
+  rotate: false
+  xy: 557, 125
+  size: 136, 117
+  orig: 500, 180
+  offset: 15, 35
+  index: 1
+shimmer
+  rotate: false
+  xy: 557, 3
+  size: 331, 115
+  orig: 500, 180
+  offset: 19, 33
+  index: 6
+shimmer
+  rotate: false
+  xy: 700, 127
+  size: 169, 115
+  orig: 500, 180
+  offset: 15, 36
+  index: 2
+shimmer
+  rotate: false
+  xy: 876, 128
+  size: 210, 114
+  orig: 500, 180
+  offset: 16, 37
+  index: 3
+shimmer
+  rotate: false
+  xy: 895, 8
+  size: 370, 113
+  orig: 500, 180
+  offset: 19, 34
+  index: 7
+shimmer
+  rotate: false
+  xy: 1093, 130
+  size: 251, 112
+  orig: 500, 180
+  offset: 17, 38
+  index: 4
+shimmer
+  rotate: false
+  xy: 1272, 12
+  size: 411, 111
+  orig: 500, 180
+  offset: 20, 35
+  index: 8
+shimmer
+  rotate: false
+  xy: 1351, 132
+  size: 290, 110
+  orig: 500, 180
+  offset: 18, 39
+  index: 5
+shimmer
+  rotate: false
+  xy: 1648, 133
+  size: 368, 109
+  orig: 500, 180
+  offset: 21, 36
+  index: 9
+shimmer
+  rotate: false
+  xy: 1690, 21
+  size: 104, 105
+  orig: 500, 180
+  offset: 14, 42
+  index: 0
+star_flash2
+  rotate: false
+  xy: 369, 99
+  size: 181, 143
+  orig: 200, 161
+  offset: 7, 10
+  index: -1
+star_glow
+  rotate: false
+  xy: 3, 59
+  size: 197, 183
+  orig: 200, 190
+  offset: 0, 7
+  index: -1

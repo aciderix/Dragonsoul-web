@@ -1,0 +1,153 @@
+
+ui_quests.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+blur
+  rotate: false
+  xy: 3, 293
+  size: 308, 197
+  orig: 308, 197
+  offset: 0, 0
+  index: -1
+burst
+  rotate: false
+  xy: 3, 129
+  size: 244, 157
+  orig: 256, 256
+  offset: 5, 88
+  index: 14
+burst
+  rotate: false
+  xy: 318, 333
+  size: 244, 157
+  orig: 256, 256
+  offset: 5, 88
+  index: 18
+burst
+  rotate: false
+  xy: 569, 333
+  size: 244, 157
+  orig: 256, 256
+  offset: 5, 88
+  index: 19
+burst
+  rotate: false
+  xy: 820, 336
+  size: 244, 154
+  orig: 256, 256
+  offset: 5, 88
+  index: 13
+burst
+  rotate: false
+  xy: 1071, 336
+  size: 244, 154
+  orig: 256, 256
+  offset: 5, 88
+  index: 16
+burst
+  rotate: false
+  xy: 1322, 336
+  size: 244, 154
+  orig: 256, 256
+  offset: 5, 88
+  index: 17
+burst
+  rotate: false
+  xy: 1573, 339
+  size: 244, 151
+  orig: 256, 256
+  offset: 5, 88
+  index: 15
+burst
+  rotate: false
+  xy: 1824, 346
+  size: 217, 144
+  orig: 256, 256
+  offset: 6, 88
+  index: 2
+burst
+  rotate: false
+  xy: 318, 177
+  size: 244, 149
+  orig: 256, 256
+  offset: 5, 89
+  index: 10
+burst
+  rotate: false
+  xy: 569, 176
+  size: 244, 150
+  orig: 256, 256
+  offset: 5, 89
+  index: 11
+burst
+  rotate: false
+  xy: 820, 179
+  size: 244, 150
+  orig: 256, 256
+  offset: 5, 89
+  index: 12
+burst
+  rotate: false
+  xy: 1071, 180
+  size: 244, 149
+  orig: 256, 256
+  offset: 5, 89
+  index: 9
+burst
+  rotate: false
+  xy: 1322, 184
+  size: 244, 145
+  orig: 256, 256
+  offset: 5, 89
+  index: 8
+burst
+  rotate: false
+  xy: 1573, 190
+  size: 243, 142
+  orig: 256, 256
+  offset: 6, 89
+  index: 1
+burst
+  rotate: false
+  xy: 3, 3
+  size: 155, 119
+  orig: 256, 256
+  offset: 36, 91
+  index: 0
+burst
+  rotate: false
+  xy: 1573, 42
+  size: 244, 141
+  orig: 256, 256
+  offset: 5, 88
+  index: 7
+burst
+  rotate: false
+  xy: 1322, 37
+  size: 242, 140
+  orig: 256, 256
+  offset: 6, 88
+  index: 6
+burst
+  rotate: false
+  xy: 820, 33
+  size: 239, 139
+  orig: 256, 256
+  offset: 6, 88
+  index: 5
+burst
+  rotate: false
+  xy: 1071, 31
+  size: 234, 142
+  orig: 256, 256
+  offset: 6, 88
+  index: 4
+burst
+  rotate: false
+  xy: 254, 26
+  size: 222, 144
+  orig: 256, 256
+  offset: 6, 88
+  index: 3

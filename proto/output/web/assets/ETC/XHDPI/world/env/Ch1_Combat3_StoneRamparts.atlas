@@ -1,0 +1,46 @@
+
+Ch1_Combat3_StoneRamparts.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,0
+  rotate: false
+  xy: 3, 3
+  size: 2000, 1017
+  orig: 2000, 1017
+  offset: 0, 0
+  index: -1
+
+Ch1_Combat3_StoneRamparts2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,1
+  rotate: false
+  xy: 3, 493
+  size: 2000, 483
+  orig: 2000, 483
+  offset: 0, 0
+  index: -1
+foreground-0,1
+  rotate: false
+  xy: 3, 3
+  size: 2000, 483
+  orig: 2000, 483
+  offset: 0, 0
+  index: -1
+
+Ch1_Combat3_StoneRamparts3.png
+size: 2048,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+foreground-0,0
+  rotate: false
+  xy: 3, 3
+  size: 1920, 185
+  orig: 2000, 1017
+  offset: 80, 0
+  index: -1

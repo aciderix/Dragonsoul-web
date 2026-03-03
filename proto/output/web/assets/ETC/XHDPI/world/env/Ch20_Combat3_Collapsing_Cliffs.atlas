@@ -1,0 +1,80 @@
+
+Ch20_Combat3_Collapsing_Cliffs.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,0
+  rotate: false
+  xy: 3, 3
+  size: 2000, 1017
+  orig: 2000, 1017
+  offset: 0, 0
+  index: -1
+foreground-0,0
+  rotate: false
+  xy: 2010, 1019
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+foreground-0,1
+  rotate: false
+  xy: 2010, 1019
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+foreground-1,0
+  rotate: false
+  xy: 2010, 1019
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+foreground-1,1
+  rotate: false
+  xy: 2010, 1019
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+
+Ch20_Combat3_Collapsing_Cliffs2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+foreground-1,2
+  rotate: false
+  xy: 3, 3
+  size: 1959, 646
+  orig: 1959, 966
+  offset: 0, 0
+  index: -1
+
+Ch20_Combat3_Collapsing_Cliffs3.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+foreground-0,2
+  rotate: false
+  xy: 3, 3
+  size: 2041, 580
+  orig: 2041, 966
+  offset: 0, 0
+  index: -1
+
+Ch20_Combat3_Collapsing_Cliffs4.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,1
+  rotate: false
+  xy: 3, 3
+  size: 2000, 483
+  orig: 2000, 483
+  offset: 0, 0
+  index: -1

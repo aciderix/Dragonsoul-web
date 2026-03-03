@@ -1,0 +1,146 @@
+
+ui_experience.png
+size: 2048,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+flare_base
+  rotate: false
+  xy: 3, 47
+  size: 190, 195
+  orig: 200, 200
+  offset: 10, 5
+  index: -1
+spend_XP_ANIM
+  rotate: false
+  xy: 200, 101
+  size: 117, 141
+  orig: 150, 150
+  offset: 18, 3
+  index: 12
+spend_XP_ANIM
+  rotate: false
+  xy: 324, 101
+  size: 114, 141
+  orig: 150, 150
+  offset: 19, 3
+  index: 10
+spend_XP_ANIM
+  rotate: false
+  xy: 445, 101
+  size: 113, 141
+  orig: 150, 150
+  offset: 19, 3
+  index: 11
+spend_XP_ANIM
+  rotate: false
+  xy: 565, 102
+  size: 112, 140
+  orig: 150, 150
+  offset: 21, 3
+  index: 9
+spend_XP_ANIM
+  rotate: false
+  xy: 684, 101
+  size: 110, 141
+  orig: 150, 150
+  offset: 20, 3
+  index: 14
+spend_XP_ANIM
+  rotate: false
+  xy: 801, 101
+  size: 110, 141
+  orig: 150, 150
+  offset: 20, 3
+  index: 15
+spend_XP_ANIM
+  rotate: false
+  xy: 918, 101
+  size: 109, 141
+  orig: 150, 150
+  offset: 21, 3
+  index: 13
+spend_XP_ANIM
+  rotate: false
+  xy: 1034, 101
+  size: 107, 141
+  orig: 150, 150
+  offset: 22, 3
+  index: 16
+spend_XP_ANIM
+  rotate: false
+  xy: 1148, 101
+  size: 107, 141
+  orig: 150, 150
+  offset: 22, 3
+  index: 17
+spend_XP_ANIM
+  rotate: false
+  xy: 1262, 108
+  size: 106, 134
+  orig: 150, 150
+  offset: 23, 10
+  index: 18
+spend_XP_ANIM
+  rotate: false
+  xy: 1375, 121
+  size: 106, 121
+  orig: 150, 150
+  offset: 23, 23
+  index: 19
+spend_XP_ANIM
+  rotate: false
+  xy: 1488, 113
+  size: 94, 129
+  orig: 150, 150
+  offset: 23, 3
+  index: 8
+spend_XP_ANIM
+  rotate: false
+  xy: 1589, 149
+  size: 106, 93
+  orig: 150, 150
+  offset: 23, 51
+  index: 20
+spend_XP_ANIM
+  rotate: false
+  xy: 1808, 156
+  size: 92, 86
+  orig: 150, 150
+  offset: 24, 5
+  index: 7
+spend_XP_ANIM
+  rotate: false
+  xy: 1907, 177
+  size: 104, 65
+  orig: 150, 150
+  offset: 24, 79
+  index: 21
+spend_XP_ANIM
+  rotate: false
+  xy: 200, 44
+  size: 83, 50
+  orig: 150, 150
+  offset: 23, 5
+  index: 6
+spend_XP_ANIM
+  rotate: false
+  xy: 3, 3
+  size: 79, 37
+  orig: 150, 150
+  offset: 46, 106
+  index: 22
+spend_XP_ANIM
+  rotate: false
+  xy: 1589, 116
+  size: 68, 26
+  orig: 150, 150
+  offset: 38, 3
+  index: 5
+star_8point_A
+  rotate: false
+  xy: 1702, 142
+  size: 99, 100
+  orig: 100, 100
+  offset: 1, 0
+  index: -1

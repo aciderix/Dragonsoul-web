@@ -1,0 +1,48 @@
+
+misc.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+coffin_base
+  rotate: false
+  xy: 463, 95
+  size: 365, 569
+  orig: 510, 676
+  offset: 57, 48
+  index: -1
+coffin_glow
+  rotate: false
+  xy: 3, 14
+  size: 453, 650
+  orig: 510, 676
+  offset: 24, 15
+  index: -1
+coffin_lid
+  rotate: false
+  xy: 835, 77
+  size: 328, 587
+  orig: 510, 676
+  offset: 55, 36
+  index: -1
+shadow
+  rotate: false
+  xy: 1170, 531
+  size: 575, 133
+  orig: 576, 133
+  offset: 0, 0
+  index: -1
+shadow_temple
+  rotate: false
+  xy: 1170, 396
+  size: 576, 128
+  orig: 576, 133
+  offset: 0, 5
+  index: -1
+white
+  rotate: false
+  xy: 3, 3
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1

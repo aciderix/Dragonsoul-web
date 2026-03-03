@@ -1,0 +1,104 @@
+
+hero_dragon_lady.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+burst_impact1
+  rotate: false
+  xy: 885, 266
+  size: 102, 94
+  orig: 102, 95
+  offset: 0, 1
+  index: -1
+burst_trails1
+  rotate: false
+  xy: 413, 210
+  size: 28, 84
+  orig: 30, 100
+  offset: 1, 16
+  index: -1
+fireworks
+  rotate: false
+  xy: 379, 301
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+glow_bar_red
+  rotate: false
+  xy: 172, 132
+  size: 150, 157
+  orig: 163, 171
+  offset: 6, 7
+  index: -1
+hand_glow
+  rotate: false
+  xy: 172, 296
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+impact_dragon1
+  rotate: false
+  xy: 3, 68
+  size: 159, 166
+  orig: 159, 166
+  offset: 0, 0
+  index: -1
+lightning_ball
+  rotate: false
+  xy: 169, 3
+  size: 135, 122
+  orig: 150, 150
+  offset: 11, 12
+  index: -1
+lightning_beam
+  rotate: false
+  xy: 3, 241
+  size: 162, 255
+  orig: 162, 255
+  offset: 0, 0
+  index: -1
+lightning_orangeball
+  rotate: false
+  xy: 743, 223
+  size: 135, 122
+  orig: 150, 150
+  offset: 11, 12
+  index: -1
+newdragon
+  rotate: false
+  xy: 586, 352
+  size: 200, 144
+  orig: 200, 144
+  offset: 0, 0
+  index: -1
+pCloud1
+  rotate: false
+  xy: 329, 193
+  size: 77, 96
+  orig: 77, 96
+  offset: 0, 0
+  index: -1
+pHealGroundGlow
+  rotate: false
+  xy: 793, 367
+  size: 200, 129
+  orig: 200, 129
+  offset: 0, 0
+  index: -1
+particle
+  rotate: false
+  xy: 3, 30
+  size: 32, 31
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+star_blue
+  rotate: false
+  xy: 586, 204
+  size: 150, 141
+  orig: 150, 150
+  offset: 0, 7
+  index: -1

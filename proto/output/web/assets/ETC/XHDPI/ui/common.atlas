@@ -1,0 +1,1162 @@
+
+common.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+common/common/Popup_Bottom
+  rotate: false
+  xy: 1976, 216
+  size: 66, 41
+  split: 29, 27, 2, 33
+  orig: 66, 41
+  offset: 0, 0
+  index: -1
+common/common/Popup_Top
+  rotate: false
+  xy: 1383, 240
+  size: 42, 28
+  split: 17, 19, 20, 2
+  orig: 42, 28
+  offset: 0, 0
+  index: -1
+common/common/black_border_bottom
+  rotate: false
+  xy: 1432, 244
+  size: 80, 24
+  orig: 80, 25
+  offset: 0, 0
+  index: -1
+common/common/black_border_left
+  rotate: false
+  xy: 1383, 275
+  size: 24, 80
+  orig: 25, 80
+  offset: 0, 0
+  index: -1
+common/common/chat_cursor
+  rotate: false
+  xy: 224, 4
+  size: 4, 3
+  split: 0, 4, 0, 0
+  pad: -1, -1, 0, 0
+  orig: 4, 3
+  offset: 0, 0
+  index: -1
+common/common/difficulty_dont_even_try_glow
+  rotate: false
+  xy: 760, 236
+  size: 473, 325
+  orig: 500, 500
+  offset: 14, 72
+  index: -1
+common/common/difficulty_easy
+  rotate: false
+  xy: 784, 3
+  size: 200, 226
+  orig: 250, 250
+  offset: 27, 13
+  index: 2
+common/common/difficulty_extraorbital
+  rotate: false
+  xy: 1428, 340
+  size: 197, 223
+  orig: 250, 250
+  offset: 29, 13
+  index: 2
+common/common/difficulty_medium
+  rotate: false
+  xy: 1221, 4
+  size: 200, 225
+  orig: 250, 250
+  offset: 27, 14
+  index: 2
+common/common/difficulty_really_freakin_hard
+  rotate: false
+  xy: 991, 4
+  size: 223, 225
+  orig: 250, 250
+  offset: 16, 14
+  index: 2
+common/common/difficulty_really_m_ther_fu__in_hard_glow
+  rotate: false
+  xy: 405, 5
+  size: 372, 201
+  orig: 500, 500
+  offset: 59, 284
+  index: -1
+common/common/difficulty_sadistic
+  rotate: false
+  xy: 1428, 3
+  size: 234, 230
+  orig: 250, 250
+  offset: 9, 15
+  index: 2
+common/common/difficulty_unbearable
+  rotate: false
+  xy: 1669, 4
+  size: 234, 230
+  orig: 250, 250
+  offset: 9, 14
+  index: 2
+common/common/effect_hard_as_f__k_
+  rotate: false
+  xy: 3, 553
+  size: 281, 467
+  orig: 500, 500
+  offset: 110, 23
+  index: -1
+common/common/effect_really_freakin_easy
+  rotate: false
+  xy: 1632, 241
+  size: 252, 217
+  orig: 500, 500
+  offset: 116, 153
+  index: -1
+common/common/effect_really_freakin_hard
+  rotate: false
+  xy: 291, 665
+  size: 437, 355
+  orig: 500, 500
+  offset: 7, 104
+  index: -1
+common/common/gear_unavailable
+  rotate: false
+  xy: 1383, 362
+  size: 34, 52
+  orig: 40, 58
+  offset: 3, 3
+  index: -1
+common/common/guild_token
+  rotate: false
+  xy: 892, 573
+  size: 158, 148
+  orig: 205, 196
+  offset: 20, 22
+  index: -1
+common/common/hero_type_tank
+  rotate: false
+  xy: 735, 728
+  size: 300, 292
+  orig: 300, 300
+  offset: 0, 8
+  index: -1
+common/common/icon_arena_coin
+  rotate: false
+  xy: 1912, 827
+  size: 128, 125
+  orig: 142, 143
+  offset: 7, 11
+  index: -1
+common/common/icon_check
+  rotate: false
+  xy: 1912, 555
+  size: 124, 124
+  orig: 200, 200
+  offset: 38, 36
+  index: -1
+common/common/icon_check_large
+  rotate: false
+  xy: 3, 188
+  size: 353, 358
+  orig: 404, 410
+  offset: 26, 26
+  index: -1
+common/common/icon_dead
+  rotate: false
+  xy: 1912, 959
+  size: 130, 61
+  orig: 153, 80
+  offset: 12, 9
+  index: -1
+common/common/icon_evolve
+  rotate: false
+  xy: 363, 213
+  size: 390, 334
+  orig: 500, 411
+  offset: 55, 45
+  index: -1
+common/common/icon_expedition_shop
+  rotate: false
+  xy: 1057, 568
+  size: 152, 156
+  orig: 205, 196
+  offset: 26, 17
+  index: -1
+common/common/icon_fast_forward
+  rotate: false
+  xy: 1383, 421
+  size: 35, 20
+  orig: 48, 31
+  offset: 7, 6
+  index: -1
+common/common/icon_green_plus
+  rotate: false
+  xy: 1891, 242
+  size: 78, 78
+  orig: 78, 80
+  offset: 0, 1
+  index: -1
+common/common/icon_heroes
+  rotate: false
+  xy: 1240, 249
+  size: 136, 192
+  orig: 218, 200
+  offset: 36, 5
+  index: -1
+common/common/icon_loot
+  rotate: false
+  xy: 422, 557
+  size: 151, 101
+  orig: 168, 116
+  offset: 4, 11
+  index: -1
+common/common/icon_loot_dropped
+  rotate: false
+  xy: 1240, 448
+  size: 168, 115
+  orig: 168, 116
+  offset: 0, 0
+  index: -1
+common/common/icon_pause
+  rotate: false
+  xy: 1519, 247
+  size: 22, 21
+  orig: 33, 31
+  offset: 5, 5
+  index: -1
+common/common/icon_plus
+  rotate: false
+  xy: 580, 558
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+common/common/icon_pvp_shop
+  rotate: false
+  xy: 291, 554
+  size: 124, 104
+  orig: 124, 104
+  offset: 0, 0
+  index: -1
+common/common/icon_record
+  rotate: false
+  xy: 1571, 282
+  size: 51, 51
+  orig: 73, 71
+  offset: 10, 9
+  index: -1
+common/common/icon_scrolls
+  rotate: false
+  xy: 3, 4
+  size: 214, 177
+  orig: 218, 200
+  offset: 1, 23
+  index: -1
+common/common/icon_used
+  rotate: false
+  xy: 1912, 488
+  size: 123, 60
+  orig: 153, 80
+  offset: 13, 11
+  index: -1
+common/common/icon_used_french
+  rotate: false
+  xy: 1891, 327
+  size: 149, 70
+  orig: 153, 80
+  offset: 3, 6
+  index: -1
+common/common/icon_used_german
+  rotate: false
+  xy: 1891, 404
+  size: 150, 54
+  orig: 153, 80
+  offset: 1, 12
+  index: -1
+common/common/icon_xp
+  rotate: false
+  xy: 224, 14
+  size: 174, 167
+  orig: 186, 173
+  offset: 9, 3
+  index: -1
+common/common/list_glow
+  rotate: false
+  xy: 1976, 264
+  size: 68, 56
+  split: 13, 23, 21, 23
+  pad: 10, 23, 13, 14
+  orig: 68, 56
+  offset: 0, 0
+  index: -1
+common/common/mailbox_icon_arena
+  rotate: false
+  xy: 1632, 465
+  size: 273, 265
+  orig: 300, 300
+  offset: 13, 19
+  index: -1
+common/common/mailbox_icon_arena_defense
+  rotate: false
+  xy: 1608, 737
+  size: 297, 283
+  orig: 300, 300
+  offset: 1, 12
+  index: -1
+common/common/mailbox_icon_contests
+  rotate: false
+  xy: 1042, 731
+  size: 276, 289
+  orig: 300, 300
+  offset: 0, 1
+  index: -1
+common/common/mailbox_icon_crypt_raid
+  rotate: false
+  xy: 1325, 731
+  size: 276, 289
+  orig: 300, 300
+  offset: 0, 1
+  index: -1
+common/common/on_off_switch_bg
+  rotate: false
+  xy: 1216, 570
+  size: 409, 154
+  orig: 409, 163
+  offset: 0, 5
+  index: -1
+common/common/on_off_switch_bg_small
+  rotate: false
+  xy: 735, 665
+  size: 150, 56
+  orig: 150, 58
+  offset: 0, 1
+  index: -1
+common/common/on_off_switch_bg_small_patch
+  rotate: false
+  xy: 1414, 275
+  size: 150, 58
+  split: 42, 40, 0, 58
+  pad: 26, 26, -1, -1
+  orig: 150, 58
+  offset: 0, 0
+  index: -1
+common/common/popup_bg
+  rotate: false
+  xy: 1548, 249
+  size: 18, 19
+  orig: 18, 19
+  offset: 0, 0
+  index: -1
+common/common/round_box
+  rotate: false
+  xy: 785, 574
+  size: 32, 32
+  split: 13, 12, 8, 11
+  pad: -1, -1, 9, 11
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+common/common/sale_badge_right_corner
+  rotate: false
+  xy: 687, 568
+  size: 91, 90
+  orig: 91, 90
+  offset: 0, 0
+  index: -1
+common/common/scroll_more
+  rotate: false
+  xy: 363, 194
+  size: 29, 12
+  orig: 29, 12
+  offset: 0, 0
+  index: -1
+common/common/settings_dark
+  rotate: false
+  xy: 1910, 174
+  size: 59, 61
+  orig: 65, 64
+  offset: 3, 2
+  index: -1
+common/common/single_arrow_left
+  rotate: false
+  xy: 1910, 9
+  size: 117, 158
+  orig: 137, 174
+  offset: 5, 8
+  index: -1
+common/common/sort
+  rotate: false
+  xy: 824, 577
+  size: 42, 29
+  orig: 42, 30
+  offset: 0, 0
+  index: -1
+common/common/tooltip_sale
+  rotate: false
+  xy: 785, 613
+  size: 96, 45
+  orig: 101, 47
+  offset: 3, 0
+  index: -1
+common/common/war_token
+  rotate: false
+  xy: 1912, 686
+  size: 124, 134
+  orig: 125, 139
+  offset: 0, 3
+  index: -1
+common/common/white_square
+  rotate: false
+  xy: 1573, 256
+  size: 18, 19
+  orig: 18, 19
+  offset: 0, 0
+  index: -1
+
+common2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+common/common/arrow_green
+  rotate: false
+  xy: 1319, 209
+  size: 42, 40
+  orig: 51, 47
+  offset: 5, 3
+  index: -1
+common/common/black_border_right
+  rotate: false
+  xy: 2013, 940
+  size: 24, 80
+  orig: 25, 80
+  offset: 1, 0
+  index: -1
+common/common/chevron_how_to_get
+  rotate: false
+  xy: 1996, 89
+  size: 43, 59
+  orig: 50, 64
+  offset: 5, 3
+  index: -1
+common/common/difficulty_abysmal
+  rotate: false
+  xy: 1425, 3
+  size: 250, 246
+  orig: 250, 250
+  offset: 0, 2
+  index: -1
+common/common/difficulty_brutal
+  rotate: false
+  xy: 1774, 288
+  size: 250, 246
+  orig: 250, 250
+  offset: 0, 2
+  index: -1
+common/common/difficulty_dont_even_try
+  rotate: false
+  xy: 938, 513
+  size: 246, 250
+  orig: 250, 250
+  offset: 2, 0
+  index: -1
+common/common/difficulty_hard
+  rotate: false
+  xy: 1156, 770
+  size: 222, 250
+  orig: 250, 250
+  offset: 14, 0
+  index: -1
+common/common/difficulty_heart_ripping
+  rotate: false
+  xy: 1385, 770
+  size: 219, 250
+  orig: 250, 250
+  offset: 15, 0
+  index: -1
+common/common/difficulty_inter_dimensional
+  rotate: false
+  xy: 1420, 513
+  size: 214, 250
+  orig: 250, 250
+  offset: 18, 0
+  index: -1
+common/common/difficulty_medium
+  rotate: false
+  xy: 1545, 257
+  size: 222, 249
+  orig: 250, 250
+  offset: 14, 1
+  index: -1
+common/common/difficulty_really_freakin_easy
+  rotate: false
+  xy: 1191, 513
+  size: 222, 250
+  orig: 250, 250
+  offset: 14, 0
+  index: -1
+common/common/difficulty_really_freakin_hard
+  rotate: false
+  xy: 901, 770
+  size: 248, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+common/common/difficulty_really_m_ther_fu__in_hard
+  rotate: false
+  xy: 1319, 256
+  size: 219, 250
+  orig: 250, 250
+  offset: 15, 0
+  index: -1
+common/common/difficulty_soulless
+  rotate: false
+  xy: 1682, 3
+  size: 219, 247
+  orig: 250, 250
+  offset: 14, 3
+  index: -1
+common/common/effect_easy
+  rotate: false
+  xy: 873, 209
+  size: 439, 257
+  orig: 500, 500
+  offset: 40, 229
+  index: -1
+common/common/effect_hard
+  rotate: false
+  xy: 1611, 791
+  size: 395, 229
+  orig: 500, 500
+  offset: 53, 271
+  index: -1
+common/common/effect_medium
+  rotate: false
+  xy: 504, 473
+  size: 427, 268
+  orig: 500, 500
+  offset: 16, 232
+  index: -1
+common/common/gRays_light
+  rotate: false
+  xy: 1004, 5
+  size: 199, 197
+  orig: 200, 200
+  offset: 0, 1
+  index: -1
+common/common/generic_bg
+  rotate: false
+  xy: 1993, 32
+  size: 50, 50
+  split: 1, 1, 3, 2
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+common/common/hero_type_control
+  rotate: false
+  xy: 3, 741
+  size: 293, 279
+  orig: 300, 300
+  offset: 7, 8
+  index: -1
+common/common/hero_type_dps
+  rotate: false
+  xy: 3, 172
+  size: 300, 276
+  orig: 300, 300
+  offset: 0, 24
+  index: -1
+common/common/hero_type_support
+  rotate: false
+  xy: 3, 455
+  size: 293, 279
+  orig: 300, 300
+  offset: 7, 8
+  index: -1
+common/common/icon_achievements
+  rotate: false
+  xy: 791, 7
+  size: 206, 188
+  orig: 218, 200
+  offset: 6, 6
+  index: -1
+common/common/icon_gem
+  rotate: false
+  xy: 1641, 674
+  size: 105, 110
+  orig: 125, 125
+  offset: 10, 8
+  index: -1
+common/common/icon_gold
+  rotate: false
+  xy: 1908, 204
+  size: 81, 77
+  orig: 81, 90
+  offset: 0, 7
+  index: -1
+common/common/icon_hero_shard
+  rotate: false
+  xy: 1908, 120
+  size: 81, 77
+  orig: 81, 79
+  offset: 0, 0
+  index: -1
+common/common/icon_inventory
+  rotate: false
+  xy: 375, 6
+  size: 188, 182
+  orig: 218, 200
+  offset: 15, 8
+  index: -1
+common/common/icon_loading
+  rotate: false
+  xy: 1210, 6
+  size: 208, 196
+  orig: 225, 225
+  offset: 8, 10
+  index: -1
+common/common/icon_mercinary
+  rotate: false
+  xy: 1641, 546
+  size: 70, 121
+  orig: 120, 145
+  offset: 21, 15
+  index: -1
+common/common/icon_messages
+  rotate: false
+  xy: 570, 7
+  size: 214, 181
+  orig: 218, 200
+  offset: 4, 19
+  index: -1
+common/common/icon_name_generator
+  rotate: false
+  xy: 1718, 610
+  size: 49, 57
+  orig: 49, 57
+  offset: 0, 0
+  index: -1
+common/common/icon_stamina
+  rotate: false
+  xy: 1996, 155
+  size: 45, 72
+  orig: 94, 94
+  offset: 25, 10
+  index: -1
+common/common/item_state_container
+  rotate: false
+  xy: 1908, 4
+  size: 78, 78
+  orig: 78, 78
+  offset: 0, 0
+  index: -1
+common/common/item_state_ready_to_equip
+  rotate: false
+  xy: 1718, 556
+  size: 47, 47
+  orig: 63, 63
+  offset: 8, 8
+  index: -1
+common/common/item_state_too_low_level
+  rotate: false
+  xy: 1996, 234
+  size: 47, 47
+  orig: 63, 63
+  offset: 8, 8
+  index: -1
+common/common/mailbox_icon_daily_purchase
+  rotate: false
+  xy: 303, 748
+  size: 284, 272
+  orig: 300, 300
+  offset: 0, 12
+  index: -1
+common/common/mailbox_icon_new_user
+  rotate: false
+  xy: 310, 195
+  size: 276, 269
+  orig: 300, 300
+  offset: 0, 21
+  index: -1
+common/common/mailbox_icon_new_user_arena
+  rotate: false
+  xy: 594, 752
+  size: 300, 268
+  orig: 300, 300
+  offset: 0, 19
+  index: -1
+common/common/mailbox_icon_team_challenge
+  rotate: false
+  xy: 593, 202
+  size: 273, 264
+  orig: 300, 300
+  offset: 13, 16
+  index: -1
+common/common/mailbox_icon_vip_gem
+  rotate: false
+  xy: 1774, 541
+  size: 252, 243
+  orig: 300, 300
+  offset: 18, 33
+  index: -1
+common/common/runicite
+  rotate: false
+  xy: 303, 471
+  size: 194, 270
+  orig: 300, 300
+  offset: 53, 15
+  index: -1
+common/common/single_arrow_left_orange
+  rotate: false
+  xy: 3, 7
+  size: 117, 158
+  orig: 137, 174
+  offset: 5, 8
+  index: -1
+common/common/single_arrow_right
+  rotate: false
+  xy: 127, 7
+  size: 117, 158
+  orig: 137, 174
+  offset: 14, 9
+  index: -1
+common/common/single_arrow_right_orange
+  rotate: false
+  xy: 251, 7
+  size: 117, 158
+  orig: 137, 174
+  offset: 14, 9
+  index: -1
+
+common3.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+common/common/arrow_stat_upgrade
+  rotate: false
+  xy: 1459, 17
+  size: 145, 46
+  orig: 156, 56
+  offset: 5, 4
+  index: -1
+common/common/check_box_legendary
+  rotate: false
+  xy: 1695, 12
+  size: 76, 76
+  orig: 90, 85
+  offset: 7, 4
+  index: -1
+common/common/difficulty_abysmal
+  rotate: false
+  xy: 1174, 301
+  size: 233, 230
+  orig: 250, 250
+  offset: 9, 14
+  index: 2
+common/common/difficulty_brutal
+  rotate: false
+  xy: 1409, 556
+  size: 232, 228
+  orig: 250, 250
+  offset: 10, 16
+  index: 2
+common/common/difficulty_city_ender
+  rotate: false
+  xy: 449, 7
+  size: 214, 246
+  orig: 250, 250
+  offset: 20, 2
+  index: -1
+common/common/difficulty_death_incarnate
+  rotate: false
+  xy: 3, 3
+  size: 217, 249
+  orig: 250, 250
+  offset: 17, 0
+  index: -1
+common/common/difficulty_death_incarnate
+  rotate: false
+  xy: 1414, 325
+  size: 194, 224
+  orig: 250, 250
+  offset: 33, 16
+  index: 2
+common/common/difficulty_dont_even_try
+  rotate: false
+  xy: 1443, 792
+  size: 225, 228
+  orig: 250, 250
+  offset: 17, 15
+  index: 2
+common/common/difficulty_easy
+  rotate: false
+  xy: 3, 771
+  size: 221, 249
+  orig: 250, 250
+  offset: 14, 1
+  index: -1
+common/common/difficulty_extraorbital
+  rotate: false
+  xy: 3, 259
+  size: 219, 249
+  orig: 250, 250
+  offset: 14, 0
+  index: -1
+common/common/difficulty_fatal_solitude
+  rotate: false
+  xy: 229, 260
+  size: 220, 248
+  orig: 250, 250
+  offset: 15, 2
+  index: -1
+common/common/difficulty_freestyle_agony
+  rotate: false
+  xy: 969, 287
+  size: 198, 234
+  orig: 250, 250
+  offset: 25, 7
+  index: -1
+common/common/difficulty_ghastly_scream
+  rotate: false
+  xy: 3, 515
+  size: 220, 249
+  orig: 250, 250
+  offset: 15, 1
+  index: -1
+common/common/difficulty_hard
+  rotate: false
+  xy: 1390, 70
+  size: 198, 224
+  orig: 250, 250
+  offset: 29, 15
+  index: 2
+common/common/difficulty_hard_as_f__k_
+  rotate: false
+  xy: 227, 3
+  size: 215, 249
+  orig: 250, 250
+  offset: 17, 0
+  index: -1
+common/common/difficulty_hard_as_f__k_
+  rotate: false
+  xy: 1240, 791
+  size: 196, 229
+  orig: 250, 250
+  offset: 29, 15
+  index: 2
+common/common/difficulty_heart_ripping
+  rotate: false
+  xy: 1818, 334
+  size: 194, 220
+  orig: 250, 250
+  offset: 31, 14
+  index: 2
+common/common/difficulty_inter_dimensional
+  rotate: false
+  xy: 1595, 95
+  size: 191, 223
+  orig: 250, 250
+  offset: 33, 15
+  index: 2
+common/common/difficulty_really_freakin_easy
+  rotate: false
+  xy: 1181, 67
+  size: 202, 227
+  orig: 250, 250
+  offset: 26, 11
+  index: 2
+common/common/difficulty_really_m_ther_fu__in_hard
+  rotate: false
+  xy: 1203, 553
+  size: 199, 230
+  orig: 250, 250
+  offset: 27, 15
+  index: 2
+common/common/difficulty_sadistic
+  rotate: false
+  xy: 230, 518
+  size: 250, 246
+  orig: 250, 250
+  offset: 0, 1
+  index: -1
+common/common/difficulty_soulless
+  rotate: false
+  xy: 1615, 328
+  size: 196, 221
+  orig: 250, 250
+  offset: 31, 15
+  index: 2
+common/common/difficulty_suicide_night
+  rotate: false
+  xy: 998, 538
+  size: 198, 234
+  orig: 250, 250
+  offset: 25, 7
+  index: -1
+common/common/difficulty_umlaut_my_______
+  rotate: false
+  xy: 712, 273
+  size: 250, 242
+  orig: 250, 250
+  offset: 0, 4
+  index: 2
+common/common/difficulty_umlaut_my_______
+  rotate: false
+  xy: 742, 779
+  size: 250, 241
+  orig: 250, 250
+  offset: 0, 4
+  index: -1
+common/common/difficulty_unbearable
+  rotate: false
+  xy: 231, 774
+  size: 250, 246
+  orig: 250, 250
+  offset: 0, 2
+  index: -1
+common/common/difficulty_video_game_hell
+  rotate: false
+  xy: 741, 528
+  size: 250, 242
+  orig: 250, 250
+  offset: 0, 4
+  index: 2
+common/common/difficulty_video_game_hell
+  rotate: false
+  xy: 924, 25
+  size: 250, 241
+  orig: 250, 250
+  offset: 0, 4
+  index: -1
+common/common/difficulty_world_ender
+  rotate: false
+  xy: 1793, 105
+  size: 247, 216
+  orig: 250, 250
+  offset: 3, 17
+  index: -1
+common/common/difficulty_wretched
+  rotate: false
+  xy: 456, 266
+  size: 249, 245
+  orig: 250, 250
+  offset: 0, 2
+  index: -1
+common/common/difficulty_wretched
+  rotate: false
+  xy: 999, 790
+  size: 234, 230
+  orig: 250, 250
+  offset: 9, 14
+  index: 2
+common/common/double_arrow_right_glow
+  rotate: false
+  xy: 1793, 561
+  size: 185, 154
+  orig: 199, 174
+  offset: 8, 12
+  index: -1
+common/common/hud_resource_bg
+  rotate: false
+  xy: 1675, 888
+  size: 308, 132
+  orig: 308, 132
+  offset: 0, 0
+  index: -1
+common/common/icon_blue_plus
+  rotate: false
+  xy: 1611, 12
+  size: 77, 76
+  orig: 78, 80
+  offset: 1, 2
+  index: -1
+common/common/icon_green
+  rotate: false
+  xy: 1675, 805
+  size: 75, 76
+  orig: 78, 79
+  offset: 1, 1
+  index: -1
+common/common/icon_grey_plus
+  rotate: false
+  xy: 1778, 12
+  size: 76, 76
+  orig: 78, 80
+  offset: 1, 2
+  index: -1
+common/common/icon_grey_plus2
+  rotate: false
+  xy: 1943, 26
+  size: 73, 72
+  orig: 78, 80
+  offset: 2, 4
+  index: -1
+common/common/icon_quick_attack
+  rotate: false
+  xy: 1394, 4
+  size: 58, 59
+  orig: 58, 59
+  offset: 0, 0
+  index: -1
+common/common/icon_red
+  rotate: false
+  xy: 1648, 570
+  size: 75, 76
+  orig: 78, 79
+  offset: 1, 1
+  index: -1
+common/common/icon_skill_points
+  rotate: false
+  xy: 1861, 24
+  size: 75, 74
+  orig: 78, 80
+  offset: 1, 3
+  index: -1
+common/common/icon_used_spanish
+  rotate: false
+  xy: 1181, 3
+  size: 140, 57
+  orig: 153, 80
+  offset: 5, 11
+  index: -1
+common/common/item_state_go_get
+  rotate: false
+  xy: 1328, 8
+  size: 59, 52
+  orig: 63, 63
+  offset: 2, 5
+  index: -1
+common/common/mailbox_icon_battlepoints
+  rotate: false
+  xy: 488, 777
+  size: 247, 243
+  orig: 300, 300
+  offset: 24, 33
+  index: -1
+common/common/mailbox_icon_global
+  rotate: false
+  xy: 670, 16
+  size: 247, 243
+  orig: 300, 300
+  offset: 24, 33
+  index: -1
+common/common/mercinary_mail
+  rotate: false
+  xy: 487, 522
+  size: 247, 245
+  orig: 300, 300
+  offset: 24, 31
+  index: -1
+common/common/soulmart_token
+  rotate: false
+  xy: 1648, 653
+  size: 138, 132
+  orig: 142, 143
+  offset: 4, 0
+  index: -1
+common/common/unsummoned_left
+  rotate: false
+  xy: 1793, 805
+  size: 250, 76
+  orig: 250, 76
+  offset: 0, 0
+  index: -1
+common/common/unsummoned_right
+  rotate: false
+  xy: 1793, 722
+  size: 250, 76
+  orig: 250, 76
+  offset: 0, 0
+  index: -1
+
+common4.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+common/common/difficulty_angry_fear
+  rotate: false
+  xy: 256, 71
+  size: 216, 219
+  orig: 250, 250
+  offset: 16, 10
+  index: -1
+common/common/difficulty_bomb_of_bombs
+  rotate: false
+  xy: 3, 74
+  size: 246, 216
+  orig: 250, 250
+  offset: 2, 15
+  index: -1
+common/common/difficulty_pea_in_a_lake
+  rotate: false
+  xy: 479, 71
+  size: 216, 219
+  orig: 250, 250
+  offset: 16, 10
+  index: -1
+common/common/difficulty_pea_in_a_pond
+  rotate: false
+  xy: 850, 271
+  size: 216, 219
+  orig: 250, 250
+  offset: 16, 10
+  index: -1
+common/common/difficulty_pea_in_the_sea
+  rotate: false
+  xy: 1073, 271
+  size: 216, 219
+  orig: 250, 250
+  offset: 16, 10
+  index: -1
+common/common/difficulty_pin_in_haystack
+  rotate: false
+  xy: 1296, 271
+  size: 216, 219
+  orig: 250, 250
+  offset: 16, 10
+  index: -1
+common/common/double_arrow_right
+  rotate: false
+  xy: 678, 358
+  size: 165, 132
+  orig: 199, 174
+  offset: 18, 24
+  index: -1
+common/common/icon_hero_skin
+  rotate: false
+  xy: 3, 3
+  size: 73, 64
+  orig: 81, 79
+  offset: 4, 7
+  index: -1
+common/common/icon_team_level_up
+  rotate: false
+  xy: 3, 297
+  size: 668, 193
+  orig: 668, 199
+  offset: 0, 6
+  index: -1
+common/common/icon_ticket_vip
+  rotate: false
+  xy: 1849, 373
+  size: 157, 117
+  orig: 174, 132
+  offset: 4, 8
+  index: -1
+common/common/single_arrow_down
+  rotate: false
+  xy: 1519, 373
+  size: 158, 117
+  orig: 174, 137
+  offset: 9, 6
+  index: -1
+common/common/single_arrow_up
+  rotate: false
+  xy: 1684, 373
+  size: 158, 117
+  orig: 174, 137
+  offset: 7, 14
+  index: -1

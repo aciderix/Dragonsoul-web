@@ -1,0 +1,209 @@
+
+monster_phys_golem.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+crystal01-b
+  rotate: false
+  xy: 877, 158
+  size: 21, 34
+  orig: 21, 34
+  offset: 0, 0
+  index: -1
+crystal010-f
+  rotate: false
+  xy: 398, 25
+  size: 40, 55
+  orig: 40, 55
+  offset: 0, 0
+  index: -1
+crystal011-f
+  rotate: false
+  xy: 793, 188
+  size: 69, 64
+  orig: 69, 64
+  offset: 0, 0
+  index: -1
+crystal02-b
+  rotate: false
+  xy: 358, 7
+  size: 23, 38
+  orig: 23, 38
+  offset: 0, 0
+  index: -1
+crystal03-b
+  rotate: false
+  xy: 205, 10
+  size: 26, 34
+  orig: 26, 34
+  offset: 0, 0
+  index: -1
+crystal04-b
+  rotate: false
+  xy: 250, 3
+  size: 55, 42
+  orig: 55, 42
+  offset: 0, 0
+  index: -1
+crystal05-b
+  rotate: false
+  xy: 793, 138
+  size: 46, 43
+  orig: 46, 43
+  offset: 0, 0
+  index: -1
+crystal05-f
+  rotate: false
+  xy: 905, 157
+  size: 16, 35
+  orig: 16, 35
+  offset: 0, 0
+  index: -1
+crystal06-f
+  rotate: false
+  xy: 349, 84
+  size: 33, 60
+  orig: 33, 60
+  offset: 0, 0
+  index: -1
+crystal07-f
+  rotate: false
+  xy: 460, 74
+  size: 23, 69
+  orig: 23, 69
+  offset: 0, 0
+  index: -1
+crystal08-f
+  rotate: false
+  xy: 124, 6
+  size: 29, 38
+  orig: 29, 38
+  offset: 0, 0
+  index: -1
+crystal09-f
+  rotate: false
+  xy: 846, 125
+  size: 24, 56
+  orig: 24, 56
+  offset: 0, 0
+  index: -1
+foot-b
+  rotate: false
+  xy: 349, 52
+  size: 42, 25
+  orig: 42, 25
+  offset: 0, 0
+  index: -1
+foot-f
+  rotate: false
+  xy: 3, 18
+  size: 61, 26
+  orig: 61, 26
+  offset: 0, 0
+  index: -1
+head_jaw_closed
+  rotate: false
+  xy: 250, 52
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+head_jaw_open
+  rotate: false
+  xy: 391, 150
+  size: 92, 102
+  orig: 92, 102
+  offset: 0, 0
+  index: -1
+lower_arm-b
+  rotate: false
+  xy: 869, 199
+  size: 69, 53
+  orig: 69, 53
+  offset: 0, 0
+  index: -1
+lower_arm-f
+  rotate: false
+  xy: 655, 169
+  size: 64, 83
+  orig: 64, 83
+  offset: 0, 0
+  index: -1
+lower_leg-f
+  rotate: false
+  xy: 945, 199
+  size: 66, 53
+  orig: 66, 53
+  offset: 0, 0
+  index: -1
+lower_leg_b
+  rotate: false
+  xy: 312, 3
+  size: 39, 42
+  orig: 39, 42
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 726, 159
+  size: 60, 93
+  orig: 60, 93
+  offset: 0, 0
+  index: -1
+palm-b
+  rotate: false
+  xy: 389, 87
+  size: 64, 56
+  orig: 64, 56
+  offset: 0, 0
+  index: -1
+palm-f
+  rotate: false
+  xy: 565, 168
+  size: 83, 84
+  orig: 83, 84
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 3, 51
+  size: 240, 201
+  orig: 240, 201
+  offset: 0, 0
+  index: -1
+upper_arm-b
+  rotate: false
+  xy: 490, 102
+  size: 68, 150
+  orig: 68, 150
+  offset: 0, 0
+  index: -1
+upper_arm-f
+  rotate: false
+  xy: 250, 151
+  size: 134, 101
+  orig: 134, 101
+  offset: 0, 0
+  index: -1
+upper_arm02-f
+  rotate: false
+  xy: 565, 103
+  size: 78, 58
+  orig: 78, 58
+  offset: 0, 0
+  index: -1
+upper_leg-b
+  rotate: false
+  xy: 160, 15
+  size: 38, 29
+  orig: 38, 29
+  offset: 0, 0
+  index: -1
+upper_leg-f
+  rotate: false
+  xy: 71, 6
+  size: 46, 38
+  orig: 46, 38
+  offset: 0, 0
+  index: -1

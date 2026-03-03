@@ -1,0 +1,356 @@
+
+hero_faith_healer.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+behind_glow
+  rotate: false
+  xy: 595, 820
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+book_and_blur
+  rotate: false
+  xy: 3, 801
+  size: 585, 219
+  orig: 900, 300
+  offset: 0, 41
+  index: -1
+book_glow
+  rotate: false
+  xy: 3, 523
+  size: 356, 271
+  orig: 356, 271
+  offset: 0, 0
+  index: -1
+burst_impact1
+  rotate: false
+  xy: 1937, 926
+  size: 102, 94
+  orig: 102, 95
+  offset: 0, 1
+  index: -1
+cloud4
+  rotate: false
+  xy: 366, 610
+  size: 188, 184
+  orig: 188, 184
+  offset: 0, 0
+  index: -1
+clover
+  rotate: false
+  xy: 969, 688
+  size: 132, 130
+  orig: 139, 139
+  offset: 3, 4
+  index: -1
+glow_bar
+  rotate: false
+  xy: 3, 74
+  size: 113, 251
+  orig: 120, 256
+  offset: 3, 5
+  index: -1
+glow_ring
+  rotate: false
+  xy: 1523, 775
+  size: 180, 79
+  orig: 180, 120
+  offset: 0, 19
+  index: 0
+glow_ring
+  rotate: false
+  xy: 123, 78
+  size: 180, 81
+  orig: 180, 120
+  offset: 0, 20
+  index: 5
+glow_ring
+  rotate: false
+  xy: 595, 735
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 1
+glow_ring
+  rotate: false
+  xy: 561, 648
+  size: 180, 80
+  orig: 180, 120
+  offset: 0, 20
+  index: 6
+glow_ring
+  rotate: false
+  xy: 782, 729
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 2
+glow_ring
+  rotate: false
+  xy: 748, 644
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 3
+glow_ring
+  rotate: false
+  xy: 1108, 725
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 4
+glow_ring
+  rotate: false
+  xy: 1108, 640
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 7
+glow_ring
+  rotate: false
+  xy: 730, 559
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 8
+glow_ring
+  rotate: false
+  xy: 730, 474
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 9
+glowline
+  rotate: false
+  xy: 3, 332
+  size: 200, 184
+  orig: 200, 200
+  offset: 0, 16
+  index: -1
+heal_plus
+  rotate: false
+  xy: 310, 67
+  size: 95, 95
+  orig: 95, 95
+  offset: 0, 0
+  index: -1
+horseshoe
+  rotate: false
+  xy: 123, 166
+  size: 125, 159
+  orig: 150, 162
+  offset: 13, 2
+  index: -1
+looping
+  rotate: false
+  xy: 573, 568
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 0
+looping
+  rotate: false
+  xy: 573, 488
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 1
+looping
+  rotate: false
+  xy: 1520, 695
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 2
+looping
+  rotate: false
+  xy: 935, 608
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 3
+looping
+  rotate: false
+  xy: 917, 528
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 4
+looping
+  rotate: false
+  xy: 917, 448
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 5
+looping
+  rotate: false
+  xy: 1092, 560
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 6
+looping
+  rotate: false
+  xy: 1074, 480
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 7
+looping
+  rotate: false
+  xy: 1074, 400
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 8
+looping
+  rotate: false
+  xy: 1520, 615
+  size: 150, 73
+  orig: 150, 84
+  offset: 0, 3
+  index: 9
+magic
+  rotate: false
+  xy: 802, 814
+  size: 145, 206
+  orig: 152, 256
+  offset: 0, 9
+  index: 4
+magic
+  rotate: false
+  xy: 954, 825
+  size: 148, 195
+  orig: 152, 256
+  offset: 3, 46
+  index: 5
+magic
+  rotate: false
+  xy: 210, 334
+  size: 139, 182
+  orig: 152, 256
+  offset: 0, 0
+  index: 3
+magic
+  rotate: false
+  xy: 1295, 645
+  size: 134, 127
+  orig: 152, 256
+  offset: 0, 0
+  index: 2
+magic
+  rotate: false
+  xy: 366, 455
+  size: 111, 66
+  orig: 152, 256
+  offset: 3, 0
+  index: 1
+magic
+  rotate: false
+  xy: 1710, 853
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: 0
+moon
+  rotate: false
+  xy: 255, 169
+  size: 140, 158
+  orig: 150, 165
+  offset: 4, 3
+  index: -1
+pHealGroundGlow
+  rotate: false
+  xy: 1109, 891
+  size: 200, 129
+  orig: 200, 129
+  offset: 0, 0
+  index: -1
+particle
+  rotate: false
+  xy: 1937, 888
+  size: 32, 31
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+pastel_charm
+  rotate: false
+  xy: 3, 3
+  size: 200, 64
+  orig: 200, 83
+  offset: 0, 12
+  index: 9
+pastel_charm
+  rotate: false
+  xy: 1316, 942
+  size: 200, 78
+  orig: 200, 83
+  offset: 0, 0
+  index: 2
+pastel_charm
+  rotate: false
+  xy: 1523, 943
+  size: 200, 77
+  orig: 200, 83
+  offset: 0, 1
+  index: 1
+pastel_charm
+  rotate: false
+  xy: 1730, 944
+  size: 200, 76
+  orig: 200, 83
+  offset: 0, 0
+  index: 4
+pastel_charm
+  rotate: false
+  xy: 366, 528
+  size: 200, 75
+  orig: 200, 83
+  offset: 0, 0
+  index: 5
+pastel_charm
+  rotate: false
+  xy: 1109, 810
+  size: 200, 74
+  orig: 200, 83
+  offset: 0, 4
+  index: 0
+pastel_charm
+  rotate: false
+  xy: 1316, 860
+  size: 200, 75
+  orig: 200, 83
+  offset: 0, 0
+  index: 6
+pastel_charm
+  rotate: false
+  xy: 1523, 861
+  size: 200, 75
+  orig: 200, 83
+  offset: 0, 0
+  index: 7
+pastel_charm
+  rotate: false
+  xy: 1730, 863
+  size: 200, 74
+  orig: 200, 83
+  offset: 0, 3
+  index: 3
+pastel_charm
+  rotate: false
+  xy: 1316, 779
+  size: 200, 74
+  orig: 200, 83
+  offset: 0, 0
+  index: 8
+puff_cloud
+  rotate: false
+  xy: 1436, 689
+  size: 77, 83
+  orig: 77, 83
+  offset: 0, 0
+  index: -1

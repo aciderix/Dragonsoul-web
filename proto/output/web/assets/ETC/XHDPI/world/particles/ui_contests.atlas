@@ -1,0 +1,153 @@
+
+ui_contests.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Fluffy
+  rotate: false
+  xy: 1085, 514
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+blue_flare
+  rotate: false
+  xy: 835, 259
+  size: 220, 217
+  orig: 220, 217
+  offset: 0, 0
+  index: -1
+circle_glow
+  rotate: false
+  xy: 1363, 481
+  size: 52, 51
+  orig: 58, 55
+  offset: 2, 3
+  index: -1
+contests_MASK_FR
+  rotate: false
+  xy: 835, 483
+  size: 243, 519
+  orig: 927, 975
+  offset: 447, 93
+  index: -1
+ui_main_contests_MASK_Fr
+  rotate: false
+  xy: 835, 483
+  size: 243, 519
+  orig: 927, 975
+  offset: 447, 93
+  index: -1
+contests_lit_solo
+  rotate: false
+  xy: 3, 110
+  size: 825, 892
+  orig: 927, 975
+  offset: 50, 36
+  index: -1
+contests_sword
+  rotate: false
+  xy: 1292, 471
+  size: 64, 243
+  orig: 74, 250
+  offset: 5, 2
+  index: -1
+contests_sword_part
+  rotate: false
+  xy: 1953, 870
+  size: 64, 132
+  orig: 74, 137
+  offset: 5, 0
+  index: -1
+ui_main_contests_sword_part
+  rotate: false
+  xy: 1953, 870
+  size: 64, 132
+  orig: 74, 137
+  offset: 5, 0
+  index: -1
+flash
+  rotate: false
+  xy: 1363, 539
+  size: 124, 127
+  orig: 128, 128
+  offset: 0, 1
+  index: -1
+mist
+  rotate: false
+  xy: 1820, 876
+  size: 126, 126
+  orig: 128, 128
+  offset: 0, 0
+  index: 10001
+mist
+  rotate: false
+  xy: 1386, 673
+  size: 125, 127
+  orig: 128, 128
+  offset: 3, 0
+  index: 10003
+mist
+  rotate: false
+  xy: 1518, 672
+  size: 113, 128
+  orig: 128, 128
+  offset: 9, 0
+  index: 10002
+mist
+  rotate: false
+  xy: 109, 7
+  size: 92, 96
+  orig: 128, 128
+  offset: 20, 30
+  index: 10000
+puffWhite
+  rotate: false
+  xy: 208, 9
+  size: 77, 94
+  orig: 77, 96
+  offset: 0, 2
+  index: -1
+snow
+  rotate: false
+  xy: 1386, 807
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+spark
+  rotate: false
+  xy: 1593, 823
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+splash1
+  rotate: false
+  xy: 1593, 858
+  size: 220, 144
+  orig: 256, 256
+  offset: 22, 25
+  index: -1
+splash2
+  rotate: false
+  xy: 835, 122
+  size: 187, 130
+  orig: 200, 150
+  offset: 5, 4
+  index: -1
+star_8point_A
+  rotate: false
+  xy: 3, 3
+  size: 99, 100
+  orig: 100, 100
+  offset: 1, 0
+  index: -1
+star_fill_mono
+  rotate: false
+  xy: 1085, 721
+  size: 294, 281
+  orig: 350, 350
+  offset: 30, 34
+  index: -1

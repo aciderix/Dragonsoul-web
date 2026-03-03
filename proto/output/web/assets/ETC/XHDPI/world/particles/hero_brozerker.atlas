@@ -1,0 +1,202 @@
+
+hero_brozerker.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Skull
+  rotate: false
+  xy: 1415, 342
+  size: 150, 120
+  orig: 154, 130
+  offset: 2, 4
+  index: -1
+burst_impact1
+  rotate: false
+  xy: 574, 121
+  size: 102, 94
+  orig: 102, 95
+  offset: 0, 1
+  index: -1
+glow_explode
+  rotate: false
+  xy: 3, 47
+  size: 194, 194
+  orig: 200, 200
+  offset: 4, 5
+  index: -1
+glowline
+  rotate: false
+  xy: 230, 278
+  size: 200, 184
+  orig: 200, 200
+  offset: 0, 16
+  index: -1
+grad_box
+  rotate: false
+  xy: 261, 135
+  size: 89, 136
+  orig: 89, 139
+  offset: 0, 3
+  index: -1
+heal_plus
+  rotate: false
+  xy: 683, 124
+  size: 91, 91
+  orig: 95, 95
+  offset: 2, 2
+  index: -1
+mace_iron
+  rotate: false
+  xy: 3, 248
+  size: 220, 214
+  orig: 220, 214
+  offset: 0, 0
+  index: -1
+pCloud1
+  rotate: false
+  xy: 373, 63
+  size: 77, 96
+  orig: 77, 96
+  offset: 0, 0
+  index: -1
+pHealGroundGlow
+  rotate: false
+  xy: 437, 333
+  size: 200, 129
+  orig: 200, 129
+  offset: 0, 0
+  index: -1
+pHealPillar
+  rotate: false
+  xy: 204, 31
+  size: 50, 210
+  orig: 50, 210
+  offset: 0, 0
+  index: -1
+pShine1
+  rotate: false
+  xy: 1011, 341
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+shield
+  rotate: false
+  xy: 1810, 359
+  size: 106, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 0
+shield
+  rotate: false
+  xy: 1923, 359
+  size: 106, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 2
+shield
+  rotate: false
+  xy: 261, 25
+  size: 105, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 1
+shield
+  rotate: false
+  xy: 461, 223
+  size: 106, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 4
+shield
+  rotate: false
+  xy: 461, 113
+  size: 106, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 6
+shield
+  rotate: false
+  xy: 457, 3
+  size: 105, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 3
+shield
+  rotate: false
+  xy: 574, 222
+  size: 105, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 5
+shield
+  rotate: false
+  xy: 686, 222
+  size: 105, 103
+  orig: 351, 185
+  offset: 123, 39
+  index: 7
+shieldBreak
+  rotate: false
+  xy: 644, 332
+  size: 184, 130
+  orig: 351, 185
+  offset: 99, 32
+  index: 4
+shieldBreak
+  rotate: false
+  xy: 835, 338
+  size: 169, 124
+  orig: 351, 185
+  offset: 99, 34
+  index: 3
+shieldBreak
+  rotate: false
+  xy: 1572, 340
+  size: 120, 122
+  orig: 351, 185
+  offset: 113, 35
+  index: 2
+shieldBreak
+  rotate: false
+  xy: 1699, 349
+  size: 104, 113
+  orig: 351, 185
+  offset: 122, 38
+  index: 1
+shieldBreak
+  rotate: false
+  xy: 357, 166
+  size: 97, 105
+  orig: 351, 185
+  offset: 130, 40
+  index: 0
+shieldBreak
+  rotate: false
+  xy: 1699, 341
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: 5
+shield_ring
+  rotate: false
+  xy: 3, 6
+  size: 187, 34
+  orig: 187, 34
+  offset: 0, 0
+  index: -1
+stars
+  rotate: false
+  xy: 1011, 376
+  size: 195, 86
+  orig: 200, 87
+  offset: 4, 0
+  index: -1
+stars_yellow
+  rotate: false
+  xy: 1213, 381
+  size: 195, 81
+  orig: 200, 87
+  offset: 4, 5
+  index: -1
