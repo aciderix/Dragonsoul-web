@@ -1,0 +1,27 @@
+
+monster_wraith.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: false
+  xy: 3, 3
+  size: 224, 437
+  orig: 224, 437
+  offset: 0, 0
+  index: -1
+hand-b
+  rotate: false
+  xy: 234, 229
+  size: 54, 90
+  orig: 54, 90
+  offset: 0, 0
+  index: -1
+hand-f
+  rotate: false
+  xy: 234, 326
+  size: 66, 114
+  orig: 66, 114
+  offset: 0, 0
+  index: -1

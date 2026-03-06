@@ -1,0 +1,118 @@
+
+hero_roller_viking.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cloud
+  rotate: false
+  xy: 386, 119
+  size: 188, 140
+  orig: 200, 156
+  offset: 6, 7
+  index: -1
+debuff_icon_Roller_warrior
+  rotate: false
+  xy: 3, 67
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+impact
+  rotate: false
+  xy: 581, 161
+  size: 231, 123
+  orig: 231, 123
+  offset: 0, 0
+  index: -1
+impact_green
+  rotate: false
+  xy: 210, 69
+  size: 169, 190
+  orig: 170, 200
+  offset: 0, 0
+  index: -1
+pHealGroundGlow
+  rotate: false
+  xy: 855, 244
+  size: 200, 129
+  orig: 200, 129
+  offset: 0, 0
+  index: -1
+rocks
+  rotate: false
+  xy: 3, 274
+  size: 240, 216
+  orig: 240, 216
+  offset: 0, 0
+  index: -1
+shock
+  rotate: false
+  xy: 250, 380
+  size: 320, 110
+  orig: 320, 125
+  offset: 0, 0
+  index: 5
+shock
+  rotate: false
+  xy: 577, 380
+  size: 320, 110
+  orig: 320, 125
+  offset: 0, 0
+  index: 6
+shock
+  rotate: false
+  xy: 904, 380
+  size: 320, 110
+  orig: 320, 125
+  offset: 0, 0
+  index: 7
+shock
+  rotate: false
+  xy: 1231, 380
+  size: 320, 110
+  orig: 320, 125
+  offset: 0, 0
+  index: 8
+shock
+  rotate: false
+  xy: 1558, 380
+  size: 320, 110
+  orig: 320, 125
+  offset: 0, 0
+  index: 9
+shock
+  rotate: false
+  xy: 250, 266
+  size: 320, 107
+  orig: 320, 125
+  offset: 0, 0
+  index: 4
+shock
+  rotate: false
+  xy: 577, 291
+  size: 271, 82
+  orig: 320, 125
+  offset: 26, 21
+  index: 3
+shock
+  rotate: false
+  xy: 3, 3
+  size: 192, 57
+  orig: 320, 125
+  offset: 65, 41
+  index: 2
+shock
+  rotate: false
+  xy: 1885, 449
+  size: 140, 41
+  orig: 320, 125
+  offset: 91, 53
+  index: 1
+shock
+  rotate: false
+  xy: 386, 89
+  size: 80, 23
+  orig: 320, 125
+  offset: 121, 65
+  index: 0

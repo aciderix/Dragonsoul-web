@@ -1,0 +1,83 @@
+
+hero_polemaster.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Smoky
+  rotate: false
+  xy: 274, 258
+  size: 294, 213
+  orig: 300, 250
+  offset: 5, 37
+  index: -1
+Spin_mblur
+  rotate: false
+  xy: 782, 285
+  size: 199, 186
+  orig: 200, 188
+  offset: 0, 2
+  index: -1
+fireworks_oval
+  rotate: false
+  xy: 732, 131
+  size: 66, 145
+  orig: 88, 150
+  offset: 10, 5
+  index: -1
+glowbar
+  rotate: false
+  xy: 575, 143
+  size: 150, 133
+  orig: 150, 143
+  offset: 0, 4
+  index: -1
+glowstream
+  rotate: false
+  xy: 210, 3
+  size: 170, 203
+  orig: 170, 215
+  offset: 0, 12
+  index: -1
+impact_green
+  rotate: false
+  xy: 387, 61
+  size: 169, 190
+  orig: 170, 200
+  offset: 0, 0
+  index: -1
+particle
+  rotate: false
+  xy: 988, 440
+  size: 32, 31
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shock_blur
+  rotate: false
+  xy: 3, 213
+  size: 264, 258
+  orig: 264, 258
+  offset: 0, 0
+  index: -1
+smash
+  rotate: false
+  xy: 387, 3
+  size: 195, 51
+  orig: 200, 55
+  offset: 2, 4
+  index: -1
+splashy
+  rotate: false
+  xy: 575, 283
+  size: 200, 188
+  orig: 200, 188
+  offset: 0, 0
+  index: -1
+splashy2
+  rotate: false
+  xy: 3, 10
+  size: 200, 196
+  orig: 200, 196
+  offset: 0, 0
+  index: -1

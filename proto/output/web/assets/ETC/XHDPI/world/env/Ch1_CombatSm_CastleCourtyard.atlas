@@ -1,0 +1,46 @@
+
+Ch1_CombatSm_CastleCourtyard.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,0
+  rotate: false
+  xy: 3, 3
+  size: 2000, 1017
+  orig: 2000, 1017
+  offset: 0, 0
+  index: -1
+
+Ch1_CombatSm_CastleCourtyard2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,1
+  rotate: false
+  xy: 3, 493
+  size: 2000, 483
+  orig: 2000, 483
+  offset: 0, 0
+  index: -1
+foreground-0,1
+  rotate: false
+  xy: 3, 3
+  size: 2000, 483
+  orig: 2000, 483
+  offset: 0, 0
+  index: -1
+
+Ch1_CombatSm_CastleCourtyard3.png
+size: 2048,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+foreground-0,0
+  rotate: false
+  xy: 3, 3
+  size: 1728, 76
+  orig: 2000, 1017
+  offset: 85, 0
+  index: -1

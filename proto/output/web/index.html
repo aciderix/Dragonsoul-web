@@ -134,7 +134,7 @@
 </head>
 <body>
     <h1>&#x1F409; DragonSoul Web</h1>
-    <div class="subtitle">Phase 3.6 — Boucle RAF + shaders linkés sur GPU + audio stubé</div>
+    <div class="subtitle">Phase 3.7 — Textures PNG décodées depuis GAME_ASSETS</div>
 
     <div id="status-bar">
         <div class="status-item">
@@ -296,6 +296,7 @@
                 renderErrors++;
                 if (renderErrors <= 5) {
                     addLog('render() erreur: ' + e.message, 'log-error');
+                    if (e.stack) addLog(e.stack.split('\n').slice(0,8).join(' | '), 'log-error');
                 }
                 if (renderErrors > 20) {
                     cancelAnimationFrame(_rafId);
@@ -308,12 +309,73 @@
         requestAnimationFrame(loop);
     }
 
+    // ─── PNG Preloader ────────────────────────────────────────────────────────
+    // Helper: decode a PNG Blob/ArrayBuffer into {data, width, height} RGBA
+    async function decodePNG(src) {
+        const blob = src instanceof Blob ? src : new Blob([src], {type: 'image/png'});
+        const bmp = await createImageBitmap(blob);
+        const canvas = new OffscreenCanvas(bmp.width, bmp.height);
+        canvas.getContext('2d').drawImage(bmp, 0, 0);
+        const imgData = canvas.getContext('2d').getImageData(0, 0, bmp.width, bmp.height);
+        return { data: new Uint8Array(imgData.data.buffer), width: bmp.width, height: bmp.height };
+    }
+
+    async function preloadTextures() {
+        if (typeof GAME_ASSETS === 'undefined') return;
+        window.GAME_ASSETS_RGBA = {};
+        let decoded = 0, fetched = 0, skipped = 0;
+
+        // Phase 1: decode PNGs already in GAME_ASSETS (stubs from game-assets.js)
+        for (const path of Object.keys(GAME_ASSETS)) {
+            const asset = GAME_ASSETS[path];
+            if (!asset || !asset._webBytes || !path.toLowerCase().endsWith('.png')) continue;
+            try {
+                GAME_ASSETS_RGBA[path] = await decodePNG(asset._webBytes);
+                decoded++;
+            } catch(e) { skipped++; }
+        }
+
+        // Phase 2: fetch and decode known atlas PNGs from the HTTP server
+        // These are NOT pre-loaded in game-assets.js (too large), but exist on disk
+        const serverPNGs = [
+            'ETC/XHDPI/ui/base.png',    'ETC/XHDPI/ui/base2.png',   'ETC/XHDPI/ui/base3.png',
+            'ETC/XHDPI/ui/base4.png',   'ETC/XHDPI/ui/base5.png',   'ETC/XHDPI/ui/base6.png',
+            'ETC/XHDPI/ui/base7.png',   'ETC/XHDPI/ui/base8.png',   'ETC/XHDPI/ui/base9.png',
+            'ETC/XHDPI/ui/base10.png',  'ETC/XHDPI/ui/base11.png',  'ETC/XHDPI/ui/base12.png',
+            'ETC/XHDPI/ui/base13.png',  'ETC/XHDPI/ui/base14.png',  'ETC/XHDPI/ui/base15.png',
+            'ETC/XHDPI/ui/common.png',  'ETC/XHDPI/ui/common2.png', 'ETC/XHDPI/ui/common3.png',
+            'ETC/XHDPI/ui/common4.png', 'ETC/XHDPI/ui/boot.png',
+            'ETC/XHDPI/ui/splash_normal.png', 'ETC/XHDPI/ui/splash_holiday.png',
+            'ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png',
+        ];
+        for (const path of serverPNGs) {
+            if (GAME_ASSETS_RGBA[path] || GAME_ASSETS_RGBA['ui/' + path.split('/').pop()]) continue;
+            try {
+                const resp = await fetch('assets/' + path);
+                if (!resp.ok) continue;
+                const buf = await resp.arrayBuffer();
+                // Cache raw bytes in GAME_ASSETS so XHR bypass finds them already loaded
+                const bytes = new Uint8Array(buf);
+                GAME_ASSETS[path] = { _webBytes: bytes };
+                // Decode to RGBA and store under multiple keys for path flexibility
+                const rgba = await decodePNG(buf);
+                GAME_ASSETS_RGBA[path] = rgba;
+                // Also store without ETC/XHDPI prefix for flexible lookup
+                const shortPath = path.replace('ETC/XHDPI/', '');
+                GAME_ASSETS_RGBA[shortPath] = rgba;
+                fetched++;
+            } catch(e) { skipped++; }
+        }
+        console.info('[PRELOAD] done — ' + decoded + ' from GAME_ASSETS, ' + fetched + ' fetched, '
+            + skipped + ' skipped. Total RGBA: ' + Object.keys(GAME_ASSETS_RGBA).length);
+    }
+
     // ─── Main boot sequence ───────────────────────────────────────────────────
-    window.addEventListener('load', function() {
+    window.addEventListener('load', async function() {
         const canvas = document.getElementById('game-canvas');
 
-        // 1. Check WebGL2 support
-        const testCtx = canvas.getContext('webgl2');
+        // 1. Check WebGL2 support — use same attrs as setupWebGL2 so context is shared correctly
+        const testCtx = canvas.getContext('webgl2', {preserveDrawingBuffer: true, alpha: false});
         if (!testCtx) {
             setStatus('st-webgl', 'N/A', 'fail');
             setOverlay('WebGL2 non supporté par ce navigateur');
@@ -375,9 +437,19 @@
             };
         }
 
+        setOverlay('Décodage des textures PNG...');
+
+        // 3. Pre-decode PNG textures from GAME_ASSETS (needed for synchronous texture loading)
+        try {
+            await preloadTextures();
+            addLog('PNG textures pré-décodées dans GAME_ASSETS_RGBA', 'log-ok');
+        } catch(e) {
+            addLog('WARN preloadTextures: ' + e.message, 'log-warn');
+        }
+
         setOverlay('Lancement game.create()...');
 
-        // 3. Run main() — calls game.create() + first renderFrame()
+        // 4. Run main() — calls game.create() + first renderFrame()
         setStatus('st-create', 'running...', 'pending');
         setStatus('st-render', 'waiting...', 'pending');
         try {

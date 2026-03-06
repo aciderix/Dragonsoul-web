@@ -1,0 +1,153 @@
+
+hero_brute_dragon.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back_leg-b
+  rotate: false
+  xy: 180, 24
+  size: 143, 142
+  orig: 143, 142
+  offset: 0, 0
+  index: -1
+back_leg-f
+  rotate: false
+  xy: 1506, 357
+  size: 168, 133
+  orig: 168, 133
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 3, 173
+  size: 343, 317
+  orig: 343, 317
+  offset: 0, 0
+  index: -1
+eye-f
+  rotate: false
+  xy: 1277, 264
+  size: 49, 48
+  orig: 49, 48
+  offset: 0, 0
+  index: -1
+eye_brow-b
+  rotate: false
+  xy: 1833, 447
+  size: 62, 43
+  orig: 62, 43
+  offset: 0, 0
+  index: -1
+eye_brow-f
+  rotate: false
+  xy: 1044, 147
+  size: 96, 70
+  orig: 96, 70
+  offset: 0, 0
+  index: -1
+eye_closed-b
+  rotate: false
+  xy: 1506, 325
+  size: 30, 25
+  orig: 30, 25
+  offset: 0, 0
+  index: -1
+eye_closed-f
+  rotate: false
+  xy: 1833, 392
+  size: 49, 48
+  orig: 49, 48
+  offset: 0, 0
+  index: -1
+eye_open-b
+  rotate: false
+  xy: 1147, 192
+  size: 30, 25
+  orig: 30, 25
+  offset: 0, 0
+  index: -1
+front_leg-b
+  rotate: false
+  xy: 1363, 321
+  size: 136, 169
+  orig: 136, 169
+  offset: 0, 0
+  index: -1
+front_leg-b2
+  rotate: false
+  xy: 353, 179
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+front_leg-f
+  rotate: false
+  xy: 1195, 319
+  size: 161, 171
+  orig: 161, 171
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 604, 195
+  size: 238, 295
+  orig: 238, 295
+  offset: 0, 0
+  index: -1
+jaw
+  rotate: false
+  xy: 3, 3
+  size: 170, 163
+  orig: 170, 163
+  offset: 0, 0
+  index: -1
+jaw_mblur
+  rotate: false
+  xy: 1681, 359
+  size: 145, 131
+  orig: 145, 131
+  offset: 0, 0
+  index: -1
+jaw_teeth-f
+  rotate: false
+  xy: 1195, 264
+  size: 75, 48
+  orig: 75, 48
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 1195, 242
+  size: 11, 15
+  orig: 11, 15
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 330, 147
+  size: 14, 19
+  orig: 14, 19
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 1044, 224
+  size: 144, 266
+  orig: 144, 266
+  offset: 0, 0
+  index: -1
+wing-b
+  rotate: false
+  xy: 353, 187
+  size: 244, 303
+  orig: 244, 303
+  offset: 0, 0
+  index: -1
+wing-f
+  rotate: false
+  xy: 849, 145
+  size: 188, 345
+  orig: 188, 345
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,181 @@
+
+monster_archer_phys.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm-b
+  rotate: false
+  xy: 720, 369
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+arm-f
+  rotate: false
+  xy: 162, 82
+  size: 34, 141
+  orig: 34, 141
+  offset: 0, 0
+  index: -1
+arrow
+  rotate: false
+  xy: 563, 452
+  size: 235, 55
+  orig: 235, 55
+  offset: 0, 0
+  index: -1
+bow
+  rotate: false
+  xy: 3, 230
+  size: 287, 277
+  orig: 287, 277
+  offset: 0, 0
+  index: -1
+eye_closed-b
+  rotate: false
+  xy: 297, 233
+  size: 29, 15
+  orig: 29, 15
+  offset: 0, 0
+  index: -1
+eye_closed-f
+  rotate: false
+  xy: 203, 85
+  size: 20, 19
+  orig: 20, 19
+  offset: 0, 0
+  index: -1
+eyeball-b
+  rotate: false
+  xy: 440, 235
+  size: 11, 13
+  orig: 11, 13
+  offset: 0, 0
+  index: -1
+eyeball-f
+  rotate: false
+  xy: 621, 353
+  size: 19, 16
+  orig: 19, 16
+  offset: 0, 0
+  index: -1
+eyebrow-b
+  rotate: false
+  xy: 263, 112
+  size: 10, 9
+  orig: 10, 9
+  offset: 0, 0
+  index: -1
+eyebrow-f
+  rotate: false
+  xy: 333, 144
+  size: 21, 13
+  orig: 21, 13
+  offset: 0, 0
+  index: -1
+hair-b
+  rotate: false
+  xy: 402, 165
+  size: 31, 83
+  orig: 31, 83
+  offset: 0, 0
+  index: -1
+hair-f
+  rotate: false
+  xy: 203, 111
+  size: 53, 112
+  orig: 53, 112
+  offset: 0, 0
+  index: -1
+hair-m
+  rotate: false
+  xy: 263, 128
+  size: 63, 95
+  orig: 63, 95
+  offset: 0, 0
+  index: -1
+head_mouth_grunt
+  rotate: false
+  xy: 967, 454
+  size: 46, 53
+  orig: 46, 53
+  offset: 0, 0
+  index: -1
+head_mouth_open
+  rotate: false
+  xy: 563, 265
+  size: 46, 58
+  orig: 46, 58
+  offset: 0, 0
+  index: -1
+leg-b
+  rotate: false
+  xy: 805, 432
+  size: 76, 75
+  orig: 76, 75
+  offset: 0, 0
+  index: -1
+leg-f
+  rotate: false
+  xy: 333, 164
+  size: 62, 84
+  orig: 62, 84
+  offset: 0, 0
+  index: -1
+loin_cloth-b
+  rotate: false
+  xy: 563, 330
+  size: 51, 115
+  orig: 51, 115
+  offset: 0, 0
+  index: -1
+loin_cloth-f
+  rotate: false
+  xy: 621, 376
+  size: 92, 69
+  orig: 92, 69
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 57, 58
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 967, 441
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+shoulder-f
+  rotate: false
+  xy: 3, 3
+  size: 47, 61
+  orig: 47, 61
+  offset: 0, 0
+  index: -1
+string
+  rotate: false
+  xy: 297, 255
+  size: 259, 252
+  orig: 259, 252
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 888, 437
+  size: 72, 70
+  orig: 72, 70
+  offset: 0, 0
+  index: -1
+tunic
+  rotate: false
+  xy: 3, 71
+  size: 152, 152
+  orig: 152, 152
+  offset: 0, 0
+  index: -1

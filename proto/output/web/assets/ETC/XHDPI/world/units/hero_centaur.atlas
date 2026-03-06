@@ -1,0 +1,265 @@
+
+hero_centaur.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer 178
+  rotate: false
+  xy: 235, 41
+  size: 22, 62
+  orig: 22, 62
+  offset: 0, 0
+  index: -1
+air_horn
+  rotate: false
+  xy: 487, 110
+  size: 68, 98
+  orig: 68, 98
+  offset: 0, 0
+  index: -1
+air_horn_wrist_l
+  rotate: false
+  xy: 607, 124
+  size: 35, 56
+  orig: 35, 56
+  offset: 0, 0
+  index: -1
+air_horn_wrist_u
+  rotate: false
+  xy: 49, 3
+  size: 22, 34
+  orig: 22, 34
+  offset: 0, 0
+  index: -1
+arrow-a
+  rotate: false
+  xy: 3, 44
+  size: 178, 59
+  orig: 178, 59
+  offset: 0, 0
+  index: -1
+arrow-b
+  rotate: false
+  xy: 816, 199
+  size: 178, 59
+  orig: 178, 59
+  offset: 0, 0
+  index: -1
+arrow-c
+  rotate: false
+  xy: 816, 199
+  size: 178, 59
+  orig: 178, 59
+  offset: 0, 0
+  index: -1
+arrow-d
+  rotate: false
+  xy: 816, 199
+  size: 178, 59
+  orig: 178, 59
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 339, 294
+  size: 161, 210
+  orig: 161, 210
+  offset: 0, 0
+  index: -1
+bow
+  rotate: false
+  xy: 507, 215
+  size: 103, 289
+  orig: 103, 289
+  offset: 0, 0
+  index: -1
+ear
+  rotate: false
+  xy: 703, 156
+  size: 18, 24
+  orig: 18, 24
+  offset: 0, 0
+  index: -1
+eye-b
+  rotate: false
+  xy: 1011, 495
+  size: 9, 9
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+eye-f
+  rotate: false
+  xy: 244, 111
+  size: 16, 11
+  orig: 16, 11
+  offset: 0, 0
+  index: -1
+eye_ball-b
+  rotate: false
+  xy: 1001, 252
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+eye_ball-f
+  rotate: false
+  xy: 487, 281
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+eye_brow-b
+  rotate: false
+  xy: 816, 186
+  size: 12, 6
+  orig: 12, 6
+  offset: 0, 0
+  index: -1
+eye_brow-f
+  rotate: false
+  xy: 339, 277
+  size: 23, 10
+  orig: 23, 10
+  offset: 0, 0
+  index: -1
+eye_close-b
+  rotate: false
+  xy: 1011, 479
+  size: 9, 9
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+eye_close-f
+  rotate: false
+  xy: 78, 26
+  size: 16, 11
+  orig: 16, 11
+  offset: 0, 0
+  index: -1
+hair-b
+  rotate: false
+  xy: 188, 47
+  size: 40, 56
+  orig: 40, 56
+  offset: 0, 0
+  index: -1
+hair-f
+  rotate: false
+  xy: 903, 377
+  size: 101, 127
+  orig: 101, 127
+  offset: 0, 0
+  index: -1
+hair-t
+  rotate: false
+  xy: 3, 7
+  size: 39, 30
+  orig: 39, 30
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 617, 187
+  size: 104, 105
+  orig: 104, 105
+  offset: 0, 0
+  index: -1
+head_death
+  rotate: false
+  xy: 903, 265
+  size: 104, 105
+  orig: 104, 105
+  offset: 0, 0
+  index: -1
+head_hit
+  rotate: false
+  xy: 376, 181
+  size: 104, 106
+  orig: 104, 106
+  offset: 0, 0
+  index: -1
+head_victory
+  rotate: false
+  xy: 376, 68
+  size: 104, 106
+  orig: 104, 106
+  offset: 0, 0
+  index: -1
+horse_body
+  rotate: false
+  xy: 3, 272
+  size: 329, 232
+  orig: 329, 232
+  offset: 0, 0
+  index: -1
+leg_back-b
+  rotate: false
+  xy: 728, 183
+  size: 81, 128
+  orig: 81, 128
+  offset: 0, 0
+  index: -1
+leg_back-f
+  rotate: false
+  xy: 723, 318
+  size: 90, 186
+  orig: 90, 186
+  offset: 0, 0
+  index: -1
+leg_front-b
+  rotate: false
+  xy: 820, 319
+  size: 76, 185
+  orig: 76, 185
+  offset: 0, 0
+  index: -1
+leg_front-f
+  rotate: false
+  xy: 617, 299
+  size: 99, 205
+  orig: 99, 205
+  offset: 0, 0
+  index: -1
+lower_hand-b
+  rotate: false
+  xy: 487, 64
+  size: 65, 39
+  orig: 65, 39
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 3, 110
+  size: 234, 155
+  orig: 234, 155
+  offset: 0, 0
+  index: -1
+thread
+  rotate: false
+  xy: 337, 68
+  size: 32, 197
+  orig: 32, 197
+  offset: 0, 0
+  index: -1
+upper_hand-b
+  rotate: false
+  xy: 562, 120
+  size: 38, 88
+  orig: 38, 88
+  offset: 0, 0
+  index: -1
+upper_hand-f
+  rotate: false
+  xy: 244, 129
+  size: 86, 136
+  orig: 86, 136
+  offset: 0, 0
+  index: -1
+wrist-f
+  rotate: false
+  xy: 649, 141
+  size: 47, 39
+  orig: 47, 39
+  offset: 0, 0
+  index: -1

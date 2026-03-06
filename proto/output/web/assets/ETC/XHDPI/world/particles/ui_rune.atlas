@@ -1,0 +1,426 @@
+
+ui_rune.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1starMask
+  rotate: false
+  xy: 266, 3
+  size: 147, 146
+  orig: 160, 160
+  offset: 6, 8
+  index: 7
+1starMask
+  rotate: false
+  xy: 1795, 341
+  size: 100, 100
+  orig: 160, 160
+  offset: 30, 31
+  index: 4
+1starMask
+  rotate: false
+  xy: 270, 600
+  size: 74, 74
+  orig: 160, 160
+  offset: 43, 44
+  index: 1
+1starMask
+  rotate: false
+  xy: 553, 13
+  size: 74, 74
+  orig: 160, 160
+  offset: 43, 44
+  index: 13
+1starMask
+  rotate: false
+  xy: 1301, 253
+  size: 63, 63
+  orig: 160, 160
+  offset: 48, 50
+  index: 16
+1starMask
+  rotate: false
+  xy: 1328, 96
+  size: 62, 62
+  orig: 160, 160
+  offset: 49, 50
+  index: 10
+1starMask
+  rotate: false
+  xy: 1371, 257
+  size: 59, 59
+  orig: 160, 160
+  offset: 49, 52
+  index: 19
+Aglow
+  rotate: false
+  xy: 1845, 827
+  size: 188, 189
+  orig: 256, 256
+  offset: 35, 40
+  index: 38
+Aglow
+  rotate: false
+  xy: 533, 367
+  size: 178, 171
+  orig: 256, 256
+  offset: 39, 50
+  index: 14
+Aglow
+  rotate: false
+  xy: 718, 361
+  size: 92, 177
+  orig: 256, 256
+  offset: 83, 47
+  index: 4
+Aglow
+  rotate: false
+  xy: 817, 321
+  size: 178, 177
+  orig: 256, 256
+  offset: 40, 46
+  index: 20
+Aglow
+  rotate: false
+  xy: 1002, 250
+  size: 176, 169
+  orig: 256, 256
+  offset: 40, 51
+  index: 16
+Aglow
+  rotate: false
+  xy: 1185, 244
+  size: 109, 175
+  orig: 256, 256
+  offset: 73, 48
+  index: 10
+Aglow
+  rotate: false
+  xy: 266, 156
+  size: 172, 173
+  orig: 256, 256
+  offset: 43, 48
+  index: 36
+Aglow
+  rotate: false
+  xy: 445, 152
+  size: 110, 177
+  orig: 256, 256
+  offset: 73, 47
+  index: 6
+Aglow
+  rotate: false
+  xy: 562, 201
+  size: 138, 159
+  orig: 256, 256
+  offset: 60, 58
+  index: 32
+Aglow
+  rotate: false
+  xy: 707, 187
+  size: 90, 167
+  orig: 256, 256
+  offset: 83, 52
+  index: 24
+Aglow
+  rotate: false
+  xy: 804, 147
+  size: 175, 167
+  orig: 256, 256
+  offset: 40, 52
+  index: 18
+Aglow
+  rotate: false
+  xy: 986, 76
+  size: 172, 167
+  orig: 256, 256
+  offset: 41, 52
+  index: 22
+Aglow
+  rotate: false
+  xy: 1165, 79
+  size: 156, 158
+  orig: 256, 256
+  offset: 51, 56
+  index: 34
+Aglow
+  rotate: false
+  xy: 1289, 506
+  size: 107, 171
+  orig: 256, 256
+  offset: 74, 50
+  index: 12
+Aglow
+  rotate: false
+  xy: 1301, 323
+  size: 109, 176
+  orig: 256, 256
+  offset: 73, 47
+  index: 8
+Aglow
+  rotate: false
+  xy: 1417, 356
+  size: 119, 168
+  orig: 256, 256
+  offset: 69, 52
+  index: 30
+Aglow
+  rotate: false
+  xy: 1552, 518
+  size: 106, 166
+  orig: 256, 256
+  offset: 76, 53
+  index: 26
+Aglow
+  rotate: false
+  xy: 1665, 520
+  size: 114, 166
+  orig: 256, 256
+  offset: 71, 52
+  index: 28
+Aglow
+  rotate: false
+  xy: 1795, 448
+  size: 105, 106
+  orig: 256, 256
+  offset: 76, 82
+  index: 2
+Aglow
+  rotate: false
+  xy: 1328, 165
+  size: 61, 81
+  orig: 256, 256
+  offset: 98, 94
+  index: 0
+Fluffy
+  rotate: false
+  xy: 622, 545
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+blue_flare
+  rotate: false
+  xy: 829, 799
+  size: 220, 217
+  orig: 220, 217
+  offset: 0, 0
+  index: -1
+dusts0124
+  rotate: false
+  xy: 270, 336
+  size: 189, 85
+  orig: 200, 100
+  offset: 6, 8
+  index: -1
+dusts0156
+  rotate: false
+  xy: 829, 505
+  size: 197, 85
+  orig: 200, 100
+  offset: 0, 8
+  index: -1
+dusts0188
+  rotate: false
+  xy: 1033, 426
+  size: 193, 93
+  orig: 200, 100
+  offset: 0, 2
+  index: -1
+glow_center2
+  rotate: false
+  xy: 1403, 531
+  size: 142, 153
+  orig: 226, 236
+  offset: 29, 76
+  index: -1
+glow_lf2
+  rotate: false
+  xy: 3, 200
+  size: 256, 208
+  orig: 256, 256
+  offset: 0, 48
+  index: -1
+glow_rt2
+  rotate: false
+  xy: 3, 681
+  size: 349, 335
+  orig: 350, 350
+  offset: 0, 6
+  index: -1
+gparticle1
+  rotate: false
+  xy: 3, 415
+  size: 260, 259
+  orig: 320, 320
+  offset: 28, 33
+  index: -1
+mist
+  rotate: false
+  xy: 420, 19
+  size: 126, 126
+  orig: 128, 128
+  offset: 0, 0
+  index: 10001
+mist
+  rotate: false
+  xy: 1543, 384
+  size: 125, 127
+  orig: 128, 128
+  offset: 3, 0
+  index: 10003
+mist
+  rotate: false
+  xy: 1675, 385
+  size: 113, 128
+  orig: 128, 128
+  offset: 9, 0
+  index: 10002
+mist
+  rotate: false
+  xy: 668, 84
+  size: 92, 96
+  orig: 128, 128
+  offset: 20, 30
+  index: 10000
+pGlow3White
+  rotate: false
+  xy: 466, 361
+  size: 60, 60
+  orig: 65, 65
+  offset: 3, 4
+  index: -1
+particle
+  rotate: false
+  xy: 533, 556
+  size: 32, 31
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+puff
+  rotate: false
+  xy: 1786, 561
+  size: 163, 78
+  orig: 200, 89
+  offset: 21, 4
+  index: -1
+puffWhite
+  rotate: false
+  xy: 1956, 545
+  size: 77, 94
+  orig: 77, 96
+  offset: 0, 2
+  index: -1
+rings
+  rotate: false
+  xy: 359, 760
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 1
+smoke_keystone
+  rotate: false
+  xy: 622, 752
+  size: 200, 264
+  orig: 200, 264
+  offset: 0, 0
+  index: -1
+snow
+  rotate: false
+  xy: 829, 597
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+spark
+  rotate: false
+  xy: 1233, 491
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+star_8point_A
+  rotate: false
+  xy: 562, 94
+  size: 99, 100
+  orig: 100, 100
+  offset: 1, 0
+  index: -1
+swirl
+  rotate: false
+  xy: 3, 20
+  size: 256, 173
+  orig: 256, 200
+  offset: 0, 6
+  index: 9
+swirl
+  rotate: false
+  xy: 1056, 849
+  size: 256, 167
+  orig: 256, 200
+  offset: 0, 10
+  index: 8
+swirl
+  rotate: false
+  xy: 1319, 855
+  size: 256, 161
+  orig: 256, 200
+  offset: 0, 13
+  index: 7
+swirl
+  rotate: false
+  xy: 1582, 857
+  size: 256, 159
+  orig: 256, 200
+  offset: 0, 15
+  index: 2
+swirl
+  rotate: false
+  xy: 359, 594
+  size: 256, 159
+  orig: 256, 200
+  offset: 0, 15
+  index: 3
+swirl
+  rotate: false
+  xy: 270, 428
+  size: 256, 159
+  orig: 256, 200
+  offset: 0, 14
+  index: 6
+swirl
+  rotate: false
+  xy: 1056, 684
+  size: 256, 158
+  orig: 256, 200
+  offset: 0, 15
+  index: 4
+swirl
+  rotate: false
+  xy: 1319, 691
+  size: 256, 157
+  orig: 256, 200
+  offset: 0, 15
+  index: 5
+swirl
+  rotate: false
+  xy: 1582, 693
+  size: 249, 157
+  orig: 256, 200
+  offset: 0, 18
+  index: 1
+swirl
+  rotate: false
+  xy: 1036, 526
+  size: 246, 151
+  orig: 256, 200
+  offset: 0, 24
+  index: 0
+vapor1
+  rotate: false
+  xy: 1838, 646
+  size: 200, 174
+  orig: 200, 174
+  offset: 0, 0
+  index: -1

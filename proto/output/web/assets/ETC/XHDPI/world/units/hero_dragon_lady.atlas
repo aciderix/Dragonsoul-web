@@ -1,0 +1,279 @@
+
+hero_dragon_lady.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: false
+  xy: 470, 169
+  size: 86, 83
+  orig: 86, 83
+  offset: 0, 0
+  index: -1
+close_eye-b
+  rotate: false
+  xy: 3, 3
+  size: 11, 14
+  orig: 11, 14
+  offset: 0, 0
+  index: -1
+close_eye-f
+  rotate: false
+  xy: 152, 9
+  size: 31, 17
+  orig: 31, 17
+  offset: 0, 0
+  index: -1
+eye-b
+  rotate: false
+  xy: 21, 3
+  size: 9, 14
+  orig: 9, 14
+  offset: 0, 0
+  index: -1
+eye-f
+  rotate: false
+  xy: 264, 39
+  size: 28, 17
+  orig: 28, 17
+  offset: 0, 0
+  index: -1
+eye_ball-b
+  rotate: false
+  xy: 190, 18
+  size: 6, 8
+  orig: 6, 8
+  offset: 0, 0
+  index: -1
+eye_ball-f
+  rotate: false
+  xy: 529, 87
+  size: 8, 9
+  orig: 8, 9
+  offset: 0, 0
+  index: -1
+eyebrow-b
+  rotate: false
+  xy: 787, 161
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
+eyebrow-f
+  rotate: false
+  xy: 361, 49
+  size: 25, 12
+  orig: 25, 12
+  offset: 0, 0
+  index: -1
+feet-b
+  rotate: false
+  xy: 733, 142
+  size: 47, 30
+  orig: 47, 30
+  offset: 0, 0
+  index: -1
+feet-f
+  rotate: false
+  xy: 620, 136
+  size: 29, 42
+  orig: 29, 42
+  offset: 0, 0
+  index: -1
+hair-back01
+  rotate: false
+  xy: 807, 167
+  size: 66, 85
+  orig: 66, 85
+  offset: 0, 0
+  index: -1
+hair-back02
+  rotate: false
+  xy: 563, 89
+  size: 52, 38
+  orig: 52, 38
+  offset: 0, 0
+  index: -1
+hair-f
+  rotate: false
+  xy: 563, 185
+  size: 89, 67
+  orig: 89, 67
+  offset: 0, 0
+  index: -1
+hair-t
+  rotate: false
+  xy: 152, 161
+  size: 115, 91
+  orig: 115, 91
+  offset: 0, 0
+  index: -1
+hand-f
+  rotate: false
+  xy: 656, 138
+  size: 43, 35
+  orig: 43, 35
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 659, 180
+  size: 67, 72
+  orig: 67, 72
+  offset: 0, 0
+  index: -1
+head2
+  rotate: false
+  xy: 880, 175
+  size: 66, 77
+  orig: 66, 77
+  offset: 0, 0
+  index: -1
+head3
+  rotate: false
+  xy: 953, 176
+  size: 66, 76
+  orig: 66, 76
+  offset: 0, 0
+  index: -1
+head4
+  rotate: false
+  xy: 733, 179
+  size: 67, 73
+  orig: 67, 73
+  offset: 0, 0
+  index: -1
+hip
+  rotate: false
+  xy: 374, 166
+  size: 89, 86
+  orig: 89, 86
+  offset: 0, 0
+  index: -1
+lower_arm-b
+  rotate: false
+  xy: 622, 69
+  size: 25, 60
+  orig: 25, 60
+  offset: 0, 0
+  index: -1
+lower_arm-f
+  rotate: false
+  xy: 456, 84
+  size: 24, 75
+  orig: 24, 75
+  offset: 0, 0
+  index: -1
+lower_leg-b
+  rotate: false
+  xy: 113, 6
+  size: 32, 76
+  orig: 32, 76
+  offset: 0, 0
+  index: -1
+lower_leg-f
+  rotate: false
+  xy: 315, 48
+  size: 39, 102
+  orig: 39, 102
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 529, 103
+  size: 27, 59
+  orig: 27, 59
+  offset: 0, 0
+  index: -1
+neck_collar-b
+  rotate: false
+  xy: 152, 33
+  size: 49, 43
+  orig: 49, 43
+  offset: 0, 0
+  index: -1
+neck_collar-f
+  rotate: false
+  xy: 208, 37
+  size: 49, 37
+  orig: 49, 37
+  offset: 0, 0
+  index: -1
+scarf
+  rotate: false
+  xy: 152, 83
+  size: 49, 71
+  orig: 49, 71
+  offset: 0, 0
+  index: -1
+shield-b
+  rotate: false
+  xy: 563, 134
+  size: 50, 44
+  orig: 50, 44
+  offset: 0, 0
+  index: -1
+shield-f
+  rotate: false
+  xy: 3, 24
+  size: 103, 58
+  orig: 103, 58
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 3, 89
+  size: 142, 163
+  orig: 142, 163
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 706, 137
+  size: 20, 36
+  orig: 20, 36
+  offset: 0, 0
+  index: -1
+upper_arm-b
+  rotate: false
+  xy: 361, 68
+  size: 39, 82
+  orig: 39, 82
+  offset: 0, 0
+  index: -1
+upper_arm-f
+  rotate: false
+  xy: 407, 79
+  size: 42, 80
+  orig: 42, 80
+  offset: 0, 0
+  index: -1
+upper_leg-b
+  rotate: false
+  xy: 487, 87
+  size: 35, 75
+  orig: 35, 75
+  offset: 0, 0
+  index: -1
+upper_leg-f
+  rotate: false
+  xy: 264, 63
+  size: 44, 87
+  orig: 44, 87
+  offset: 0, 0
+  index: -1
+wing-b
+  rotate: false
+  xy: 208, 81
+  size: 49, 73
+  orig: 49, 73
+  offset: 0, 0
+  index: -1
+wing-f
+  rotate: false
+  xy: 274, 157
+  size: 93, 95
+  orig: 93, 95
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,537 @@
+
+ui_combat.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+flare_test_02_A
+  rotate: false
+  xy: 3, 826
+  size: 195, 194
+  orig: 200, 200
+  offset: 4, 6
+  index: -1
+hero_ActiveSkill_gFlare_W_fr
+  rotate: false
+  xy: 1491, 371
+  size: 147, 163
+  orig: 147, 163
+  offset: 0, 0
+  index: -1
+hero_ActiveSkill_gFlare_low_W
+  rotate: false
+  xy: 1654, 675
+  size: 200, 166
+  orig: 200, 174
+  offset: 0, 8
+  index: -1
+hero_ActiveSkill_gFlare_mid_W
+  rotate: false
+  xy: 1240, 842
+  size: 200, 178
+  orig: 200, 178
+  offset: 0, 0
+  index: -1
+hero_ActiveSkill_gFlare_top2_W
+  rotate: false
+  xy: 1645, 392
+  size: 177, 134
+  orig: 177, 134
+  offset: 0, 0
+  index: -1
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 205, 840
+  size: 200, 180
+  orig: 200, 216
+  offset: 0, 19
+  index: 22
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 412, 841
+  size: 200, 179
+  orig: 200, 216
+  offset: 0, 19
+  index: 18
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 619, 841
+  size: 200, 179
+  orig: 200, 216
+  offset: 0, 19
+  index: 19
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 826, 841
+  size: 200, 179
+  orig: 200, 216
+  offset: 0, 19
+  index: 20
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1033, 841
+  size: 200, 179
+  orig: 200, 216
+  offset: 0, 19
+  index: 21
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1447, 844
+  size: 200, 176
+  orig: 200, 216
+  offset: 0, 19
+  index: 17
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1654, 848
+  size: 200, 172
+  orig: 200, 216
+  offset: 0, 19
+  index: 16
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1447, 671
+  size: 200, 166
+  orig: 200, 216
+  offset: 0, 19
+  index: 15
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1240, 677
+  size: 200, 158
+  orig: 200, 216
+  offset: 0, 19
+  index: 14
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1654, 533
+  size: 200, 135
+  orig: 200, 216
+  offset: 0, 19
+  index: 11
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 205, 686
+  size: 200, 147
+  orig: 200, 216
+  offset: 0, 19
+  index: 12
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 412, 687
+  size: 200, 147
+  orig: 200, 216
+  offset: 0, 19
+  index: 13
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 338, 7
+  size: 164, 78
+  orig: 200, 216
+  offset: 19, 19
+  index: 5
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1445, 541
+  size: 199, 123
+  orig: 200, 216
+  offset: 1, 19
+  index: 10
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1305, 22
+  size: 187, 99
+  orig: 200, 216
+  offset: 7, 19
+  index: 8
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1829, 315
+  size: 195, 111
+  orig: 200, 216
+  offset: 3, 19
+  index: 9
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1822, 220
+  size: 177, 88
+  orig: 200, 216
+  offset: 12, 19
+  index: 6
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1649, 10
+  size: 149, 68
+  orig: 200, 216
+  offset: 26, 19
+  index: 4
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1805, 8
+  size: 114, 52
+  orig: 200, 216
+  offset: 45, 19
+  index: 2
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1926, 18
+  size: 69, 42
+  orig: 200, 216
+  offset: 81, 20
+  index: 1
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1491, 165
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: 0
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 1305, 524
+  size: 133, 146
+  orig: 200, 200
+  offset: 39, 24
+  index: 17
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 1677, 233
+  size: 138, 152
+  orig: 200, 200
+  offset: 28, 25
+  index: 22
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 1499, 20
+  size: 143, 146
+  orig: 200, 200
+  offset: 28, 24
+  index: 19
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 1677, 85
+  size: 138, 141
+  orig: 200, 200
+  offset: 28, 24
+  index: 20
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 1822, 67
+  size: 143, 146
+  orig: 200, 200
+  offset: 29, 31
+  index: 26
+hero_redGlow_2X
+  rotate: false
+  xy: 3, 628
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 1
+hero_redGlow_2X
+  rotate: false
+  xy: 3, 430
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 2
+hero_redGlow_2X
+  rotate: false
+  xy: 3, 232
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 3
+hero_redGlow_2X
+  rotate: false
+  xy: 3, 34
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 4
+hero_redGlow_2X
+  rotate: false
+  xy: 1861, 829
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 5
+hero_redGlow_2X
+  rotate: false
+  xy: 1861, 631
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 6
+hero_redGlow_2X
+  rotate: false
+  xy: 1861, 433
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 7
+hero_redGlow_2X
+  rotate: false
+  xy: 189, 488
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 8
+hero_redGlow_2X
+  rotate: false
+  xy: 189, 290
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 9
+hero_redGlow_2X
+  rotate: false
+  xy: 189, 92
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 10
+hero_redGlow_2X
+  rotate: false
+  xy: 619, 643
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 11
+hero_redGlow_2X
+  rotate: false
+  xy: 805, 643
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 12
+hero_redGlow_2X
+  rotate: false
+  xy: 991, 643
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 13
+hero_redGlow_2X
+  rotate: false
+  xy: 375, 488
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 14
+hero_redGlow_2X
+  rotate: false
+  xy: 375, 290
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 15
+hero_redGlow_2X
+  rotate: false
+  xy: 375, 92
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 16
+hero_redGlow_2X
+  rotate: false
+  xy: 561, 445
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 17
+hero_redGlow_2X
+  rotate: false
+  xy: 561, 247
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 18
+hero_redGlow_2X
+  rotate: false
+  xy: 747, 445
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 19
+hero_redGlow_2X
+  rotate: false
+  xy: 747, 247
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 20
+hero_redGlow_2X
+  rotate: false
+  xy: 933, 445
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 21
+hero_redGlow_2X
+  rotate: false
+  xy: 933, 247
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 22
+hero_redGlow_2X
+  rotate: false
+  xy: 561, 49
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 23
+hero_redGlow_2X
+  rotate: false
+  xy: 747, 49
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 24
+hero_redGlow_2X
+  rotate: false
+  xy: 933, 49
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 25
+hero_redGlow_2X
+  rotate: false
+  xy: 1119, 445
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 26
+hero_redGlow_2X
+  rotate: false
+  xy: 1119, 247
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 27
+hero_redGlow_2X
+  rotate: false
+  xy: 1119, 49
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 28
+hero_redGlow_2X
+  rotate: false
+  xy: 1305, 326
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 29
+hero_redGlow_2X
+  rotate: false
+  xy: 1305, 128
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 30
+hero_redGlow_2X
+  rotate: false
+  xy: 1491, 173
+  size: 179, 191
+  orig: 200, 200
+  offset: 10, 5
+  index: 31
+promote_ready_glow
+  rotate: false
+  xy: 189, 3
+  size: 142, 82
+  orig: 142, 83
+  offset: 0, 1
+  index: -1
+
+ui_combat2.png
+size: 2048,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 3, 3
+  size: 177, 88
+  orig: 200, 216
+  offset: 12, 19
+  index: 7
+hero_button_ActiveSkill_ANIM
+  rotate: false
+  xy: 1413, 184
+  size: 133, 60
+  orig: 200, 216
+  offset: 35, 19
+  index: 3
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 3, 98
+  size: 142, 146
+  orig: 200, 200
+  offset: 28, 31
+  index: 25
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 152, 98
+  size: 141, 146
+  orig: 200, 200
+  offset: 30, 24
+  index: 18
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 300, 101
+  size: 142, 143
+  orig: 200, 200
+  offset: 30, 33
+  index: 27
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 449, 99
+  size: 138, 145
+  orig: 200, 200
+  offset: 28, 25
+  index: 21
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 594, 94
+  size: 137, 150
+  orig: 200, 200
+  offset: 28, 27
+  index: 23
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 738, 93
+  size: 137, 151
+  orig: 200, 200
+  offset: 35, 25
+  index: 29
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 882, 96
+  size: 136, 148
+  orig: 200, 200
+  offset: 36, 24
+  index: 16
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 1025, 103
+  size: 137, 141
+  orig: 200, 200
+  offset: 35, 35
+  index: 28
+hero_button_fairy_ANIM
+  rotate: false
+  xy: 1169, 98
+  size: 131, 146
+  orig: 200, 200
+  offset: 28, 31
+  index: 24
+star_8point_A
+  rotate: false
+  xy: 1307, 144
+  size: 99, 100
+  orig: 100, 100
+  offset: 1, 0
+  index: -1

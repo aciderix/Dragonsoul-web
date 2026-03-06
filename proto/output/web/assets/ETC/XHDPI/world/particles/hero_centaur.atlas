@@ -1,0 +1,265 @@
+
+hero_centaur.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Puff
+  rotate: false
+  xy: 471, 803
+  size: 192, 189
+  orig: 200, 200
+  offset: 6, 8
+  index: -1
+core
+  rotate: false
+  xy: 382, 227
+  size: 107, 182
+  orig: 108, 182
+  offset: 1, 0
+  index: -1
+energy
+  rotate: false
+  xy: 670, 872
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 20
+energy
+  rotate: false
+  xy: 915, 872
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 21
+energy
+  rotate: false
+  xy: 1160, 872
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 22
+energy
+  rotate: false
+  xy: 1405, 872
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 23
+energy
+  rotate: false
+  xy: 1650, 872
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 24
+energy
+  rotate: false
+  xy: 264, 670
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 25
+energy
+  rotate: false
+  xy: 670, 745
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 26
+energy
+  rotate: false
+  xy: 915, 745
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 27
+energy
+  rotate: false
+  xy: 1160, 745
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 28
+energyGlow
+  rotate: false
+  xy: 1405, 745
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 20
+energyGlow
+  rotate: false
+  xy: 1650, 745
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 21
+energyGlow
+  rotate: false
+  xy: 653, 618
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 22
+energyGlow
+  rotate: false
+  xy: 898, 618
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 23
+energyGlow
+  rotate: false
+  xy: 1143, 618
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 24
+energyGlow
+  rotate: false
+  xy: 1388, 618
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 25
+energyGlow
+  rotate: false
+  xy: 1633, 618
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 26
+energyGlow
+  rotate: false
+  xy: 264, 543
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 27
+energyGlow
+  rotate: false
+  xy: 210, 416
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: 28
+fireworks
+  rotate: false
+  xy: 3, 455
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+fireworks2
+  rotate: false
+  xy: 264, 797
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+gloveB_only
+  rotate: false
+  xy: 509, 670
+  size: 137, 126
+  orig: 138, 128
+  offset: 0, 1
+  index: -1
+glove_arrow
+  rotate: false
+  xy: 652, 559
+  size: 230, 52
+  orig: 230, 53
+  offset: 0, 1
+  index: -1
+glove_arrow_eyeclosed
+  rotate: false
+  xy: 1126, 569
+  size: 230, 42
+  orig: 230, 42
+  offset: 0, 0
+  index: -1
+glove_arrow_eyeopen
+  rotate: false
+  xy: 889, 566
+  size: 230, 45
+  orig: 230, 45
+  offset: 0, 0
+  index: -1
+glove_impact
+  rotate: false
+  xy: 206, 219
+  size: 169, 190
+  orig: 170, 200
+  offset: 0, 0
+  index: -1
+glove_only
+  rotate: false
+  xy: 509, 537
+  size: 136, 126
+  orig: 141, 143
+  offset: 0, 9
+  index: -1
+horn_lightning
+  rotate: false
+  xy: 194, 15
+  size: 128, 197
+  orig: 137, 200
+  offset: 5, 0
+  index: -1
+pDirt
+  rotate: false
+  xy: 3, 3
+  size: 65, 54
+  orig: 65, 57
+  offset: 0, 2
+  index: -1
+particle
+  rotate: false
+  xy: 1895, 757
+  size: 32, 31
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sandball_barrier
+  rotate: false
+  xy: 3, 657
+  size: 254, 335
+  orig: 254, 335
+  offset: 0, 0
+  index: -1
+shhh
+  rotate: false
+  xy: 3, 255
+  size: 196, 193
+  orig: 200, 193
+  offset: 4, 0
+  index: -1
+shield_ring
+  rotate: false
+  xy: 1363, 577
+  size: 187, 34
+  orig: 187, 34
+  offset: 0, 0
+  index: -1
+smear_ring
+  rotate: false
+  xy: 3, 64
+  size: 184, 184
+  orig: 200, 200
+  offset: 8, 8
+  index: -1
+stopwatch
+  rotate: false
+  xy: 1895, 795
+  size: 147, 197
+  orig: 150, 200
+  offset: 2, 1
+  index: -1
+stopwatch_needle
+  rotate: false
+  xy: 210, 550
+  size: 16, 100
+  orig: 16, 126
+  offset: 0, 26
+  index: -1

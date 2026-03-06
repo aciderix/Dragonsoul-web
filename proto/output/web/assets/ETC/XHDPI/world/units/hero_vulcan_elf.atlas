@@ -1,0 +1,188 @@
+
+hero_vulcan_elf.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm-b
+  rotate: false
+  xy: 86, 15
+  size: 56, 71
+  orig: 56, 71
+  offset: 0, 0
+  index: -1
+arm-f
+  rotate: false
+  xy: 403, 149
+  size: 78, 103
+  orig: 78, 103
+  offset: 0, 0
+  index: -1
+cape-b
+  rotate: false
+  xy: 3, 93
+  size: 148, 159
+  orig: 148, 159
+  offset: 0, 0
+  index: -1
+cape-f
+  rotate: false
+  xy: 733, 202
+  size: 92, 50
+  orig: 92, 50
+  offset: 0, 0
+  index: -1
+closed_eye-b
+  rotate: false
+  xy: 315, 119
+  size: 27, 16
+  orig: 27, 16
+  offset: 0, 0
+  index: -1
+closed_eye-f
+  rotate: false
+  xy: 998, 238
+  size: 21, 14
+  orig: 21, 14
+  offset: 0, 0
+  index: -1
+eyeball-b
+  rotate: false
+  xy: 266, 58
+  size: 12, 11
+  orig: 12, 11
+  offset: 0, 0
+  index: -1
+eyeball-f
+  rotate: false
+  xy: 488, 155
+  size: 19, 11
+  orig: 19, 11
+  offset: 0, 0
+  index: -1
+eyebrow-b
+  rotate: false
+  xy: 790, 181
+  size: 12, 14
+  orig: 12, 14
+  offset: 0, 0
+  index: -1
+eyebrow-f
+  rotate: false
+  xy: 217, 3
+  size: 23, 12
+  orig: 23, 12
+  offset: 0, 0
+  index: -1
+hand2-f
+  rotate: false
+  xy: 832, 198
+  size: 48, 54
+  orig: 48, 54
+  offset: 0, 0
+  index: -1
+hand3-f
+  rotate: false
+  xy: 942, 209
+  size: 49, 43
+  orig: 49, 43
+  offset: 0, 0
+  index: -1
+hand_02-f
+  rotate: false
+  xy: 887, 197
+  size: 48, 55
+  orig: 48, 55
+  offset: 0, 0
+  index: -1
+head_mouth open
+  rotate: false
+  xy: 3, 4
+  size: 76, 82
+  orig: 76, 82
+  offset: 0, 0
+  index: -1
+head_mouth_closed
+  rotate: false
+  xy: 488, 173
+  size: 76, 79
+  orig: 76, 79
+  offset: 0, 0
+  index: -1
+head_mouth_pain
+  rotate: false
+  xy: 571, 173
+  size: 76, 79
+  orig: 76, 79
+  offset: 0, 0
+  index: -1
+hip
+  rotate: false
+  xy: 733, 162
+  size: 50, 33
+  orig: 50, 33
+  offset: 0, 0
+  index: -1
+knife
+  rotate: false
+  xy: 149, 18
+  size: 61, 61
+  orig: 61, 61
+  offset: 0, 0
+  index: -1
+leg-b
+  rotate: false
+  xy: 238, 118
+  size: 70, 134
+  orig: 70, 134
+  offset: 0, 0
+  index: -1
+leg-f
+  rotate: false
+  xy: 158, 86
+  size: 73, 166
+  orig: 73, 166
+  offset: 0, 0
+  index: -1
+loin_cloth
+  rotate: false
+  xy: 654, 174
+  size: 72, 78
+  orig: 72, 78
+  offset: 0, 0
+  index: -1
+palm-b
+  rotate: false
+  xy: 217, 22
+  size: 42, 47
+  orig: 42, 47
+  offset: 0, 0
+  index: -1
+palm-f
+  rotate: false
+  xy: 238, 76
+  size: 54, 35
+  orig: 54, 35
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 299, 104
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 247, 8
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 315, 142
+  size: 81, 110
+  orig: 81, 110
+  offset: 0, 0
+  index: -1

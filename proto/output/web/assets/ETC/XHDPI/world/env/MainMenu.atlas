@@ -1,0 +1,153 @@
+
+MainMenu.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+left_side_foreground-0,0
+  rotate: false
+  xy: 3, 3
+  size: 2041, 1017
+  orig: 2041, 1017
+  offset: 0, 0
+  index: -1
+
+MainMenu2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+left_side_foreground-1,0
+  rotate: false
+  xy: 3, 3
+  size: 2041, 1017
+  orig: 2041, 1017
+  offset: 0, 0
+  index: -1
+
+MainMenu3.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+right_background-0,0
+  rotate: false
+  xy: 3, 3
+  size: 2041, 1017
+  orig: 2041, 1017
+  offset: 0, 0
+  index: -1
+
+MainMenu4.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+right_background-1,0
+  rotate: false
+  xy: 3, 3
+  size: 2041, 1017
+  orig: 2041, 1017
+  offset: 0, 0
+  index: -1
+
+MainMenu5.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+right_background-0,1
+  rotate: false
+  xy: 3, 493
+  size: 2041, 483
+  orig: 2041, 483
+  offset: 0, 0
+  index: -1
+right_background-1,1
+  rotate: false
+  xy: 3, 3
+  size: 2041, 483
+  orig: 2041, 483
+  offset: 0, 0
+  index: -1
+
+MainMenu6.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+left_side_foreground-2,0
+  rotate: false
+  xy: 1765, 837
+  size: 219, 183
+  orig: 1190, 1017
+  offset: 0, 0
+  index: -1
+right_background-2,0
+  rotate: false
+  xy: 3, 3
+  size: 994, 1017
+  orig: 994, 1017
+  offset: 0, 0
+  index: -1
+tree-0,0
+  rotate: false
+  xy: 1004, 3
+  size: 754, 1017
+  orig: 754, 1017
+  offset: 0, 0
+  index: -1
+
+MainMenu7.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+lava-0,0
+  rotate: false
+  xy: 3, 3
+  size: 700, 207
+  orig: 700, 209
+  offset: 0, 0
+  index: -1
+left_side_foreground-0,1
+  rotate: false
+  xy: 3, 579
+  size: 2041, 355
+  orig: 2041, 355
+  offset: 0, 0
+  index: -1
+left_side_foreground-1,1
+  rotate: false
+  xy: 3, 217
+  size: 2041, 355
+  orig: 2041, 355
+  offset: 0, 0
+  index: -1
+
+MainMenu8.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+left_side_foreground-2,1
+  rotate: false
+  xy: 3, 493
+  size: 1189, 355
+  orig: 1190, 355
+  offset: 0, 0
+  index: -1
+right_background-2,1
+  rotate: false
+  xy: 3, 3
+  size: 994, 483
+  orig: 994, 483
+  offset: 0, 0
+  index: -1
+tree-0,1
+  rotate: false
+  xy: 1199, 365
+  size: 411, 483
+  orig: 754, 483
+  offset: 0, 0
+  index: -1

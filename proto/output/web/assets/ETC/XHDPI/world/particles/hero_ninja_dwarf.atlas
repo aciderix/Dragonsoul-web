@@ -1,0 +1,349 @@
+
+hero_ninja_dwarf.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Puff
+  rotate: false
+  xy: 437, 308
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 3
+Puff
+  rotate: false
+  xy: 644, 308
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 4
+Puff
+  rotate: false
+  xy: 851, 308
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 5
+Puff
+  rotate: false
+  xy: 1058, 308
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 6
+Puff
+  rotate: false
+  xy: 1265, 308
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 7
+Puff
+  rotate: false
+  xy: 1472, 319
+  size: 192, 189
+  orig: 200, 200
+  offset: 6, 8
+  index: 2
+Puff
+  rotate: false
+  xy: 1878, 339
+  size: 164, 169
+  orig: 200, 200
+  offset: 19, 15
+  index: 1
+Puff
+  rotate: false
+  xy: 1162, 163
+  size: 131, 138
+  orig: 200, 200
+  offset: 37, 31
+  index: 0
+SmokeRing01
+  rotate: false
+  xy: 869, 201
+  size: 147, 100
+  orig: 151, 104
+  offset: 3, 2
+  index: -1
+Smoke_Burst01
+  rotate: false
+  xy: 808, 94
+  size: 72, 74
+  orig: 72, 74
+  offset: 0, 0
+  index: 2
+Smoke_Burst01
+  rotate: false
+  xy: 1255, 84
+  size: 69, 72
+  orig: 72, 74
+  offset: 0, 1
+  index: 3
+Smoke_Burst01
+  rotate: false
+  xy: 208, 3
+  size: 31, 32
+  orig: 72, 74
+  offset: 19, 21
+  index: 7
+Smoke_Burst01
+  rotate: false
+  xy: 526, 3
+  size: 62, 64
+  orig: 72, 74
+  offset: 3, 5
+  index: 4
+Smoke_Burst01
+  rotate: false
+  xy: 885, 4
+  size: 57, 60
+  orig: 72, 74
+  offset: 6, 7
+  index: 5
+Smoke_Burst01
+  rotate: false
+  xy: 1748, 281
+  size: 43, 46
+  orig: 72, 74
+  offset: 13, 14
+  index: 6
+Smoke_Burst01
+  rotate: false
+  xy: 1435, 192
+  size: 17, 18
+  orig: 72, 74
+  offset: 26, 28
+  index: 8
+Smoke_Burst01
+  rotate: false
+  xy: 210, 274
+  size: 9, 10
+  orig: 72, 74
+  offset: 30, 32
+  index: 9
+Smoke_Burst01
+  rotate: false
+  xy: 638, 180
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: 1
+Swoosh2
+  rotate: false
+  xy: 1162, 97
+  size: 86, 59
+  orig: 200, 200
+  offset: 105, 58
+  index: 6
+Swoosh2
+  rotate: false
+  xy: 664, 175
+  size: 88, 52
+  orig: 200, 200
+  offset: 78, 67
+  index: 5
+Swoosh2
+  rotate: false
+  xy: 887, 71
+  size: 84, 57
+  orig: 200, 200
+  offset: 50, 80
+  index: 4
+Swoosh2
+  rotate: false
+  xy: 1331, 43
+  size: 81, 59
+  orig: 200, 200
+  offset: 20, 82
+  index: 3
+Swoosh2
+  rotate: false
+  xy: 595, 10
+  size: 73, 62
+  orig: 200, 200
+  offset: 0, 79
+  index: 2
+Swoosh2
+  rotate: false
+  xy: 675, 15
+  size: 41, 57
+  orig: 200, 200
+  offset: 0, 79
+  index: 1
+Swoosh2
+  rotate: false
+  xy: 808, 25
+  size: 70, 62
+  orig: 200, 200
+  offset: 130, 55
+  index: 7
+Swoosh3
+  rotate: false
+  xy: 759, 175
+  size: 88, 52
+  orig: 200, 200
+  offset: 78, 67
+  index: 5
+Swoosh3
+  rotate: false
+  xy: 887, 135
+  size: 86, 59
+  orig: 200, 200
+  offset: 105, 58
+  index: 6
+Swoosh3
+  rotate: false
+  xy: 1331, 109
+  size: 84, 57
+  orig: 200, 200
+  offset: 50, 80
+  index: 4
+Swoosh3
+  rotate: false
+  xy: 438, 20
+  size: 81, 59
+  orig: 200, 200
+  offset: 20, 82
+  index: 3
+Swoosh3
+  rotate: false
+  xy: 723, 5
+  size: 73, 62
+  orig: 200, 200
+  offset: 0, 79
+  index: 2
+Swoosh3
+  rotate: false
+  xy: 949, 7
+  size: 41, 57
+  orig: 200, 200
+  offset: 0, 79
+  index: 1
+Swoosh3
+  rotate: false
+  xy: 1671, 265
+  size: 70, 62
+  orig: 200, 200
+  offset: 130, 55
+  index: 7
+Whirl
+  rotate: false
+  xy: 437, 188
+  size: 220, 113
+  orig: 220, 122
+  offset: 0, 0
+  index: -1
+aura_bloodlust
+  rotate: false
+  xy: 1300, 173
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+blue_flare
+  rotate: false
+  xy: 3, 291
+  size: 220, 217
+  orig: 220, 217
+  offset: 0, 0
+  index: -1
+burst_impact1
+  rotate: false
+  xy: 438, 86
+  size: 102, 95
+  orig: 102, 95
+  offset: 0, 0
+  index: -1
+burst_trails1
+  rotate: false
+  xy: 1435, 217
+  size: 28, 84
+  orig: 30, 100
+  offset: 1, 16
+  index: -1
+can
+  rotate: false
+  xy: 1023, 100
+  size: 132, 201
+  orig: 134, 203
+  offset: 1, 1
+  index: -1
+can_impact
+  rotate: false
+  xy: 210, 42
+  size: 118, 120
+  orig: 118, 120
+  offset: 0, 0
+  index: -1
+foam_splash1
+  rotate: false
+  xy: 638, 79
+  size: 79, 89
+  orig: 100, 100
+  offset: 13, 8
+  index: -1
+foam_splash2
+  rotate: false
+  xy: 547, 88
+  size: 84, 93
+  orig: 100, 100
+  offset: 10, 6
+  index: -1
+foam_splash3
+  rotate: false
+  xy: 335, 66
+  size: 96, 96
+  orig: 100, 100
+  offset: 2, 2
+  index: -1
+pCloud1White
+  rotate: false
+  xy: 724, 74
+  size: 77, 94
+  orig: 77, 96
+  offset: 0, 2
+  index: -1
+pHealGroundGlow
+  rotate: false
+  xy: 230, 169
+  size: 200, 129
+  orig: 200, 129
+  offset: 0, 0
+  index: -1
+pose_swoosh
+  rotate: false
+  xy: 3, 81
+  size: 200, 203
+  orig: 200, 203
+  offset: 0, 0
+  index: -1
+pose_swoosh2
+  rotate: false
+  xy: 3, 7
+  size: 198, 67
+  orig: 200, 79
+  offset: 2, 9
+  index: -1
+pose_swoosh3
+  rotate: false
+  xy: 230, 305
+  size: 200, 203
+  orig: 200, 203
+  offset: 0, 0
+  index: -1
+pose_swoosh4
+  rotate: false
+  xy: 664, 234
+  size: 198, 67
+  orig: 200, 79
+  offset: 2, 9
+  index: -1
+vapor1
+  rotate: false
+  xy: 1671, 334
+  size: 200, 174
+  orig: 200, 174
+  offset: 0, 0
+  index: -1

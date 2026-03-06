@@ -1,0 +1,48 @@
+
+monster_archer_grunt.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arrow_mblur
+  rotate: false
+  xy: 787, 172
+  size: 230, 33
+  orig: 230, 33
+  offset: 0, 0
+  index: -1
+barrier
+  rotate: false
+  xy: 613, 103
+  size: 167, 102
+  orig: 167, 111
+  offset: 0, 5
+  index: -1
+behind_glow
+  rotate: false
+  xy: 3, 5
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+fireworks
+  rotate: false
+  xy: 210, 10
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
+foam_splash2
+  rotate: false
+  xy: 613, 3
+  size: 84, 93
+  orig: 100, 100
+  offset: 10, 6
+  index: -1
+splash
+  rotate: false
+  xy: 417, 11
+  size: 189, 194
+  orig: 189, 194
+  offset: 0, 0
+  index: -1

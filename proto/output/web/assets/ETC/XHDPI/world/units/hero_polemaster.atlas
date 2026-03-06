@@ -1,0 +1,230 @@
+
+hero_polemaster.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Spin_mblur
+  rotate: false
+  xy: 308, 62
+  size: 87, 82
+  orig: 87, 82
+  offset: 0, 0
+  index: -1
+bowtie
+  rotate: false
+  xy: 491, 142
+  size: 34, 17
+  orig: 34, 17
+  offset: 0, 0
+  index: -1
+eye-closed-f
+  rotate: false
+  xy: 373, 37
+  size: 20, 18
+  orig: 20, 18
+  offset: 0, 0
+  index: -1
+eye_closed-b
+  rotate: false
+  xy: 198, 21
+  size: 13, 9
+  orig: 13, 9
+  offset: 0, 0
+  index: -1
+eyeball-b
+  rotate: false
+  xy: 402, 65
+  size: 30, 10
+  orig: 30, 10
+  offset: 0, 0
+  index: -1
+eyeball-f
+  rotate: false
+  xy: 782, 173
+  size: 34, 13
+  orig: 34, 13
+  offset: 0, 0
+  index: -1
+eyebrow-b
+  rotate: false
+  xy: 876, 190
+  size: 17, 10
+  orig: 17, 10
+  offset: 0, 0
+  index: -1
+eyebrow-f
+  rotate: false
+  xy: 842, 187
+  size: 27, 13
+  orig: 27, 13
+  offset: 0, 0
+  index: -1
+foot-b
+  rotate: false
+  xy: 308, 31
+  size: 58, 24
+  orig: 58, 24
+  offset: 0, 0
+  index: -1
+foot-f
+  rotate: false
+  xy: 131, 3
+  size: 60, 27
+  orig: 60, 27
+  offset: 0, 0
+  index: -1
+head_mouth_closed
+  rotate: false
+  xy: 220, 41
+  size: 81, 103
+  orig: 81, 103
+  offset: 0, 0
+  index: -1
+head_mouth_open
+  rotate: false
+  xy: 131, 37
+  size: 82, 107
+  orig: 82, 107
+  offset: 0, 0
+  index: -1
+lower_arm-b
+  rotate: false
+  xy: 782, 193
+  size: 53, 58
+  orig: 53, 58
+  offset: 0, 0
+  index: -1
+lower_arm-f
+  rotate: false
+  xy: 532, 161
+  size: 61, 90
+  orig: 61, 90
+  offset: 0, 0
+  index: -1
+lower_leg-b
+  rotate: false
+  xy: 493, 49
+  size: 38, 50
+  orig: 38, 50
+  offset: 0, 0
+  index: -1
+lower_leg-f
+  rotate: false
+  xy: 441, 104
+  size: 43, 55
+  orig: 43, 55
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 842, 207
+  size: 63, 44
+  orig: 63, 44
+  offset: 0, 0
+  index: -1
+palm-b
+  rotate: false
+  xy: 441, 56
+  size: 45, 41
+  orig: 45, 41
+  offset: 0, 0
+  index: -1
+palm_closed-f
+  rotate: false
+  xy: 532, 110
+  size: 41, 44
+  orig: 41, 44
+  offset: 0, 0
+  index: -1
+palm_open-b
+  rotate: false
+  xy: 538, 54
+  size: 41, 49
+  orig: 41, 49
+  offset: 0, 0
+  index: -1
+palm_open-f
+  rotate: false
+  xy: 912, 204
+  size: 55, 47
+  orig: 55, 47
+  offset: 0, 0
+  index: -1
+pupil-b
+  rotate: false
+  xy: 823, 179
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+pupil-f
+  rotate: false
+  xy: 580, 146
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+staff
+  rotate: false
+  xy: 3, 151
+  size: 428, 100
+  orig: 428, 100
+  offset: 0, 0
+  index: -1
+staff_mblur
+  rotate: false
+  xy: 438, 166
+  size: 87, 85
+  orig: 87, 85
+  offset: 0, 0
+  index: -1
+thumb-b
+  rotate: false
+  xy: 491, 106
+  size: 26, 29
+  orig: 26, 29
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 3, 10
+  size: 121, 134
+  orig: 121, 134
+  offset: 0, 0
+  index: -1
+upper_arm-b
+  rotate: false
+  xy: 723, 175
+  size: 52, 76
+  orig: 52, 76
+  offset: 0, 0
+  index: -1
+upper_arm-f
+  rotate: false
+  xy: 600, 164
+  size: 56, 87
+  orig: 56, 87
+  offset: 0, 0
+  index: -1
+upper_leg-b
+  rotate: false
+  xy: 402, 82
+  size: 32, 62
+  orig: 32, 62
+  offset: 0, 0
+  index: -1
+upper_leg-f
+  rotate: false
+  xy: 663, 175
+  size: 53, 76
+  orig: 53, 76
+  offset: 0, 0
+  index: -1
+waist
+  rotate: false
+  xy: 974, 216
+  size: 46, 35
+  orig: 46, 35
+  offset: 0, 0
+  index: -1

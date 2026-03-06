@@ -1,0 +1,46 @@
+
+Ch20_Combat4_Chaos_Nexus.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,0
+  rotate: false
+  xy: 3, 3
+  size: 2000, 1017
+  orig: 2000, 1017
+  offset: 0, 0
+  index: -1
+
+Ch20_Combat4_Chaos_Nexus2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+background-0,1
+  rotate: false
+  xy: 3, 493
+  size: 2000, 483
+  orig: 2000, 483
+  offset: 0, 0
+  index: -1
+foreground-0,1
+  rotate: false
+  xy: 3, 3
+  size: 2000, 483
+  orig: 2000, 483
+  offset: 0, 0
+  index: -1
+
+Ch20_Combat4_Chaos_Nexus3.png
+size: 128,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+foreground-0,0
+  rotate: false
+  xy: 3, 3
+  size: 95, 89
+  orig: 2000, 1017
+  offset: 1890, 0
+  index: -1

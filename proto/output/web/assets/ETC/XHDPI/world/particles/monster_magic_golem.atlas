@@ -1,0 +1,104 @@
+
+monster_magic_golem.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cloud
+  rotate: false
+  xy: 1116, 316
+  size: 188, 140
+  orig: 200, 156
+  offset: 6, 7
+  index: -1
+crystal_spread
+  rotate: false
+  xy: 769, 241
+  size: 200, 215
+  orig: 200, 215
+  offset: 0, 0
+  index: -1
+enexplosion
+  rotate: false
+  xy: 264, 236
+  size: 251, 220
+  orig: 251, 220
+  offset: 0, 0
+  index: -1
+fire
+  rotate: false
+  xy: 976, 259
+  size: 133, 197
+  orig: 167, 234
+  offset: 16, 0
+  index: -1
+impact
+  rotate: false
+  xy: 1311, 301
+  size: 167, 155
+  orig: 167, 167
+  offset: 0, 6
+  index: -1
+lensflare
+  rotate: false
+  xy: 264, 135
+  size: 200, 94
+  orig: 200, 102
+  offset: 0, 4
+  index: -1
+lightning_ball
+  rotate: false
+  xy: 1891, 334
+  size: 135, 122
+  orig: 150, 150
+  offset: 11, 12
+  index: -1
+missile_a
+  rotate: false
+  xy: 1485, 156
+  size: 121, 204
+  orig: 121, 204
+  offset: 0, 0
+  index: -1
+missile_crystal
+  rotate: false
+  xy: 3, 3
+  size: 239, 111
+  orig: 250, 111
+  offset: 11, 0
+  index: -1
+missile_impact
+  rotate: false
+  xy: 1613, 264
+  size: 72, 96
+  orig: 74, 98
+  offset: 1, 1
+  index: -1
+rocks
+  rotate: false
+  xy: 522, 240
+  size: 240, 216
+  orig: 240, 216
+  offset: 0, 0
+  index: -1
+sandball_barrier
+  rotate: false
+  xy: 3, 121
+  size: 254, 335
+  orig: 254, 335
+  offset: 0, 0
+  index: -1
+wind_cloud
+  rotate: false
+  xy: 1485, 367
+  size: 196, 89
+  orig: 200, 94
+  offset: 2, 2
+  index: -1
+wind_cloud2
+  rotate: false
+  xy: 1688, 367
+  size: 196, 89
+  orig: 200, 94
+  offset: 3, 2
+  index: -1

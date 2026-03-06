@@ -1,0 +1,458 @@
+
+ui_main.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+campaign_dim
+  rotate: false
+  xy: 1772, 76
+  size: 261, 230
+  orig: 261, 230
+  offset: 0, 0
+  index: -1
+challengers_dragon_eyes
+  rotate: false
+  xy: 628, 487
+  size: 38, 10
+  orig: 344, 406
+  offset: 119, 338
+  index: -1
+events_chain_B_L
+  rotate: false
+  xy: 1947, 3
+  size: 17, 29
+  orig: 17, 29
+  offset: 0, 0
+  index: -1
+events_chain_B_R
+  rotate: false
+  xy: 1947, 39
+  size: 20, 30
+  orig: 20, 30
+  offset: 0, 0
+  index: -1
+events_chain_C_L
+  rotate: false
+  xy: 1921, 36
+  size: 19, 33
+  orig: 22, 33
+  offset: 1, 0
+  index: -1
+events_chain_C_R
+  rotate: false
+  xy: 1921, 3
+  size: 18, 26
+  orig: 21, 27
+  offset: 2, 1
+  index: -1
+fight_pit_sword_L
+  rotate: false
+  xy: 1844, 22
+  size: 70, 47
+  orig: 74, 58
+  offset: 1, 3
+  index: -1
+fight_pit_sword_R
+  rotate: false
+  xy: 1772, 8
+  size: 65, 61
+  orig: 70, 65
+  offset: 4, 1
+  index: -1
+pit_b
+  rotate: false
+  xy: 3, 6
+  size: 1127, 460
+  orig: 1129, 462
+  offset: 1, 1
+  index: -1
+summit_beams_A
+  rotate: false
+  xy: 1137, 24
+  size: 628, 473
+  orig: 700, 645
+  offset: 27, 11
+  index: -1
+summit_beams_B
+  rotate: false
+  xy: 3, 473
+  size: 618, 547
+  orig: 700, 645
+  offset: 31, 11
+  index: -1
+the_summit_dim
+  rotate: false
+  xy: 1772, 313
+  size: 262, 184
+  orig: 280, 198
+  offset: 8, 9
+  index: -1
+the_summit_glow
+  rotate: false
+  xy: 1844, 859
+  size: 200, 161
+  orig: 280, 198
+  offset: 7, 4
+  index: -1
+trader_dim
+  rotate: false
+  xy: 628, 504
+  size: 601, 516
+  orig: 601, 516
+  offset: 0, 0
+  index: -1
+trader_lit
+  rotate: false
+  xy: 1236, 504
+  size: 601, 516
+  orig: 601, 516
+  offset: 0, 0
+  index: -1
+ui_main_poleFlag_glow
+  rotate: false
+  xy: 1844, 516
+  size: 194, 336
+  orig: 200, 336
+  offset: 2, 0
+  index: -1
+
+ui_main2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Tentacle
+  rotate: false
+  xy: 1745, 550
+  size: 245, 467
+  orig: 247, 469
+  offset: 1, 1
+  index: -1
+challengers_dragon_dim
+  rotate: false
+  xy: 1434, 88
+  size: 344, 406
+  orig: 344, 406
+  offset: 0, 0
+  index: -1
+events_lit_sign_base
+  rotate: false
+  xy: 1880, 15
+  size: 152, 185
+  orig: 155, 188
+  offset: 1, 3
+  index: -1
+events_lit_sign_chain_A
+  rotate: false
+  xy: 368, 16
+  size: 135, 32
+  orig: 155, 37
+  offset: 18, 5
+  index: -1
+fight_pit_base
+  rotate: false
+  xy: 1039, 120
+  size: 388, 374
+  orig: 388, 374
+  offset: 0, 0
+  index: -1
+fight_pit_lit
+  rotate: false
+  xy: 1039, 120
+  size: 388, 374
+  orig: 388, 374
+  offset: 0, 0
+  index: -1
+fight_pit_statueGlow
+  rotate: false
+  xy: 3, 3
+  size: 358, 162
+  orig: 388, 374
+  offset: 6, 18
+  index: -1
+pit-f
+  rotate: false
+  xy: 3, 172
+  size: 1029, 378
+  orig: 1031, 380
+  offset: 1, 1
+  index: -1
+pit_disabled
+  rotate: false
+  xy: 3, 557
+  size: 1127, 460
+  orig: 1147, 509
+  offset: 0, 16
+  index: -1
+the_summit_glow_A
+  rotate: false
+  xy: 977, 29
+  size: 123, 84
+  orig: 191, 138
+  offset: 16, 0
+  index: -1
+the_summit_glow_B
+  rotate: false
+  xy: 1107, 29
+  size: 123, 84
+  orig: 191, 138
+  offset: 16, 0
+  index: -1
+trader_ontap
+  rotate: false
+  xy: 1137, 501
+  size: 601, 516
+  orig: 601, 516
+  offset: 0, 0
+  index: -1
+ui_main_poleCross
+  rotate: false
+  xy: 725, 84
+  size: 245, 81
+  orig: 245, 81
+  offset: 0, 0
+  index: -1
+ui_main_poleFlag
+  rotate: false
+  xy: 1880, 207
+  size: 163, 336
+  orig: 163, 336
+  offset: 0, 0
+  index: -1
+ui_main_poleShadow
+  rotate: false
+  xy: 368, 55
+  size: 350, 110
+  orig: 350, 110
+  offset: 0, 0
+  index: -1
+ui_main_poleVert
+  rotate: false
+  xy: 1785, 127
+  size: 88, 416
+  orig: 88, 416
+  offset: 0, 0
+  index: -1
+
+ui_main3.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+campaign_lit
+  rotate: false
+  xy: 1776, 230
+  size: 261, 230
+  orig: 261, 230
+  offset: 0, 0
+  index: -1
+challengers_dragon_lit
+  rotate: false
+  xy: 391, 612
+  size: 344, 406
+  orig: 344, 406
+  offset: 0, 0
+  index: -1
+challengers_dragon_on_tap
+  rotate: false
+  xy: 1436, 336
+  size: 296, 402
+  orig: 344, 406
+  offset: 34, 2
+  index: -1
+challengers_magic_on_tap
+  rotate: false
+  xy: 1119, 444
+  size: 300, 294
+  orig: 300, 300
+  offset: 0, 4
+  index: -1
+challengers_physical_dim
+  rotate: false
+  xy: 754, 3
+  size: 334, 242
+  orig: 334, 242
+  offset: 0, 0
+  index: -1
+challengers_physical_lit
+  rotate: false
+  xy: 1095, 3
+  size: 334, 242
+  orig: 334, 242
+  offset: 0, 0
+  index: -1
+event_dim
+  rotate: false
+  xy: 398, 207
+  size: 338, 398
+  orig: 338, 398
+  offset: 0, 0
+  index: -1
+event_ontap
+  rotate: false
+  xy: 1739, 467
+  size: 290, 271
+  orig: 338, 398
+  offset: 0, 65
+  index: -1
+events_lit_post
+  rotate: false
+  xy: 742, 620
+  size: 338, 398
+  orig: 338, 398
+  offset: 0, 0
+  index: -1
+expedetion_dim
+  rotate: false
+  xy: 1436, 10
+  size: 333, 319
+  orig: 333, 319
+  offset: 0, 0
+  index: -1
+expedetion_ontap
+  rotate: false
+  xy: 743, 252
+  size: 369, 361
+  orig: 400, 400
+  offset: 10, 31
+  index: -1
+fight_pit_dim
+  rotate: false
+  xy: 3, 185
+  size: 388, 374
+  orig: 388, 374
+  offset: 0, 0
+  index: -1
+guilds_dim
+  rotate: false
+  xy: 1087, 745
+  size: 402, 273
+  orig: 402, 273
+  offset: 0, 0
+  index: -1
+guilds_lit
+  rotate: false
+  xy: 1496, 745
+  size: 402, 273
+  orig: 402, 273
+  offset: 0, 0
+  index: -1
+guilds_on_tap
+  rotate: false
+  xy: 398, 21
+  size: 349, 179
+  orig: 402, 273
+  offset: 45, 94
+  index: -1
+the_summit
+  rotate: false
+  xy: 1776, 41
+  size: 240, 182
+  orig: 280, 198
+  offset: 13, 8
+  index: -1
+the_summit_cover
+  rotate: false
+  xy: 3, 41
+  size: 170, 137
+  orig: 173, 143
+  offset: 1, 6
+  index: -1
+the_summit_lit
+  rotate: false
+  xy: 180, 38
+  size: 150, 140
+  orig: 280, 198
+  offset: 75, 19
+  index: -1
+the_summit_wisdom
+  rotate: false
+  xy: 1119, 253
+  size: 241, 184
+  orig: 280, 198
+  offset: 13, 6
+  index: -1
+ui_main_poleFlag_dim
+  rotate: false
+  xy: 3, 566
+  size: 381, 452
+  orig: 381, 452
+  offset: 0, 0
+  index: -1
+
+ui_main4.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+campaign_ontap
+  rotate: false
+  xy: 343, 3
+  size: 261, 228
+  orig: 325, 275
+  offset: 31, 23
+  index: -1
+campaign_ontap_glow
+  rotate: false
+  xy: 680, 247
+  size: 325, 247
+  orig: 325, 275
+  offset: 0, 28
+  index: -1
+challengers_magic_dim
+  rotate: false
+  xy: 1012, 259
+  size: 285, 235
+  orig: 285, 235
+  offset: 0, 0
+  index: -1
+challengers_magic_lit
+  rotate: false
+  xy: 1304, 259
+  size: 285, 235
+  orig: 285, 235
+  offset: 0, 0
+  index: -1
+challengers_physical_on_tap_A
+  rotate: false
+  xy: 611, 9
+  size: 177, 222
+  orig: 334, 242
+  offset: 95, 0
+  index: -1
+challengers_physical_on_tap_B
+  rotate: false
+  xy: 343, 238
+  size: 330, 256
+  orig: 334, 292
+  offset: 4, 11
+  index: -1
+expedetion_lit
+  rotate: false
+  xy: 3, 175
+  size: 333, 319
+  orig: 333, 319
+  offset: 0, 0
+  index: -1
+fight_pit_statues
+  rotate: false
+  xy: 1596, 316
+  size: 337, 178
+  orig: 388, 374
+  offset: 20, 5
+  index: -1
+fight_pit_swordGlow
+  rotate: false
+  xy: 795, 60
+  size: 180, 180
+  orig: 388, 374
+  offset: 114, 163
+  index: -1
+the_summit_neutral
+  rotate: false
+  xy: 1596, 127
+  size: 240, 182
+  orig: 280, 198
+  offset: 13, 8
+  index: -1

@@ -1,0 +1,223 @@
+
+hero_red_shaman.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+buff_wave
+  rotate: false
+  xy: 1646, 171
+  size: 94, 250
+  orig: 97, 250
+  offset: 3, 0
+  index: -1
+buff_wave2
+  rotate: false
+  xy: 1747, 256
+  size: 94, 250
+  orig: 97, 250
+  offset: 0, 0
+  index: -1
+core
+  rotate: false
+  xy: 1519, 154
+  size: 107, 182
+  orig: 108, 182
+  offset: 1, 0
+  index: -1
+enexplosion
+  rotate: false
+  xy: 264, 286
+  size: 251, 220
+  orig: 251, 220
+  offset: 0, 0
+  index: -1
+glow_ring2
+  rotate: false
+  xy: 486, 201
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 0
+glow_ring2
+  rotate: false
+  xy: 839, 6
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 1
+glow_ring2
+  rotate: false
+  xy: 1026, 6
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 2
+glow_ring2
+  rotate: false
+  xy: 1213, 8
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 3
+glow_ring2
+  rotate: false
+  xy: 1139, 428
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 4
+glow_ring2
+  rotate: false
+  xy: 1326, 428
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 5
+glow_ring2
+  rotate: false
+  xy: 1400, 48
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 6
+glow_ring2
+  rotate: false
+  xy: 1459, 343
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 7
+glow_ring2
+  rotate: false
+  xy: 1513, 428
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 8
+glow_ring2
+  rotate: false
+  xy: 1587, 69
+  size: 180, 78
+  orig: 180, 120
+  offset: 0, 20
+  index: 9
+helix2
+  rotate: false
+  xy: 184, 45
+  size: 223, 119
+  orig: 240, 135
+  offset: 0, 0
+  index: 4
+helix2
+  rotate: false
+  xy: 264, 178
+  size: 215, 101
+  orig: 240, 135
+  offset: 22, 0
+  index: 6
+helix2
+  rotate: false
+  xy: 414, 48
+  size: 211, 123
+  orig: 240, 135
+  offset: 5, 0
+  index: 3
+helix2
+  rotate: false
+  xy: 673, 208
+  size: 215, 119
+  orig: 240, 135
+  offset: 21, 0
+  index: 8
+helix2
+  rotate: false
+  xy: 715, 382
+  size: 205, 124
+  orig: 240, 135
+  offset: 9, 0
+  index: 2
+helix2
+  rotate: false
+  xy: 839, 91
+  size: 230, 110
+  orig: 240, 135
+  offset: 0, 0
+  index: 5
+helix2
+  rotate: false
+  xy: 895, 251
+  size: 204, 124
+  orig: 240, 135
+  offset: 11, 0
+  index: 1
+helix2
+  rotate: false
+  xy: 927, 383
+  size: 205, 123
+  orig: 240, 135
+  offset: 15, 0
+  index: 9
+helix2
+  rotate: false
+  xy: 1106, 266
+  size: 212, 110
+  orig: 240, 135
+  offset: 28, 0
+  index: 7
+sandball_barrier
+  rotate: false
+  xy: 3, 171
+  size: 254, 335
+  orig: 254, 335
+  offset: 0, 0
+  index: -1
+smoke
+  rotate: false
+  xy: 3, 3
+  size: 174, 161
+  orig: 200, 175
+  offset: 16, 7
+  index: 77
+smoke
+  rotate: false
+  xy: 632, 19
+  size: 200, 175
+  orig: 200, 175
+  offset: 0, 0
+  index: 89
+smoke
+  rotate: false
+  xy: 522, 334
+  size: 186, 172
+  orig: 200, 175
+  offset: 7, 0
+  index: 83
+smoke
+  rotate: false
+  xy: 1076, 93
+  size: 159, 151
+  orig: 200, 175
+  offset: 20, 12
+  index: 71
+smoke
+  rotate: false
+  xy: 1242, 111
+  size: 143, 148
+  orig: 200, 175
+  offset: 28, 14
+  index: 65
+smoke
+  rotate: false
+  xy: 1325, 277
+  size: 127, 144
+  orig: 200, 175
+  offset: 37, 15
+  index: 59
+smoke
+  rotate: false
+  xy: 1392, 133
+  size: 120, 137
+  orig: 200, 175
+  offset: 40, 19
+  index: 53

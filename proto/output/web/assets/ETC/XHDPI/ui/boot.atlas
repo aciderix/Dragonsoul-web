@@ -1,0 +1,28 @@
+
+boot.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+boot/boot/boot_progress
+  rotate: false
+  xy: 683, 431
+  size: 13, 20
+  split: 2, 2, 6, 6
+  orig: 13, 20
+  offset: 0, 0
+  index: -1
+boot/boot/logo
+  rotate: false
+  xy: 3, 152
+  size: 673, 299
+  orig: 708, 299
+  offset: 17, 0
+  index: -1
+boot/boot/tip
+  rotate: false
+  xy: 3, 3
+  size: 155, 142
+  orig: 155, 142
+  offset: 0, 0
+  index: -1
