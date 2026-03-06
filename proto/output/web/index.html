@@ -335,19 +335,38 @@
             } catch(e) { skipped++; }
         }
 
-        // Phase 2: fetch and decode known atlas PNGs from the HTTP server
-        // These are NOT pre-loaded in game-assets.js (too large), but exist on disk
-        const serverPNGs = [
-            'ETC/XHDPI/ui/base.png',    'ETC/XHDPI/ui/base2.png',   'ETC/XHDPI/ui/base3.png',
-            'ETC/XHDPI/ui/base4.png',   'ETC/XHDPI/ui/base5.png',   'ETC/XHDPI/ui/base6.png',
-            'ETC/XHDPI/ui/base7.png',   'ETC/XHDPI/ui/base8.png',   'ETC/XHDPI/ui/base9.png',
-            'ETC/XHDPI/ui/base10.png',  'ETC/XHDPI/ui/base11.png',  'ETC/XHDPI/ui/base12.png',
-            'ETC/XHDPI/ui/base13.png',  'ETC/XHDPI/ui/base14.png',  'ETC/XHDPI/ui/base15.png',
-            'ETC/XHDPI/ui/common.png',  'ETC/XHDPI/ui/common2.png', 'ETC/XHDPI/ui/common3.png',
-            'ETC/XHDPI/ui/common4.png', 'ETC/XHDPI/ui/boot.png',
-            'ETC/XHDPI/ui/splash_normal.png', 'ETC/XHDPI/ui/splash_holiday.png',
-            'ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png',
-        ];
+        // Phase 2: fetch and decode ALL PNGs from the server (via asset-manifest.json)
+        // The manifest is generated at build time from all files in the assets/ directory
+        let serverPNGs = [];
+        try {
+            const manifestResp = await fetch('asset-manifest.json');
+            if (manifestResp.ok) {
+                const allAssets = await manifestResp.json();
+                // Only PNGs need RGBA decode; filter to PNGs only
+                serverPNGs = allAssets.filter(p => p.toLowerCase().endsWith('.png'))
+                                      .map(p => p.replace(/^assets\//, ''));
+            }
+        } catch(e) { console.warn('[PRELOAD] asset-manifest.json not found, falling back to hardcoded list'); }
+
+        // Fallback hardcoded list if manifest fetch fails
+        if (!serverPNGs.length) {
+            serverPNGs = [
+                'ETC/XHDPI/ui/base.png',    'ETC/XHDPI/ui/base2.png',   'ETC/XHDPI/ui/base3.png',
+                'ETC/XHDPI/ui/base4.png',   'ETC/XHDPI/ui/base5.png',   'ETC/XHDPI/ui/base6.png',
+                'ETC/XHDPI/ui/base7.png',   'ETC/XHDPI/ui/base8.png',   'ETC/XHDPI/ui/base9.png',
+                'ETC/XHDPI/ui/base10.png',  'ETC/XHDPI/ui/base11.png',  'ETC/XHDPI/ui/base12.png',
+                'ETC/XHDPI/ui/base13.png',  'ETC/XHDPI/ui/base14.png',  'ETC/XHDPI/ui/base15.png',
+                'ETC/XHDPI/ui/common.png',  'ETC/XHDPI/ui/common2.png', 'ETC/XHDPI/ui/common3.png',
+                'ETC/XHDPI/ui/common4.png', 'ETC/XHDPI/ui/boot.png',
+                'ETC/XHDPI/ui/splash_normal.png', 'ETC/XHDPI/ui/splash_holiday.png',
+                'ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png',
+                'ETC/XHDPI/world/env/MainMenu.png',  'ETC/XHDPI/world/env/MainMenu2.png',
+                'ETC/XHDPI/world/env/MainMenu3.png', 'ETC/XHDPI/world/env/MainMenu4.png',
+                'ETC/XHDPI/world/env/MainMenu5.png', 'ETC/XHDPI/world/env/MainMenu6.png',
+                'ETC/XHDPI/world/env/MainMenu7.png', 'ETC/XHDPI/world/env/MainMenu8.png',
+            ];
+        }
+
         for (const path of serverPNGs) {
             if (GAME_ASSETS_RGBA[path] || GAME_ASSETS_RGBA['ui/' + path.split('/').pop()]) continue;
             try {
@@ -363,6 +382,9 @@
                 // Also store without ETC/XHDPI prefix for flexible lookup
                 const shortPath = path.replace('ETC/XHDPI/', '');
                 GAME_ASSETS_RGBA[shortPath] = rgba;
+                // Also store by filename only for maximum compatibility
+                const fname = path.split('/').pop();
+                if (!GAME_ASSETS_RGBA[fname]) GAME_ASSETS_RGBA[fname] = rgba;
                 fetched++;
             } catch(e) { skipped++; }
         }
