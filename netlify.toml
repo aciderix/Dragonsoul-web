@@ -47,3 +47,25 @@
   for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
+
+[functions]
+  directory = "netlify/functions"
+
+# Game server API: redirect /login and /api/boot to Netlify Functions
+[[redirects]]
+  from = "/login"
+  to = "/.netlify/functions/login"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/boot"
+  to = "/.netlify/functions/boot"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/boot"
+  status = 200
+  force = false

@@ -60,6 +60,12 @@
             display: block;
             width: 100%;
             height: auto;
+            touch-action: none;   /* Fix 90: prevent browser scroll/zoom on mobile */
+            user-select: none;    /* prevent text selection on tap */
+            -webkit-user-select: none;
+        }
+        #canvas-container {
+            touch-action: none;   /* also on container to prevent edge cases */
         }
         #overlay {
             position: absolute;
@@ -367,26 +373,29 @@
             ];
         }
 
-        for (const path of serverPNGs) {
-            if (GAME_ASSETS_RGBA[path] || GAME_ASSETS_RGBA['ui/' + path.split('/').pop()]) continue;
+        // Parallel fetch+decode with concurrency limit of 8
+        async function fetchAndDecode(path) {
+            if (GAME_ASSETS_RGBA[path] || GAME_ASSETS_RGBA['ui/' + path.split('/').pop()]) return;
             try {
                 const resp = await fetch('assets/' + path);
-                if (!resp.ok) continue;
+                if (!resp.ok) { skipped++; return; }
                 const buf = await resp.arrayBuffer();
-                // Cache raw bytes in GAME_ASSETS so XHR bypass finds them already loaded
                 const bytes = new Uint8Array(buf);
                 GAME_ASSETS[path] = { _webBytes: bytes };
-                // Decode to RGBA and store under multiple keys for path flexibility
                 const rgba = await decodePNG(buf);
                 GAME_ASSETS_RGBA[path] = rgba;
-                // Also store without ETC/XHDPI prefix for flexible lookup
                 const shortPath = path.replace('ETC/XHDPI/', '');
                 GAME_ASSETS_RGBA[shortPath] = rgba;
-                // Also store by filename only for maximum compatibility
                 const fname = path.split('/').pop();
                 if (!GAME_ASSETS_RGBA[fname]) GAME_ASSETS_RGBA[fname] = rgba;
                 fetched++;
             } catch(e) { skipped++; }
+        }
+
+        // Run up to 8 concurrent fetches
+        const CONCURRENCY = 8;
+        for (let i = 0; i < serverPNGs.length; i += CONCURRENCY) {
+            await Promise.allSettled(serverPNGs.slice(i, i + CONCURRENCY).map(fetchAndDecode));
         }
         console.info('[PRELOAD] done — ' + decoded + ' from GAME_ASSETS, ' + fetched + ' fetched, '
             + skipped + ' skipped. Total RGBA: ' + Object.keys(GAME_ASSETS_RGBA).length);
