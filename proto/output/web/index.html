@@ -506,5 +506,13 @@
         document.getElementById('st-bridge').className = 'status-value fail';
         document.getElementById('console').innerHTML = '<div class=\'log-error\'>classes.js non trouvé. Lancez un serveur HTTP dans proto/output/web/</div>';
     "></script>
+    <script>
+    /* Register Service Worker for WebP serving + asset caching */
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+            console.info('[SW] registered, scope:', reg.scope);
+        }).catch(e => console.warn('[SW] registration failed:', e));
+    }
+    </script>
 </body>
 </html>

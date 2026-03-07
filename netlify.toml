@@ -1,0 +1,49 @@
+[build]
+  publish = "proto/output/web"
+
+# Cache assets 1 year (immutable - PNGs, WebPs, OGGs, atlases)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache JS 1 year (classes.js is content-addressed in practice)
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Short cache for HTML (so updates are picked up)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Service Worker must not be cached
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# WebP files served with correct Content-Type
+[[headers]]
+  for = "/*.png.webp"
+  [headers.values]
+    Content-Type = "image/webp"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirect .png requests to .png.webp for browsers that support WebP
+# (all modern browsers do - Chrome, Firefox, Safari 14+, Edge)
+[[redirects]]
+  from = "/assets/*.png"
+  to = "/assets/:splat.png.webp"
+  status = 200
+  force = false
+  [redirects.conditions]
+    Accept = ["image/webp"]
+
+# CORS for game server API calls (dev only, Netlify doesn't proxy)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
