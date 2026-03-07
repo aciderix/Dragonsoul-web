@@ -1,0 +1,715 @@
+"🐉 DragonSoul Web
+Phase 3.7 — Textures PNG décodées depuis GAME_ASSETS
+WebGL2
+OK
+Bridge
+OK
+create()
+OK
+render()
+OK
+FPS
+26 fps
+Frames
+677
+Shaders
+0
+Programs
+0
+DrawCalls
+0
+26 FPS
+Console DragonSoul
+692 lignes
+[Assets] 8 shaders + boot atlas + 6 fonts + path aliases loaded
+WebGL2: WebGL 2.0 (OpenGL ES 3.0 Chromium)
+[FIX79-INIT] cbgg_j.prototype found, $update14=function
+[FIX79-INIT] $update14 prototype patched successfully
+[WebGL2 Bridge] Phase 3.6 actif — rendu GPU activé, boucle RAF prête
+Bridge WebGL2 Phase 3.6 actif
+[SW] registered, scope: https://dragonsoul.netlify.app/
+[PRELOAD] done — 1 from GAME_ASSETS, 161 fetched, 12 skipped. Total RGBA: 449
+PNG textures pré-décodées dans GAME_ASSETS_RGBA
+DragonSoul Web - Phase 3.6
+Gdx singleton initialise
+[ERROR] com.perblue.common.h.a: Problem geting log
+RPGMain instancie
+Appel de game.create()...
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[FL] finishLoading called (iteration 1)
+[AM] update #1: tasks=undefined loadQ=0 loaded=0 toLoad=0 prog=N/A
+[FL] done at iter 0
+[CLTLS-case1]
+[CLTLS-case3]
+[CLTLS-case4]
+[CLTLS-case11]
+[CLTLS-case12]
+[CLTLS-case13]
+[CLTLS-case14]
+[CLTLS-case15]
+[CLTLS-case16]
+[CLTLS-case17]
+[CLTLS-case18]
+[CLTLS-case19]
+[CLTLS-case20]
+[SCREENVP] update: screenW=1280 screenH=720 scale=1
+[VP] apply: worldSize=1280x720 centering=1
+[CAM14] call #1 pos=(640,360) vp=1280x720
+[UPDATE0] #1 pos=(640,360) vp=1280x720
+[FL] finishLoading called (iteration 2)
+[UT] updateTask #1: f59=0 file=fonts/Klepto.png loader=cbgaa_n c152=0 m31=0
+[TASK] update: loader=cbgaa_n file=fonts/Klepto.png deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Klepto.png deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Klepto.png deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Klepto.png deps=1 m31=3 k30=exists j40=0 resuming=false
+[TEX] cbgaa_n_b called #1 a651=ok b371=null
+[GL] texImage2D 512x512
+[TEXLOAD] fonts/Klepto.png 512x512
+[TASK] update: loader=cbgaa_b file=fonts/Klepto.fnt deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Klepto.fnt deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Klepto.fnt deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Klepto.fnt deps=1 m31=3 k30=exists j40=0 resuming=false
+[BitmapFont] Parsed 1 pages from .fnt: Klepto.png
+[TASK] update: loader=cbgaa_n file=fonts/Swanse.png deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Swanse.png deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Swanse.png deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Swanse.png deps=1 m31=3 k30=exists j40=0 resuming=false
+[TEX] cbgaa_n_b called #2 a651=ok b371=null
+[GL] texImage2D 512x512
+[TEXLOAD] fonts/Swanse.png 512x512
+[TASK] update: loader=cbgaa_b file=fonts/Swanse.fnt deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Swanse.fnt deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Swanse.fnt deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Swanse.fnt deps=1 m31=3 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Chinese.png deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Chinese.png deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Chinese.png deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Chinese.png deps=1 m31=3 k30=exists j40=0 resuming=false
+[TEX] cbgaa_n_b called #3 a651=ok b371=null
+[TEXLOAD-STUB] fonts/Chinese.png
+[GL] texImage2D 1x1
+[TEXLOAD] fonts/Chinese.png 1x1
+[TASK] update: loader=cbgaa_b file=fonts/Chinese.fnt deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Chinese.fnt deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Chinese.fnt deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Chinese.fnt deps=1 m31=3 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Korean.png deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Korean.png deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Korean.png deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Korean.png deps=1 m31=3 k30=exists j40=0 resuming=false
+[TEX] cbgaa_n_b called #4 a651=ok b371=null
+[TEXLOAD-STUB] fonts/Korean.png
+[GL] texImage2D 1x1
+[TEXLOAD] fonts/Korean.png 1x1
+[TASK] update: loader=cbgaa_b file=fonts/Korean.fnt deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Korean.fnt deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Korean.fnt deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Korean.fnt deps=1 m31=3 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Japanese.png deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Japanese.png deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Japanese.png deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_n file=fonts/Japanese.png deps=1 m31=3 k30=exists j40=0 resuming=false
+[TEX] cbgaa_n_b called #5 a651=ok b371=null
+[TEXLOAD-STUB] fonts/Japanese.png
+[GL] texImage2D 1x1
+[TEXLOAD] fonts/Japanese.png 1x1
+[TASK] update: loader=cbgaa_b file=fonts/Japanese.fnt deps=0 m31=0 k30=null j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Japanese.fnt deps=0 m31=1 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Japanese.fnt deps=1 m31=2 k30=exists j40=0 resuming=false
+[TASK] update: loader=cbgaa_b file=fonts/Japanese.fnt deps=1 m31=3 k30=exists j40=0 resuming=false
+[TEXLOAD] fonts/Russian.png 512x512
+[FL] done at iter 47
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ASSET] require: ui/boot.atlas type=undefined
+[ASSET] require: ui/fantasy_legend_studio_splash_screen.png type=undefined
+[FL] finishLoading called (iteration 3)
+[ATLAS] Web bypass: parsing atlas directly (417 chars)
+[ATLAS-RL] line 0: ''
+[ATLAS-RL] line 1: 'boot.png'
+[ATLAS-C9] page=boot.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@66332de1
+[ATLAS-RL] line 2: 'size: 1024,512'
+[ATLAS-RL] line 3: 'format: RGBA8888'
+[ATLAS-RL] line 4: 'filter: Linear,Linear'
+[ATLAS-RL] EOF at line 29
+[TEXLOAD] ETC/XHDPI/ui/boot.png 1024x1024
+[AM] update #57: tasks=undefined loadQ=0 loaded=1 toLoad=2 prog=50.0%
+[TEXLOAD] ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png 16x16
+[FL] done at iter 9
+[LLC] has(fantasy_legend_studio_splash_screen,TextureRegion)=0
+[LLC2] has(fantasy_legend_studio_splash_screen,cbgg_n)=1
+[GD] getDrawable name=fantasy_legend_studio_splash_screen skin=cpru_RPGSkin regions=?
+[LLC] has(fantasy_legend_studio_splash_screen,TextureRegion)=0
+[LLC2] has(fantasy_legend_studio_splash_screen,cbgg_n)=1
+game.create() termine
+[RENDER] RPGMain.render case 2 #1
+[LS] render: loadState=0 renderedOnce=0 splashReady=0 totalProgress=0
+[AM0] update(33ms): resuming=false
+[FIX84] initErrorPopups: no existingUsers, triggering restart(0,0) for initial boot
+[RESTART] restart called userId=0 isForce=0 errorPopupsInited=1
+[RESTART-case1]
+[RESTART-case2]
+[RESTART-case3]
+[RESTART-case4]
+[RESTART-case5]
+[RESTART-case6]
+[RESTART-case7]
+[RESTART-case8]
+[RESTART-case9]
+[RESTART-case10]
+[RESTART-case11]
+[RESTART-case12]
+[RESTART-case13]
+[RESTART-case14]
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[RESTART-case15]
+[RESTART-case16]
+[RESTART] mainScreen is null → case 18 (new LoadingScreen)
+[RESTART-case18]
+[RESTART-case19]
+[RESTART-case20]
+[RESTART-case21]
+[RESTART-case22]
+[RESTART-case23]
+[RESTART-case24]
+[RESTART-case25]
+[ASSET] require: ui/boot.atlas type=undefined
+[AssetUpdater] Web bypass: skipping boot network update, setting active=0
+[RESTART-case26]
+[FL] finishLoading called (iteration 4)
+[UT] updateTask #59: f59=0 file=ETC/XHDPI/ui/boot.atlas loader=cbgaa_m c152=0 m31=0
+[ATLAS] Web bypass: parsing atlas directly (417 chars)
+[ATLAS-RL] line 0: ''
+[ATLAS-RL] line 1: 'boot.png'
+[ATLAS-C9] page=boot.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@19578896
+[ATLAS-RL] line 2: 'size: 1024,512'
+[ATLAS-RL] line 3: 'format: RGBA8888'
+[ATLAS-RL] line 4: 'filter: Linear,Linear'
+[ATLAS-RL] EOF at line 29
+[TEXLOAD] ETC/XHDPI/ui/boot.png 1024x1024
+[TEXLOAD] ETC/XHDPI/ui/splash_normal.png 1200x628
+[FL] done at iter 9
+[LLC] has(splash_bg,TextureRegion)=0
+[LLC2] has(splash_bg,cbgg_n)=1
+[GD] getDrawable name=splash_bg skin=cpru_RPGSkin regions=?
+[LLC] has(splash_bg,TextureRegion)=0
+[LLC2] has(splash_bg,cbgg_n)=1
+[LLC] has(boot/boot/boot_progress,TextureRegion)=1
+[GD] getDrawable name=boot/boot/boot_progress skin=cpru_RPGSkin regions=?
+[LLC] has(boot/boot/boot_progress,TextureRegion)=1
+[LLC] has(boot/boot/boot_progress,TextureRegion)=1
+[LLC] has(boot/boot/boot_progress,TextureRegion)=1
+[LLC] has(boot/boot/logo,TextureRegion)=1
+[GD] getDrawable name=boot/boot/logo skin=cpru_RPGSkin regions=?
+[LLC] has(boot/boot/logo,TextureRegion)=1
+[GD] getDrawable name=boot/boot/tip skin=cpru_RPGSkin regions=?
+[RESTART-case27]
+[RESTART] case 29: SERVER_TYPE check, isNONE=false
+[RESTART-case30]
+[FIX83] connectToLoginServer called, userId=0 serverType=undefined
+[CLTLS-case1]
+[CLTLS-case1]
+[CLTLS-case2]
+[CLTLS-case3]
+[CLTLS-case1]
+[CLTLS-case4]
+[CLTLS-case5]
+[CLTLS-case1]
+[CLTLS-case6]
+[CLTLS-case7]
+[CLTLS-case1]
+[CLTLS-case8]
+[CLTLS-case9]
+[CLTLS-case1]
+[CLTLS-case10]
+[CLTLS-case11]
+[CLTLS-case12]
+[CLTLS-case13]
+[CLTLS-case14]
+[CLTLS-case15]
+[CLTLS-case16]
+[CLTLS-case17]
+[CLTLS-case18]
+[CLTLS-case19]
+[CLTLS-case20]
+[CLTLS-case21]
+[CLTLS-case22]
+[CLTLS-case23]
+[cbgf_b_a3] c116 assigned: OK(non-null)
+[CLTLS-23-done] var6.c116= OK
+[CLTLS-case24]
+[CLTLS-24-done] var6.c116= OK
+[CLTLS-case25]
+[CLTLS-case26]
+[CLTLS-case27]
+[CLTLS-case28]
+[CLTLS-28-done] var3.c116= OK
+[CLTLS-case29]
+[cbgf_a_a0] WARN: var1 is not a TeaVM string: undefined undefined
+[CLTLS-case29-DONE]
+[CLTLS-case30]
+[CLTLS-case31]
+[CLTLS-case33]
+[FIX83] sendLoginRequest called!
+[WebNet] -> login http://127.0.0.1:8080/login
+[AssetUpdater] Web bypass: skipping boot network update, setting active=0
+[RENDER] stage.draw() called #1
+[CAM14] call #2 pos=(640,360) vp=1280x720
+[UPDATE0] #2 pos=(640,360) vp=1280x720
+[STAGE] draw: visible=1, batch(c172)=SET, r4=null, a4=0
+[STAGE] case2: root children=2
+[SCENE] cbgss_e vis=1 ch=2
+[SCENE]   cbgss_e vis=1 ch=3
+[SCENE]     cbgssu_i vis=1 ch=2
+[SCENE]       cbgssu_j vis=1 ch=1
+[SCENE]         cpruw_RPGImage vis=1 ch=0 HAS_CONTENT
+[SCENE]       cbgssu_j vis=1 ch=2
+[SCENE]         cbgssu_i vis=1 ch=3
+[SCENE]           cbgssu_j vis=1 ch=1
+[SCENE]             cbgssu_e vis=1 ch=0 HAS_CONTENT
+[SCENE]           cbgssu_j vis=1 ch=1
+[SCENE]             cpruwc_ProgressBar vis=1 ch=1
+[SCENE]           cbgssu_j vis=1 ch=1
+[SCENE]             cpcea_a vis=1 ch=0 HAS_CONTENT
+[SCENE]         cbgssu_j vis=1 ch=2
+[SCENE]           cbgssu_e vis=1 ch=0 HAS_CONTENT
+[SCENE]           cpcea_a vis=1 ch=0 HAS_CONTENT
+[SCENE]     cbgssu_i vis=1 ch=0
+[SCENE]     cbgssu_i vis=1 ch=0
+[SCENE]   cbgss_e vis=1 ch=0
+[BATCH] type=cbggg_m $a43=function $b31=function $e0=function $d13=undefined $c1=undefined proto=cbggg_m
+[DRAW] root.draw called, ownDraw=false protoDraw=true root=cbgss_e fn=function body=function(p1,p2){window._wrapCalled=(window._wrapCalled||0)+1;return f(this,p1,p2)} children=2 rootAlpha=1 batchVerts=0
+[GRP.ENTRY] cbgss_e_draw called! this=cbgss_e
+[GRP.draw] entered: transform=1 type=cbgss_e
+[GRP] drawChildren: alpha=1 gAlpha=1 type=cbgss_e ch=?(v=undefined),?(v=undefined)
+[VIS] child[0]=cbgss_e visible=1 colorA=1 effVis=1
+[GRP.ENTRY] cbgss_e_draw called! this=cbgss_e
+[GRP.draw] entered: transform=0 type=cbgss_e
+[GRP] drawChildren: alpha=1 gAlpha=1 type=cbgss_e ch=?(v=undefined),?(v=undefined),?(v=undefined)
+[GRP.ENTRY] cbgss_e_draw called! this=cbgssu_i
+[GRP.draw] entered: transform=0 type=cbgssu_i
+[GRP] drawChildren: alpha=1 gAlpha=1 type=cbgssu_i ch=?(v=undefined),?(v=undefined)
+[GRP] drawChildren: alpha=1 gAlpha=1 type=cbgssu_j ch=?(v=undefined)
+[IMG] draw: drawableType=cbgssb_p type=cpruw_RPGImage imgW=1375.7961783439491 imgH=720 drawFn=function(var_1, var_2, var_3, var_4, var_5) { cbgssb_p_draw$4708afd0(this, var_1
+[DRAW4] calling draw$4708afd0 on cbgssb_p batch.$e39=0
+[BDRAW] g28=1 e39=0 d83len=20000 tex=cbgg_n
+[DRAW4] after: batch.$e39=20
+[FLUSH] e39=20 verts: -47.000 0.000 -1.7014117331926443e+38 0.000 1.000 -47.000 720.000 -1.7014117331926443e+38 0.000 0.000 1328.796 720.000 -1.7014117331926443e+38 1.000 0.000 1328.796 0.000 -1.7014117331926443e+38 1.000 1.000 
+[GRP] drawChildren: alpha=1 gAlpha=1 type=cbgssu_j ch=?(v=undefined),?(v=undefined)
+[IMG] draw: drawableType=cbgssb_o type=cbgssu_e imgW=767.1973244147157 imgH=324 drawFn=function(var_1, var_2, var_3, var_4, var_5) { cbgssb_o_draw$4708afd0(this, var_1
+[DRAW4] calling draw$4708afd0 on cbgssb_o batch.$e39=0
+[DRAW4] after: batch.$e39=20
+[FLUSH] e39=20 verts: 274.421 140.000 -1.0633823332454027e+37 0.003 0.440 274.421 464.000 -1.0633823332454027e+37 0.003 0.148 1003.692 464.000 -1.0633823332454027e+37 0.660 0.148 1003.692 140.000 -1.0633823332454027e+37 0.660 0.440 
+[VIS] child[0]=cpruw_RPGImage visible=1 colorA=1 effVis=1
+[IMG] draw: drawableType=cbgssb_m type=cpruw_RPGImage imgW=19.5 imgH=19 drawFn=function(var_1, var_2, var_3, var_4, var_5) { cbgssb_m_draw$4708afd0(this, var_1
+[DRAW4] calling draw$4708afd0 on cbgssb_m batch.$e39=0
+[DRAW4] after: batch.$e39=180
+[FLUSH] e39=180 verts: 0.000 0.000 -1.7014117331926443e+38 0.667 0.440 0.000 9.000 -1.7014117331926443e+38 0.667 0.435 3.000 9.000 -1.7014117331926443e+38 0.669 0.435 3.000 0.000 -1.7014117331926443e+38 0.669 0.440 
+[FLUSH] e39=20 verts: 584.000 12.000 -1.7014117331926443e+38 0.003 0.142 584.000 99.032 -1.7014117331926443e+38 0.003 0.003 679.000 99.032 -1.7014117331926443e+38 0.154 0.003 679.000 12.000 -1.7014117331926443e+38 0.154 0.142 
+[DRAW] root.draw returned, drawCallCount=4 batchVerts=0
+game.create() + premier frame OK
+Boucle RAF démarrée
+[RENDER] RPGMain.render case 2 #2
+[LS] render: loadState=2 renderedOnce=0 splashReady=0 totalProgress=0.019999999552965164
+[AssetUpdater] Web bypass: skipping boot network update, setting active=0
+[RENDER] stage.draw() called #2
+[CAM14] call #3 pos=(640,360) vp=1280x720
+[UPDATE0] #3 pos=(640,360) vp=1280x720
+[STAGE] draw: visible=1, batch(c172)=SET, r4=null, a4=0
+[STAGE] case2: root children=2
+[DRAW] root.draw called, ownDraw=false protoDraw=true root=cbgss_e fn=function body=function(p1,p2){window._wrapCalled=(window._wrapCalled||0)+1;return f(this,p1,p2)} children=2 rootAlpha=1 batchVerts=0
+[VIS] child[0]=cbgss_e visible=1 colorA=1 effVis=1
+[FLUSH] e39=20 verts: -47.000 0.000 -1.7014117331926443e+38 0.000 1.000 -47.000 720.000 -1.7014117331926443e+38 0.000 0.000 1328.796 720.000 -1.7014117331926443e+38 1.000 0.000 1328.796 0.000 -1.7014117331926443e+38 1.000 1.000 
+[VIS] child[0]=cpruw_RPGImage visible=1 colorA=1 effVis=1
+[DRAW] root.draw returned, drawCallCount=8 batchVerts=0
+Premier frame rendu avec succès !
+[WebNet] <- login 0 http://127.0.0.1:8080/login
+[WebNet] -> /api/boot http://127.0.0.1:8080/api/boot
+[WebNet] login XHR error
+[WebNet] -> /api/boot http://127.0.0.1:8080/api/boot
+[WebNet] /api/boot HTTP 0 - using defaults
+[WebNet] /api/boot error - using defaults
+[WebNet] /api/boot HTTP 0 - using defaults
+[WebNet] /api/boot error - using defaults
+[RENDER] RPGMain.render case 2 #3
+[LS] render: loadState=3 renderedOnce=1 splashReady=0 totalProgress=0.019999999552965164
+[RENDER] stage.draw() called #3
+[CAM14] call #4 pos=(640,360) vp=1280x720
+[UPDATE0] #4 pos=(640,360) vp=1280x720
+[STAGE] draw: visible=1, batch(c172)=SET, r4=null, a4=0
+[STAGE] case2: root children=2
+[DRAW] root.draw called, ownDraw=false protoDraw=true root=cbgss_e fn=function body=function(p1,p2){window._wrapCalled=(window._wrapCalled||0)+1;return f(this,p1,p2)} children=2 rootAlpha=1 batchVerts=0
+[VIS] child[0]=cbgss_e visible=1 colorA=1 effVis=1
+[VIS] child[0]=cpruw_RPGImage visible=1 colorA=1 effVis=1
+[DRAW] root.draw returned, drawCallCount=12 batchVerts=0
+[LS] render: loadState=5 renderedOnce=1 splashReady=0 totalProgress=0.26999999955296516
+[AM0] update(33ms): resuming=false
+[AM] update #71: tasks=undefined loadQ=4 loaded=0 toLoad=4 prog=0.0%
+[UT] updateTask #69: f59=0 file=ETC/XHDPI/ui/common.atlas loader=cbgaa_m c152=0 m31=0
+[ATLAS] Web bypass: parsing atlas directly (20658 chars)
+[ATLAS-RL] line 0: ''
+[ATLAS-RL] line 1: 'common.png'
+[ATLAS-C9] page=common.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@b5b189e
+[ATLAS-RL] line 2: 'size: 2048,1024'
+[ATLAS-RL] line 3: 'format: RGBA8888'
+[ATLAS-RL] line 4: 'filter: Linear,Linear'
+[ATLAS-C9] page=common2.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@61557bfa
+[ATLAS-C9] page=common3.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@b61c10f
+[ATLAS-C9] page=common4.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@5b472d4f
+[ATLAS-RL] EOF at line 1163
+[Fix88] BootData injected into delayedBootData
+[Fix88] Calling updateFromNetwork on screen: cprus_LoadingScreen
+[CAM14] call #5 pos=(640,360) vp=1280x720
+[UPDATE0] #5 pos=(640,360) vp=1280x720
+[VIS] child[0]=cbgss_e visible=1 colorA=1 effVis=1
+[VIS] child[0]=cpruw_RPGImage visible=1 colorA=1 effVis=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[AM0] update(33ms): resuming=false
+[VIS] child[0]=cbgss_e visible=1 colorA=1 effVis=1
+[VIS] child[0]=cpruw_RPGImage visible=1 colorA=1 effVis=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[AM] update #77: tasks=undefined loadQ=2 loaded=1 toLoad=4 prog=25.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/base.atlas"} Q[1]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #75: f59=0 file=ETC/XHDPI/ui/common3.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[AM] update #85: tasks=undefined loadQ=2 loaded=1 toLoad=4 prog=25.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/base.atlas"} Q[1]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #83: f59=0 file=ETC/XHDPI/ui/common.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.32750000059604645
+[ATLAS] Web bypass: parsing atlas directly (83935 chars)
+[ATLAS-RL] line 0: ''
+[ATLAS-RL] line 1: 'base.png'
+[ATLAS-C9] page=base.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@eca06d00
+[ATLAS-RL] line 2: 'size: 2048,1024'
+[ATLAS-RL] line 3: 'format: RGBA8888'
+[ATLAS-RL] line 4: 'filter: Linear,Linear'
+[ATLAS-C9] page=base2.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@c103ad80
+[ATLAS-C9] page=base3.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@22cd0cf9
+[ATLAS-C9] page=base4.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@e91fc750
+[ATLAS-C9] page=base5.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@2f4c3aea
+[ATLAS-C9] page=base6.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@aa34f2a2
+[ATLAS-C9] page=base7.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@b875bad2
+[ATLAS-C9] page=base8.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@ead055e5
+[ATLAS-C9] page=base9.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@edfc3fb3
+[ATLAS-C9] page=base10.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@2b473c76
+[ATLAS-C9] page=base11.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@55fad852
+[ATLAS-C9] page=base12.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@d0e37a6a
+[ATLAS-C9] page=base13.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@4a62d21d
+[ATLAS-C9] page=base14.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@140e3bad
+[ATLAS-C9] page=base15.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@bc05b010
+[ATLAS-RL] EOF at line 4854
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #91: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #89: f59=0 file=ETC/XHDPI/ui/base15.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #99: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #97: f59=0 file=ETC/XHDPI/ui/base13.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #107: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #105: f59=0 file=ETC/XHDPI/ui/base11.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #115: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #113: f59=0 file=ETC/XHDPI/ui/base9.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #123: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #121: f59=0 file=ETC/XHDPI/ui/base7.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #131: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #129: f59=0 file=ETC/XHDPI/ui/base5.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #139: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #137: f59=0 file=ETC/XHDPI/ui/base3.png loader=cbgaa_n c152=0 m31=1
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[AM] update #146: tasks=undefined loadQ=1 loaded=2 toLoad=4 prog=50.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/ui/boot.atlas"}
+[UT] updateTask #144: f59=0 file=ETC/XHDPI/ui/base.png loader=cbgaa_n c152=0 m31=0
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=5 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=4 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[LS] render: loadState=6 renderedOnce=1 splashReady=1 totalProgress=0.38500000163912773
+[C6] startScreen.loadState=0 isUNINIT=true UNINITIALIZED=0
+[C6] -> ptr=18 (UNINITIALIZED branch)
+[C18] case18 entry#1 var$3=object
+[C18] after PerfStats_start, getting startScreen
+[C19] calling create1 entry#1
+[FL] finishLoading called (iteration 5)
+[FL] done at iter 0
+[ERROR] : Type: CAMPAIGN_MIN_STAMINA_TO_ATTACK is not recognized in com/perblue/rpg/game/data/misc//uservalues.tab
+[ERROR] : Type: EXPERT_RESET is not recognized in com/perblue/rpg/game/data/misc//vipstats.tab
+[AM] update #153: tasks=undefined loadQ=1 loaded=0 toLoad=1 prog=0.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/world/env/MainMenu.atlas"}
+[UT] updateTask #149: f59=0 file=ETC/XHDPI/world/env/MainMenu.atlas loader=cbgaa_m c152=0 m31=0
+[ATLAS] Web bypass: parsing atlas directly (2339 chars)
+[ATLAS-RL] line 0: ''
+[ATLAS-RL] line 1: 'MainMenu.png'
+[ATLAS-C9] page=MainMenu.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@22c714d4
+[ATLAS-RL] line 2: 'size: 2048,1024'
+[ATLAS-RL] line 3: 'format: RGBA8888'
+[ATLAS-RL] line 4: 'filter: Linear,Linear'
+[ATLAS-C9] page=MainMenu2.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@cbe36bba
+[ATLAS-C9] page=MainMenu3.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@741b66f0
+[ATLAS-C9] page=MainMenu4.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@6838d2
+[ATLAS-C9] page=MainMenu5.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@e93d160b
+[ATLAS-C9] page=MainMenu6.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@34762d55
+[ATLAS-C9] page=MainMenu7.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@ca4242db
+[ATLAS-C9] page=MainMenu8.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@c1351937
+[ATLAS-RL] EOF at line 154
+[AM] update #159: tasks=undefined loadQ=0 loaded=0 toLoad=1 prog=0.0%
+[UT] updateTask #155: f59=0 file=ETC/XHDPI/world/env/MainMenu7.png loader=cbgaa_n c152=0 m31=1
+[AM] update #170: tasks=undefined loadQ=0 loaded=0 toLoad=1 prog=0.0%
+[UT] updateTask #166: f59=0 file=ETC/XHDPI/world/env/MainMenu4.png loader=cbgaa_n c152=0 m31=0
+[AM] update #175: tasks=undefined loadQ=0 loaded=0 toLoad=1 prog=0.0%
+[UT] updateTask #171: f59=0 file=ETC/XHDPI/world/env/MainMenu3.png loader=cbgaa_n c152=0 m31=1
+[AM] update #183: tasks=undefined loadQ=0 loaded=0 toLoad=1 prog=0.0%
+[UT] updateTask #179: f59=0 file=ETC/XHDPI/world/env/MainMenu.png loader=cbgaa_n c152=0 m31=1
+[ATLAS] Web bypass: parsing atlas directly (7085 chars)
+[ATLAS-RL] line 0: ''
+[ATLAS-RL] line 1: 'ui_main.png'
+[ATLAS-C9] page=ui_main.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@cf9ee286
+[ATLAS-RL] line 2: 'size: 2048,1024'
+[ATLAS-RL] line 3: 'format: RGBA8888'
+[ATLAS-RL] line 4: 'filter: Linear,Linear'
+[ATLAS-C9] page=ui_main2.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@6a0b4741
+[ATLAS-C9] page=ui_main3.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@5e8fa030
+[ATLAS-C9] page=ui_main4.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@fbb75bf4
+[ATLAS-RL] EOF at line 459
+[AM] update #194: tasks=undefined loadQ=1 loaded=0 toLoad=2 prog=0.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/world/ui/ui_main_campaign.skel_world/ui/ui_main.atlas"}
+[UT] updateTask #186: f59=0 file=ETC/XHDPI/world/ui/ui_main4.png loader=cbgaa_n c152=0 m31=1
+[AM] update #202: tasks=undefined loadQ=1 loaded=0 toLoad=2 prog=0.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/world/ui/ui_main_campaign.skel_world/ui/ui_main.atlas"}
+[UT] updateTask #194: f59=0 file=ETC/XHDPI/world/ui/ui_main2.png loader=cbgaa_n c152=0 m31=1
+[READ] path=ETC/XHDPI/world/ui/ui_main_campaign.skel hasWebBytes=true type=1
+[AM] update #213: tasks=undefined loadQ=1 loaded=0 toLoad=2 prog=0.0% Q[0]={"$monitor":null,"$id$":0,"$hashCode12":0,"$nativeString":"ETC/XHDPI/world/ui/ui_main_guilds.skel_world/ui/ui_main.atlas"}
+[UT] updateTask #204: f59=0 file=ETC/XHDPI/world/ui/ui_main_guilds.skel_world/ui/ui_main.atlas loader= c152=1 m31=1
+[READ] path=ETC/XHDPI/world/ui/ui_main_guilds.skel hasWebBytes=true type=1
+[READ] path=ETC/XHDPI/world/ui/ui_main_events.skel hasWebBytes=true type=1
+[READ] path=ETC/XHDPI/world/ui/ui_main_fightpit.skel hasWebBytes=true type=1
+[READ] path=ETC/XHDPI/world/ui/ui_main_flag.skel hasWebBytes=true type=1
+[AM] update #230: tasks=undefined loadQ=0 loaded=2 toLoad=2 prog=100.0%
+[UT] updateTask #213: f59=0 file=ETC/XHDPI/world/ui/ui_main_trader.skel_world/ui/ui_main.atlas loader= c152=0 m31=0
+[C19] create1 RETURNED/COMPLETE!
+[C17] loadState=1 name=function() {
+    return f(this);
+}
+[C23] loadState=2 CREATED=true notLoading=true timeOk=true minTime=1772880246856 now=1772880329536
+[RUN6] LoadingScreen$6.run() - post-create runnable
+[RUN7] LoadingScreen$7.run() - pushing startScreen to screenManager
+[SM] nextScreen=cprus_MainMenuScreen ptr→1
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] : Type: STONE_ANGELIC_AVENGER is not recognized in com/perblue/rpg/game/data/item//itemstats.tab
+[ERROR] : Missing row in itemstats.tab for MEATY_BUTTER
+[ERROR] : Missing row in itemstats.tab for FOUNTAIN_OF_OLD_AGE
+[ERROR] : Missing row in itemstats.tab for ITEM_INFO
+[ERROR] : Missing row in itemstats.tab for WHITE_PICKET_SHIELD
+[ERROR] : Missing row in itemstats.tab for CAVE_DAGGER
+[ERROR] : Missing row in itemstats.tab for DESERT_SMASHER
+[ERROR] : Missing row in itemstats.tab for MUSCLE_BOUND_BOOK
+[ERROR] : Missing row in itemstats.tab for HOT_ARMOR
+[ERROR] : Missing row in itemstats.tab for ARCANE_DOODLES
+[ERROR] : Missing row in itemstats.tab for FEATHERWEIGHT_WINGS
+[ERROR] : Missing row in itemstats.tab for MY_JAM
+[ERROR] : Missing row in itemstats.tab for VOLCANIC_BLADE
+[ERROR] : Missing row in itemstats.tab for MOON_LIGHT
+[ERROR] : Missing row in itemstats.tab for ALCHEMIST_STARTER_PACK
+[ERROR] : Missing row in itemstats.tab for SKIN_SKELETON_DEER_ASCENDANT_DEER
+[ERROR] : Missing row in itemstats.tab for DRACONIC_FUSE
+[ERROR] : Missing row in itemstats.tab for LION_LIQUEUR
+[ERROR] : Missing row in itemstats.tab for SPIDER_BOMB
+[ERROR] : Missing row in itemstats.tab for SREEL_FEATHER_WEIGHT_FOIL
+[ERROR] : Missing row in itemstats.tab for SKIN_NPC_ANUBIS_DRAGON_MASTERY
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] : Type: LAST_DEFENDER_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: KARAOKE_KING_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: SHADOW_OF_SVEN_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: SUN_SEEKER_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: FORGOTTEN_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: STEPLADDER_BROTHERS_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: BLACK_WING_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: UNRIPE_MYTHOLOGY_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: GREED_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: DIGGER_MOLE_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: ANCIENT_DWARF_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: SADISTIC_DANCER_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: SNAPPER_BONE_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: WHITE_TIGRESS_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: VERMILION_PRIESTESS_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: PCH_ANUBIS_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: ABYSS_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: UMLAUT_THE_FIRST_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: CLAW_MAN_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] : Type: DARK_HERO_5 is not recognized in com/perblue/rpg/game/data/unit/skill//dynamicskillstats.tab
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] : Type: LAST_DEFENDER_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: KARAOKE_KING_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: SHADOW_OF_SVEN_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: SUN_SEEKER_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: FORGOTTEN_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: STEPLADDER_BROTHERS_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: BLACK_WING_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: UNRIPE_MYTHOLOGY_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: GREED_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: DIGGER_MOLE_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: ANCIENT_DWARF_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: SADISTIC_DANCER_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: SNAPPER_BONE_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: WHITE_TIGRESS_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: VERMILION_PRIESTESS_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: PCH_ANUBIS_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: ABYSS_DRAGON_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: UMLAUT_THE_FIRST_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: CLAW_MAN_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[ERROR] : Type: DARK_HERO_5 is not recognized in com/perblue/rpg/game/data/unit/skill//skillstats.tab
+[WARN] : Invalid tag: ' TRUE' for skill at row: NPC_UMLAUT_THE_FIFTH_FIRST_1
+[WARN] : Invalid tag: ' TRUE' for skill at row: NPC_BOSS_UMLAUT_THE_FIFTH_FIRST_1
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [ONE] and column [ONE] with value [100]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [TWO] and column [ONE] with value [130]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [THREE] and column [ONE] with value [160]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [FOUR] and column [ONE] with value [211]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [FIVE] and column [ONE] with value [275]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [SIX] and column [ONE] with value [357]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [SEVEN] and column [ONE] with value [500]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [EIGHT] and column [ONE] with value [700]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [NINE] and column [ONE] with value [889]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [TEN] and column [ONE] with value [1125]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [ELEVEN] and column [ONE] with value [1429]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [TWELVE] and column [ONE] with value [1833]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [THIRTEEN] and column [ONE] with value [2400]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [FOURTEEN] and column [ONE] with value [3250]
+[ERROR] : Problem reading cell in runeEmpowerCosts.tab for row [FIFTEEN] and column [ONE] with value [4667]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [ONE] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [TWO] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [THREE] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [FOUR] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [FIVE] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [SIX] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [SEVEN] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [EIGHT] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [NINE] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [TEN] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [ELEVEN] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [TWELVE] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [THIRTEEN] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [FOURTEEN] and column [ONE] with value [1.00]
+[ERROR] : Problem reading cell in runeEmpowerChances.tab for row [FIFTEEN] and column [ONE] with value [1.00]
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] com.perblue.common.h.a: Problem geting log
+[ERROR] : Problem reading cell in runeSellValues.tab for row [ZERO] and column [ONE] with value [25]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [ONE] and column [ONE] with value [125]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [TWO] and column [ONE] with value [255]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [THREE] and column [ONE] with value [415]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [FOUR] and column [ONE] with value [602]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [FIVE] and column [ONE] with value [831]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [SIX] and column [ONE] with value [1,110]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [SEVEN] and column [ONE] with value [1,481]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [EIGHT] and column [ONE] with value [1,972]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [NINE] and column [ONE] with value [2,550]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [TEN] and column [ONE] with value [3,227]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [ELEVEN] and column [ONE] with value [4,020]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [TWELVE] and column [ONE] with value [4,959]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [THIRTEEN] and column [ONE] with value [6,090]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [FOURTEEN] and column [ONE] with value [7,506]
+[ERROR] : Problem reading cell in runeSellValues.tab for row [FIFTEEN] and column [ONE] with value [9,398]
+[ERROR] : Missing row in runeRarityStats.tab for CYAN
+[ERROR] : Missing row in runeRarityStats.tab for RED
+[AM] update #245: tasks=undefined loadQ=0 loaded=1 toLoad=1 prog=100.0%
+[AM] update #247: tasks=undefined loadQ=0 loaded=1 toLoad=1 prog=100.0%
+[RENDER] RPGMain.render case 2 #500"
