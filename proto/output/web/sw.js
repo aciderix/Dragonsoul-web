@@ -3,16 +3,20 @@
  * Also caches assets so subsequent loads are instant.
  */
 
-const CACHE_NAME = 'ds-assets-v1';
+const CACHE_NAME = 'ds-assets-v3';
 
 // On install: skip waiting so SW activates immediately
 self.addEventListener('install', e => {
   self.skipWaiting();
 });
 
-// On activate: claim all clients immediately
+// On activate: delete old caches then claim clients
 self.addEventListener('activate', e => {
-  e.waitUntil(self.clients.claim());
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
 });
 
 // Intercept fetch
