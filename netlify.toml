@@ -7,11 +7,11 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache JS 1 year (classes.js is content-addressed in practice)
+# JS served no-store so SW network-first always gets fresh classes.js after deploy
 [[headers]]
   for = "/*.js"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Short cache for HTML (so updates are picked up)
 [[headers]]
@@ -25,24 +25,7 @@
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
 
-# WebP files served with correct Content-Type
-[[headers]]
-  for = "/*.png.webp"
-  [headers.values]
-    Content-Type = "image/webp"
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Redirect .png requests to .png.webp for browsers that support WebP
-# (all modern browsers do - Chrome, Firefox, Safari 14+, Edge)
-[[redirects]]
-  from = "/assets/*.png"
-  to = "/assets/:splat.png.webp"
-  status = 200
-  force = false
-  [redirects.conditions]
-    Accept = ["image/webp"]
-
-# CORS for game server API calls (dev only, Netlify doesn't proxy)
+# CORS for game server API calls
 [[headers]]
   for = "/*"
   [headers.values]
