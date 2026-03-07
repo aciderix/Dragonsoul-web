@@ -1,5 +1,6 @@
 [build]
   publish = "proto/output/web"
+  command = "npm install"
 
 # Cache assets 1 year (immutable - PNGs, WebPs, OGGs, atlases)
 [[headers]]
