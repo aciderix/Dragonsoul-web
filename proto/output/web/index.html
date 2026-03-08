@@ -298,9 +298,9 @@
         function dispatchTouch(type, x, y) {
             const proc = window._dsInputProcessor;
             if (!proc) return;
-            // Get the Stage: index 1 of InputMultiplexer's processor list
-            const data = proc.$a666 && proc.$a666.data ? proc.$a666.data : null;
-            const stage = data ? data[1] : proc;  // fallback to proc itself
+            // Get the Stage: index 1 of InputMultiplexer's $a666 ArrayList ($a514 is backing array)
+            const arr = proc.$a666 && proc.$a666.$a514 ? proc.$a666.$a514.data : null;
+            const stage = arr && arr.length > 1 ? arr[1] : proc;
             if (!stage) return;
             try {
                 if (type === 'down' && stage.$touchDown1) stage.$touchDown1(x, y, 0, 0);
@@ -311,7 +311,7 @@
         canvas.addEventListener('mousedown', e => {
             e.preventDefault();
             const {x, y} = getGameCoords(e);
-            console.debug('[INPUT] mousedown', x, y);
+            console.info('[INPUT] mousedown', x, y);
             dispatchTouch('down', x, y);
         });
         canvas.addEventListener('mouseup', e => {
