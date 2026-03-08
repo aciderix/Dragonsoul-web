@@ -538,9 +538,29 @@
             addLog('WARN preloadTextures: ' + e.message, 'log-warn');
         }
 
+        // 4. Pre-fetch /login + /api/boot (Fix 94: bypass CLTLS URLEncoder crash)
+        setOverlay('Connexion au serveur...');
+        try {
+            await fetch('/login', { method: 'POST', credentials: 'include' });
+            const bootResp = await fetch('/api/boot', { credentials: 'include' });
+            if (bootResp.ok) {
+                window._dsBootData = await bootResp.json();
+                const bd = window._dsBootData;
+                console.info('[BOOT-PRE] Fix94: name=' + (bd.name||'?') +
+                    ' lvl=' + (bd.team_level||0) +
+                    ' gold=' + (bd.gold||0) +
+                    ' heroes=' + ((bd.heroes||[]).length));
+            } else {
+                console.warn('[BOOT-PRE] /api/boot HTTP ' + bootResp.status + ' — defaults');
+            }
+        } catch(e) {
+            console.warn('[BOOT-PRE] pre-fetch error:', e.message);
+        }
+        window._dsBootReady = true;
+
         setOverlay('Lancement game.create()...');
 
-        // 4. Run main() — calls game.create() + first renderFrame()
+        // 5. Run main() — calls game.create() + first renderFrame()
         setStatus('st-create', 'running...', 'pending');
         setStatus('st-render', 'waiting...', 'pending');
         try {
