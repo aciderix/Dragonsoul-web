@@ -279,6 +279,66 @@
     let _rafId = null;
     let _renderOk = false;
 
+    // ─── Fix 93: DOM input → Stage dispatch ──────────────────────────────────
+    function setupCanvasInput() {
+        const canvas = document.getElementById('game-canvas');
+        if (!canvas) { console.warn('[INPUT] canvas not found'); return; }
+
+        function getGameCoords(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const sx = canvas.width / rect.width;
+            const sy = canvas.height / rect.height;
+            const src = evt.touches ? evt.touches[0] : evt;
+            return {
+                x: Math.round((src.clientX - rect.left) * sx),
+                y: Math.round((src.clientY - rect.top)  * sy)
+            };
+        }
+
+        function dispatchTouch(type, x, y) {
+            const proc = window._dsInputProcessor;
+            if (!proc) return;
+            // Get the Stage: index 1 of InputMultiplexer's processor list
+            const data = proc.$a666 && proc.$a666.data ? proc.$a666.data : null;
+            const stage = data ? data[1] : proc;  // fallback to proc itself
+            if (!stage) return;
+            try {
+                if (type === 'down' && stage.$touchDown1) stage.$touchDown1(x, y, 0, 0);
+                else if (type === 'up'   && stage.$touchUp0)   stage.$touchUp0(x, y, 0, 0);
+            } catch(e) { console.warn('[INPUT] dispatch err:', e.message); }
+        }
+
+        canvas.addEventListener('mousedown', e => {
+            e.preventDefault();
+            const {x, y} = getGameCoords(e);
+            console.debug('[INPUT] mousedown', x, y);
+            dispatchTouch('down', x, y);
+        });
+        canvas.addEventListener('mouseup', e => {
+            e.preventDefault();
+            const {x, y} = getGameCoords(e);
+            dispatchTouch('up', x, y);
+        });
+        canvas.addEventListener('touchstart', e => {
+            e.preventDefault();
+            const {x, y} = getGameCoords(e);
+            dispatchTouch('down', x, y);
+        }, { passive: false });
+        canvas.addEventListener('touchend', e => {
+            e.preventDefault();
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                const rect = canvas.getBoundingClientRect();
+                const sx = canvas.width / rect.width;
+                const sy = canvas.height / rect.height;
+                const t = e.changedTouches[0];
+                dispatchTouch('up',
+                    Math.round((t.clientX - rect.left) * sx),
+                    Math.round((t.clientY - rect.top)  * sy));
+            }
+        }, { passive: false });
+        console.log('[INPUT] canvas input listeners attached');
+    }
+
     function startRenderLoop() {
         if (_rafRunning) return;
         _rafRunning = true;
@@ -489,6 +549,7 @@
             addLog('game.create() + premier frame OK', 'log-ok');
             // 4. Start the RAF render loop
             startRenderLoop();
+            setupCanvasInput();
         } catch(e) {
             const msg = e.message || String(e);
             setStatus('st-create', 'EXCEPTION', 'fail');
