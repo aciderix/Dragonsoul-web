@@ -30,6 +30,7 @@ const headless    = !args.includes('--no-headless');
 const timeoutSec  = parseInt((args.find(a => a.startsWith('--timeout=')) || '--timeout=90').split('=')[1]);
 const extraWaitSec= parseInt((args.find(a => a.startsWith('--extra-wait=')) || '--extra-wait=5').split('=')[1]);
 const filter      = (args.find(a => a.startsWith('--filter=')) || '').split('=')[1] || null;
+const testButtons = args.includes('--test-buttons');
 
 // ─── Netlify API helpers (via curl to avoid proxy issues) ──────────────────────
 function netlifyFetch(path) {
@@ -121,14 +122,63 @@ try {
     // 5. Wait for game to boot (MMS render OR timeout)
     const bootTimeout = timeoutSec * 1000;
     console.log(`[PW] Waiting up to ${timeoutSec}s for [MMS] render or render loop...`);
+    let mmsRenderOk = false;
     try {
         await page.waitForFunction(() => window._mmsRender >= 3, { timeout: bootTimeout });
         console.log('[PW] MainMenuScreen confirmed rendering!');
+        mmsRenderOk = true;
     } catch {
-        console.warn('[PW] MainMenuScreen not detected within timeout');
+        console.warn('[PW] MainMenuScreen not detected within timeout — waiting extra 30s...');
+        // Wait extra time for MMS to appear (loading is variable due to software WebGL)
+        try {
+            await page.waitForFunction(() => window._mmsRender >= 3, { timeout: 30000 });
+            console.log('[PW] MainMenuScreen confirmed (late)!');
+            mmsRenderOk = true;
+        } catch {
+            console.warn('[PW] MainMenuScreen still not detected');
+        }
     }
 
-    // 6. Extra wait for more log lines (scene dump, flush data, etc.)
+    // 6. Button click test (if --test-buttons)
+    if (testButtons && mmsRenderOk) {
+        console.log('\n[PW] ── BUTTON TEST ──');
+        await page.waitForTimeout(2000);
+        const ci = await page.evaluate(() => {
+            const c = document.getElementById('game-canvas');
+            if (!c) return null;
+            const r = c.getBoundingClientRect();
+            return { x: r.left, y: r.top, w: r.width, h: r.height };
+        });
+        console.log('[PW] Canvas bounds:', JSON.stringify(ci));
+
+        const clickCanvas = async (name, rx, ry) => {
+            if (!ci) return;
+            const cx = ci.x + ci.w * rx;
+            const cy = ci.y + ci.h * ry;
+            const before = logs.length;
+            console.log(`\n[BTN] ${name} → (${cx.toFixed(0)}, ${cy.toFixed(0)})`);
+            await page.mouse.click(cx, cy);
+            await page.waitForTimeout(5000);
+            const newLogs = logs.slice(before);
+            const sm = newLogs.filter(l => l.text.includes('[SM]') || l.text.includes('[SS]'));
+            const err = newLogs.filter(l => l.type === 'error' || l.type === 'pageerror');
+            if (sm.length)  { console.log('  Transitions:'); sm.forEach(l => console.log('   ', l.text)); }
+            if (err.length) { console.log('  ERRORS:'); err.forEach(l => console.log('   ', l.text.slice(0,300))); }
+            if (!sm.length && !err.length) console.log('  (no change)');
+        };
+
+        // MMS bottom tab bar at y≈0.93, 5 tabs spread across x
+        await clickCanvas('Campaign', 0.10, 0.93);
+        await clickCanvas('Heroes',   0.30, 0.93);
+        await clickCanvas('Shop',     0.50, 0.93);
+        await clickCanvas('Guild',    0.70, 0.93);
+        await clickCanvas('Tab5',     0.90, 0.93);
+        await clickCanvas('Center',   0.50, 0.50);
+
+        console.log('[PW] ── END BUTTON TEST ──\n');
+    }
+
+    // 6b. Extra wait for more log lines (scene dump, flush data, etc.)
     console.log(`[PW] Extra wait ${extraWaitSec}s to collect additional logs...`);
     await page.waitForTimeout(extraWaitSec * 1000);
 
