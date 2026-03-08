@@ -1,0 +1,37 @@
+🐉 DragonSoul Web
+Phase 3.7 — Textures PNG décodées depuis GAME_ASSETS
+WebGL2
+OK
+Bridge
+OK
+create()
+EXCEPTION
+render()
+waiting...
+FPS
+—
+Frames
+0
+Shaders
+0
+Programs
+0
+DrawCalls
+0
+Exception — voir console
+Console DragonSoul
+9 lignes
+[Assets] 8 shaders + boot atlas + 6 fonts + path aliases loaded
+WebGL2: WebGL 2.0 (OpenGL ES 3.0 Chromium)
+[FIX79-INIT] cbgg_j.prototype found, $update14=function
+[FIX79-INIT] $update14 prototype patched successfully
+[WebGL2 Bridge] Phase 3.6 actif — rendu GPU activé, boucle RAF prête
+Bridge WebGL2 Phase 3.6 actif
+PNG textures pré-décodées dans GAME_ASSETS_RGBA
+game.create() exception: Cannot read properties of undefined (reading '$length')
+TypeError: Cannot read properties of undefined (reading '$length')
+    at jn_URLEncoder_encode0 (https://dragonsoul.netlify.app/classes.js:1608410:19)
+    at jn_URLEncoder_encode (https://dragonsoul.netlify.app/classes.js:1608529:24)
+    at cbgf_a_a0 (https://dragonsoul.netlify.app/classes.js:374038:24)
+    at cbgf_a_a1 (https://dragonsoul.netlify.app/classes.js:374131:16)
+    at cbgf_b_a1 (https://dragonsoul.netlify.app/classes.js:374357:16)

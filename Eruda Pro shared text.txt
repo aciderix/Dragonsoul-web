@@ -1,0 +1,83 @@
+[ERROR] com.perblue.common.h.a: Problem geting log
+[RESTART-case15]
+[RESTART-case16]
+[RESTART] mainScreen is null → case 18 (new LoadingScreen)
+[RESTART-case18]
+[RESTART-case19]
+[RESTART-case20]
+[RESTART-case21]
+[RESTART-case22]
+[RESTART-case23]
+[RESTART-case24]
+[RESTART-case25]
+[ASSET] require: ui/boot.atlas type=undefined
+[AssetUpdater] Web bypass: skipping boot network update, setting active=0
+[RESTART-case26]
+[FL] finishLoading called (iteration 4)
+[UT] updateTask #59: f59=0 file=ETC/XHDPI/ui/boot.atlas loader=cbgaa_m c152=0 m31=0
+[ATLAS] Web bypass: parsing atlas directly (417 chars)
+[ATLAS-RL] line 0: ''
+[ATLAS-RL] line 1: 'boot.png'
+[ATLAS-C9] page=boot.png var2type=cbgc_a has_a113=function has_a206=function has_b139=function
+[ATLAS-C9] resolved ok: var$6=com.badlogic.gdx.c.a@19578896
+[ATLAS-RL] line 2: 'size: 1024,512'
+[ATLAS-RL] line 3: 'format: RGBA8888'
+[ATLAS-RL] line 4: 'filter: Linear,Linear'
+[ATLAS-RL] EOF at line 29
+[TEXLOAD] ETC/XHDPI/ui/boot.png 1024x1024
+[TEXLOAD] ETC/XHDPI/ui/splash_normal.png 1200x628
+[FL] done at iter 9
+[LLC] has(splash_bg,TextureRegion)=0
+[LLC2] has(splash_bg,cbgg_n)=1
+[GD] getDrawable name=splash_bg skin=cpru_RPGSkin regions=?
+[LLC] has(splash_bg,TextureRegion)=0
+[LLC2] has(splash_bg,cbgg_n)=1
+[LLC] has(boot/boot/boot_progress,TextureRegion)=1
+[GD] getDrawable name=boot/boot/boot_progress skin=cpru_RPGSkin regions=?
+[LLC] has(boot/boot/boot_progress,TextureRegion)=1
+[LLC] has(boot/boot/logo,TextureRegion)=1
+[GD] getDrawable name=boot/boot/logo skin=cpru_RPGSkin regions=?
+[LLC] has(boot/boot/logo,TextureRegion)=1
+[GD] getDrawable name=boot/boot/tip skin=cpru_RPGSkin regions=?
+[RESTART-case27]
+[RESTART] case 29: SERVER_TYPE check, isNONE=false
+[RESTART-case30]
+[FIX83] connectToLoginServer called, userId=0 serverType=undefined
+[CLTLS-case1]
+[CLTLS-case2]
+[CLTLS-case3]
+[CLTLS-case1]
+[CLTLS-case4]
+[CLTLS-case5]
+[CLTLS-case1]
+[CLTLS-case6]
+[CLTLS-case7]
+[CLTLS-case1]
+[CLTLS-case8]
+[CLTLS-case9]
+[CLTLS-case1]
+[CLTLS-case10]
+[CLTLS-case11]
+[CLTLS-case12]
+[CLTLS-case13]
+[CLTLS-case14]
+[CLTLS-case15]
+[CLTLS-case16]
+[CLTLS-case17]
+[CLTLS-case18]
+[CLTLS-case19]
+[CLTLS-case20]
+[CLTLS-case21]
+[CLTLS-case22]
+[CLTLS-case23]
+[cbgf_b_a3] c116 assigned: OK(non-null)
+[CLTLS-23-done] var6.c116= OK
+[CLTLS-case24]
+[CLTLS-24-done] var6.c116= OK
+[CLTLS-case25]
+[CLTLS-case26]
+[CLTLS-case27]
+[CLTLS-case28]
+[CLTLS-28-done] var3.c116= OK
+[CLTLS-case29]
+[CLTLS-EX] TypeError: Cannot read properties of undefined (reading '$length') object object ju_HashMap {$monitor: null, $id$: 0, $cachedKeySet: ju_HashMap$1, $cachedValues: null, $elementCount0: 12, …}

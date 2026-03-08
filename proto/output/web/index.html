@@ -60,6 +60,12 @@
             display: block;
             width: 100%;
             height: auto;
+            touch-action: none;   /* Fix 90: prevent browser scroll/zoom on mobile */
+            user-select: none;    /* prevent text selection on tap */
+            -webkit-user-select: none;
+        }
+        #canvas-container {
+            touch-action: none;   /* also on container to prevent edge cases */
         }
         #overlay {
             position: absolute;
@@ -235,10 +241,10 @@
     const _origWarn  = console.warn.bind(console);
     const _origError = console.error.bind(console);
 
-    console.info  = function(msg) { _origInfo(msg);  logLines(msg); };
-    console.log   = function(msg) { _origLog(msg);   logLines(msg); };
-    console.warn  = function(msg) { _origWarn(msg);  addLog(String(msg), 'log-warn'); };
-    console.error = function(msg) { _origError(msg); addLog(String(msg), 'log-error'); };
+    console.info  = function(...args) { _origInfo(...args);  logLines(args.map(String).join(' ')); };
+    console.log   = function(...args) { _origLog(...args);   logLines(args.map(String).join(' ')); };
+    console.warn  = function(...args) { _origWarn(...args);  addLog(args.map(String).join(' '), 'log-warn'); };
+    console.error = function(...args) { _origError(...args); addLog(args.map(String).join(' '), 'log-error'); };
 
     // ─── Status helpers ───────────────────────────────────────────────────────
     function setStatus(id, value, cls) {
@@ -273,6 +279,66 @@
     let _rafId = null;
     let _renderOk = false;
 
+    // ─── Fix 93: DOM input → Stage dispatch ──────────────────────────────────
+    function setupCanvasInput() {
+        const canvas = document.getElementById('game-canvas');
+        if (!canvas) { console.warn('[INPUT] canvas not found'); return; }
+
+        function getGameCoords(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const sx = canvas.width / rect.width;
+            const sy = canvas.height / rect.height;
+            const src = evt.touches ? evt.touches[0] : evt;
+            return {
+                x: Math.round((src.clientX - rect.left) * sx),
+                y: Math.round((src.clientY - rect.top)  * sy)
+            };
+        }
+
+        function dispatchTouch(type, x, y) {
+            const proc = window._dsInputProcessor;
+            if (!proc) return;
+            // Get the Stage: index 1 of InputMultiplexer's $a666 ArrayList ($a514 is backing array)
+            const arr = proc.$a666 && proc.$a666.$a514 ? proc.$a666.$a514.data : null;
+            const stage = arr && arr.length > 1 ? arr[1] : proc;
+            if (!stage) return;
+            try {
+                if (type === 'down' && stage.$touchDown1) stage.$touchDown1(x, y, 0, 0);
+                else if (type === 'up'   && stage.$touchUp0)   stage.$touchUp0(x, y, 0, 0);
+            } catch(e) { console.warn('[INPUT] dispatch err:', e.message); }
+        }
+
+        canvas.addEventListener('mousedown', e => {
+            e.preventDefault();
+            const {x, y} = getGameCoords(e);
+            console.info('[INPUT] mousedown', x, y);
+            dispatchTouch('down', x, y);
+        });
+        canvas.addEventListener('mouseup', e => {
+            e.preventDefault();
+            const {x, y} = getGameCoords(e);
+            dispatchTouch('up', x, y);
+        });
+        canvas.addEventListener('touchstart', e => {
+            e.preventDefault();
+            const {x, y} = getGameCoords(e);
+            dispatchTouch('down', x, y);
+        }, { passive: false });
+        canvas.addEventListener('touchend', e => {
+            e.preventDefault();
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                const rect = canvas.getBoundingClientRect();
+                const sx = canvas.width / rect.width;
+                const sy = canvas.height / rect.height;
+                const t = e.changedTouches[0];
+                dispatchTouch('up',
+                    Math.round((t.clientX - rect.left) * sx),
+                    Math.round((t.clientY - rect.top)  * sy));
+            }
+        }, { passive: false });
+        console.log('[INPUT] canvas input listeners attached');
+    }
+
     function startRenderLoop() {
         if (_rafRunning) return;
         _rafRunning = true;
@@ -295,7 +361,7 @@
             } catch(e) {
                 renderErrors++;
                 if (renderErrors <= 5) {
-                    addLog('render() erreur: ' + e.message, 'log-error');
+                    console.error("[RENDER-ERR]", e.message, e.stack ? e.stack.split("\n").slice(0,4).join(" | ") : ""); addLog("render() erreur: " + e.message, "log-error");
                     if (e.stack) addLog(e.stack.split('\n').slice(0,8).join(' | '), 'log-error');
                 }
                 if (renderErrors > 20) {
@@ -335,36 +401,61 @@
             } catch(e) { skipped++; }
         }
 
-        // Phase 2: fetch and decode known atlas PNGs from the HTTP server
-        // These are NOT pre-loaded in game-assets.js (too large), but exist on disk
-        const serverPNGs = [
-            'ETC/XHDPI/ui/base.png',    'ETC/XHDPI/ui/base2.png',   'ETC/XHDPI/ui/base3.png',
-            'ETC/XHDPI/ui/base4.png',   'ETC/XHDPI/ui/base5.png',   'ETC/XHDPI/ui/base6.png',
-            'ETC/XHDPI/ui/base7.png',   'ETC/XHDPI/ui/base8.png',   'ETC/XHDPI/ui/base9.png',
-            'ETC/XHDPI/ui/base10.png',  'ETC/XHDPI/ui/base11.png',  'ETC/XHDPI/ui/base12.png',
-            'ETC/XHDPI/ui/base13.png',  'ETC/XHDPI/ui/base14.png',  'ETC/XHDPI/ui/base15.png',
-            'ETC/XHDPI/ui/common.png',  'ETC/XHDPI/ui/common2.png', 'ETC/XHDPI/ui/common3.png',
-            'ETC/XHDPI/ui/common4.png', 'ETC/XHDPI/ui/boot.png',
-            'ETC/XHDPI/ui/splash_normal.png', 'ETC/XHDPI/ui/splash_holiday.png',
-            'ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png',
-        ];
-        for (const path of serverPNGs) {
-            if (GAME_ASSETS_RGBA[path] || GAME_ASSETS_RGBA['ui/' + path.split('/').pop()]) continue;
+        // Phase 2: fetch and decode ALL PNGs from the server (via asset-manifest.json)
+        // The manifest is generated at build time from all files in the assets/ directory
+        let serverPNGs = [];
+        try {
+            const manifestResp = await fetch('asset-manifest.json');
+            if (manifestResp.ok) {
+                const allAssets = await manifestResp.json();
+                // Only PNGs need RGBA decode; filter to PNGs only
+                serverPNGs = allAssets.filter(p => p.toLowerCase().endsWith('.png'))
+                                      .map(p => p.replace(/^assets\//, ''));
+            }
+        } catch(e) { console.warn('[PRELOAD] asset-manifest.json not found, falling back to hardcoded list'); }
+
+        // Fallback hardcoded list if manifest fetch fails
+        if (!serverPNGs.length) {
+            serverPNGs = [
+                'ETC/XHDPI/ui/base.png',    'ETC/XHDPI/ui/base2.png',   'ETC/XHDPI/ui/base3.png',
+                'ETC/XHDPI/ui/base4.png',   'ETC/XHDPI/ui/base5.png',   'ETC/XHDPI/ui/base6.png',
+                'ETC/XHDPI/ui/base7.png',   'ETC/XHDPI/ui/base8.png',   'ETC/XHDPI/ui/base9.png',
+                'ETC/XHDPI/ui/base10.png',  'ETC/XHDPI/ui/base11.png',  'ETC/XHDPI/ui/base12.png',
+                'ETC/XHDPI/ui/base13.png',  'ETC/XHDPI/ui/base14.png',  'ETC/XHDPI/ui/base15.png',
+                'ETC/XHDPI/ui/common.png',  'ETC/XHDPI/ui/common2.png', 'ETC/XHDPI/ui/common3.png',
+                'ETC/XHDPI/ui/common4.png', 'ETC/XHDPI/ui/boot.png',
+                'ETC/XHDPI/ui/splash_normal.png', 'ETC/XHDPI/ui/splash_holiday.png',
+                'ETC/XHDPI/ui/fantasy_legend_studio_splash_screen.png',
+                'ETC/XHDPI/world/env/MainMenu.png',  'ETC/XHDPI/world/env/MainMenu2.png',
+                'ETC/XHDPI/world/env/MainMenu3.png', 'ETC/XHDPI/world/env/MainMenu4.png',
+                'ETC/XHDPI/world/env/MainMenu5.png', 'ETC/XHDPI/world/env/MainMenu6.png',
+                'ETC/XHDPI/world/env/MainMenu7.png', 'ETC/XHDPI/world/env/MainMenu8.png',
+            ];
+        }
+
+        // Parallel fetch+decode with concurrency limit of 8
+        async function fetchAndDecode(path) {
+            if (GAME_ASSETS_RGBA[path] || GAME_ASSETS_RGBA['ui/' + path.split('/').pop()]) return;
             try {
                 const resp = await fetch('assets/' + path);
-                if (!resp.ok) continue;
+                if (!resp.ok) { skipped++; return; }
                 const buf = await resp.arrayBuffer();
-                // Cache raw bytes in GAME_ASSETS so XHR bypass finds them already loaded
                 const bytes = new Uint8Array(buf);
                 GAME_ASSETS[path] = { _webBytes: bytes };
-                // Decode to RGBA and store under multiple keys for path flexibility
                 const rgba = await decodePNG(buf);
                 GAME_ASSETS_RGBA[path] = rgba;
-                // Also store without ETC/XHDPI prefix for flexible lookup
                 const shortPath = path.replace('ETC/XHDPI/', '');
                 GAME_ASSETS_RGBA[shortPath] = rgba;
+                const fname = path.split('/').pop();
+                if (!GAME_ASSETS_RGBA[fname]) GAME_ASSETS_RGBA[fname] = rgba;
                 fetched++;
             } catch(e) { skipped++; }
+        }
+
+        // Run up to 8 concurrent fetches
+        const CONCURRENCY = 8;
+        for (let i = 0; i < serverPNGs.length; i += CONCURRENCY) {
+            await Promise.allSettled(serverPNGs.slice(i, i + CONCURRENCY).map(fetchAndDecode));
         }
         console.info('[PRELOAD] done — ' + decoded + ' from GAME_ASSETS, ' + fetched + ' fetched, '
             + skipped + ' skipped. Total RGBA: ' + Object.keys(GAME_ASSETS_RGBA).length);
@@ -458,6 +549,7 @@
             addLog('game.create() + premier frame OK', 'log-ok');
             // 4. Start the RAF render loop
             startRenderLoop();
+            setupCanvasInput();
         } catch(e) {
             const msg = e.message || String(e);
             setStatus('st-create', 'EXCEPTION', 'fail');
@@ -484,5 +576,13 @@
         document.getElementById('st-bridge').className = 'status-value fail';
         document.getElementById('console').innerHTML = '<div class=\'log-error\'>classes.js non trouvé. Lancez un serveur HTTP dans proto/output/web/</div>';
     "></script>
+    <script>
+    /* Register Service Worker for WebP serving + asset caching */
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+            console.info('[SW] registered, scope:', reg.scope);
+        }).catch(e => console.warn('[SW] registration failed:', e));
+    }
+    </script>
 </body>
 </html>

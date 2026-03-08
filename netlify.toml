@@ -1,0 +1,55 @@
+[build]
+  publish = "proto/output/web"
+  command = "npm install"
+
+# Cache assets 1 year (immutable - PNGs, WebPs, OGGs, atlases)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# JS served no-store so SW network-first always gets fresh classes.js after deploy
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Short cache for HTML (so updates are picked up)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Service Worker must not be cached
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# CORS for game server API calls
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[functions]
+  directory = "netlify/functions"
+
+# Game server API: redirect /login and /api/boot to Netlify Functions
+[[redirects]]
+  from = "/login"
+  to = "/.netlify/functions/login"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/boot"
+  to = "/.netlify/functions/boot"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/boot"
+  status = 200
+  force = false
