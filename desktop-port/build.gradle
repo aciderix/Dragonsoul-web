@@ -33,9 +33,18 @@ dependencies {
     // stock libGDX desktop natives (libgdx64.so) — extracted at run time
     runtimeOnly "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-    // the game itself: obfuscated libGDX engine + com.perblue.* business logic
-    implementation files('../classes1.jar', '../classes2.jar')
+    // the game itself: obfuscated libGDX engine + com.perblue.* business logic,
+    // after ASM remap that resolves class/package name collisions (see :remapGame)
+    implementation files('libs/game-remapped.jar')
 }
+
+// ASM toolchain used only by the offline remap step (kept off the app classpath)
+configurations { remaptool }
+dependencies {
+    remaptool 'org.ow2.asm:asm:9.7'
+    remaptool 'org.ow2.asm:asm-commons:9.7'
+}
+tasks.register('printRemapCp') { doLast { println configurations.remaptool.asPath } }
 
 application {
     mainClass = 'desktop.DesktopLauncher'

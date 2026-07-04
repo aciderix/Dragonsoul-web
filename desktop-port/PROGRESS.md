@@ -117,3 +117,39 @@ LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe \
 
 Classpath runtime résolu : `gradle -q printRuntimeClasspath`.
 Rendu headless vérifié : GL 4.5 Compat / GLSL 4.50 / llvmpipe (voir GLSmokeTest).
+
+---
+## Mise à jour — backend LWJGL3 complet + remap ASM (compile OK)
+
+### Obstacle majeur résolu : collisions nom-classe/nom-package
+L'obfuscation crée 75 collisions où une classe `X` coexiste avec un package `X`
+(légal en bytecode, **inexprimable en source Java**). Bloquant pour nous :
+- `com.badlogic.gdx.b` (Game) vs package `b` (Cursor/Music/Sound `b.a/b.b/b.c`)
+- `com.badlogic.gdx.c` (ApplicationListener) vs package `c` (FileHandle `c.a`)
+- `com.badlogic.gdx.utils.b` (classe) vs package `utils.b` (**holder Gdx** `utils.b.a`)
+
+**Solution** : `tools/RemapTool.java` (ASM) renomme ces 3 classes en `b_`/`c_`/
+`utils.b_` dans TOUT le jeu (refs incluses, ex. RPGMain extends b→b_). Produit
+`libs/game-remapped.jar`. Régénérer : `bash tools/remap.sh`. Source les nomme
+ensuite : ApplicationListener = `com.badlogic.gdx.c_`, packages b/c/utils.b libres.
+
+### Backend implémenté (dsbackend/) — compile contre game-remapped.jar
+- `DsGL20` : 75 méthodes GL20 → LWJGL GL11/13/15/20/30
+- `DsFiles` : mapping Files vérifié (b(String)=internal, a=classpath, c=external,
+  d=local), FileHandle Absolute (lecture disque directe depuis assets extraits)
+- `DsGraphics` : taille fenêtre + gl20, density=2.0 (XHDPI), défauts pour le reste
+- `DsInput` : stocke le processor, pas d'événements (pas requis pour 1er rendu)
+- `DsAudio` (+ Sound/Music no-op) : boot sans OpenAL
+- `DsPreferences` : java.util.Properties sur disque
+- `DsApplication` : logs stdout, postRunnable→file drainée par le launcher
+- `DsDeviceInfo` : stub des 30 getters, Platform=ANDROID
+- `desktop/DesktopLauncher` : GLFW+GL, wire singleton `com.badlogic.gdx.utils.b.a`
+  (champs a=app,b=graphics,c=audio,d=input,e=files,g/h=gl20), new RPGMain(deviceInfo),
+  create()/render() loop.
+
+### État
+- [x] Étape 3-7 : backend + launcher **compilent**
+- [ ] Étape 8 : exécuter (extraire assets APK + libgdx64.so), déboguer create()
+
+### Lancer
+`bash run-desktop.sh` (extrait assets/natif, run sous Xvfb). Voir le script.
