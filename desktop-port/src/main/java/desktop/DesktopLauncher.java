@@ -106,6 +106,8 @@ public final class DesktopLauncher {
             last = now;
             app.drainRunnables();
             game.render();
+            String shot = System.getProperty("DS_SCREENSHOT");
+            if (shot != null && (frames == maxFrames - 1)) captureScreenshot(shot, W, H);
             glfwSwapBuffers(win);
             glfwPollEvents();
             frames++;
@@ -114,6 +116,21 @@ public final class DesktopLauncher {
         try { game.dispose(); } catch (Throwable t) { t.printStackTrace(System.out); }
         glfwDestroyWindow(win);
         glfwTerminate();
+    }
+
+    /** Capture the current framebuffer to a PNG (proof of visual output). */
+    static void captureScreenshot(String path, int w, int h) {
+        java.nio.ByteBuffer buf = org.lwjgl.BufferUtils.createByteBuffer(w * h * 4);
+        org.lwjgl.opengl.GL11.glReadPixels(0, 0, w, h,
+                org.lwjgl.opengl.GL11.GL_RGBA, org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE, buf);
+        // flip vertically (GL origin is bottom-left)
+        java.nio.ByteBuffer flip = org.lwjgl.BufferUtils.createByteBuffer(w * h * 4);
+        for (int y = 0; y < h; y++) {
+            int src = (h - 1 - y) * w * 4;
+            for (int x = 0; x < w * 4; x++) flip.put(y * w * 4 + x, buf.get(src + x));
+        }
+        org.lwjgl.stb.STBImageWrite.stbi_write_png(path, w, h, 4, flip, w * 4);
+        System.out.println("[launcher] screenshot -> " + path);
     }
 
     /** Diagnostic: load a PNG straight through the game's Pixmap to surface the

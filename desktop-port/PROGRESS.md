@@ -173,3 +173,34 @@ Progression runtime (create() de RPGMain s'exécute loin) :
 ### Décisions de version/plateforme (réelles, pas des shims)
 - Natif libGDX **1.9.3** desktop (match ABI Gdx2DPixmap)
 - ApplicationType=Android, Platform=ANDROID, densité XHDPI → assets ETC/XHDPI réels
+
+---
+## 🎉 RÉSULTAT FINAL — DragonSoul REND nativement sur Linux
+
+`game.create()` réussit, la boucle de rendu tourne, et l'**écran-titre réel du jeu
+« Fantasy Legend Studios » s'affiche** (capture : `docs/screenshot-splash.png`),
+rendu sous Xvfb + Mesa llvmpipe depuis le bytecode obfusqué via le backend LWJGL3.
+
+Chaîne complète validée : bytecode → backend LWJGL3 maison → GLFW+OpenGL →
+RPGMain.create() → rendu de l'UI réelle.
+
+Corrections finales du boot :
+- `DsGraphics.getDisplayMode()` renvoie un vrai DisplayMode (null → NPE initScaling)
+- `DsNative` (INative) + `DsPurchasing` (IPurchasing) : ponts natifs (orientation,
+  notifications, IAP…) ; `handleSilentException`/`systemLog` réels
+- L'AssetUpdater tente un serveur de contenu (127.0.0.1:8080) → échec non fatal
+  (silent exception) ; brancher `Dragonsoul-server v2` (Python) pour aller plus loin
+
+### Lancer / capturer
+```bash
+bash run-desktop.sh                              # headless, N frames puis dispose
+# capture d'écran :
+#   -DDS_SCREENSHOT=out.png  (déjà câblé dans le launcher, dernière frame)
+```
+
+### Restant pour la JOUABILITÉ (dettes, voir SHIMS.md)
+- [ ] Input GLFW réel (clavier/souris → InputProcessor `com.badlogic.gdx.j`)
+- [ ] Audio OpenAL réel (actuellement muet)
+- [ ] Serveur local (contenu + jeu) : `Dragonsoul-server v2` du repo d'extraction
+- [ ] Fonts CJK multi-pages (Chinese/Korean/Japanese) — non bloquant
+- [ ] Remplacer `-Xverify:none` par recalcul stackmaps ASM (robustesse)
