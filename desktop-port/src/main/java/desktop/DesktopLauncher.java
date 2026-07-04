@@ -74,6 +74,7 @@ public final class DesktopLauncher {
         // --- the real game ---
         DsDeviceInfo device = new DsDeviceInfo();
         com.perblue.rpg.RPGMain game = new com.perblue.rpg.RPGMain(device);
+        game.setNativeAccess(new DsNative()); // platform bridge (orientation, IAP, notifications...)
         DsApplication app = new DsApplication(game, graphics, input, audio, runDir);
         // Report ApplicationType = Android (switchmap value a$a.a). The APK ships
         // only the Android/ETC1 texture set, so we must take the game's Android

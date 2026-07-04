@@ -42,11 +42,24 @@ public final class DsGraphics implements com.badlogic.gdx.f {
     public boolean isGL30Available() { return false; }
     public com.badlogic.gdx.graphics.glutils.g getGLVersion() { return null; }
 
+    // DisplayMode (f$b) has a protected (w,h,refreshRate,bpp) constructor; build
+    // a real one reflectively so the game can read its width/height (fields a/b).
+    // The game dereferences this in scene2d Drawable.initScaling() on the Android
+    // path, so returning null here NPEs the whole UI.
+    private com.badlogic.gdx.f.b displayMode() {
+        try {
+            java.lang.reflect.Constructor<com.badlogic.gdx.f.b> c =
+                com.badlogic.gdx.f.b.class.getDeclaredConstructor(int.class, int.class, int.class, int.class);
+            c.setAccessible(true);
+            return c.newInstance(width, height, 60, 32);
+        } catch (Exception e) { throw new RuntimeException("cannot build DisplayMode", e); }
+    }
+
     public com.badlogic.gdx.f.a getBufferFormat() { return null; }
-    public com.badlogic.gdx.f.b getDisplayMode() { return null; }
-    public com.badlogic.gdx.f.b getDisplayMode(com.badlogic.gdx.f.d monitor) { return null; }
-    public com.badlogic.gdx.f.b[] getDisplayModes() { return new com.badlogic.gdx.f.b[0]; }
-    public com.badlogic.gdx.f.b[] getDisplayModes(com.badlogic.gdx.f.d monitor) { return new com.badlogic.gdx.f.b[0]; }
+    public com.badlogic.gdx.f.b getDisplayMode() { return displayMode(); }
+    public com.badlogic.gdx.f.b getDisplayMode(com.badlogic.gdx.f.d monitor) { return displayMode(); }
+    public com.badlogic.gdx.f.b[] getDisplayModes() { return new com.badlogic.gdx.f.b[] { displayMode() }; }
+    public com.badlogic.gdx.f.b[] getDisplayModes(com.badlogic.gdx.f.d monitor) { return new com.badlogic.gdx.f.b[] { displayMode() }; }
     public com.badlogic.gdx.f.d getMonitor() { return null; }
     public com.badlogic.gdx.f.d getPrimaryMonitor() { return null; }
     public com.badlogic.gdx.f.d[] getMonitors() { return new com.badlogic.gdx.f.d[0]; }

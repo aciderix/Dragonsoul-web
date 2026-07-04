@@ -119,8 +119,12 @@ public final class DsGL20 implements com.badlogic.gdx.graphics.f {
     public void glScissor(int x, int y, int w, int h) { GL11.glScissor(x, y, w, h); }
     public void glShaderSource(int shader, String source) { GL20.glShaderSource(shader, source); }
 
+    private static final boolean TRACE_TEX = Boolean.getBoolean("DS_TRACE_TEX");
+
     public void glTexImage2D(int target, int level, int internalformat, int width, int height,
                              int border, int format, int type, Buffer pixels) {
+        if (TRACE_TEX) System.out.println("[gl] glTexImage2D " + width + "x" + height
+                + " thread=" + Thread.currentThread().getName() + " pixels=" + (pixels != null));
         if (pixels == null) GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (ByteBuffer) null);
         else if (pixels instanceof ByteBuffer) GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (ByteBuffer) pixels);
         else if (pixels instanceof ShortBuffer) GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (ShortBuffer) pixels);
