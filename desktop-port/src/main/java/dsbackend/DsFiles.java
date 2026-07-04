@@ -28,24 +28,35 @@ public final class DsFiles implements com.badlogic.gdx.e {
         new File(localRoot).mkdirs();
     }
 
+    private static final boolean TRACE = Boolean.getBoolean("DS_TRACE_FILES");
+
     private static com.badlogic.gdx.c.a abs(File f) {
+        if (TRACE) System.out.println("[files] " + (f.exists() ? "OK   " : "MISS ") + f.getPath());
         return new com.badlogic.gdx.c.a(f.getAbsolutePath());
     }
 
-    public com.badlogic.gdx.c.a a(String path) { return abs(new File(assetsRoot, path)); }     // classpath
-    public com.badlogic.gdx.c.a b(String path) { return abs(new File(assetsRoot, path)); }     // internal
-    public com.badlogic.gdx.c.a c(String path) { return abs(new File(externalRoot, path)); }   // external
-    public com.badlogic.gdx.c.a d(String path) { return abs(new File(localRoot, path)); }      // local
+    /** Resolve under {@code root}, but leave already-absolute paths untouched so
+     *  the game's own path composition (e.g. fntFile.parent().child(page)) isn't
+     *  double-prefixed with the asset root. */
+    private static com.badlogic.gdx.c.a under(String root, String path) {
+        File f = new File(path);
+        return abs(f.isAbsolute() ? f : new File(root, path));
+    }
+
+    public com.badlogic.gdx.c.a a(String path) { return under(assetsRoot, path); }   // classpath
+    public com.badlogic.gdx.c.a b(String path) { return under(assetsRoot, path); }   // internal
+    public com.badlogic.gdx.c.a c(String path) { return under(externalRoot, path); } // external
+    public com.badlogic.gdx.c.a d(String path) { return under(localRoot, path); }    // local
     public String a() { return externalRoot + File.separator; }                                 // external path
     public String b() { return localRoot + File.separator; }                                    // local path
 
     public com.badlogic.gdx.c.a a(String path, com.badlogic.gdx.e.a type) {
         switch (type.ordinal()) {
-            case 0: return abs(new File(assetsRoot, path));   // Classpath
-            case 1: return abs(new File(assetsRoot, path));   // Internal
-            case 2: return abs(new File(externalRoot, path)); // External
+            case 0: return under(assetsRoot, path);           // Classpath
+            case 1: return under(assetsRoot, path);           // Internal
+            case 2: return under(externalRoot, path);         // External
             case 3: return new com.badlogic.gdx.c.a(path);    // Absolute
-            case 4: return abs(new File(localRoot, path));    // Local
+            case 4: return under(localRoot, path);            // Local
             default: return new com.badlogic.gdx.c.a(path);
         }
     }

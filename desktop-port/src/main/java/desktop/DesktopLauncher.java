@@ -88,6 +88,8 @@ public final class DesktopLauncher {
         com.badlogic.gdx.utils.b.a.a = app;       // Gdx.app
         System.out.println("[launcher] RPGMain instantiated");
 
+        if (Boolean.getBoolean("DS_PROBE_PNG")) { probePixmap(files, "fonts/Klepto.png"); probeFont(files, "fonts/Klepto.fnt"); }
+
         System.out.println("[launcher] calling game.create() ...");
         game.create();
         System.out.println("[launcher] game.create() returned");
@@ -111,5 +113,43 @@ public final class DesktopLauncher {
         try { game.dispose(); } catch (Throwable t) { t.printStackTrace(System.out); }
         glfwDestroyWindow(win);
         glfwTerminate();
+    }
+
+    /** Diagnostic: load a PNG straight through the game's Pixmap to surface the
+     *  real decode exception (which the AssetManager otherwise swallows). */
+    static void probePixmap(com.badlogic.gdx.e files, String path) {
+        try {
+            com.badlogic.gdx.c.a fh = files.b(path); // internal()
+            Object pixmap = Class.forName("com.badlogic.gdx.graphics.k")
+                    .getConstructor(com.badlogic.gdx.c.a.class).newInstance(fh);
+            System.out.println("[probe] Pixmap loaded OK: " + path + " -> " + pixmap);
+        } catch (Throwable t) {
+            System.out.println("[probe] Pixmap FAILED for " + path + ":");
+            Throwable c = t;
+            while (c != null) { System.out.println("   " + c); c = c.getCause(); }
+        }
+    }
+
+    /** Diagnostic: load a BitmapFont (page texture + GL upload) to surface the
+     *  real font-loading exception the AssetManager swallows in taskFailed. */
+    static void probeFont(com.badlogic.gdx.e files, String path) {
+        try {
+            com.badlogic.gdx.c.a fh = files.b(path);
+            Object font = Class.forName("com.badlogic.gdx.graphics.g2d.b")
+                    .getConstructor(com.badlogic.gdx.c.a.class, boolean.class).newInstance(fh, false);
+            System.out.println("[probe] BitmapFont loaded OK: " + path + " -> " + font);
+        } catch (Throwable t) {
+            System.out.println("[probe] BitmapFont FAILED for " + path + ":");
+            Throwable c = (t instanceof java.lang.reflect.InvocationTargetException && t.getCause() != null) ? t.getCause() : t;
+            for (int i = 0; c != null && i < 6; i++) {
+                System.out.println("   " + c);
+                for (StackTraceElement s : c.getStackTrace()) {
+                    if (s.getClassName().startsWith("com.badlogic") || s.getClassName().startsWith("com.perblue")) {
+                        System.out.println("      at " + s); break;
+                    }
+                }
+                c = c.getCause();
+            }
+        }
     }
 }

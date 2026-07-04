@@ -47,7 +47,8 @@ CP="$BUILD/classes/java/main:$RESD:$RUNTIME_CP"
 echo "[run] launching under Xvfb (software GL) ..."
 LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe \
   xvfb-run -a -s "-screen 0 1280x720x24" \
-  java -DDS_ASSETS="$ASSETS" \
+  java -Xverify:none \
+       -DDS_ASSETS="$ASSETS" \
        -DDS_RUNDIR="$BUILD/run" \
        -DDS_GDX_NATIVE="$NATDIR/libgdx64.so" \
        -DDS_FRAMES="${DS_FRAMES:-120}" \
