@@ -1,0 +1,56 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    lwjglVersion = '3.3.4'
+    lwjglNatives = 'natives-linux'
+    // libGDX native (Matrix4/BufferUtils JNI). The obfuscated engine kept these
+    // class names, so stock desktop natives bind. Version pinned to the era of
+    // the game (~1.9.x); the native math ABI is stable across these.
+    gdxVersion = '1.9.11'
+}
+
+dependencies {
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+    implementation "org.lwjgl:lwjgl"
+    implementation "org.lwjgl:lwjgl-glfw"
+    implementation "org.lwjgl:lwjgl-opengl"
+    implementation "org.lwjgl:lwjgl-openal"
+    implementation "org.lwjgl:lwjgl-stb"
+
+    runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
+
+    // stock libGDX desktop natives (libgdx64.so) — extracted at run time
+    runtimeOnly "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+    // the game itself: obfuscated libGDX engine + com.perblue.* business logic
+    implementation files('../classes1.jar', '../classes2.jar')
+}
+
+application {
+    mainClass = 'desktop.DesktopLauncher'
+}
+
+// Old dex2jar bytecode targets Java 6/7; silence obsolete-target warnings.
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-Xlint:none'
+    options.encoding = 'UTF-8'
+}
+
+// Helper: dump the resolved runtime classpath so the manual run/build scripts
+// (which don't use the application plugin's launcher) can reuse it.
+tasks.register('printRuntimeClasspath') {
+    doLast {
+        println configurations.runtimeClasspath.asPath
+    }
+}
