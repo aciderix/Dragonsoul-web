@@ -34,7 +34,26 @@ l'implémente en LWJGL3 et on renseigne le singleton `Gdx`.
 | `Preferences` | `com.badlogic.gdx.i` | |
 | `Screen` | `com.badlogic.gdx.k` | |
 | `GL20` | `com.badlogic.gdx.graphics.f` | glClear/glBindBuffer/... (**noms préservés**) |
-| `Gdx` singleton | **À CONFIRMER** (map dit `com.badlogic.gdx.utils.b`) | champs statiques app/graphics/input/files/audio/gl |
+| `Gdx` singleton | **`com.badlogic.gdx.utils.b.a`** ✅ CONFIRMÉ | voir champs ci-dessous |
+
+### Singleton Gdx confirmé : `com.badlogic.gdx.utils.b.a` (champs statiques)
+
+| Champ | Type obfusqué | = |
+|---|---|---|
+| `a` | `com.badlogic.gdx.a` | Gdx.app (Application) |
+| `b` | `com.badlogic.gdx.f` | Gdx.graphics (Graphics) |
+| `c` | `com.badlogic.gdx.d` | Gdx.audio (Audio) |
+| `d` | `com.badlogic.gdx.g` | Gdx.input (Input) |
+| `e` | `com.badlogic.gdx.e` | Gdx.files (Files) |
+| `g`, `h` | `com.badlogic.gdx.graphics.f` | Gdx.gl / Gdx.gl20 (GL20) |
+| `i` | `com.badlogic.gdx.graphics.g` | Gdx.gl30 (GL30) |
+
+Init backend = assigner ces 8 champs statiques puis instancier RPGMain.
+
+FileHandle = `com.badlogic.gdx.c.a` : **classe concrète java.io.File** (standard
+libGDX, pas la variante Android) → marche presque telle quelle sur desktop.
+
+Signatures complètes : `desktop-port/docs/obfuscated-interfaces.txt`.
 
 Classes à méthodes natives **préservées** (`Matrix4`, `BufferUtils`) → les natifs
 desktop standard de libGDX (`gdx-platform:natives-desktop`, `libgdx64.so`) se lient.
@@ -67,7 +86,7 @@ Bytecode du jeu : `../classes1.jar` (RPGMain + base gdx) + `../classes2.jar`
 
 - [x] Étape 0 : recon environnement (JDK/Gradle/Xvfb/Mesa/réseau)
 - [x] Étape 1 : squelette Gradle + résolution LWJGL + compile contre le bytecode + run OK
-- [ ] Étape 2 : localiser précisément le singleton Gdx + signatures exactes des interfaces plateforme
+- [x] Étape 2 : singleton Gdx localisé (`com.badlogic.gdx.utils.b.a`) + interfaces dumpées (docs/obfuscated-interfaces.txt)
 - [ ] Étape 3 : backend LWJGL3 — Files (java.io) + FileHandle
 - [ ] Étape 4 : backend — Application + Graphics + fenêtre GLFW + contexte GL
 - [ ] Étape 5 : backend — GL20 (75 méthodes) → org.lwjgl.opengl.GL20/GL30

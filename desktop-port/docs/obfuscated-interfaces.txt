@@ -1,0 +1,400 @@
+# Signatures des interfaces plateforme obfusquées (javap) — référence backend
+# Généré depuis classes1.jar:classes2.jar
+
+## Singleton Gdx = com.badlogic.gdx.utils.b.a
+#   a=Application(a)  b=Graphics(f)  c=Audio(d)  d=Input(g)  e=Files(e)  g,h=GL20(graphics.f)  i=GL30(graphics.g)
+public class com.badlogic.gdx.utils.b.a implements a.a.i {
+  public static com.badlogic.gdx.a a;
+  public static com.badlogic.gdx.f b;
+  public static com.badlogic.gdx.d c;
+  public static com.badlogic.gdx.g d;
+  public static com.badlogic.gdx.e e;
+  public static com.badlogic.gdx.l f;
+  public static com.badlogic.gdx.graphics.f g;
+  public static com.badlogic.gdx.graphics.f h;
+  public static com.badlogic.gdx.graphics.g i;
+  private static java.lang.String j;
+  public com.badlogic.gdx.utils.b.a();
+  private static float a(float, float, float, float, float);
+  public static int a(int);
+  public static int a(java.io.DataInput, byte[]) throws d.a.a.c.a;
+  public static long a(byte[], int);
+  public static com.badlogic.gdx.scenes.scene2d.a.a a(float, float);
+  public static com.badlogic.gdx.scenes.scene2d.a.e a(float, float, float, com.badlogic.gdx.math.g);
+  public static com.badlogic.gdx.scenes.scene2d.a.i a();
+  public static com.badlogic.gdx.scenes.scene2d.a.j a(com.badlogic.gdx.scenes.scene2d.a);
+  public static com.badlogic.gdx.scenes.scene2d.a.k a(float, float, com.badlogic.gdx.math.g);
+  public static com.badlogic.gdx.scenes.scene2d.a.l a(float);
+  public static com.badlogic.gdx.scenes.scene2d.a.m a(java.lang.Runnable);
+  public static com.badlogic.gdx.scenes.scene2d.a.o a(com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a);
+  public static com.badlogic.gdx.scenes.scene2d.a.o a(com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a);
+  public static com.badlogic.gdx.scenes.scene2d.a.o a(com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a);
+  public static com.badlogic.gdx.scenes.scene2d.a.o a(com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a);
+  public static com.badlogic.gdx.scenes.scene2d.a.o a(com.badlogic.gdx.scenes.scene2d.a...);
+  public static com.badlogic.gdx.scenes.scene2d.a.r a(boolean);
+  public static com.badlogic.gdx.utils.b.b a(java.lang.Class, java.lang.Class...) throws com.badlogic.gdx.utils.b.e;
+  public static java.lang.Class a(java.lang.String) throws com.badlogic.gdx.utils.b.e;
+  public static <T> T a(java.lang.Class<T>) throws com.badlogic.gdx.utils.b.e;
+  public static java.lang.String a(android.content.Context);
+  public static java.lang.String a(android.text.format.Time);
+  public static java.lang.String a(java.lang.String, java.lang.Object...);
+  public static java.lang.String a(byte[]);
+  public static java.lang.String a(byte[], boolean);
+  public static <T> java.util.List<T> a(java.util.List<T>);
+  public static java.util.Map<java.lang.String, java.lang.Long> a(java.io.InputStream) throws java.io.IOException;
+  public static org.json.JSONObject a(java.lang.String, java.lang.Object, android.content.Context);
+  public static org.json.JSONObject a(org.acra.b.b) throws org.acra.f.f;
+  public static void a(int, int, int, int);
+  public static void a(android.content.Context, int, int);
+  public static void a(d.a.a.e.f, java.io.File, com.badlogic.gdx.a.a.c$a) throws d.a.a.c.a;
+  private static void a(d.a.a.e.f, java.io.File, boolean, boolean, boolean, boolean) throws d.a.a.c.a;
+  public static void a(java.io.Reader);
+  public static void a(java.lang.Object);
+  public static void a(java.lang.Object, java.lang.String);
+  public static void a(java.lang.String, java.lang.String);
+  public static void a(java.lang.String, java.lang.String, java.lang.Object, android.content.Context);
+  private static void a(org.json.JSONObject, java.lang.String) throws org.json.JSONException;
+  public static void a(boolean, java.lang.String);
+  public static void a(java.lang.Object[]);
+  public static void a(java.lang.String[], int, com.perblue.common.b.r);
+  public static boolean a(int, int);
+  public static boolean a(android.content.Context, java.lang.String);
+  public static boolean a(java.io.File) throws d.a.a.c.a;
+  public static boolean a(java.lang.Object, java.lang.Object);
+  public static <E> boolean a(java.util.Collection<E>);
+  public static byte[] a(char[]);
+  public static int b(int);
+  public static int b(byte[], int);
+  public static com.badlogic.gdx.graphics.k b(int, int, int, int);
+  public static com.badlogic.gdx.scenes.scene2d.a.a b(float, float, com.badlogic.gdx.math.g);
+  public static com.badlogic.gdx.scenes.scene2d.a.c b(float);
+  public static com.badlogic.gdx.scenes.scene2d.a.g b(com.badlogic.gdx.scenes.scene2d.a, com.badlogic.gdx.scenes.scene2d.a);
+  public static com.badlogic.gdx.scenes.scene2d.a.n b(float, float, float, com.badlogic.gdx.math.g);
+  public static com.badlogic.gdx.utils.b.b b(java.lang.Class, java.lang.Class...) throws com.badlogic.gdx.utils.b.e;
+  public static java.lang.String b(android.content.Context);
+  public static java.lang.String b(java.io.InputStream) throws java.io.IOException;
+  public static java.lang.String b(java.lang.String, java.lang.Object, android.content.Context);
+  public static java.lang.String b(byte[]);
+  public static java.security.KeyPair b();
+  public static org.json.JSONObject b(android.content.Context, java.lang.String) throws org.json.JSONException;
+  public static void b(java.io.File) throws d.a.a.c.a;
+  public static void b(java.lang.String);
+  public static void b(boolean);
+  public static void b(boolean, java.lang.String);
+  public static void b(java.lang.String[], int, com.perblue.common.b.r);
+  public static com.badlogic.gdx.utils.b.d[] b(java.lang.Class);
+  public static com.badlogic.gdx.scenes.scene2d.a.q c(int);
+  public static java.lang.String c();
+  private static java.lang.String c(java.io.File) throws java.io.IOException;
+  public static java.lang.String c(java.lang.String);
+  public static short c(byte[], int);
+  public static void c(boolean);
+  public static com.badlogic.gdx.utils.b.c[] c(java.lang.Class);
+  public static float d(int);
+  public static int d();
+  public static int d(byte[], int);
+  public static <T extends com.badlogic.gdx.scenes.scene2d.a> T d(java.lang.Class<T>);
+  public static java.lang.String d(java.lang.String);
+  public static java.lang.String e();
+  public static java.lang.String e(java.lang.String);
+  public static void e(byte[], int);
+  public static java.util.Date f(java.lang.String);
+  public static boolean g(java.lang.String);
+  public static boolean h(java.lang.String) throws d.a.a.c.a;
+  public static boolean i(java.lang.String) throws d.a.a.c.a;
+  public static boolean j(java.lang.String) throws d.a.a.c.a;
+  public static boolean k(java.lang.String) throws d.a.a.c.a;
+  public static void l(java.lang.String);
+  public static void m(java.lang.String);
+  private static java.lang.Object n(java.lang.String);
+  public float a(float, float[], int);
+}
+
+## com.badlogic.gdx.a  (Application)
+public interface com.badlogic.gdx.a {
+  public abstract void addLifecycleListener(com.badlogic.gdx.k);
+  public abstract void debug(java.lang.String, java.lang.String);
+  public abstract void error(java.lang.String, java.lang.String);
+  public abstract void error(java.lang.String, java.lang.String, java.lang.Throwable);
+  public abstract void exit();
+  public abstract com.badlogic.gdx.c getApplicationListener();
+  public abstract com.badlogic.gdx.d getAudio();
+  public abstract com.badlogic.gdx.utils.e getClipboard();
+  public abstract com.badlogic.gdx.f getGraphics();
+  public abstract com.badlogic.gdx.g getInput();
+  public abstract com.badlogic.gdx.m getPreferences(java.lang.String);
+  public abstract int getType$2826c76();
+  public abstract void log(java.lang.String, java.lang.String);
+  public abstract void log(java.lang.String, java.lang.String, java.lang.Throwable);
+  public abstract void postRunnable(java.lang.Runnable);
+  public abstract void removeLifecycleListener(com.badlogic.gdx.k);
+  public abstract void resetKeyboardSuggestions();
+  public abstract boolean supportsAndroidEditables();
+}
+
+## com.badlogic.gdx.b  (Game)
+public abstract class com.badlogic.gdx.b implements com.badlogic.gdx.c {
+  public com.badlogic.gdx.b();
+  public void create();
+  public void dispose();
+  public void pause();
+  public void render();
+  public void resize(int, int);
+  public void resume();
+}
+
+## com.badlogic.gdx.c  (ApplicationListener)
+public interface com.badlogic.gdx.c {
+  public abstract void create();
+  public abstract void dispose();
+  public abstract void pause();
+  public abstract void render();
+  public abstract void resize(int, int);
+  public abstract void resume();
+}
+
+## com.badlogic.gdx.d  (Audio)
+public interface com.badlogic.gdx.d {
+  public abstract void dispose();
+  public abstract com.badlogic.gdx.b.b newMusic(com.badlogic.gdx.c.a);
+  public abstract com.badlogic.gdx.b.c newSound(com.badlogic.gdx.c.a);
+  public abstract void pause();
+  public abstract void resume();
+  public abstract void stopAllSounds();
+}
+
+## com.badlogic.gdx.e  (Files)
+public interface com.badlogic.gdx.e {
+  public abstract com.badlogic.gdx.c.a a(java.lang.String);
+  public abstract com.badlogic.gdx.c.a a(java.lang.String, com.badlogic.gdx.e$a);
+  public abstract java.lang.String a();
+  public abstract com.badlogic.gdx.c.a b(java.lang.String);
+  public abstract java.lang.String b();
+  public abstract com.badlogic.gdx.c.a c(java.lang.String);
+  public abstract com.badlogic.gdx.c.a d(java.lang.String);
+}
+
+## com.badlogic.gdx.f  (Graphics)
+public interface com.badlogic.gdx.f {
+  public abstract int getBackBufferHeight();
+  public abstract int getBackBufferWidth();
+  public abstract com.badlogic.gdx.f$a getBufferFormat();
+  public abstract float getDeltaTime();
+  public abstract float getDensity();
+  public abstract com.badlogic.gdx.f$b getDisplayMode();
+  public abstract com.badlogic.gdx.f$b getDisplayMode(com.badlogic.gdx.f$d);
+  public abstract com.badlogic.gdx.f$b[] getDisplayModes();
+  public abstract com.badlogic.gdx.f$b[] getDisplayModes(com.badlogic.gdx.f$d);
+  public abstract long getFrameId();
+  public abstract int getFramesPerSecond();
+  public abstract com.badlogic.gdx.graphics.f getGL20();
+  public abstract com.badlogic.gdx.graphics.g getGL30();
+  public abstract com.badlogic.gdx.graphics.glutils.g getGLVersion();
+  public abstract int getHeight();
+  public abstract com.badlogic.gdx.f$d getMonitor();
+  public abstract com.badlogic.gdx.f$d[] getMonitors();
+  public abstract float getPpcX();
+  public abstract float getPpcY();
+  public abstract float getPpiX();
+  public abstract float getPpiY();
+  public abstract com.badlogic.gdx.f$d getPrimaryMonitor();
+  public abstract float getRawDeltaTime();
+  public abstract float getTargetDensity();
+  public abstract int getType$4df6916e();
+  public abstract int getWidth();
+  public abstract boolean isContinuousRendering();
+  public abstract boolean isFullscreen();
+  public abstract boolean isGL30Available();
+  public abstract com.badlogic.gdx.b.a newCursor$56fd1508(com.badlogic.gdx.graphics.k, int, int);
+  public abstract void requestRendering();
+  public abstract void setContinuousRendering(boolean);
+  public abstract void setCursor$6c4d0c86(com.badlogic.gdx.b.a);
+  public abstract boolean setFullscreenMode(com.badlogic.gdx.f$b);
+  public abstract void setResizable(boolean);
+  public abstract void setSystemCursor$48a93f7f(int);
+  public abstract void setTitle(java.lang.String);
+  public abstract void setUndecorated(boolean);
+  public abstract void setVSync(boolean);
+  public abstract boolean setWindowedMode(int, int);
+  public abstract boolean supportsDisplayModeChange();
+  public abstract boolean supportsExtension(java.lang.String);
+}
+
+## com.badlogic.gdx.g  (Input)
+public interface com.badlogic.gdx.g {
+  public abstract int a();
+  public abstract void a(com.badlogic.gdx.j);
+  public abstract void a(boolean);
+  public abstract boolean a(int);
+  public abstract int b();
+  public abstract void b(boolean);
+  public abstract boolean b(int);
+  public abstract boolean c();
+  public abstract boolean c(int);
+  public abstract long d();
+}
+
+## com.badlogic.gdx.j  (InputProcessor)
+public interface com.badlogic.gdx.j {
+  public abstract boolean keyDown(int);
+  public abstract boolean keyTyped(char);
+  public abstract boolean keyUp(int);
+  public abstract boolean mouseMoved(int, int);
+  public abstract boolean scrolled(int);
+  public abstract boolean touchDown(int, int, int, int);
+  public abstract boolean touchDragged(int, int, int);
+  public abstract boolean touchUp(int, int, int, int);
+}
+
+## com.badlogic.gdx.k  (LifecycleListener)
+public interface com.badlogic.gdx.k {
+  public abstract void dispose();
+  public abstract void pause();
+  public abstract void resume();
+}
+
+## com.badlogic.gdx.m  (Preferences)
+public interface com.badlogic.gdx.m {
+  public abstract com.badlogic.gdx.m a(java.lang.String, int);
+  public abstract com.badlogic.gdx.m a(java.lang.String, long);
+  public abstract com.badlogic.gdx.m a(java.lang.String, java.lang.String);
+  public abstract com.badlogic.gdx.m a(java.lang.String, boolean);
+  public abstract void a();
+  public abstract boolean a(java.lang.String);
+  public abstract int b(java.lang.String);
+  public abstract int b(java.lang.String, int);
+  public abstract long b(java.lang.String, long);
+  public abstract java.lang.String b(java.lang.String, java.lang.String);
+  public abstract boolean b(java.lang.String, boolean);
+  public abstract long c(java.lang.String);
+  public abstract java.lang.String d(java.lang.String);
+  public abstract boolean e(java.lang.String);
+}
+
+## com.badlogic.gdx.graphics.f  (GL20)
+public interface com.badlogic.gdx.graphics.f {
+  public abstract void glAttachShader(int, int);
+  public abstract void glBindBuffer(int, int);
+  public abstract void glBindFramebuffer(int, int);
+  public abstract void glBindRenderbuffer(int, int);
+  public abstract void glBindTexture(int, int);
+  public abstract void glBlendFunc(int, int);
+  public abstract void glBufferData(int, int, java.nio.Buffer, int);
+  public abstract void glBufferSubData(int, int, int, java.nio.Buffer);
+  public abstract int glCheckFramebufferStatus(int);
+  public abstract void glClear(int);
+  public abstract void glClearColor(float, float, float, float);
+  public abstract void glCompileShader(int);
+  public abstract void glCompressedTexImage2D(int, int, int, int, int, int, int, java.nio.Buffer);
+  public abstract int glCreateProgram();
+  public abstract int glCreateShader(int);
+  public abstract void glDeleteBuffer(int);
+  public abstract void glDeleteFramebuffer(int);
+  public abstract void glDeleteProgram(int);
+  public abstract void glDeleteRenderbuffer(int);
+  public abstract void glDeleteShader(int);
+  public abstract void glDeleteTexture(int);
+  public abstract void glDepthMask(boolean);
+  public abstract void glDisable(int);
+  public abstract void glDisableVertexAttribArray(int);
+  public abstract void glDrawArrays(int, int, int);
+  public abstract void glDrawElements(int, int, int, int);
+  public abstract void glDrawElements(int, int, int, java.nio.Buffer);
+  public abstract void glEnable(int);
+  public abstract void glEnableVertexAttribArray(int);
+  public abstract void glFramebufferRenderbuffer(int, int, int, int);
+  public abstract void glFramebufferTexture2D(int, int, int, int, int);
+  public abstract int glGenBuffer();
+  public abstract int glGenFramebuffer();
+  public abstract int glGenRenderbuffer();
+  public abstract int glGenTexture();
+  public abstract void glGenerateMipmap(int);
+  public abstract java.lang.String glGetActiveAttrib(int, int, java.nio.IntBuffer, java.nio.Buffer);
+  public abstract java.lang.String glGetActiveUniform(int, int, java.nio.IntBuffer, java.nio.Buffer);
+  public abstract int glGetAttribLocation(int, java.lang.String);
+  public abstract void glGetIntegerv(int, java.nio.IntBuffer);
+  public abstract java.lang.String glGetProgramInfoLog(int);
+  public abstract void glGetProgramiv(int, int, java.nio.IntBuffer);
+  public abstract java.lang.String glGetShaderInfoLog(int);
+  public abstract void glGetShaderiv(int, int, java.nio.IntBuffer);
+  public abstract java.lang.String glGetString(int);
+  public abstract int glGetUniformLocation(int, java.lang.String);
+  public abstract void glLinkProgram(int);
+  public abstract void glPixelStorei(int, int);
+  public abstract void glReadPixels(int, int, int, int, int, int, java.nio.Buffer);
+  public abstract void glRenderbufferStorage(int, int, int, int);
+  public abstract void glScissor(int, int, int, int);
+  public abstract void glShaderSource(int, java.lang.String);
+  public abstract void glTexImage2D(int, int, int, int, int, int, int, int, java.nio.Buffer);
+  public abstract void glTexParameterf(int, int, float);
+  public abstract void glUniform1f(int, float);
+  public abstract void glUniform1fv(int, int, float[], int);
+  public abstract void glUniform1i(int, int);
+  public abstract void glUniform2f(int, float, float);
+  public abstract void glUniform2fv(int, int, float[], int);
+  public abstract void glUniform2i(int, int, int);
+  public abstract void glUniform3f(int, float, float, float);
+  public abstract void glUniform3fv(int, int, float[], int);
+  public abstract void glUniform3i(int, int, int, int);
+  public abstract void glUniform4f(int, float, float, float, float);
+  public abstract void glUniform4fv(int, int, float[], int);
+  public abstract void glUniform4i(int, int, int, int, int);
+  public abstract void glUniformMatrix3fv(int, int, boolean, java.nio.FloatBuffer);
+  public abstract void glUniformMatrix3fv(int, int, boolean, float[], int);
+  public abstract void glUniformMatrix4fv(int, int, boolean, java.nio.FloatBuffer);
+  public abstract void glUniformMatrix4fv(int, int, boolean, float[], int);
+  public abstract void glUseProgram(int);
+  public abstract void glVertexAttrib4f(int, float, float, float, float);
+  public abstract void glVertexAttribPointer(int, int, int, boolean, int, int);
+  public abstract void glVertexAttribPointer(int, int, int, boolean, int, java.nio.Buffer);
+  public abstract void glViewport(int, int, int, int);
+}
+
+## com.badlogic.gdx.graphics.g  (GL30)
+public interface com.badlogic.gdx.graphics.g extends com.badlogic.gdx.graphics.f {
+  public abstract void a(int);
+  public abstract void a(int, int, int, int, int, int, int, int, int, java.nio.Buffer);
+  public abstract void a(int, java.nio.IntBuffer);
+  public abstract void b(int, java.nio.IntBuffer);
+}
+
+## FileHandle = com.badlogic.gdx.c.a
+public class com.badlogic.gdx.c.a {
+  protected java.io.File a;
+  protected com.badlogic.gdx.e$a b;
+  protected com.badlogic.gdx.c.a();
+  protected com.badlogic.gdx.c.a(java.io.File, com.badlogic.gdx.e$a);
+  public com.badlogic.gdx.c.a(java.lang.String);
+  protected com.badlogic.gdx.c.a(java.lang.String, com.badlogic.gdx.e$a);
+  public com.badlogic.gdx.c.a a();
+  public com.badlogic.gdx.c.a a(java.lang.String);
+  public final java.io.BufferedInputStream a(int);
+  public final java.io.OutputStream a(boolean);
+  public final java.io.Writer a(boolean, java.lang.String);
+  public final void a(com.badlogic.gdx.c.a);
+  public final void a(java.lang.String, boolean);
+  public final void a(byte[], boolean);
+  public com.badlogic.gdx.c.a b(java.lang.String);
+  public final java.io.BufferedReader b(int);
+  public java.io.InputStream b();
+  public final java.io.Reader c(java.lang.String);
+  public com.badlogic.gdx.c.a[] c();
+  public final java.lang.String d(java.lang.String);
+  public boolean d();
+  public boolean e();
+  public boolean equals(java.lang.Object);
+  public long f();
+  public java.io.File g();
+  public int hashCode();
+  public final java.lang.String i();
+  public final java.lang.String j();
+  public final java.lang.String k();
+  public final java.lang.String l();
+  public final java.lang.String m();
+  public final com.badlogic.gdx.e$a n();
+  public final byte[] o();
+  public final void p();
+  public final boolean q();
+  public final boolean r();
+  public java.lang.String toString();
+}
