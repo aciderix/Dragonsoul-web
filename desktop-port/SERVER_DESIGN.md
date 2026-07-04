@@ -91,7 +91,22 @@ Auth **entre la passerelle et le serveur**, hors protocole de jeu :
 5. **Mot de passe** : auth passerelle↔serveur (niveau 1), puis option niveau 2.
 6. **Directory** : beacon LAN + index communautaire (+ option master server).
 
-## Choix à confirmer
-- Périmètre découverte au départ (Direct / LAN / Communauté / Master).
-- Mot de passe : porte d'accès seule, ou aussi chiffrement lié au mdp.
-- Persistance serveur : fichier JSON ou SQLite d'emblée.
+## Décisions (verrouillées)
+- **Découverte** : Direct IP (toujours) + **LAN beacon UDP** + **liste communautaire
+  JSON** (URL HTTPS configurable). Master server **reporté**.
+- **Mot de passe** : **porte d'accès challenge-réponse** `HMAC(mdp, nonce)` entre
+  passerelle et serveur (hors protocole de jeu). Chiffrement-lié-au-mdp = option future.
+- **Persistance serveur** : **SQLite** (embarqué).
+
+### Format de la liste communautaire (JSON)
+Fichier JSON hébergé à une URL configurable (ex. GitHub raw). Tableau d'entrées :
+```json
+[
+  { "name": "Serveur FR #1", "host": "1.2.3.4", "port": 8080,
+    "password": true, "region": "EU", "description": "PvE communautaire" }
+]
+```
+- Le launcher fetch l'URL (HTTPS), affiche la liste ; l'URL est configurable
+  (décentralisé). Ajouter un serveur = éditer le JSON (PR pour une liste git).
+- Le JSON n'annonce qu'une adresse (aucun pouvoir de compromission) ; rejoindre exige
+  le mot de passe si le serveur en a un ; jamais de connexion automatique.
