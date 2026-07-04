@@ -116,3 +116,23 @@ com.perblue.rpg.network.messages.MessageFactory    # readMessage (registre)
 com.perblue.rpg.network.messages.ClientInfo/BootData
 com.perblue.rpg.assetupdate.{AssetUpdater,CategoryUpdater}   # contenu HTTP
 ```
+
+---
+## Mise à jour — verrou de boot identifié : contenu additionnel manquant
+
+Test empirique avec le serveur v0 (index.txt vide) :
+- OK: l'AssetUpdater récupère index.txt -> "nothing to download, update complete".
+- BLOQUE: MISSING_ADDITIONAL=true. Le jeu vérifie des fichiers repères par
+  catégorie: world/units/hero_claw_man.atlas (WORLD_ADDITIONAL),
+  ui/external_skins.atlas (UI_DYNAMIC), sound/war_you_won_broken_shield.ogg (SOUND).
+  Ce contenu jadis téléchargé manque en local.
+- La connexion (RPGMain.startNetwork -> connectToServer) est GATEE par la
+  complétude du contenu: tant que MISSING_ADDITIONAL=true, le jeu boucle sur le
+  chargement et n'ouvre jamais le socket de jeu (0 connexion TCP cote serveur).
+
+Deux pistes (alignees avec "recenser puis retirer/completer"):
+1. Recensement fiable du contenu requis (marqueurs + listes des categories).
+2. Lever le gate sans toucher au bytecode: placeholders des repères OU flag/prefs
+   (shouldDownloadAdditionalWorld/missingAdditionalWorld), puis tolerer les assets
+   manquants a l'usage.
+3. En parallele: serveur de login (repondre BootData a ClientInfo).
