@@ -75,6 +75,16 @@ public final class DesktopLauncher {
         DsDeviceInfo device = new DsDeviceInfo();
         com.perblue.rpg.RPGMain game = new com.perblue.rpg.RPGMain(device);
         DsApplication app = new DsApplication(game, graphics, input, audio, runDir);
+        // Report ApplicationType = Android (switchmap value a$a.a). The APK ships
+        // only the Android/ETC1 texture set, so we must take the game's Android
+        // asset path (ETC compression). Density (XHDPI) is then selected via
+        // DeviceInfo.getFullVersion()'s density-tier digit — see DsDeviceInfo.
+        try {
+            java.lang.reflect.Field f = Class.forName("com.badlogic.gdx.a$a").getDeclaredField("a");
+            f.setAccessible(true);
+            app.applicationType = f.getInt(null);
+            System.out.println("[launcher] ApplicationType (a$a.a=Android) = " + app.applicationType);
+        } catch (Throwable t) { System.out.println("[launcher] WARN: could not read a$a.a: " + t); }
         com.badlogic.gdx.utils.b.a.a = app;       // Gdx.app
         System.out.println("[launcher] RPGMain instantiated");
 

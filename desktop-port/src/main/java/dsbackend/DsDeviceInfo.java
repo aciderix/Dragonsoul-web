@@ -12,7 +12,10 @@ public final class DsDeviceInfo implements com.perblue.rpg.util.DeviceInfo {
         return com.perblue.rpg.network.messages.Platform.ANDROID;
     }
     public long getSystemTime() { return System.currentTimeMillis(); }
-    public int getFullVersion() { return 22200; }
+    // The thousands digit of (fullVersion % 10000) encodes the Android asset
+    // density tier (1=HDPI, 2=MDPI, 3=XHDPI) in RPGMain.getCurrentAssetDensity().
+    // The APK ships only XHDPI assets, so this must land on tier 3.
+    public int getFullVersion() { return 23000; }
     public int getScreenSize() { return 0; }
     public int getSystemVolume() { return 100; }
     public int getsDKVersion() { return 21; }

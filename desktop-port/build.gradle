@@ -12,7 +12,10 @@ ext {
     // libGDX native (Matrix4/BufferUtils JNI). The obfuscated engine kept these
     // class names, so stock desktop natives bind. Version pinned to the era of
     // the game (~1.9.x); the native math ABI is stable across these.
-    gdxVersion = '1.9.11'
+    // Pinned to 1.9.3: the game's Gdx2DPixmap uses the one-arg setBlend(int)/
+    // setScale(int) JNI form, which matches libGDX 1.9.3 (1.9.6 already switched
+    // to setBlend(long,int)). Using the matching native avoids a JNI ABI segfault.
+    gdxVersion = '1.9.3'
 }
 
 dependencies {
@@ -32,6 +35,14 @@ dependencies {
 
     // stock libGDX desktop natives (libgdx64.so) — extracted at run time
     runtimeOnly "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+    // Android-provided libraries the game assumes at runtime (not bundled in the
+    // APK because Android supplies them); needed on the desktop JVM.
+    implementation 'org.json:json:20240303'
+    // Android framework stubs (all android.* types) so class references resolve
+    // during boot. Methods throw "Stub!" if actually called — functional
+    // overrides for the few boot-critical ones live in src (earlier on classpath).
+    implementation 'com.google.android:android:4.1.1.4'
 
     // the game itself: obfuscated libGDX engine + com.perblue.* business logic,
     // after ASM remap that resolves class/package name collisions (see :remapGame)

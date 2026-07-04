@@ -153,3 +153,23 @@ ensuite : ApplicationListener = `com.badlogic.gdx.c_`, packages b/c/utils.b libr
 
 ### Lancer
 `bash run-desktop.sh` (extrait assets/natif, run sous Xvfb). Voir le script.
+
+---
+## Mise à jour — le jeu BOOTE : assets chargés, UI en construction
+
+Progression runtime (create() de RPGMain s'exécute loin) :
+1. ✅ Singleton Gdx câblé, RPGMain instancié, create() appelé
+2. ✅ Ressources classpath (.tab/.properties) : extraites de l'APK (getResourceAsStream)
+   → `run-desktop.sh` extrait tout sauf assets/res/lib/dex vers build/apk-resources
+3. ✅ **Natif gdx = 1.9.3** (pas 1.9.11 !) : le jeu utilise l'API Gdx2DPixmap
+   `setBlend(int)` (1 arg) → seul 1.9.3 matche, sinon SIGSEGV. Vérifié via source libGDX.
+4. ✅ Densité + compression : `RPGMain.getCurrentAssetDensity` → XHDPI si getType==iOS,
+   sinon switch sur `(getFullVersion()%10000)/1000` (1=HDPI,2=MDPI,3=XHDPI).
+   L'APK ne fournit QUE ETC/XHDPI → getType=Android (a$a.a=1, chemin ETC) +
+   getFullVersion=23000 (tier 3 = XHDPI). **boot.atlas se charge.**
+5. ⏳ Blocage actuel : NPE dans scene2d initScaling via RPGSkin.getDrawable
+   (LoadingScreen.createUI) — page de police manquante (fonts/*.fnt "deps" échouent).
+
+### Décisions de version/plateforme (réelles, pas des shims)
+- Natif libGDX **1.9.3** desktop (match ABI Gdx2DPixmap)
+- ApplicationType=Android, Platform=ANDROID, densité XHDPI → assets ETC/XHDPI réels
