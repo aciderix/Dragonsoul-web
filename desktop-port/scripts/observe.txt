@@ -1,0 +1,10 @@
+# Observe boot progression
+wait 30
+screenshot build/shot_030.png
+wait 90
+screenshot build/shot_120.png
+wait 120
+screenshot build/shot_240.png
+wait 120
+screenshot build/shot_360.png
+quit

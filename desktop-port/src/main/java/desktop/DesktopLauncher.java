@@ -44,13 +44,14 @@ public final class DesktopLauncher {
         GLFWErrorCallback.createPrint(System.err).set();
         if (!glfwInit()) throw new IllegalStateException("glfwInit failed");
         glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_VISIBLE, Boolean.getBoolean("DS_VISIBLE") ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
         long win = glfwCreateWindow(W, H, "DragonSoul (desktop)", NULL, NULL);
         if (win == NULL) throw new IllegalStateException("glfwCreateWindow failed");
         glfwMakeContextCurrent(win);
+        glfwSwapInterval(Boolean.getBoolean("DS_VISIBLE") ? 1 : 0);
         GL.createCapabilities();
         System.out.println("[launcher] GL " + org.lwjgl.opengl.GL11.glGetString(org.lwjgl.opengl.GL11.GL_VERSION));
 
@@ -58,6 +59,7 @@ public final class DesktopLauncher {
         DsGL20 gl = new DsGL20();
         DsGraphics graphics = new DsGraphics(gl, W, H);
         DsInput input = new DsInput();
+        GlfwInput glfwInput = new GlfwInput(win, input); // real keyboard/mouse/scroll -> InputProcessor
         DsAudio audio = new DsAudio();
         DsFiles files = new DsFiles(assets,
                 new File(runDir, "external").getPath(), new File(runDir, "local").getPath());
@@ -75,6 +77,11 @@ public final class DesktopLauncher {
         DsDeviceInfo device = new DsDeviceInfo();
         com.perblue.rpg.RPGMain game = new com.perblue.rpg.RPGMain(device);
         game.setNativeAccess(new DsNative()); // platform bridge (orientation, IAP, notifications...)
+        game.setSocialNetworkManager(new DsBridges.Social());
+        game.setAnalytics(new DsBridges.Analytics());
+        game.setSupportManager(new DsBridges.Support());
+        game.setScreenRecording(new DsBridges.ScreenRecording());
+        game.setTapjoyOfferwall(new DsBridges.Tapjoy());
         DsApplication app = new DsApplication(game, graphics, input, audio, runDir);
         // Report ApplicationType = Android (switchmap value a$a.a). The APK ships
         // only the Android/ETC1 texture set, so we must take the game's Android
@@ -96,14 +103,31 @@ public final class DesktopLauncher {
         System.out.println("[launcher] game.create() returned");
         game.resize(W, H);
 
+        // --- optional scripted test driver (DS_SCRIPT=path, or '-' for stdin) ---
+        final boolean[] stopFlag = { false };
+        DsDriver driver = null;
+        String scriptPath = System.getProperty("DS_SCRIPT");
+        if (scriptPath != null) {
+            java.util.List<String> lines = "-".equals(scriptPath)
+                ? new java.io.BufferedReader(new java.io.InputStreamReader(System.in)).lines().collect(java.util.stream.Collectors.toList())
+                : java.nio.file.Files.readAllLines(java.nio.file.Paths.get(scriptPath));
+            driver = new DsDriver(input, new DsDriver.Host() {
+                public void screenshot(String file) { captureScreenshot(file, W, H); }
+                public void stop() { stopFlag[0] = true; }
+            }, lines);
+            System.out.println("[launcher] driver loaded: " + scriptPath);
+        }
+
         // --- render loop ---
         long frames = 0;
         double last = glfwGetTime();
-        while (!glfwWindowShouldClose(win) && (maxFrames == 0 || frames < maxFrames)) {
+        while (!glfwWindowShouldClose(win) && !stopFlag[0] && (maxFrames == 0 || frames < maxFrames)) {
             double now = glfwGetTime();
             graphics.deltaTime = (float) (now - last);
             graphics.frameId = frames;
             last = now;
+            input.drain();                 // synthetic (CLI) input on the render thread
+            if (driver != null) driver.onFrame(frames);
             app.drainRunnables();
             game.render();
             String shot = System.getProperty("DS_SCREENSHOT");
@@ -111,6 +135,7 @@ public final class DesktopLauncher {
             glfwSwapBuffers(win);
             glfwPollEvents();
             frames++;
+            if (driver != null && driver.isDone() && maxFrames == 0) break;
         }
         System.out.println("[launcher] ran " + frames + " frames, disposing");
         try { game.dispose(); } catch (Throwable t) { t.printStackTrace(System.out); }
