@@ -97,6 +97,17 @@ public final class DesktopLauncher {
         System.out.println("[launcher] RPGMain instantiated");
 
         if (Boolean.getBoolean("DS_PROBE_PNG")) { probePixmap(files, "fonts/Klepto.png"); probeFont(files, "fonts/Klepto.fnt"); }
+        String probeAudio = System.getProperty("DS_PROBE_AUDIO");
+        if (probeAudio != null) {
+            try {
+                Object snd = audio.newSound(files.b(probeAudio));
+                long id = ((com.badlogic.gdx.b.c) snd).play(1f);
+                System.out.println("[probe] Sound " + probeAudio + " -> id=" + id + " alError=" + org.lwjgl.openal.AL10.alGetError());
+                com.badlogic.gdx.b.b mus = audio.newMusic(files.b(probeAudio));
+                mus.setLooping(true); mus.play();
+                System.out.println("[probe] Music playing=" + mus.isPlaying() + " alError=" + org.lwjgl.openal.AL10.alGetError());
+            } catch (Throwable t) { System.out.println("[probe] audio FAILED:"); t.printStackTrace(System.out); }
+        }
 
         System.out.println("[launcher] calling game.create() ...");
         game.create();
@@ -127,6 +138,7 @@ public final class DesktopLauncher {
             graphics.frameId = frames;
             last = now;
             input.drain();                 // synthetic (CLI) input on the render thread
+            audio.update();                // pump streaming music
             if (driver != null) driver.onFrame(frames);
             app.drainRunnables();
             game.render();

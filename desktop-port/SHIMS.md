@@ -21,8 +21,11 @@ Légende fidélité :
 | `DsPreferences` | **RÉEL** | Persiste dans un .prefs (java.util.Properties/XML). |
 | `DsGraphics` | **PARTIEL** | Taille fenêtre + GL réels. `getDisplayMode/Monitors/Cursor` → null/vide. À compléter si le jeu les déréférence (plein écran, curseur custom). |
 | `DsApplication` | **RÉEL** | Logs → stdout ; postRunnable → file drainée sur le thread render (réel). `getClipboard` → null (presse-papier non branché). |
-| `DsInput` (Input) | **NO-OP** | ⚠️ **Pas encore d'événements clavier/souris.** Suffisant pour le rendu, mais le jeu n'est **pas jouable** tant que les callbacks GLFW ne sont pas branchés. TODO prioritaire. |
-| `DsAudio` (+Sound/Music) | **NO-OP** | Son silencieux. La logique de jeu n'en dépend pas ; à remplacer par OpenAL pour le son réel. |
+| `DsInput` (Input) | **RÉEL** | Clavier/souris/scroll GLFW → InputProcessor (mapping keycodes GLFW→libGDX vérifié). Souris = pointeur touch 0. + file d'injection synthétique pour le pilotage CLI (`DsDriver`). |
+| `GlfwInput` | **RÉEL** | Callbacks GLFW (garde les refs anti-GC), mapping keycodes. |
+| `DsDriver` (CLI) | **RÉEL** | Pilotage headless par script : tap/move/key/text/wait/screenshot/quit. `DS_SCRIPT=fichier` ou `-` (stdin). |
+| `DsAudio` (+Sound/Music) | **RÉEL** | OpenAL (LWJGL) + STB Vorbis. Sound = décodage OGG complet → buffer AL ; Music = streaming pompé par `update()`. Repli propre si pas de device (headless → device null, API OK sans son audible). |
+| `DsBridges.*` (Social/Analytics/Support/ScreenRecording/Tapjoy) | **NO-OP** | Services plateforme non applicables sur desktop : `isSignedIn()=false`, `isAvailable()=false`, actions no-op. Analytics/Support pourraient plus tard pointer vers de vrais services. |
 | `DsDeviceInfo` | **FACTICE** | Valeurs device inventées mais cohérentes. `getPlatform()=ANDROID` (parité assets/logique). `getFullVersion()=23000` : le chiffre 3 = tier densité XHDPI (contrainte réelle, voir ci-dessous). |
 | `getType$2826c76()` = `a$a.a` (Android) | **RÉEL (choix)** | Renvoie l'ApplicationType Android → chemin assets ETC (le seul fourni par l'APK). |
 
@@ -37,9 +40,16 @@ Légende fidélité :
 | `org.json` + `com.google.android:android` (stubs) | `org.json` = vraie lib. `android.jar` = **stubs qui lèvent "Stub!" si appelés** — filet de résolution de types uniquement. Toute méthode réellement appelée doit être remplacée par un shim fonctionnel (elles crient bruyamment, pas de corruption silencieuse). |
 
 ## À faire (dettes connues)
-1. **Input GLFW réel** (clavier/souris → InputProcessor) — requis pour jouabilité.
-2. **Audio OpenAL réel** (sinon jeu muet).
-3. Fonts CJK multi-pages (Chinese/Korean/Japanese) : le jeu attend `Chinese.png`
-   alors que l'APK fournit `Chinese1/2/3.png` — non bloquant (langues asiatiques).
-4. Remplacer `-Xverify:none` par un recalcul de stackmaps (ASM) pour robustesse.
-5. Compléter `DsGraphics` (display modes/monitors) si besoin.
+1. ✅ ~~Input GLFW réel~~ — FAIT (clavier/souris/touch + CLI).
+2. ✅ ~~Audio OpenAL réel~~ — FAIT (OpenAL + STB Vorbis).
+3. **Serveur** : sans serveur, le jeu boucle sur l'écran de chargement (login →
+   BootData jamais reçus). Prochaine phase : brancher `Dragonsoul-server v2`.
+4. **Race de chargement async** : `get(ui_main…)` peut lever "Asset not loaded"
+   de manière non déterministe (course entre le chargement async et l'accès).
+   À rendre robuste (forcer finishLoading / synchroniser la transition).
+5. **Assets téléchargés manquants** : recenser de façon fiable ce qui était
+   téléchargé au lancement (catégories WORLD_ADDITIONAL, UI_DYNAMIC, SOUND, TEXT)
+   pour compléter ou retirer proprement.
+6. Fonts CJK multi-pages (Chinese/Korean/Japanese) : le jeu attend `Chinese.png`
+   alors que l'APK fournit `Chinese1/2/3.png` — non bloquant.
+7. Remplacer `-Xverify:none` par un recalcul de stackmaps (ASM) pour robustesse.

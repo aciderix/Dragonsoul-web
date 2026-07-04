@@ -1,0 +1,7 @@
+wait 400
+screenshot build/late_400.png
+wait 300
+screenshot build/late_700.png
+wait 300
+screenshot build/late_1000.png
+quit

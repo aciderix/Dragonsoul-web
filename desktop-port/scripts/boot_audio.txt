@@ -1,0 +1,3 @@
+wait 200
+screenshot build/audio_boot.png
+quit
