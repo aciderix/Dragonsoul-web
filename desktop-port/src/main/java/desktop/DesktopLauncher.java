@@ -110,10 +110,25 @@ public final class DesktopLauncher {
             } catch (Throwable t) { System.out.println("[probe] audio FAILED:"); t.printStackTrace(System.out); }
         }
 
+        // Pre-seed the game's own prefs so the (dead-server) additional-content
+        // download subsystem treats content as present/not-needed instead of
+        // looping into the "Content Update Failed" dialog. Written before boot so
+        // the AssetUpdater reads our values. Opt-in; documented in SHIMS.md.
+        if (forceWorldAdditional) {
+            DsPreferences p = new DsPreferences(runDir, "rpgPrefs");
+            p.a("missingAdditionalWorld", false);
+            p.a("shouldDownloadAdditionalWorld", false);
+            p.a();
+            System.out.println("[launcher] pre-seeded rpgPrefs (content complete)");
+        }
+
         System.out.println("[launcher] calling game.create() ...");
         game.create();
         System.out.println("[launcher] game.create() returned");
         game.resize(W, H);
+        if (forceWorldAdditional) {
+            try { game.getAssetManager().setHasWorldAdditional(true); } catch (Throwable ignored) {}
+        }
 
         // --- optional scripted test driver (DS_SCRIPT=path, or '-' for stdin) ---
         final boolean[] stopFlag = { false };
