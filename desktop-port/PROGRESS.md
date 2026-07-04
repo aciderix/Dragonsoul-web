@@ -87,6 +87,7 @@ Bytecode du jeu : `../classes1.jar` (RPGMain + base gdx) + `../classes2.jar`
 - [x] Étape 0 : recon environnement (JDK/Gradle/Xvfb/Mesa/réseau)
 - [x] Étape 1 : squelette Gradle + résolution LWJGL + compile contre le bytecode + run OK
 - [x] Étape 2 : singleton Gdx localisé (`com.badlogic.gdx.utils.b.a`) + interfaces dumpées (docs/obfuscated-interfaces.txt)
+- [x] Étape 2.5 : **rendu headless dé-risqué** — GLFW+OpenGL 4.5 (Mesa llvmpipe) sous Xvfb, frame OK
 - [ ] Étape 3 : backend LWJGL3 — Files (java.io) + FileHandle
 - [ ] Étape 4 : backend — Application + Graphics + fenêtre GLFW + contexte GL
 - [ ] Étape 5 : backend — GL20 (75 méthodes) → org.lwjgl.opengl.GL20/GL30
@@ -109,6 +110,10 @@ Bytecode du jeu : `../classes1.jar` (RPGMain + base gdx) + `../classes2.jar`
 cd desktop-port
 gradle --no-daemon run                 # compile + lance le launcher
 gradle --no-daemon compileJava         # compile seul
-# run headless avec affichage virtuel :
-xvfb-run -a -s "-screen 0 1280x720x24" gradle --no-daemon run
+# run headless avec affichage virtuel (software GL Mesa) :
+LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe \
+  xvfb-run -a -s "-screen 0 1280x720x24" gradle --no-daemon run
 ```
+
+Classpath runtime résolu : `gradle -q printRuntimeClasspath`.
+Rendu headless vérifié : GL 4.5 Compat / GLSL 4.50 / llvmpipe (voir GLSmokeTest).
