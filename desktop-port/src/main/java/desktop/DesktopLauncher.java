@@ -33,6 +33,7 @@ public final class DesktopLauncher {
         int W = Integer.getInteger("DS_W", 1280);
         int H = Integer.getInteger("DS_H", 720);
         int maxFrames = Integer.getInteger("DS_FRAMES", 0);
+        boolean forceWorldAdditional = Boolean.getBoolean("DS_FORCE_WORLD_ADDITIONAL");
 
         String nativeLib = System.getProperty("DS_GDX_NATIVE");
         if (nativeLib != null && new File(nativeLib).exists()) {
@@ -139,6 +140,15 @@ public final class DesktopLauncher {
             last = now;
             input.drain();                 // synthetic (CLI) input on the render thread
             audio.update();                // pump streaming music
+            // The once-downloaded "world additional" content lived on the game's
+            // now-dead servers (unrecoverable). Without it the boot check
+            // (UIHelper.checkForRequiredWorldAdditional -> setShouldRestart) loops
+            // forever. Tell the game — via its OWN public API — that the content is
+            // present so boot proceeds; missing assets then degrade gracefully
+            // (heroes without skins) instead of blocking. Opt-in, documented in SHIMS.md.
+            if (forceWorldAdditional) {
+                try { game.getAssetManager().setHasWorldAdditional(true); } catch (Throwable ignored) {}
+            }
             if (driver != null) driver.onFrame(frames);
             app.drainRunnables();
             game.render();

@@ -45,11 +45,17 @@ fi
 CP="$BUILD/classes/java/main:$RESD:$RUNTIME_CP"
 
 echo "[run] launching under Xvfb (software GL) ..."
-LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe \
+EXTRA=""
+[ -n "$DS_SCRIPT" ] && EXTRA="$EXTRA -DDS_SCRIPT=$DS_SCRIPT"
+[ -n "$DS_FORCE_WORLD_ADDITIONAL" ] && EXTRA="$EXTRA -DDS_FORCE_WORLD_ADDITIONAL=$DS_FORCE_WORLD_ADDITIONAL"
+[ -n "$DS_SCREENSHOT" ] && EXTRA="$EXTRA -DDS_SCREENSHOT=$DS_SCREENSHOT"
+
+ALSOFT_DRIVERS="${ALSOFT_DRIVERS:-null}" LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe \
   xvfb-run -a -s "-screen 0 1280x720x24" \
   java -Xverify:none \
        -DDS_ASSETS="$ASSETS" \
        -DDS_RUNDIR="$BUILD/run" \
        -DDS_GDX_NATIVE="$NATDIR/libgdx64.so" \
        -DDS_FRAMES="${DS_FRAMES:-120}" \
+       $EXTRA \
        -cp "$CP" desktop.DesktopLauncher
