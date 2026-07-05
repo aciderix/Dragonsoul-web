@@ -209,6 +209,7 @@ public final class DesktopLauncher {
             if (driver != null) driver.onFrame(frames);
             app.drainRunnables();
             game.render();
+            if (Boolean.getBoolean("DS_TRACE_SCREEN") && frames % 200 == 0) traceScreen(game, frames);
             String shot = System.getProperty("DS_SCREENSHOT");
             if (shot != null && (frames == maxFrames - 1)) captureScreenshot(shot, W, H);
             glfwSwapBuffers(win);
@@ -216,6 +217,7 @@ public final class DesktopLauncher {
             frames++;
             if (driver != null && driver.isDone() && maxFrames == 0) break;
         }
+        if (Boolean.getBoolean("DS_TRACE_SCREEN")) traceScreen(game, frames);
         System.out.println("[launcher] ran " + frames + " frames, disposing");
         try { game.dispose(); } catch (Throwable t) { t.printStackTrace(System.out); }
         glfwDestroyWindow(win);
@@ -235,6 +237,27 @@ public final class DesktopLauncher {
         }
         org.lwjgl.stb.STBImageWrite.stbi_write_png(path, w, h, 4, flip, w * 4);
         System.out.println("[launcher] screenshot -> " + path);
+    }
+
+    /** Diagnostic: report the current screen, its LoadState and (for LoadingScreen)
+     *  its total progress, to see where boot stalls. */
+    static void traceScreen(com.perblue.rpg.RPGMain game, long frame) {
+        try {
+            com.perblue.rpg.ui.screens.BaseScreen scr = game.getScreenManager().getScreen();
+            String cls = scr == null ? "null" : scr.getClass().getName();
+            String extra = "";
+            if (scr != null) {
+                extra = " loadState=" + scr.getLoadState()
+                      + " loadingNew=" + game.getScreenManager().isLoadingNewScreen();
+                if (scr instanceof com.perblue.rpg.ui.screens.LoadingScreen)
+                    extra += " totalProgress="
+                          + ((com.perblue.rpg.ui.screens.LoadingScreen) scr).getTotalProgress();
+            }
+            com.perblue.rpg.ui.screens.BaseScreen start = game.getStartScreen();
+            String startInfo = start == null ? "start=null"
+                : "start=" + start.getClass().getSimpleName() + "/" + start.getLoadState();
+            System.out.println("[screen] f" + frame + " " + cls + extra + " " + startInfo);
+        } catch (Throwable t) { System.out.println("[screen] trace failed: " + t); }
     }
 
     /** Diagnostic: load a PNG straight through the game's Pixmap to surface the

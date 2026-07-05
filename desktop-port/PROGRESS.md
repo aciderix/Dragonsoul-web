@@ -204,3 +204,54 @@ bash run-desktop.sh                              # headless, N frames puis dispo
 - [ ] Serveur local (contenu + jeu) : `Dragonsoul-server v2` du repo d'extraction
 - [ ] Fonts CJK multi-pages (Chinese/Korean/Japanese) — non bloquant
 - [ ] Remplacer `-Xverify:none` par recalcul stackmaps ASM (robustesse)
+
+---
+## 🖼️ Écran de chargement RÉEL affiché + diagnostic du blocage MainMenu
+
+### Course async ui_main.atlas — RÉSOLUE
+Le jeu franchissait le gate de contenu et atteignait `MainMenuScreen.createUI`, qui
+plantait sur `Asset not loaded: ETC/XHDPI/world/ui/ui_main.atlas` — alors que
+l'atlas ET ses 4 pages `.etc1` existent et se chargent parfaitement isolément.
+
+**Cause racine** (validée par la sonde `DS_PROBE_ATLAS`) : libGDX indexe chaque
+asset par la chaîne passée à `Gdx.files.internal(path)`. `SeletonDataLoader`
+(loader Spine du jeu) met en file sa dépendance atlas via un
+`AssetDescriptor(FileHandle)` → **clé = `FileHandle.path()`**, puis son `loadSync`
+fait `get(param.atlasFile)` avec la **chaîne relative brute**. Sur Android les deux
+coïncident (les handles internal gardent leur chemin relatif). Notre `DsFiles`
+renvoyait des handles **absolus** → dépendance rangée sous la clé absolue,
+`get(relatif)` la manque → « Asset not loaded » (avalé par `taskFailed`).
+
+**Correctif** : `DsFiles` renvoie des handles **Classpath à chemin relatif** pour
+les assets internal/classpath (`DsFileHandle` expose le ctor protégé
+`FileHandle(String,type)`), et `run-desktop.sh` met la racine des assets sur le
+classpath → les lectures passent par le classloader, `path()` reste relatif, les
+clés matchent le jeu comme sur Android. External/local restent des handles absolus.
+
+**Résultat** : le jeu affiche le **vrai écran de chargement DragonSoul** (art ETC1
+des héros, logo, barre de progression, astuces) — `docs/screenshot-loading.png`.
+
+### Blocage suivant : MainMenu attend `BootData` (→ serveur de login)
+Instrumenté `DS_TRACE_SCREEN` : après chargement, `LoadingScreen` reste en état
+`GAME` avec `start=MainMenuScreen/CREATING`, `totalProgress` figé à ~0.58.
+
+Décompilation de la machine à états :
+- `LoadingScreen.render` (GAME) : crée le start screen, puis attend
+  `getStartScreen().getLoadState()==CREATED` pour transiter vers le home.
+- `BaseScreen.create()` mettrait `CREATED` immédiatement (`isAsyncLoaded()==false`),
+  **mais `MainMenuScreen.create()` force `loadState=CREATING`** après `super.create()`.
+- `MainMenuScreen` ne passe `CREATED` **que dans `updateFromNetwork(msg)`** quand
+  `msg instanceof BootData` → `refreshUserInfo()`, `RPGMain.bootDataHandled()`.
+
+**Conclusion** : le home screen se termine à la réception d'un message **`BootData`**.
+Le jeu est donc légitimement arrivé au point où il faut le **serveur de login**
+(connexion TCP → `ClientInfo1` → réponse `BootData1`, cf. PROTOCOL.md). Prochaine
+étape : implémenter ce serveur (puis multi-serveur, cf. SERVER_DESIGN.md).
+Note backend : `Gdx.net` (champ `com.badlogic.gdx.utils.b.a.f`) n'est pas encore
+câblé — à vérifier selon que le jeu utilise `Gdx.net` ou des sockets java bruts.
+
+### Diagnostics ajoutés au launcher (tous opt-in)
+- `DS_PROBE_ATLAS=<path>` : charge un atlas en sync + async + via AssetDescriptor,
+  révèle les exceptions avalées et les collisions de clé.
+- `DS_TRACE_SCREEN=true` : logge écran courant / LoadState / totalProgress / start screen.
+- `DS_TRACE_FILES=true` : trace chaque résolution de fichier (OK/MISS/CP).
