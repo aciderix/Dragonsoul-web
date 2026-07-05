@@ -295,3 +295,48 @@ DS_SCREENSHOT=home.png DS_FRAMES=3000 bash run-desktop.sh   # le jeu → accueil
   `userInfo`, héros, ressources… pour peupler le HUD et entrer en campagne.
 - Multi-serveur (SERVER_DESIGN.md) : passerelle, découverte LAN/communauté, mot de passe.
 - Persistance serveur (SQLite), messages suivants (ClockChange déjà reçu, etc.).
+
+---
+## 🎯 Tuto INTRO jouable de bout en bout (sauf gagner le combat 1‑1)
+
+En session live continue (DsDriver), tout le tuto se déroule nativement :
+1. **Contenu par-shard chargé** — `getPossibleGoldChestHeroes` plantait
+   (`nextInt(0)`) car le pool de héros était vide : `ContentStats` (table
+   `content.<shard>.tab`) n'était pas chargée. Le client la charge normalement
+   dans `handleBootData` via `updateStats(currentServer.shardID, statData)`.
+   - Le serveur envoie bien `currentServer.shardID` + `statData` ; vérifié que
+     notre BootData round-trip donne `shardID=1` (writer/reader du jeu ET cycle
+     `ServerXOR→ClientXOR`, `bodyEqual`), et que le **codec du client** round-trip
+     un BootData correctement (`self-roundtrip shardID=7`). MAIS le shardID livré
+     dans le BootData live ne prend pas effet au décodage sur ce build (cause non
+     identifiée — sérialisation/codec/wrapper/framing tous vérifiés OK).
+   - **Fix couche plateforme** : `DesktopLauncher` force la synchro du shard après
+     le boot via `updateStats(shard,{})` du jeu → charge le vrai
+     `content.<shard>.tab` de l'APK. Confirmé `availableHeroes=91`,
+     `goldChestHeroes=90`. Flag `DS_CONTENT_SHARD` (défaut 1).
+2. **Gold Chest** → roulé → **Centaure** (héros truqué du tuto).
+3. **Silver Chest** → **Couronne** — avec le vrai handshake serveur : le client
+   envoie `RequestChestAcknowledgement`, notre `DsGame` répond `ChestAcknowledgement`
+   (push) → `resetChestRollChances()` → le roll passe.
+4. **Équipement** : Couronne équipée sur le Centaure (Power 82→86, Action EQUIP).
+5. **Campagne** : carte « Castle Dracul » → niveau 1‑1 → vrai combat 3 vagues
+   (goblin, archer, boss Brozerker) → `HeroLineupUpdate` + `CampaignAttack`.
+
+### Prochain blocage : gagner le 1‑1 (gameplay, pas un bug)
+Les skills du Centaure se chargent bien (les lignes `_2/_3/_4/_5 not recognized`
+ne concernent que les variantes d'étoiles, pas le 1‑star). Le combat tourne
+parfaitement. Le souci est le **timing du skill en aveugle** : il faut taper le
+portrait du héros quand la barre d'énergie est pleine ; piloté par captures
+successives, on ne voit pas la barre en temps réel. Au 2ᵉ essai le Centaure
+atteint le boss à pleine vie avec de gros crits, mais on ne finit pas.
+
+**Contrainte réseau** : environnement sortant-only, pas d'entrée vers le
+conteneur, Artifacts sous CSP → **pas de streaming web + inputs live** possible.
+Solution retenue : **auto‑skill dans DsDriver** (lit l'énergie de combat, tape le
+portrait quand le skill est prêt) — mode « auto » headless, propre.
+
+### À faire (suite)
+- [ ] Auto‑skill DsDriver → gagner le 1‑1 → `S_DONE` → `CAMPAIGN_UNLOCKED`.
+- [ ] Stabilité serveur (les tâches serveur en arrière-plan meurent) + persistance
+      (SQLite) pour reprendre sans re‑piloter.
+- [ ] Élucider (optionnel) pourquoi `currentServer.shardID` ne prend pas au décodage.
