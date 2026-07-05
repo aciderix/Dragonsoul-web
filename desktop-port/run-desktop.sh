@@ -54,13 +54,17 @@ if [ ! -f "$NATDIR/libgdx64.so" ]; then
   unzip -oq "$GDXJAR" 'libgdx64.so' -d "$NATDIR"
 fi
 
-CP="$BUILD/classes/java/main:$RESD:$RUNTIME_CP"
+# $ASSETS is on the classpath so internal (Classpath-type) FileHandles read the
+# APK's bundled assets while keeping their relative path() — see DsFileHandle.
+CP="$BUILD/classes/java/main:$ASSETS:$RESD:$RUNTIME_CP"
 
 echo "[run] launching under Xvfb (software GL) ..."
 EXTRA=""
 [ -n "$DS_SCRIPT" ] && EXTRA="$EXTRA -DDS_SCRIPT=$DS_SCRIPT"
 [ -n "$DS_FORCE_WORLD_ADDITIONAL" ] && EXTRA="$EXTRA -DDS_FORCE_WORLD_ADDITIONAL=$DS_FORCE_WORLD_ADDITIONAL"
 [ -n "$DS_SCREENSHOT" ] && EXTRA="$EXTRA -DDS_SCREENSHOT=$DS_SCREENSHOT"
+[ -n "$DS_TRACE_FILES" ] && EXTRA="$EXTRA -DDS_TRACE_FILES=$DS_TRACE_FILES"
+[ -n "$DS_PROBE_ATLAS" ] && EXTRA="$EXTRA -DDS_PROBE_ATLAS=$DS_PROBE_ATLAS"
 
 ALSOFT_DRIVERS="${ALSOFT_DRIVERS:-null}" LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe \
   xvfb-run -a -s "-screen 0 1280x720x24" \

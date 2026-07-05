@@ -98,6 +98,48 @@ public final class DesktopLauncher {
         System.out.println("[launcher] RPGMain instantiated");
 
         if (Boolean.getBoolean("DS_PROBE_PNG")) { probePixmap(files, "fonts/Klepto.png"); probeFont(files, "fonts/Klepto.fnt"); }
+        String probeAtlas = System.getProperty("DS_PROBE_ATLAS");
+        if (probeAtlas != null) {
+            // Directly construct TextureAtlas (g2d.b) on the GL thread: reads the
+            // .atlas and loads/uploads every .etc1 page synchronously, so any ETC1
+            // failure the game's RPGAssetManager.taskFailed swallows surfaces here
+            // with a full stack trace.
+            try {
+                System.out.println("[probe] loading atlas " + probeAtlas + " ...");
+                com.badlogic.gdx.graphics.g2d.n atl =
+                    new com.badlogic.gdx.graphics.g2d.n(files.b(probeAtlas));
+                System.out.println("[probe] atlas(sync) OK, regions=" + atl.a().b);
+                // Now the ASYNC path (how the game actually loads it): AssetManager
+                // runs loadAsync on a background thread, loadSync on this thread.
+                // AssetManager is com.badlogic.gdx.a.e — un-nameable in source ('a'
+                // is both the Application interface and the package), so reflect.
+                Class<?> amClass = Class.forName("com.badlogic.gdx.a.e");
+                Object mgr = amClass.getDeclaredConstructor().newInstance();
+                amClass.getMethod("load", String.class, Class.class)
+                       .invoke(mgr, probeAtlas, com.badlogic.gdx.graphics.g2d.n.class);
+                amClass.getMethod("finishLoading").invoke(mgr);
+                Object loaded = amClass.getMethod("isLoaded", String.class).invoke(mgr, probeAtlas);
+                System.out.println("[probe] atlas(async,string-key) isLoaded=" + loaded);
+                // Reproduce the SkeletonDataLoader dependency path: queue via an
+                // AssetDescriptor built from a resolved FileHandle, then check under
+                // which key it lands (relative string vs absolute path()).
+                Class<?> adClass = Class.forName("com.badlogic.gdx.a.a");
+                com.badlogic.gdx.c.a fh = files.b(probeAtlas);
+                System.out.println("[probe] resolved handle path() = " + fh.toString());
+                Object desc = adClass.getConstructor(com.badlogic.gdx.c.a.class, Class.class)
+                                     .newInstance(fh, com.badlogic.gdx.graphics.g2d.n.class);
+                Object mgr2 = amClass.getDeclaredConstructor().newInstance();
+                amClass.getMethod("load", adClass).invoke(mgr2, desc);
+                amClass.getMethod("finishLoading").invoke(mgr2);
+                Object byRel = amClass.getMethod("isLoaded", String.class).invoke(mgr2, probeAtlas);
+                Object byAbs = amClass.getMethod("isLoaded", String.class).invoke(mgr2, fh.toString());
+                System.out.println("[probe] via-FileHandle dep: isLoaded(relative)=" + byRel
+                                   + " isLoaded(path())=" + byAbs);
+            } catch (Throwable t) {
+                System.out.println("[probe] atlas FAILED:");
+                t.printStackTrace(System.out);
+            }
+        }
         String probeAudio = System.getProperty("DS_PROBE_AUDIO");
         if (probeAudio != null) {
             try {
