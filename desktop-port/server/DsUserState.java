@@ -7,6 +7,11 @@ import com.perblue.rpg.network.messages.UserExtra;
 import com.perblue.rpg.network.messages.BasicUserInfo;
 import com.perblue.rpg.network.messages.PrivateUserInfo;
 import com.perblue.rpg.network.messages.ResourceType;
+import com.perblue.rpg.network.messages.HeroData;
+import com.perblue.rpg.network.messages.HeroLineup;
+import com.perblue.rpg.network.messages.HeroLineupType;
+import com.perblue.rpg.network.messages.UnitType;
+import com.perblue.rpg.network.messages.Rarity;
 
 /**
  * Builds a complete, coherent NEW-PLAYER state and attaches it to a BootData, using
@@ -65,12 +70,44 @@ final class DsUserState {
         res.put(ResourceType.TEAM_XP, 0);
         res.put(ResourceType.POWER_POINTS, 0);
 
+        // Starter roster: a few real heroes at level 1, plus a campaign lineup that
+        // references them (5-hero team). UnitType/Rarity are the game's own enums.
+        UnitType[] starters = {
+            UnitType.CLAW_MAN, UnitType.AQUATIC_MAN, UnitType.CENTAUR_OF_ATTENTION,
+            UnitType.ANGELIC_HERALD, UnitType.CRIMSON_WITCH,
+        };
+        @SuppressWarnings("unchecked")
+        Map<UnitType, HeroData> heroes = (Map<UnitType, HeroData>) getField(ux, "heroes");
+        int heroNum = 1;
+        for (UnitType t : starters) heroes.put(t, hero(t, heroNum++));
+
+        @SuppressWarnings("unchecked")
+        Map<HeroLineupType, HeroLineup> lineups = (Map<HeroLineupType, HeroLineup>) getField(ux, "heroLineups");
+        HeroLineup campaign = new HeroLineup();
+        campaign.heroes = new ArrayList<>(Arrays.asList(starters));
+        lineups.put(HeroLineupType.NORMAL_CAMPAIGN, campaign);
+
         PrivateUserInfo pui = new PrivateUserInfo();
         pui.email = "";
 
         boot.userInfo = ui;
         boot.userExtra = ux;
         boot.privateUserInfo = pui;
+    }
+
+    /** A level-1, 1-star, common hero with all its sub-collections initialised. */
+    private static HeroData hero(UnitType type, int heroNum) throws Exception {
+        HeroData h = new HeroData();
+        initAllCollections(h); // items, runes, skills, modePersistentData -> empty
+        h.type = type;
+        h.level = 1;
+        h.stars = 1;
+        h.rarity = Rarity.WHITE;
+        h.eXP = 0;
+        h.heroNum = heroNum;
+        h.isLegendary = Boolean.FALSE;
+        h.isMercenary = Boolean.FALSE;
+        return h;
     }
 
     /** Set every Map field to a new HashMap and every List field to a new ArrayList. */
