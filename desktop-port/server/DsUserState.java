@@ -2,6 +2,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import com.perblue.rpg.network.messages.BootData;
+import com.perblue.rpg.network.messages.Server;
 import com.perblue.rpg.network.messages.UserInfo;
 import com.perblue.rpg.network.messages.UserExtra;
 import com.perblue.rpg.network.messages.BasicUserInfo;
@@ -30,6 +31,11 @@ final class DsUserState {
 
     static final long USER_ID = 1L;
     static final String USER_NAME = "Player";
+    // Which content shard the client loads: it reads content.<SHARD>.tab (per-shard
+    // content timeline). All content.N.tab share the same newest column (01/10/2019),
+    // so any existing shard yields the final live content. Keep it consistent with
+    // UserInfo.shardID so the client's shard view is coherent.
+    static final int SHARD = 1;
 
     static void populate(BootData boot, long serverTime) throws Exception {
         UserInfo ui = new UserInfo();
@@ -116,6 +122,20 @@ final class DsUserState {
         boot.userInfo = ui;
         boot.userExtra = ux;
         boot.privateUserInfo = pui;
+
+        // The client's handleBootData does:
+        //   SyncStatDataClientHelper.updateStats(currentServer.shardID, statData)
+        // which drives ShardStats.a(shard, statData) -> parses content.<shard>.tab (the
+        // per-shard content table: available heroes, gold/soul chest hero pools). We
+        // declare our shard here; the real content.<shard>.tab is bundled in the APK
+        // resources and loaded from the classpath (statData stays empty — no inline
+        // override needed). The platform layer (DesktopLauncher) also force-syncs this
+        // shard after boot, because the shardID does not reliably survive the client's
+        // BootData decode of this de-obfuscated build (see PROGRESS.md / content sync).
+        Server srv = new Server();
+        srv.shardID = SHARD;
+        boot.currentServer = srv;
+        boot.statData = new HashMap<>();
     }
 
     /** A level-1, 1-star, common hero with all its sub-collections initialised. */

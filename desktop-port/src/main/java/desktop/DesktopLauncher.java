@@ -191,6 +191,9 @@ public final class DesktopLauncher {
         //                      as they arrive (drive step-by-step, no restart)
         final boolean[] stopFlag = { false };
         final String[] pendingShot = { null }; // captured after render() (valid back buffer)
+        final boolean[] contentProbed = { false }; // one-shot DS_PROBE_CONTENT guard
+        final boolean[] contentSynced = { false }; // one-shot shard-content sync guard
+        final int contentShard = Integer.getInteger("DS_CONTENT_SHARD", 1); // match server SHARD
         DsDriver driver = null;
         DsDriver.Host driverHost = new DsDriver.Host() {
             public void screenshot(String file) { pendingShot[0] = file; }
@@ -243,8 +246,35 @@ public final class DesktopLauncher {
                 catch (Throwable t) { System.out.println("[launcher] startInitialLogin failed: " + t); t.printStackTrace(System.out); }
             }
             game.render();
+            // Ensure the per-shard content table is loaded once the player exists.
+            // The game normally does this in handleBootData via
+            // updateStats(currentServer.shardID, statData), but in this de-obfuscated
+            // build the shardID delivered in BootData does not take effect on decode, so
+            // the shard content (available heroes, chest hero pools) never loads and any
+            // screen previewing those pools crashes (getPossibleGoldChestHeroes samples
+            // an empty list). We load the shard the server declared, from the game's own
+            // bundled content.<shard>.tab via the game's own loader — real data, no
+            // fabrication. One-shot, guarded on the pools actually being empty.
+            if (!contentSynced[0]) {
+                try {
+                    if (game.getYourUser() != null
+                            && com.perblue.rpg.game.data.content.ContentHelper.getStats()
+                                    .getAvailableHeroes().isEmpty()) {
+                        com.perblue.rpg.game.data.SyncStatDataClientHelper.updateStats(
+                                contentShard, new java.util.HashMap<>());
+                        contentSynced[0] = true;
+                        System.out.println("[launcher] content shard " + contentShard
+                                + " synced: availableHeroes="
+                                + com.perblue.rpg.game.data.content.ContentHelper.getStats()
+                                        .getAvailableHeroes().size());
+                    }
+                } catch (Throwable t) { System.out.println("[launcher] content sync failed: " + t); }
+            }
             if (Boolean.getBoolean("DS_TRACE_SCREEN") && frames % 200 == 0) traceScreen(game, frames);
             if (Boolean.getBoolean("DS_TRACE_USER") && frames == maxFrames - 1) traceUser(game);
+            if (Boolean.getBoolean("DS_PROBE_CONTENT") && !contentProbed[0] && frames == 150) {
+                contentProbed[0] = true; traceContent(game);
+            }
             if (pendingShot[0] != null) { captureScreenshot(pendingShot[0], W, H); pendingShot[0] = null; }
             String shot = System.getProperty("DS_SCREENSHOT");
             if (shot != null && (frames == maxFrames - 1)) captureScreenshot(shot, W, H);
@@ -291,6 +321,83 @@ public final class DesktopLauncher {
             System.out.println("[user] name=" + u.getName() + " id=" + u.getID()
                 + " teamLevel=" + u.getTeamLevel() + " heroes=" + heroes + " [" + names + "]");
         } catch (Throwable t) { System.out.println("[user] trace failed: " + t); }
+    }
+
+    /** Diagnostic: report the content-driven chest pools, to find why the gold-chest
+     *  preview (getPossibleGoldChestHeroes) samples an empty list. Prints server time,
+     *  the active content column's hero sets, ChestStats' possible gold heroes for the
+     *  current user, and whether the server-pushed PossibleChestDrops is present. */
+    static void traceContent(com.perblue.rpg.RPGMain game) {
+        try {
+            long stn = com.perblue.rpg.util.TimeUtil.serverTimeNow();
+            System.out.println("[content] serverTimeNow=" + stn + " (" + new java.util.Date(stn) + ")");
+            try {
+                com.perblue.rpg.network.messages.Server cur = game.getCurrentServer();
+                System.out.println("[content] currentServer shardID=" + (cur == null ? "<null server>" : cur.shardID));
+            } catch (Throwable t) { System.out.println("[content] currentServer probe: " + t); }
+            try {
+                Object shardStats = com.perblue.rpg.game.data.content.ContentHelper.get();
+                java.lang.reflect.Field cf = shardStats.getClass().getDeclaredField("c");
+                cf.setAccessible(true);
+                System.out.println("[content] ShardStats loaded shard c=" + cf.get(shardStats));
+            } catch (Throwable t) { System.out.println("[content] shard-field probe: " + t); }
+            com.perblue.rpg.game.data.content.ContentStats cs =
+                    com.perblue.rpg.game.data.content.ContentHelper.getStats();
+            System.out.println("[content] availableHeroes=" + cs.getAvailableHeroes().size()
+                    + " chestHeroes=" + cs.getChestHeroes().size()
+                    + " goldChestHeroes=" + cs.getGoldChestHeroes().size());
+            com.perblue.rpg.game.objects.User u = game.getYourUser();
+            java.util.Set<com.perblue.rpg.network.messages.UnitType> poss =
+                    com.perblue.rpg.game.data.chest.ChestStats.getPossibleHeroes(
+                        u, com.perblue.rpg.network.messages.ChestType.GOLD);
+            System.out.println("[content] ChestStats.getPossibleHeroes(GOLD)=" + poss.size() + " " + poss);
+            Object pcd;
+            try {
+                java.lang.reflect.Method m = com.perblue.rpg.game.logic.ChestHelper.class
+                        .getDeclaredMethod("getPossibleChestDrops");
+                m.setAccessible(true); pcd = m.invoke(null);
+            } catch (Throwable t) { pcd = "<err " + t + ">"; }
+            System.out.println("[content] PossibleChestDrops(server msg)=" + pcd);
+            // CLIENT-JVM codec self-test: build a BootData with a distinctive shardID,
+            // serialize + deserialize with the game's own classes here in the client
+            // process. If this recovers the shardID, the client's codec/classes are fine
+            // and the live-message null is a delivery/handler issue; if null, the client
+            // JVM decodes BootData differently than the server.
+            try {
+                com.perblue.rpg.network.messages.BootData tb = new com.perblue.rpg.network.messages.BootData();
+                com.perblue.rpg.network.messages.Server ts = new com.perblue.rpg.network.messages.Server();
+                ts.shardID = 7; tb.currentServer = ts;
+                Class<?> wc = Class.forName("com.perblue.a.a.a.b");
+                Class<?> rc = Class.forName("com.perblue.a.a.a.a");
+                Object w = wc.getConstructor().newInstance();
+                com.perblue.a.a.i.class.getMethod("writeAll", wc).invoke(tb, w);
+                byte[] body = (byte[]) wc.getMethod("toByteArray").invoke(w);
+                Object r = rc.getConstructor(byte[].class).newInstance((Object) body);
+                Object mf = Class.forName("com.perblue.rpg.network.messages.MessageFactory")
+                        .getMethod("getInstance").invoke(null);
+                com.perblue.rpg.network.messages.BootData rt =
+                        (com.perblue.rpg.network.messages.BootData) mf.getClass()
+                        .getMethod("readMessage", rc).invoke(mf, r);
+                System.out.println("[content] CLIENT self-roundtrip: currentServer="
+                        + (rt.currentServer == null ? "NULL" : "shardID=" + rt.currentServer.shardID)
+                        + " bodyLen=" + body.length + " version=" + tb.getVersion());
+            } catch (Throwable t) {
+                System.out.println("[content] CLIENT self-roundtrip failed: " + t);
+            }
+            // Force-load shard 1 content from the client classpath and re-check the
+            // pools. If this populates them, the loader works and the live boot simply
+            // used a different shard; if it still fails, the client can't parse the
+            // shard content and the exact throw is surfaced here.
+            try {
+                com.perblue.rpg.game.data.SyncStatDataClientHelper.updateStats(1, new java.util.HashMap<>());
+                System.out.println("[content] after forced updateStats(1,{}): availableHeroes="
+                        + cs.getAvailableHeroes().size()
+                        + " goldChestHeroes=" + cs.getGoldChestHeroes().size());
+            } catch (Throwable t) {
+                System.out.println("[content] forced updateStats(1) THREW: " + t);
+                t.printStackTrace(System.out);
+            }
+        } catch (Throwable t) { System.out.println("[content] trace failed: " + t); t.printStackTrace(System.out); }
     }
 
     /** Diagnostic: report the current screen, its LoadState and (for LoadingScreen)
