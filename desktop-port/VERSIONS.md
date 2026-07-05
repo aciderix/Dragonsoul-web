@@ -50,3 +50,28 @@ Re-téléchargeables via apk.dog (endpoint `ajax/box.php?type=dwn&file_id=&hash=
 Construire le port desktop contre **2.21.4** : dex2jar → vérifier si le remap ASM
 et le backend existants (faits pour 2.22.0) s'appliquent tels quels (obfuscation
 probablement quasi identique entre versions consécutives), puis booter.
+
+---
+## ⚠️ Obstacle majeur : obfuscation (vérifié en construisant 2.21.4)
+
+En convertissant 2.21.4 stock (dex2jar) et en comparant à notre Fixed2 :
+
+| | Fixed2 2.22.0 (notre base) | 2.21.4 stock |
+|---|---|---|
+| `com.perblue.rpg.*` | **lisible** (RPGMain, DeviceInfo, INative…) | **obfusqué** : 160/162 classes = lettres uniques, RPGMain renommé |
+| libGDX | obfusqué (com.badlogic.gdx.b/c/f…) | obfusqué **différemment** (GL20 coïncide, Graphics non) |
+
+**Conclusion** : notre APK **« Fixed2 » est un build dé-obfusqué** (noms perblue
+restaurés — rare et précieux). C'est ce qui a rendu tout notre port faisable
+(backend/launcher câblés sur `com.perblue.rpg.RPGMain`, `DeviceInfo`, `INative`…).
+Les versions **stock antérieures (2.21.4, 1.0.2…) sont pleinement obfusquées** →
+y porter = **re-dériver TOUTE la cartographie** (chaque classe par structure).
+Effort équivalent à refaire tout le reverse.
+
+### Reco révisée
+- **Rester sur Fixed2 2.22.0** (dé-obfusqué, port qui rend/joue déjà) et **résoudre
+  le gate contenu** par l'option A (repères minimaux valides + tolérance) — bien
+  moins de travail que re-porter une version obfusquée.
+- La piste « version antérieure » ne vaut le coup **que** si on trouve/produit un
+  build **dé-obfusqué** d'une version ≤ 2.21.4 (ex. appliquer le mapping de Fixed2
+  à 2.21.4, si on récupère ce mapping). Sinon, coût prohibitif.
