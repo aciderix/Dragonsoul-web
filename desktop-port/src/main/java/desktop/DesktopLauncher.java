@@ -235,6 +235,7 @@ public final class DesktopLauncher {
             }
             game.render();
             if (Boolean.getBoolean("DS_TRACE_SCREEN") && frames % 200 == 0) traceScreen(game, frames);
+            if (Boolean.getBoolean("DS_TRACE_USER") && frames == maxFrames - 1) traceUser(game);
             String shot = System.getProperty("DS_SCREENSHOT");
             if (shot != null && (frames == maxFrames - 1)) captureScreenshot(shot, W, H);
             glfwSwapBuffers(win);
@@ -262,6 +263,24 @@ public final class DesktopLauncher {
         }
         org.lwjgl.stb.STBImageWrite.stbi_write_png(path, w, h, 4, flip, w * 4);
         System.out.println("[launcher] screenshot -> " + path);
+    }
+
+    /** Diagnostic: dump the loaded player state (proves BootData userInfo/userExtra
+     *  became a real User with heroes). */
+    static void traceUser(com.perblue.rpg.RPGMain game) {
+        try {
+            com.perblue.rpg.game.objects.User u = game.getYourUser();
+            if (u == null) { System.out.println("[user] getYourUser()=null"); return; }
+            int heroes = 0;
+            StringBuilder names = new StringBuilder();
+            for (com.perblue.rpg.game.objects.UnitData h : u.getHeroes()) {
+                heroes++;
+                if (names.length() > 0) names.append(", ");
+                names.append(h.getType());
+            }
+            System.out.println("[user] name=" + u.getName() + " id=" + u.getID()
+                + " teamLevel=" + u.getTeamLevel() + " heroes=" + heroes + " [" + names + "]");
+        } catch (Throwable t) { System.out.println("[user] trace failed: " + t); }
     }
 
     /** Diagnostic: report the current screen, its LoadState and (for LoadingScreen)
