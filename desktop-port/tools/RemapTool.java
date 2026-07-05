@@ -27,6 +27,19 @@ public class RemapTool {
         RENAME.put("com/badlogic/gdx/utils/b", "com/badlogic/gdx/utils/b_");
     }
 
+    // Classes whose InnerClasses attribute must be preserved because our backend
+    // source names their nested types (javac needs the attribute to resolve
+    // com.perblue.rpg.social.ISocialNetwork.UserInfoCallback etc.). Both the outer
+    // and its inner classes are kept (prefix match) so they stay mutually consistent.
+    static final String[] KEEP_INNER_PREFIXES = {
+        "com/perblue/rpg/social/ISocialNetwork",
+        "com/perblue/rpg/purchasing/IPurchasing",
+    };
+    static boolean keepInner(String n) {
+        for (String p : KEEP_INNER_PREFIXES) if (n.equals(p) || n.startsWith(p + "$")) return true;
+        return false;
+    }
+
     static String mapName(String n) {
         String r = RENAME.get(n);
         if (r != null) return r;
@@ -60,7 +73,25 @@ public class RemapTool {
                         ClassReader cr = new ClassReader(in);
                         ClassWriter cw = new ClassWriter(0);
                         ClassRemapper cm = new ClassRemapper(cw, remapper);
-                        cr.accept(cm, 0);
+                        // Drop InnerClasses attributes on the GAME's own classes only.
+                        // dex2jar emits inner/outer pairs whose InnerClasses metadata
+                        // disagree (access flags), which the JVM rejects at link time:
+                        //   IncompatibleClassChangeError: ... disagree on InnerClasses
+                        // (hit loading DamageSource$DamageSourceType from BootData). The
+                        // attribute is reflection-only, so removing it is execution-safe.
+                        // We keep it for com/badlogic/gdx/* because our backend NAMES
+                        // libGDX nested types in source (e.g. com.badlogic.gdx.f.b =
+                        // DisplayMode); javac needs the attribute to resolve those. Our
+                        // source never names a com/perblue nested type, so stripping there
+                        // is safe.
+                        boolean stripInner = cr.getClassName().startsWith("com/perblue/")
+                                && !keepInner(cr.getClassName());
+                        ClassVisitor cv = stripInner
+                            ? new ClassVisitor(Opcodes.ASM9, cm) {
+                                  @Override public void visitInnerClass(String n, String o, String i2, int a) { }
+                              }
+                            : cm;
+                        cr.accept(cv, 0);
                         byte[] outb = cw.toByteArray();
                         String internal = cr.getClassName();
                         String mapped = mapName(internal);

@@ -255,3 +255,43 @@ câblé — à vérifier selon que le jeu utilise `Gdx.net` ou des sockets java 
   révèle les exceptions avalées et les collisions de clé.
 - `DS_TRACE_SCREEN=true` : logge écran courant / LoadState / totalProgress / start screen.
 - `DS_TRACE_FILES=true` : trace chaque résolution de fichier (OK/MISS/CP).
+
+---
+## 🏠 ÉCRAN D'ACCUEIL ATTEINT — le jeu est JOUABLE (login → BootData → home)
+
+`docs/screenshot-home.png` : la **scène d'accueil complète** de DragonSoul rendue
+nativement sous Linux — bâtiments animés (Temple, Trader, Campaign, Events, Fight
+Pit, Boss Pit, Guilds, Coliseum, Chests, Enchanting, Ranking…) en skeletons Spine,
+feu de camp/torches/chaudron en particules, HUD (monnaies, chat, avatar).
+
+Chaîne complète validée de bout en bout :
+1. Port natif LWJGL3 (bytecode obfusqué) → 2. gate de contenu (markers) →
+3. écran de chargement (tous assets ETC1) → 4. **serveur de login** HTTP `/login` →
+5. **protocole de jeu** `ClientInfo1` → `BootData1` (sérialisation via les classes
+DU JEU) → 6. `MainMenuScreen.updateFromNetwork(BootData)` → `CREATED` → transition.
+
+Dernier verrou levé (hors réseau) : `IncompatibleClassChangeError` sur
+`DamageSource$DamageSourceType` (attribut InnerClasses incohérent, artefact
+dex2jar). Corrigé par une passe ASM dans `RemapTool` qui **retire les attributs
+InnerClasses des classes `com/perblue/*`** (sauf `IPurchasing`/`ISocialNetwork` dont
+notre backend nomme les types imbriqués). Attribut purement réflexif → aucune
+sémantique d'exécution changée.
+
+### Reproductibilité (⚠️ container peut se réinitialiser)
+`libs/` est gitignoré ; `libs/game-remapped.jar` est un **artefact** régénéré depuis
+les `classes1.jar`/`classes2.jar` (committés) par **`bash build-remap.sh`**.
+À exécuter une fois sur un checkout frais, avant `run-desktop.sh` / `run-server.sh`.
+
+### Lancer le tout
+```bash
+cd desktop-port
+bash build-remap.sh          # régénère libs/game-remapped.jar (une fois)
+bash run-server.sh 8080 &    # serveur login + protocole de jeu (classes du jeu)
+DS_SCREENSHOT=home.png DS_FRAMES=3000 bash run-desktop.sh   # le jeu → accueil
+```
+
+### Restant (vers plus de profondeur de jeu)
+- `BootData` minimal (serverTime/firstBoot) suffit pour l'accueil ; compléter
+  `userInfo`, héros, ressources… pour peupler le HUD et entrer en campagne.
+- Multi-serveur (SERVER_DESIGN.md) : passerelle, découverte LAN/communauté, mot de passe.
+- Persistance serveur (SQLite), messages suivants (ClockChange déjà reçu, etc.).
