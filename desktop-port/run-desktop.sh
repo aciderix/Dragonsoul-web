@@ -19,6 +19,18 @@ if [ ! -d "$ASSETS" ]; then
   unzip -oq "$APK" 'assets/*' -d "$BUILD/apk"
 fi
 
+# Content-completeness markers: the once-downloaded additional content lived on
+# the game's dead servers (unrecoverable). The AssetUpdater gates boot on the
+# existence of one representative file per category (checked in the LOCAL content
+# dir). Create empty-but-present markers so hasWorldAdditional becomes true
+# legitimately and the download-loop dialog never fires. Missing real assets then
+# degrade gracefully at use time. See CONTENT_GATE.md.
+MRK="$BUILD/run/local/Assets"
+mkdir -p "$MRK/ETC/XHDPI/world/units" "$MRK/ETC/XHDPI/ui" "$MRK/sound"
+: > "$MRK/ETC/XHDPI/world/units/hero_claw_man.atlas"
+: > "$MRK/ETC/XHDPI/ui/external_skins.atlas"
+: > "$MRK/sound/war_you_won_broken_shield.ogg"
+
 # classpath resources (real game data): the APK's .tab/.properties/.glsl live at
 # classpath root (com/perblue/...), loaded via ClassLoader.getResourceAsStream.
 # dex2jar dropped them, so extract everything that isn't assets/res/lib/dex.
