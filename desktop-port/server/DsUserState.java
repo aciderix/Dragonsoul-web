@@ -12,6 +12,9 @@ import com.perblue.rpg.network.messages.HeroLineup;
 import com.perblue.rpg.network.messages.HeroLineupType;
 import com.perblue.rpg.network.messages.UnitType;
 import com.perblue.rpg.network.messages.Rarity;
+import com.perblue.rpg.network.messages.TutorialAct;
+import com.perblue.rpg.network.messages.TutorialActType;
+import com.perblue.rpg.game.tutorial.TutorialHelper;
 
 /**
  * Builds a complete, coherent NEW-PLAYER state and attaches it to a BootData, using
@@ -70,22 +73,40 @@ final class DsUserState {
         res.put(ResourceType.TEAM_XP, 0);
         res.put(ResourceType.POWER_POINTS, 0);
 
-        // Starter roster: a few real heroes at level 1, plus a campaign lineup that
-        // references them (5-hero team). UnitType/Rarity are the game's own enums.
-        UnitType[] starters = {
-            UnitType.CLAW_MAN, UnitType.AQUATIC_MAN, UnitType.CENTAUR_OF_ATTENTION,
-            UnitType.ANGELIC_HERALD, UnitType.CRIMSON_WITCH,
-        };
+        // The game's expected first-launch mechanism (reversed from the bytecode):
+        // a genuine new account has the INTRO tutorial IN PROGRESS (step 0) and NO
+        // heroes — the tutorial itself grants the first hero and sets the
+        // CAMPAIGN_UNLOCKED flag. An ABSENT tutorial act reads as "completed"
+        // (TutorialHelper.completedTutorialAct returns true when getTutorialAct==null),
+        // so we must seed the INTRO act present-and-unfinished for the tutorial to run.
+        // DS_GRANT_HEROES=true instead skips the tutorial and hands a post-tutorial
+        // roster (for testing menus without playing the tutorial).
         @SuppressWarnings("unchecked")
-        Map<UnitType, HeroData> heroes = (Map<UnitType, HeroData>) getField(ux, "heroes");
-        int heroNum = 1;
-        for (UnitType t : starters) heroes.put(t, hero(t, heroNum++));
-
-        @SuppressWarnings("unchecked")
-        Map<HeroLineupType, HeroLineup> lineups = (Map<HeroLineupType, HeroLineup>) getField(ux, "heroLineups");
-        HeroLineup campaign = new HeroLineup();
-        campaign.heroes = new ArrayList<>(Arrays.asList(starters));
-        lineups.put(HeroLineupType.NORMAL_CAMPAIGN, campaign);
+        List<TutorialAct> acts = (List<TutorialAct>) getField(ux, "tutorialActs");
+        boolean grantHeroes = Boolean.getBoolean("ds.grantHeroes");
+        if (grantHeroes) {
+            UnitType[] starters = {
+                UnitType.CLAW_MAN, UnitType.AQUATIC_MAN, UnitType.CENTAUR_OF_ATTENTION,
+                UnitType.ANGELIC_HERALD, UnitType.CRIMSON_WITCH,
+            };
+            @SuppressWarnings("unchecked")
+            Map<UnitType, HeroData> heroes = (Map<UnitType, HeroData>) getField(ux, "heroes");
+            int heroNum = 1;
+            for (UnitType t : starters) heroes.put(t, hero(t, heroNum++));
+            @SuppressWarnings("unchecked")
+            Map<HeroLineupType, HeroLineup> lineups =
+                (Map<HeroLineupType, HeroLineup>) getField(ux, "heroLineups");
+            HeroLineup campaign = new HeroLineup();
+            campaign.heroes = new ArrayList<>(Arrays.asList(starters));
+            lineups.put(HeroLineupType.NORMAL_CAMPAIGN, campaign);
+        } else {
+            // Fresh player: INTRO tutorial in progress (step 0), no heroes.
+            TutorialAct intro = new TutorialAct();
+            intro.type = TutorialActType.INTRO;
+            intro.step = 0;
+            intro.version = TutorialHelper.getMaxVersion(TutorialActType.INTRO);
+            acts.add(intro);
+        }
 
         PrivateUserInfo pui = new PrivateUserInfo();
         pui.email = "";
