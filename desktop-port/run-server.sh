@@ -19,4 +19,6 @@ mkdir -p "$BUILD/server"
 javac -cp "$GAME_CP" -d "$BUILD/server" server/*.java 2>&1 | grep -v 'Picked up' || true
 
 echo "[server] launching on $PORT ..."
-exec java -cp "$BUILD/server:$GAME_CP" DsServer "$PORT" server
+# DS_JAVA_OPTS lets callers pass -Dds.* flags (e.g. -Dds.tutStep=41 to jump the
+# tutorial for testing, -Dds.grantHeroes=true for a post-tutorial roster).
+exec java $DS_JAVA_OPTS -cp "$BUILD/server:$GAME_CP" DsServer "$PORT" server

@@ -61,36 +61,81 @@ public final class DsGame {
             byte[] data = wrapper.wrapIn(wrapped);
             Object reader = readerCtor.newInstance((Object) data);
             com.perblue.a.a.i msg = (com.perblue.a.a.i) readMessage.invoke(messageFactory, reader);
-            String name = msg.getFullName();
-            System.out.println("[game] " + peer + " frame#" + (frame++) + " -> " + name
+            System.out.println("[game] " + peer + " frame#" + (frame++) + " -> " + msg.getFullName()
                     + " (msgNum=" + msg.getMessageNumber() + ")");
-
-            if (name.equals(com.perblue.rpg.network.messages.ClientInfo.getFullName_Static())) {
-                System.out.println("[game]   ClientInfo = " + msg);
-                sendBootData(wrapper, out, msg);
-            }
+            dispatch(msg, wrapper, out);
         }
     }
 
-    /** Build a BootData reply and send it, correlated to the client's request. */
-    private void sendBootData(com.perblue.common.i.a wrapper, OutputStream out, com.perblue.a.a.i request)
+    /** Route an incoming client message to a handler; unhandled ones are telemetry
+     *  or fire-and-forget (no response expected). */
+    private void dispatch(com.perblue.a.a.i msg, com.perblue.common.i.a wrapper, OutputStream out)
             throws Exception {
-        com.perblue.rpg.network.messages.BootData boot = new com.perblue.rpg.network.messages.BootData();
-        long now = System.currentTimeMillis();
-        boot.serverTime = now;
-        boot.firstBoot = Boolean.TRUE;
-        boot.updateAvailable = Boolean.FALSE;
-        // Full new-player state (identity, resources, …) via the game's own classes.
-        DsUserState.populate(boot, now);
-        boot.setAsReplyTo(request); // so the client matches this to its ClientInfo
+        String name = msg.getFullName();
+        if (name.equals(com.perblue.rpg.network.messages.ClientInfo.getFullName_Static())) {
+            System.out.println("[game]   ClientInfo = " + msg);
+            com.perblue.rpg.network.messages.BootData boot = new com.perblue.rpg.network.messages.BootData();
+            long now = System.currentTimeMillis();
+            boot.serverTime = now;
+            boot.firstBoot = Boolean.TRUE;
+            boot.updateAvailable = Boolean.FALSE;
+            DsUserState.populate(boot, now);
+            send(boot, msg, wrapper, out, "BootData");
+        } else if (name.equals(com.perblue.rpg.network.messages.RequestChestAcknowledgement.getFullName_Static())) {
+            handleRequestChestAcknowledgement(wrapper, out);
+        }
+        // else: BuyChests (client→server notification: loot is rolled locally by
+        // ChestHelper, no client-side receive-handler exists, so nothing to reply),
+        // ChangeTutorialStep / LoadTime / PerfReport / Ping / Action(...) — no blocking
+        // response needed yet (added as the tutorial reaches them).
+    }
 
+    /**
+     * Chest roll gate. Chest loot is computed CLIENT-SIDE (ChestHelper.buyChests →
+     * LootResults, rigged during the tutorial to grant the Centaur), but the client
+     * refuses to roll until the server has "acknowledged" the pending chests:
+     * ChestHelper.checkIfCanRollChests() sends us a RequestChestAcknowledgement and
+     * blocks while RPGMain.unacknowledgedChestsRemaining == 0. We reply with a
+     * ChestAcknowledgement, whose handler (RPGMain$107) calls resetChestRollChances()
+     * and sets the counter back to 1 — unblocking the next roll. This is the real
+     * mechanism the tutorial's gold/silver chest steps wait on.
+     */
+    private void handleRequestChestAcknowledgement(com.perblue.common.i.a wrapper, OutputStream out)
+            throws Exception {
+        com.perblue.rpg.network.messages.ChestAcknowledgement ack =
+                new com.perblue.rpg.network.messages.ChestAcknowledgement();
+        push(ack, wrapper, out, "ChestAcknowledgement");
+    }
+
+    /** Serialize + wrap + frame a server-initiated push (no request correlation). The
+     *  client routes it to the registered type-handler by message class. */
+    private void push(com.perblue.a.a.i msg, com.perblue.common.i.a wrapper,
+                      OutputStream out, String label) throws Exception {
         Object writer = writerCtor.newInstance();
-        writeAll.invoke(boot, writer);
+        writeAll.invoke(msg, writer);
         byte[] body = (byte[]) writerClass.getMethod("toByteArray").invoke(writer);
         byte[] wrapped = wrapper.wrapOut(body);
-        packInt.invoke(null, out, wrapped.length);
-        out.write(wrapped);
-        out.flush();
-        System.out.println("[game]   -> BootData sent (" + wrapped.length + " wrapped bytes)");
+        synchronized (out) {
+            packInt.invoke(null, out, wrapped.length);
+            out.write(wrapped);
+            out.flush();
+        }
+        System.out.println("[game]   -> " + label + " pushed (" + wrapped.length + " wrapped bytes)");
+    }
+
+    /** Serialize + wrap + frame a response, correlated to the request. */
+    private void send(com.perblue.a.a.i resp, com.perblue.a.a.i request,
+                      com.perblue.common.i.a wrapper, OutputStream out, String label) throws Exception {
+        resp.setAsReplyTo(request); // responseMessageNumber = request.messageNumber
+        Object writer = writerCtor.newInstance();
+        writeAll.invoke(resp, writer);
+        byte[] body = (byte[]) writerClass.getMethod("toByteArray").invoke(writer);
+        byte[] wrapped = wrapper.wrapOut(body);
+        synchronized (out) {
+            packInt.invoke(null, out, wrapped.length);
+            out.write(wrapped);
+            out.flush();
+        }
+        System.out.println("[game]   -> " + label + " sent (" + wrapped.length + " wrapped bytes)");
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
  *   move X Y           move / drag the pointer
  *   key NAME           press+release a key (ENTER, ESCAPE, A, SPACE, ...)
  *   text STRING        type characters (keyTyped)
- *   wait N             advance N frames (script mode only; ignored live)
+ *   wait N             advance N frames before running the next command
  *   screenshot [FILE]  capture the framebuffer (default build/shot.png)
  *   quit               stop the app
  *   # ...              comment
@@ -69,26 +69,38 @@ public final class DsDriver {
 
     /** Read any bytes appended to the command file and execute complete lines. */
     private void pollLive(long frame) {
+        // 1. Pull any newly-appended bytes into the partial-line buffer.
         try (RandomAccessFile raf = new RandomAccessFile(liveFile, "r")) {
             long len = raf.length();
             if (len < liveOffset) { liveOffset = 0; livePartial.setLength(0); } // truncated → restart
-            if (len == liveOffset) return;
-            raf.seek(liveOffset);
-            byte[] buf = new byte[(int) (len - liveOffset)];
-            raf.readFully(buf);
-            liveOffset = len;
-            livePartial.append(new String(buf, java.nio.charset.StandardCharsets.UTF_8));
-            int nl;
-            while ((nl = livePartial.indexOf("\n")) >= 0) {
-                String line = livePartial.substring(0, nl).trim();
-                livePartial.delete(0, nl + 1);
-                if (line.isEmpty() || line.startsWith("#")) continue;
-                if (exec(line.split("\\s+", 2), frame)) return; // quit
+            if (len > liveOffset) {
+                raf.seek(liveOffset);
+                byte[] buf = new byte[(int) (len - liveOffset)];
+                raf.readFully(buf);
+                liveOffset = len;
+                livePartial.append(new String(buf, java.nio.charset.StandardCharsets.UTF_8));
             }
         } catch (java.io.FileNotFoundException fnf) {
-            // command file not created yet — nothing to do
+            return; // command file not created yet
         } catch (Exception e) {
             System.out.println("[driver] live read error: " + e);
+            return;
+        }
+        // 2. Honour a pending `wait N`: hold the buffered commands until it elapses.
+        if (frame < resumeAt) return;
+        // 3. Drain complete buffered lines. `wait`/`quit` yield the frame; the rest of
+        //    the buffer stays and is drained on a later frame (no new bytes required).
+        int nl;
+        while ((nl = livePartial.indexOf("\n")) >= 0) {
+            String line = livePartial.substring(0, nl).trim();
+            livePartial.delete(0, nl + 1);
+            if (line.isEmpty() || line.startsWith("#")) continue;
+            try {
+                if (exec(line.split("\\s+", 2), frame)) return; // wait/quit yields
+            } catch (Exception e) {
+                System.out.println("[driver] cmd error on '" + line + "': " + e);
+                e.printStackTrace(System.out);
+            }
         }
     }
 

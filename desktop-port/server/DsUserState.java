@@ -101,9 +101,11 @@ final class DsUserState {
             lineups.put(HeroLineupType.NORMAL_CAMPAIGN, campaign);
         } else {
             // Fresh player: INTRO tutorial in progress (step 0), no heroes.
+            // ds.tutStep lets tests jump straight to a later step (e.g. 41 = open
+            // chest screen) to iterate on server responses without replaying combat.
             TutorialAct intro = new TutorialAct();
             intro.type = TutorialActType.INTRO;
-            intro.step = 0;
+            intro.step = Integer.getInteger("ds.tutStep", 0);
             intro.version = TutorialHelper.getMaxVersion(TutorialActType.INTRO);
             acts.add(intro);
         }
