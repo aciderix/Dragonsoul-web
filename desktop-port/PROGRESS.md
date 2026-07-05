@@ -340,3 +340,35 @@ portrait quand le skill est prêt) — mode « auto » headless, propre.
 - [ ] Stabilité serveur (les tâches serveur en arrière-plan meurent) + persistance
       (SQLite) pour reprendre sans re‑piloter.
 - [ ] Élucider (optionnel) pourquoi `currentServer.shardID` ne prend pas au décodage.
+
+---
+## ▶️ Reprise (demain) — après la victoire 1‑1, attaquer le 2e château (1‑2)
+
+**Statut** : le combat 1‑1 est **gagné (3 étoiles)**, on est sur la carte campagne,
+la flèche jaune pointe le **niveau 1‑2** (2e château). D'après le déroulé attendu,
+1‑2 est **perdu volontairement** pour enseigner la **construction d'équipe**
+(summon de héros via soulstones — la liste de héros `0/80` vue à l'écran Heroes).
+
+**Point de reprise rapide** (pas encore de persistance) :
+```bash
+# serveur + jeu dans un seul process, tuto sauté au coffre :
+SRV_LOG=… GAME_LOG=… DS_JAVA_OPTS="-Dds.tutStep=41" \
+  DS_FRAMES=0 DS_LIVE_FILE=<live.cmd> bash run-both.sh
+# puis rejouer jusqu'à la victoire 1‑1 :
+cat scripts/replay-intro-to-1-1.cmd >> <live.cmd>
+# (vérifier chaque étape à l'écran ; un replay peut désynchroniser d'un tap)
+```
+
+**À reverser demain (avant/pendant 1‑2)** :
+- Le flux **après INTRO** : IntroTutorialActV1 finit à `S_DONE` (1‑1). La suite
+  (attaquer 1‑2, perdre, monter une équipe) est-elle un **autre acte de tuto** ou
+  du flux organique ? (cf. TutorialActType : pas de « TEAM_BUILDING » explicite ;
+  candidats : flux naturel post-défaite qui pousse au summon.)
+- Ce que le **serveur doit fournir** pour le summon : message de summon héros →
+  réponse serveur (héros/soulstones), ou grant scripté de soulstones. À extraire
+  du bytecode (comme pour BuyChests/ChestAcknowledgement).
+
+**Améliorations pour ne plus rejouer** :
+- **Seed d'état post‑1‑1** (Centaure niv.3 + couronne + 1‑1 à 3 étoiles + acte tuto
+  au bon point) → vrai « saut direct » comme `ds.tutStep=41`.
+- **Persistance serveur (SQLite)** → l'état survit aux redémarrages.
