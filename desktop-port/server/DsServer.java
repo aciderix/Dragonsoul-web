@@ -150,22 +150,18 @@ public class DsServer {
         return new byte[0]; // empty manifest by default
     }
 
-    // --- game TCP protocol (framing probe) ---
+    // --- game TCP protocol: decode via the game's own codec/messages, reply BootData ---
     static void handleGame(Socket s, InputStream in, String peer, byte[] head, int headLen) throws IOException {
         System.out.println("[game] " + peer + " connected; first bytes: " + hex(head, headLen));
-        DataInputStream din = new DataInputStream(in);
-        int frame = 0;
         try {
-            while (true) {
-                int len = readInt32LE(din);
-                byte[] body = new byte[len];
-                din.readFully(body);
-                System.out.println("[game] frame #" + (frame++) + " len=" + len + " (wrapped)");
-                if (frame == 1) System.out.println("[game]   head=" + hex(body, Math.min(32, body.length)));
-            }
-        } catch (EOFException eof) {
-            System.out.println("[game] " + peer + " closed after " + frame + " frames");
-        } finally { s.close(); }
+            new DsGame().handle(s, in, s.getOutputStream(), peer);
+            System.out.println("[game] " + peer + " session ended");
+        } catch (Throwable t) {
+            System.out.println("[game] " + peer + " error: " + t);
+            t.printStackTrace(System.out);
+        } finally {
+            try { s.close(); } catch (IOException ignored) {}
+        }
     }
 
     static int readInt32LE(DataInputStream in) throws IOException {

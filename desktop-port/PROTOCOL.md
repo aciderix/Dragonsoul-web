@@ -175,3 +175,34 @@ Il doit gérer **trois** rôles (routage par peek/verbe, déjà amorcé dans DsS
 
 Prochaine étape concrète : implémenter `POST /login` (le plus court chemin pour que
 le jeu ouvre enfin le socket de jeu), puis le handshake `ClientInfo`→`BootData`.
+
+---
+## ✅ Protocole de jeu opérationnel de bout en bout (via les classes DU JEU)
+
+Serveur v1 (`server/DsGame.java`, lancé par `run-server.sh` avec le classpath du
+jeu) : **réutilise la sérialisation du jeu** — aucune réimplémentation du format
+binaire, donc zéro risque d'hallucination. Vérifié en exécution :
+
+- **Décodage `ClientInfo1`** : `unpackInt` → `wrapper.wrapIn` →
+  `MessageFactory.readMessage(reader)` avec `new ServerXORConnectionWrapper()`.
+  Le serveur affiche le `ClientInfo` complet (langue, platform, uniqueIdentifier,
+  userID, timeZone, loginRequestID…). Le codec XOR+Deflate du jeu fonctionne tel quel.
+- **Encodage `BootData`** : `new BootData()` → `writeAll(writer)` →
+  `wrapper.wrapOut` → `packInt` → socket. Envoyé (363 octets wrappés).
+- **Le client ACCEPTE le BootData** : `RPGMain.handleBootData` s'exécute, puis le
+  client enchaîne (`ClockChange1`). La pile réseau complète est donc bonne.
+
+Types encodés/décodés via les classes du jeu ; ceux dont le package entre en
+collision avec une classe homonyme (`com.perblue.a.a.a.a` lecteur,
+`com.perblue.a.a.a.b` écrivain, `com.perblue.common.a.b` pack/unpackInt) sont
+atteints par réflexion. Le serveur tourne avec `libs/game-remapped.jar` (mêmes
+classes que le client → sérialisation identique par construction).
+
+### Blocage suivant (hors réseau) : chargement de classe dex2jar
+`handleBootData` déclenche le `<clinit>` de `GeneralSkillStats` (données de skills)
+qui lève `IncompatibleClassChangeError: com.perblue.rpg.simulation.DamageSource and
+DamageSource$DamageSourceType disagree on InnerClasses attribute`. C'est un artefact
+**dex2jar** (attribut InnerClasses incohérent), pas un souci de serveur/BootData ni
+un shim. À corriger côté préparation du bytecode (passe ASM : normaliser/retirer les
+attributs InnerClasses, comme le remap existant). Une fois levé, les données de jeu
+se chargent et on peut compléter les champs de `BootData` (userInfo, etc.).
