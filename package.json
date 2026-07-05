@@ -3,6 +3,6 @@
     "@supabase/supabase-js": "^2.49.4"
   },
   "devDependencies": {
-    "playwright": "^1.58.2"
+    "playwright": "^1.61.1"
   }
 }
