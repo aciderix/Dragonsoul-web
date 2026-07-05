@@ -75,3 +75,31 @@ Effort équivalent à refaire tout le reverse.
 - La piste « version antérieure » ne vaut le coup **que** si on trouve/produit un
   build **dé-obfusqué** d'une version ≤ 2.21.4 (ex. appliquer le mapping de Fixed2
   à 2.21.4, si on récupère ce mapping). Sinon, coût prohibitif.
+
+---
+## Correction : stock 2.22.0 garde aussi les noms lisibles
+
+Téléchargé le **stock 2.22.0** (non-Fixed2, md5 d5ad1efe…) et vérifié :
+- `Lcom/perblue/rpg/RPGMain;` **présent**, ainsi que DeviceInfo, INative,
+  RPGAssetManager, SocialNetworkManager → **stock 2.22.0 préserve les noms perblue**.
+- Donc **Fixed2 n'est PAS un build spécialement dé-obfusqué** : c'est la **config
+  ProGuard de 2.22.0** qui garde `com.perblue.rpg.*` lisible (seul libGDX obfusqué).
+  Fixed2 = stock 2.22.0 + patch ServerType→127.0.0.1 (taille différente).
+- **PerBlue a changé sa config entre 2.21.4 (perblue obfusqué) et 2.22.0 (lisible).**
+
+### Voie de dé-obfuscation de 2.21.4 (idée validée)
+2.22.0 (lisible) sert de **référence** pour dé-obfusquer 2.21.4 par **appariement
+structurel** : pour chaque classe, calculer une signature (superclasse résolue,
+interfaces, descripteurs de méthodes/champs, **constantes String** = ancres non
+obfusquées : FULL_NAME des messages, tags de log…), apparier 2.21.4↔2.22.0, puis
+transférer le nom lisible → produire un mapping ASM `obf(2.21.4) → lisible`.
+Résultat : un 2.21.4 « lisible » sur lequel **notre backend/launcher s'appliquent**.
+
+Effort : réel (écrire le matcher structurel + itérer sur les ambiguïtés), mais
+c'est le seul chemin pour obtenir **gate-free + riche + noms lisibles**.
+
+### Décision ouverte
+- Voie 1 (courte) : **markers + tolérance sur Fixed2 2.22.0** → franchir le gate,
+  garder notre port qui marche. Risque : quelques assets/skins manquants.
+- Voie 2 (longue, plus propre) : **dé-obfusquer 2.21.4** via 2.22.0 → version riche
+  sans gate. Plus de travail, meilleur résultat final.
