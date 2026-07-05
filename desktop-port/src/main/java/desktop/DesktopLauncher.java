@@ -185,18 +185,27 @@ public final class DesktopLauncher {
             try { game.getAssetManager().setHasWorldAdditional(true); } catch (Throwable ignored) {}
         }
 
-        // --- optional scripted test driver (DS_SCRIPT=path, or '-' for stdin) ---
+        // --- optional test driver ---
+        //   DS_SCRIPT=path|-   fixed script (replayed vs the frame counter)
+        //   DS_LIVE_FILE=path  live mode: commands appended to the file are executed
+        //                      as they arrive (drive step-by-step, no restart)
         final boolean[] stopFlag = { false };
+        final String[] pendingShot = { null }; // captured after render() (valid back buffer)
         DsDriver driver = null;
+        DsDriver.Host driverHost = new DsDriver.Host() {
+            public void screenshot(String file) { pendingShot[0] = file; }
+            public void stop() { stopFlag[0] = true; }
+        };
+        String liveFile = System.getProperty("DS_LIVE_FILE");
         String scriptPath = System.getProperty("DS_SCRIPT");
-        if (scriptPath != null) {
+        if (liveFile != null) {
+            driver = new DsDriver(input, driverHost, new File(liveFile));
+            System.out.println("[launcher] driver LIVE: " + liveFile);
+        } else if (scriptPath != null) {
             java.util.List<String> lines = "-".equals(scriptPath)
                 ? new java.io.BufferedReader(new java.io.InputStreamReader(System.in)).lines().collect(java.util.stream.Collectors.toList())
                 : java.nio.file.Files.readAllLines(java.nio.file.Paths.get(scriptPath));
-            driver = new DsDriver(input, new DsDriver.Host() {
-                public void screenshot(String file) { captureScreenshot(file, W, H); }
-                public void stop() { stopFlag[0] = true; }
-            }, lines);
+            driver = new DsDriver(input, driverHost, lines);
             System.out.println("[launcher] driver loaded: " + scriptPath);
         }
 
@@ -236,6 +245,7 @@ public final class DesktopLauncher {
             game.render();
             if (Boolean.getBoolean("DS_TRACE_SCREEN") && frames % 200 == 0) traceScreen(game, frames);
             if (Boolean.getBoolean("DS_TRACE_USER") && frames == maxFrames - 1) traceUser(game);
+            if (pendingShot[0] != null) { captureScreenshot(pendingShot[0], W, H); pendingShot[0] = null; }
             String shot = System.getProperty("DS_SCREENSHOT");
             if (shot != null && (frames == maxFrames - 1)) captureScreenshot(shot, W, H);
             glfwSwapBuffers(win);

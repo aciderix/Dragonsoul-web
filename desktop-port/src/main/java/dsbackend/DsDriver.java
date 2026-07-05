@@ -1,18 +1,28 @@
 package dsbackend;
 
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Scripted test driver: injects synthetic input and captures screenshots so the
- * game can be piloted headlessly (no physical display). Commands (one per line):
+ * Test driver: injects synthetic input and captures screenshots so the game can be
+ * piloted headlessly (no physical display). Two modes:
  *
+ *  - SCRIPT mode: a fixed list of commands replayed against the frame counter
+ *    ({@code wait N} advances N frames). Deterministic, one-shot.
+ *  - LIVE mode: commands are appended to a file at runtime; each frame the driver
+ *    reads any new lines and executes them immediately. This lets an operator drive
+ *    the game step-by-step (append a tap, screenshot, look, append the next tap)
+ *    while the game runs continuously — no restart per action.
+ *
+ * Commands (one per line):
  *   tap X Y            a touch down+up at pixel (X,Y)
  *   down X Y | up X Y  individual touch events
  *   move X Y           move / drag the pointer
  *   key NAME           press+release a key (ENTER, ESCAPE, A, SPACE, ...)
  *   text STRING        type characters (keyTyped)
- *   wait N             advance N frames
+ *   wait N             advance N frames (script mode only; ignored live)
  *   screenshot [FILE]  capture the framebuffer (default build/shot.png)
  *   quit               stop the app
  *   # ...              comment
@@ -27,8 +37,13 @@ public final class DsDriver {
     private long resumeAt = 0;
     private boolean done = false;
 
+    // LIVE mode: poll a command file, executing newly appended lines each frame.
+    private final File liveFile;
+    private long liveOffset = 0;
+    private final StringBuilder livePartial = new StringBuilder();
+
     public DsDriver(DsInput input, Host host, List<String> lines) {
-        this.input = input; this.host = host;
+        this.input = input; this.host = host; this.liveFile = null;
         for (String line : lines) {
             String s = line.trim();
             if (s.isEmpty() || s.startsWith("#")) continue;
@@ -36,28 +51,64 @@ public final class DsDriver {
         }
     }
 
+    /** LIVE mode: read commands appended to {@code liveFile} at runtime. */
+    public DsDriver(DsInput input, Host host, File liveFile) {
+        this.input = input; this.host = host; this.liveFile = liveFile;
+    }
+
     public boolean isDone() { return done; }
 
     public void onFrame(long frame) {
         if (done) return;
+        if (liveFile != null) { pollLive(frame); return; }
         while (idx < cmds.size() && frame >= resumeAt) {
-            String[] c = cmds.get(idx++);
-            String op = c[0];
-            String arg = c.length > 1 ? c[1] : "";
-            switch (op) {
-                case "tap": { int[] p = xy(arg); input.touchDown(p[0], p[1], 0); input.touchUp(p[0], p[1], 0); break; }
-                case "down": { int[] p = xy(arg); input.touchDown(p[0], p[1], 0); break; }
-                case "up": { int[] p = xy(arg); input.touchUp(p[0], p[1], 0); break; }
-                case "move": { int[] p = xy(arg); input.moved(p[0], p[1]); break; }
-                case "key": { int k = keyCode(arg.trim()); if (k >= 0) { input.keyDown(k); input.keyUp(k); } break; }
-                case "text": for (int i = 0; i < arg.length(); i++) input.keyTyped(arg.charAt(i)); break;
-                case "wait": resumeAt = frame + Long.parseLong(arg.trim()); return;
-                case "screenshot": host.screenshot(arg.isEmpty() ? "build/shot.png" : arg.trim()); break;
-                case "quit": done = true; host.stop(); return;
-                default: System.out.println("[driver] unknown cmd: " + op);
-            }
+            if (exec(cmds.get(idx++), frame)) return; // wait/quit yields control
         }
         if (idx >= cmds.size()) done = true;
+    }
+
+    /** Read any bytes appended to the command file and execute complete lines. */
+    private void pollLive(long frame) {
+        try (RandomAccessFile raf = new RandomAccessFile(liveFile, "r")) {
+            long len = raf.length();
+            if (len < liveOffset) { liveOffset = 0; livePartial.setLength(0); } // truncated → restart
+            if (len == liveOffset) return;
+            raf.seek(liveOffset);
+            byte[] buf = new byte[(int) (len - liveOffset)];
+            raf.readFully(buf);
+            liveOffset = len;
+            livePartial.append(new String(buf, java.nio.charset.StandardCharsets.UTF_8));
+            int nl;
+            while ((nl = livePartial.indexOf("\n")) >= 0) {
+                String line = livePartial.substring(0, nl).trim();
+                livePartial.delete(0, nl + 1);
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                if (exec(line.split("\\s+", 2), frame)) return; // quit
+            }
+        } catch (java.io.FileNotFoundException fnf) {
+            // command file not created yet — nothing to do
+        } catch (Exception e) {
+            System.out.println("[driver] live read error: " + e);
+        }
+    }
+
+    /** Execute one command. Returns true if the caller should yield the frame. */
+    private boolean exec(String[] c, long frame) {
+        String op = c[0];
+        String arg = c.length > 1 ? c[1] : "";
+        switch (op) {
+            case "tap": { int[] p = xy(arg); input.touchDown(p[0], p[1], 0); input.touchUp(p[0], p[1], 0); break; }
+            case "down": { int[] p = xy(arg); input.touchDown(p[0], p[1], 0); break; }
+            case "up": { int[] p = xy(arg); input.touchUp(p[0], p[1], 0); break; }
+            case "move": { int[] p = xy(arg); input.moved(p[0], p[1]); break; }
+            case "key": { int k = keyCode(arg.trim()); if (k >= 0) { input.keyDown(k); input.keyUp(k); } break; }
+            case "text": for (int i = 0; i < arg.length(); i++) input.keyTyped(arg.charAt(i)); break;
+            case "wait": resumeAt = frame + Long.parseLong(arg.trim()); return true;
+            case "screenshot": host.screenshot(arg.isEmpty() ? "build/shot.png" : arg.trim()); break;
+            case "quit": done = true; host.stop(); return true;
+            default: System.out.println("[driver] unknown cmd: " + op);
+        }
+        return false;
     }
 
     private static int[] xy(String arg) {
