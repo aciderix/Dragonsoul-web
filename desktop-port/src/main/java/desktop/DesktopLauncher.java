@@ -70,6 +70,7 @@ public final class DesktopLauncher {
         com.badlogic.gdx.utils.b.a.c = audio;     // Gdx.audio
         com.badlogic.gdx.utils.b.a.d = input;     // Gdx.input
         com.badlogic.gdx.utils.b.a.e = files;     // Gdx.files
+        com.badlogic.gdx.utils.b.a.f = new DsNet(); // Gdx.net (login HTTP)
         com.badlogic.gdx.utils.b.a.g = gl;        // Gdx.gl
         com.badlogic.gdx.utils.b.a.h = gl;        // Gdx.gl20
         System.out.println("[launcher] Gdx singleton wired");
@@ -156,12 +157,24 @@ public final class DesktopLauncher {
         // download subsystem treats content as present/not-needed instead of
         // looping into the "Content Update Failed" dialog. Written before boot so
         // the AssetUpdater reads our values. Opt-in; documented in SHIMS.md.
-        if (forceWorldAdditional) {
+        // Record consent to the privacy policy + terms of service. RPGMain
+        // .connectToLoginServer gates the login behind
+        //   prefs.contains("agreedPrivacyPolicyVersion") && agreed >= currentVersion
+        // (same for terms); otherwise it shows the agreement dialog and waits for a
+        // tap we can't give headless. Writing these is exactly what the game's own
+        // "I agree" handler writes — genuine recorded consent, not a fake response.
+        // Values set high so they satisfy any current version (currently 5 / 2).
+        {
             DsPreferences p = new DsPreferences(runDir, "rpgPrefs");
-            p.a("missingAdditionalWorld", false);
-            p.a("shouldDownloadAdditionalWorld", false);
+            if (forceWorldAdditional) {
+                p.a("missingAdditionalWorld", false);
+                p.a("shouldDownloadAdditionalWorld", false);
+            }
+            p.a("agreedPrivacyPolicyVersion", 999);
+            p.a("agreedTermsOfServiceVersion", 999);
             p.a();
-            System.out.println("[launcher] pre-seeded rpgPrefs (content complete)");
+            System.out.println("[launcher] pre-seeded rpgPrefs (agreement recorded"
+                + (forceWorldAdditional ? " + content complete" : "") + ")");
         }
 
         System.out.println("[launcher] calling game.create() ...");
@@ -189,6 +202,7 @@ public final class DesktopLauncher {
 
         // --- render loop ---
         long frames = 0;
+        boolean loginStarted = false;
         double last = glfwGetTime();
         while (!glfwWindowShouldClose(win) && !stopFlag[0] && (maxFrames == 0 || frames < maxFrames)) {
             double now = glfwGetTime();
@@ -208,6 +222,17 @@ public final class DesktopLauncher {
             }
             if (driver != null) driver.onFrame(frames);
             app.drainRunnables();
+            // Kick off login exactly as the Android launcher does: after startup,
+            // AndroidLauncher.deviceInfoReady() calls game.startInitialLogin() (its
+            // async device-info gather has no desktop equivalent, so we drive it).
+            // This runs the HTTP /login step (via Gdx.net) → startNetwork → TCP
+            // ClientInfo → BootData, which is what unblocks MainMenu. One-shot, a
+            // few frames in so the LoadingScreen is live to buffer the response.
+            if (!loginStarted && frames == 3) {
+                loginStarted = true;
+                try { game.startInitialLogin(); System.out.println("[launcher] startInitialLogin() called"); }
+                catch (Throwable t) { System.out.println("[launcher] startInitialLogin failed: " + t); t.printStackTrace(System.out); }
+            }
             game.render();
             if (Boolean.getBoolean("DS_TRACE_SCREEN") && frames % 200 == 0) traceScreen(game, frames);
             String shot = System.getProperty("DS_SCREENSHOT");

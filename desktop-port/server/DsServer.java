@@ -39,7 +39,10 @@ public class DsServer {
             int n = readFully(in, head, 0, 4);
             if (n < 1) { s.close(); return; }
             in.unread(head, 0, n);
-            if (n >= 4 && head[0] == 'G' && head[1] == 'E' && head[2] == 'T' && head[3] == ' ') {
+            // Route by first bytes: an ASCII HTTP method (GET/POST/PUT/HEAD) → HTTP;
+            // anything else → the game's binary TCP protocol (framed).
+            String tok = n >= 4 ? new String(head, 0, 4, StandardCharsets.ISO_8859_1) : "";
+            if (tok.equals("GET ") || tok.equals("POST") || tok.equals("PUT ") || tok.equals("HEAD")) {
                 handleHttp(s, in, peer);
             } else {
                 handleGame(s, in, peer, head, n);
@@ -49,23 +52,95 @@ public class DsServer {
         }
     }
 
-    // --- HTTP content manifest ---
+    // --- HTTP: content manifest (GET) + login (POST /login) ---
     static void handleHttp(Socket s, InputStream in, String peer) throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.ISO_8859_1));
-        String line = r.readLine();
-        System.out.println("[http] " + peer + " " + line);
-        // drain headers
-        while ((line = r.readLine()) != null && !line.isEmpty()) { /* ignore */ }
+        // Read request line + headers over ISO-8859-1 (byte-preserving), then the
+        // body by Content-Length. We read raw so the request byte stream stays exact.
+        String requestLine = readLine(in);
+        System.out.println("[http] " + peer + " " + requestLine);
+        String[] parts = requestLine == null ? new String[0] : requestLine.split(" ");
+        String method = parts.length > 0 ? parts[0] : "";
+        String path = parts.length > 1 ? parts[1] : "";
+        int contentLength = 0;
+        String h;
+        while ((h = readLine(in)) != null && !h.isEmpty()) {
+            int c = h.indexOf(':');
+            if (c > 0 && h.substring(0, c).trim().equalsIgnoreCase("Content-Length"))
+                contentLength = Integer.parseInt(h.substring(c + 1).trim());
+        }
+        byte[] bodyIn = new byte[contentLength];
+        if (contentLength > 0) readFully(in, bodyIn, 0, contentLength);
+
+        // Login params ride the query string (GET, as the client sends) or the body
+        // (POST). Merge both so requestID is found either way.
+        int q = path.indexOf('?');
+        String query = q >= 0 ? path.substring(q + 1) : "";
+        String pathOnly = q >= 0 ? path.substring(0, q) : path;
+        if (pathOnly.startsWith("/login")) {
+            String params = query + (query.isEmpty() ? "" : "&") + new String(bodyIn, StandardCharsets.UTF_8);
+            handleLogin(s, params, peer);
+        } else {
+            byte[] body = loadIndex();
+            writeHttp(s, "text/plain", body);
+            System.out.println("[http] served index.txt (" + body.length + " bytes)");
+        }
+    }
+
+    /**
+     * Login endpoint. RPGMain.handleLoginServerResponse (reversed from the game)
+     * requires HTTP 200 and a JSON body {"status":..,"data":..,"requestID":..}.
+     * status=="good" → the game splits `data` on ':' into host:port and opens the
+     * game TCP socket there (via startNetwork). We point it back at ourselves so the
+     * same server handles the game protocol. requestID is echoed from the client's
+     * loginRequestID form field. Everything here is derived from the bytecode.
+     */
+    static void handleLogin(Socket s, String formBody, String peer) throws IOException {
+        String gameHost = System.getProperty("ds.gameHost", "127.0.0.1");
+        String gamePort = System.getProperty("ds.gamePort", "8080");
+        String requestID = formParam(formBody, "loginRequestID");
+        if (requestID == null) requestID = "0";
+        String json = "{\"status\":\"good\",\"data\":\"" + gameHost + ":" + gamePort
+                + "\",\"requestID\":\"" + jsonEscape(requestID) + "\"}";
+        System.out.println("[login] " + peer + " -> " + json);
+        writeHttp(s, "application/json", json.getBytes(StandardCharsets.UTF_8));
+    }
+
+    static void writeHttp(Socket s, String contentType, byte[] body) throws IOException {
         OutputStream out = s.getOutputStream();
-        byte[] body = loadIndex();
-        String resp = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "
+        String resp = "HTTP/1.1 200 OK\r\nContent-Type: " + contentType + "\r\nContent-Length: "
                 + body.length + "\r\nConnection: close\r\n\r\n";
         out.write(resp.getBytes(StandardCharsets.ISO_8859_1));
         out.write(body);
         out.flush();
-        System.out.println("[http] served index.txt (" + body.length + " bytes)");
         s.close();
     }
+
+    /** Read a CRLF-terminated line from a raw byte stream (headers are ASCII). */
+    static String readLine(InputStream in) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int c;
+        while ((c = in.read()) != -1) {
+            if (c == '\n') break;
+            if (c != '\r') bos.write(c);
+        }
+        if (c == -1 && bos.size() == 0) return null;
+        return new String(bos.toByteArray(), StandardCharsets.ISO_8859_1);
+    }
+
+    static String formParam(String body, String key) {
+        if (body == null) return null;
+        for (String pair : body.split("&")) {
+            int eq = pair.indexOf('=');
+            if (eq < 0) continue;
+            String k = urlDecode(pair.substring(0, eq));
+            if (k.equals(key)) return urlDecode(pair.substring(eq + 1));
+        }
+        return null;
+    }
+    static String urlDecode(String s) {
+        try { return java.net.URLDecoder.decode(s, "UTF-8"); } catch (Exception e) { return s; }
+    }
+    static String jsonEscape(String s) { return s.replace("\\", "\\\\").replace("\"", "\\\""); }
 
     static byte[] loadIndex() {
         try {

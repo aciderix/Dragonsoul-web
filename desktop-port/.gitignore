@@ -4,3 +4,4 @@ assets-extracted/
 *.so
 libs/
 scripts/
+server/*.class

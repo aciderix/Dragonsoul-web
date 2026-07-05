@@ -8,11 +8,16 @@ import java.util.Properties;
  * Obfuscated method mapping (put* return the Preferences for chaining):
  *   a(k,int)/a(k,long)/a(k,String)/a(k,boolean) = putX
  *   a()          = flush
- *   a(k)         = contains
+ *   a(k):boolean = getBoolean(k)   ← single-arg boolean GETTER (verified: the game
+ *                  reads missingAdditionalWorld via m.a(String):Z)
  *   b(k)         = getInteger(k)          b(k,int)     = getInteger(k,def)
  *   c(k)         = getLong(k)             b(k,long)    = getLong(k,def)
  *   d(k)         = getString(k)           b(k,String)  = getString(k,def)
- *   e(k)         = getBoolean(k)          b(k,boolean) = getBoolean(k,def)
+ *   e(k):boolean = contains(k)     ← verified: the game does `if (m.e(k)) m.b(k,def)`
+ *                                    (contains-then-getBoolean-with-default)
+ *                  b(k,boolean) = getBoolean(k,def)
+ * NOTE: a(k) and e(k) are easy to swap — both are (String)boolean. contains vs
+ * getBoolean was pinned from real call sites, not guessed.
  */
 public final class DsPreferences implements com.badlogic.gdx.m {
     private final Properties props = new Properties();
@@ -36,7 +41,7 @@ public final class DsPreferences implements com.badlogic.gdx.m {
         catch (Exception ignored) { }
     }
 
-    public boolean a(String k) { return props.containsKey(k); } // contains
+    public boolean a(String k) { return b(k, false); } // getBoolean(k)
 
     public int b(String k) { return b(k, 0); }
     public int b(String k, int def) { try { return Integer.parseInt(props.getProperty(k)); } catch (Exception e) { return def; } }
@@ -44,6 +49,6 @@ public final class DsPreferences implements com.badlogic.gdx.m {
     public long b(String k, long def) { try { return Long.parseLong(props.getProperty(k)); } catch (Exception e) { return def; } }
     public String d(String k) { return b(k, ""); }
     public String b(String k, String def) { String v = props.getProperty(k); return v != null ? v : def; }
-    public boolean e(String k) { return b(k, false); }
+    public boolean e(String k) { return props.containsKey(k); } // contains(k)
     public boolean b(String k, boolean def) { String v = props.getProperty(k); return v != null ? Boolean.parseBoolean(v) : def; }
 }
