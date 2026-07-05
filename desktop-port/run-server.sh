@@ -16,7 +16,7 @@ GAME_CP="$RESD:$RUNTIME_CP"
 
 echo "[server] compiling ..."
 mkdir -p "$BUILD/server"
-javac -cp "$GAME_CP" -d "$BUILD/server" server/DsServer.java server/DsGame.java 2>&1 | grep -v 'Picked up' || true
+javac -cp "$GAME_CP" -d "$BUILD/server" server/*.java 2>&1 | grep -v 'Picked up' || true
 
 echo "[server] launching on $PORT ..."
 exec java -cp "$BUILD/server:$GAME_CP" DsServer "$PORT" server

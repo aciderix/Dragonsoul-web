@@ -76,9 +76,12 @@ public final class DsGame {
     private void sendBootData(com.perblue.common.i.a wrapper, OutputStream out, com.perblue.a.a.i request)
             throws Exception {
         com.perblue.rpg.network.messages.BootData boot = new com.perblue.rpg.network.messages.BootData();
-        boot.serverTime = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
+        boot.serverTime = now;
         boot.firstBoot = Boolean.TRUE;
         boot.updateAvailable = Boolean.FALSE;
+        // Full new-player state (identity, resources, …) via the game's own classes.
+        DsUserState.populate(boot, now);
         boot.setAsReplyTo(request); // so the client matches this to its ClientInfo
 
         Object writer = writerCtor.newInstance();
