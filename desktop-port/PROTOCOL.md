@@ -136,3 +136,42 @@ Deux pistes (alignees avec "recenser puis retirer/completer"):
    (shouldDownloadAdditionalWorld/missingAdditionalWorld), puis tolerer les assets
    manquants a l'usage.
 3. En parallele: serveur de login (repondre BootData a ClientInfo).
+
+---
+## Mise à jour — la connexion est en DEUX étapes (login HTTP puis jeu TCP)
+
+Après avoir franchi le gate de contenu (l'écran de chargement réel s'affiche
+désormais, cf. PROGRESS.md), on a instrumenté un serveur d'écoute sur 8080 et
+observé le trafic client :
+- ✅ `GET /live/index.txt` (AssetUpdater) — reçu et servi.
+- ❌ **Aucune** connexion TCP « jeu ». Le jeu **n'ouvre jamais** le socket de jeu.
+
+Décompilation de `RPGMain` : la connexion passe par **deux étapes**.
+
+### Étape 1 — Login HTTP : `RPGMain.connectToLoginServer(userID, status, ServerType)`
+- Construit une `HashMap` de paramètres :
+  `uniqueIdentifier, imei, aPMacAddress, email, advertisingIdentifier, userID,
+   shardID, platform, ...` (depuis `DeviceInfo`).
+- **POST** vers l'endpoint **`/login`** (relatif à `gameHost:gamePort` =
+  `http://127.0.0.1:8080/login`).
+- La réponse porte un **status** (`"Got status <n> from login request"`), gère un
+  `"redirect"` (bascule `ServerType.DEV`) ; en cas d'échec →
+  `tryShowingLoginErrorPrompt` / `handleServerConnectionFailed` (mode `OFFLINE`).
+- En succès → appelle **`startNetwork(userID, status, ChangeServer)`**.
+
+### Étape 2 — Jeu TCP : `RPGMain.startNetwork(...)`
+- Ouvre le **`java.net.Socket`** vers le serveur de jeu (adresse issue du login),
+  enveloppe avec `ServerXORConnectionWrapper`, envoie **`ClientInfo1`**, attend
+  **`BootData1`** (cf. sections précédentes). `BootData` reçu →
+  `MainMenuScreen.updateFromNetwork` met `loadState=CREATED` → home visible.
+
+### Conséquence pour notre serveur (sur 8080)
+Il doit gérer **trois** rôles (routage par peek/verbe, déjà amorcé dans DsServer) :
+1. `GET /live/index.txt` — manifeste de contenu (fait, v0).
+2. **`POST /login`** — répondre l'adresse du serveur de jeu + session/status OK
+   (à reverser : format exact de la réponse attendu par `connectToLoginServer`).
+3. **TCP jeu** — `ServerXORConnectionWrapper` : lire `ClientInfo1`, renvoyer
+   `BootData1` (champs minimaux requis à déterminer empiriquement).
+
+Prochaine étape concrète : implémenter `POST /login` (le plus court chemin pour que
+le jeu ouvre enfin le socket de jeu), puis le handshake `ClientInfo`→`BootData`.
