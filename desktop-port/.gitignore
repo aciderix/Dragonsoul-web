@@ -3,3 +3,4 @@ build/
 assets-extracted/
 *.so
 libs/
+scripts/
