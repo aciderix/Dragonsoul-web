@@ -23,6 +23,8 @@ import java.util.List;
  *   key NAME           press+release a key (ENTER, ESCAPE, A, SPACE, ...)
  *   text STRING        type characters (keyTyped)
  *   wait N             advance N frames before running the next command
+ *   autotap X Y [P]    auto-fire a tap at (X,Y) every P frames (default 20) until
+ *                      "autotap off" — headless skill auto-cast in combat
  *   screenshot [FILE]  capture the framebuffer (default build/shot.png)
  *   quit               stop the app
  *   # ...              comment
@@ -42,6 +44,11 @@ public final class DsDriver {
     private long liveOffset = 0;
     private final StringBuilder livePartial = new StringBuilder();
 
+    // AUTO-TAP: fire a tap at (autoX,autoY) every autoPeriod frames until cleared.
+    // Used to auto-cast a hero's skill in combat (tap the portrait whenever the skill
+    // is ready) without a real-time view — a headless "auto" mode.
+    private int autoX = -1, autoY = -1, autoPeriod = 0;
+
     public DsDriver(DsInput input, Host host, List<String> lines) {
         this.input = input; this.host = host; this.liveFile = null;
         for (String line : lines) {
@@ -60,6 +67,10 @@ public final class DsDriver {
 
     public void onFrame(long frame) {
         if (done) return;
+        // Auto-tap: fire the recurring tap on its period (skill auto-cast in combat).
+        if (autoPeriod > 0 && frame % autoPeriod == 0) {
+            input.touchDown(autoX, autoY, 0); input.touchUp(autoX, autoY, 0);
+        }
         if (liveFile != null) { pollLive(frame); return; }
         while (idx < cmds.size() && frame >= resumeAt) {
             if (exec(cmds.get(idx++), frame)) return; // wait/quit yields control
@@ -116,6 +127,13 @@ public final class DsDriver {
             case "key": { int k = keyCode(arg.trim()); if (k >= 0) { input.keyDown(k); input.keyUp(k); } break; }
             case "text": for (int i = 0; i < arg.length(); i++) input.keyTyped(arg.charAt(i)); break;
             case "wait": resumeAt = frame + Long.parseLong(arg.trim()); return true;
+            case "autotap": { // "autotap X Y PERIOD" repeats a tap; "autotap off" stops
+                if (arg.trim().equalsIgnoreCase("off")) { autoPeriod = 0; break; }
+                String[] t = arg.trim().split("\\s+");
+                autoX = Integer.parseInt(t[0]); autoY = Integer.parseInt(t[1]);
+                autoPeriod = t.length > 2 ? Integer.parseInt(t[2]) : 20;
+                break;
+            }
             case "screenshot": host.screenshot(arg.isEmpty() ? "build/shot.png" : arg.trim()); break;
             case "quit": done = true; host.stop(); return true;
             default: System.out.println("[driver] unknown cmd: " + op);
