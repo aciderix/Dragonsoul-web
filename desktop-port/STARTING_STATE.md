@@ -180,11 +180,22 @@ avec `RPGMain.getYourUser()`), sans lire l'écran :
 `autonarr` a fait défiler seul l'intro (step 2→4→6→7) sans capture ni tap. On connaît écran +
 étape + texte + composant exact à cliquer.
 
-**Prochaine incrément** :
-- [ ] `taparrow` : cliquer l'acteur cible (via `questPointers→getTarget()` puis coords écran).
-      ⚠️ touche l'API scene2d **obfusquée** (`Actor` = `…scene2d.b`, `localToStageCoordinates`
-      renommé) → à faire proprement (réflexion sur noms obfusqués, ou table
-      `UIComponentName → coords`). D'ici là, `tutinfo` donne déjà le composant et on tape aux
-      coords connues.
-- [ ] auto‑clic **`>>` / vague suivante** en combat (élément non‑tuto), sur le modèle `autotap`.
-- Bénéfice : piloter des séquences longues avec très peu de captures.
+**`taparrow` + `autotut` — ✅ implémentés & validés.** Bonne surprise : les **méthodes**
+scene2d ne sont **pas** obfusquées (seulement les noms de classes), donc `Actor.getWidth/
+getHeight/localToStageCoordinates/getStage/getTutorialName` sont appelables directement.
+- `taparrow` : résout l'acteur cible via `BaseScreen.questPointers → getTarget()`, sinon
+  **recherche sur tout le stage** (`RPGMain.getStage().i()` = root) par `getTutorialName()`
+  (couvre les overlays modaux, ex. bouton fermer du reveal « New Hero »). Centre de l'acteur
+  (stage) → pixels écran par **auto‑calibration** : on échantillonne les 2 coins écran via
+  `Stage.a()` (screen→stage) et on inverse → gère l'échelle du viewport et le flip Y sans
+  résolution en dur. `Vector2` (`…math.p`) : champs `b`=x, `c`=y.
+- `autotut [P]|off` : chaque P frames, clique une flèche affichée sinon avance un dialogue.
+- **Validé** : depuis un nouveau joueur canonique, `autotut` a piloté **step 0 → combat
+  d'intro (4 casts) → coffre (Centaure, heroes=3) → fermeture overlay → menu héros → équip
+  Couronne → campagne (step 59)**, entièrement hands‑off, zéro capture. Coords confirmées par
+  l'avancée du step à chaque clic.
+
+**Reste (mineur)** :
+- [ ] auto‑clic **`>>` / vague suivante** en combat **non‑tuto** (ex. rejouer 1‑1 hors tuto) —
+      le combat du tuto est déjà piloté par `taparrow`. Sur le modèle `autotap`.
+- Bénéfice atteint : piloter le tuto entier avec ~2 commandes et zéro capture.
