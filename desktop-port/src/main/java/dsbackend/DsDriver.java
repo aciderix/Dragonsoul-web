@@ -277,8 +277,11 @@ public final class DsDriver {
             if (lbl != null && lbl.isVisible() && lbl.getParent() != null) {
                 tapActorCenter(lbl, "combat continue"); return;
             }
-            // 2. enable fast-forward (2x) once
-            if (!as.isFastForward()) {
+            // 2. enable fast-forward (2x) once — ONLY if actually unlocked (it gates behind
+            //    Team Level 30 / VIP; clicking it while locked just spams an upsell tooltip).
+            //    Compare the FFButtonState by name to avoid referencing the package-private enum.
+            Object ffState = as.getFastForwardButtonState();
+            if (!as.isFastForward() && ffState != null && "AVAILABLE".equals(ffState.toString())) {
                 com.badlogic.gdx.scenes.scene2d.b ff = fieldActor(as, "fastForwardButton");
                 if (ff != null && ff.isVisible()) { tapActorCenter(ff, "combat fastforward"); return; }
             }
