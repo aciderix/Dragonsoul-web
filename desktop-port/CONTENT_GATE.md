@@ -47,6 +47,33 @@ L'APK embarque ~22 héros de base ; ces repères sont du contenu *additionnel* t
 - Court terme (cet APK) : option 1 (repères minimaux + tolérance) — travail borné.
 - Long terme / plus propre : option 2 (version antérieure) à évaluer.
 
+## 🔎 Récupération du contenu réel — ENQUÊTE COMPLÈTE (2026‑07‑06) → introuvable
+Question : peut‑on récupérer les `external_*.atlas` manquants (campaign maps 3+, temple, runes…) ?
+**Toutes les pistes épuisées, résultat négatif :**
+
+### a) Dans les APK (1.0.2, 2.21.4, 2.22.0‑stock, Fixed2)
+- **Aucune** version ne bundle d'`external_*.atlas`. **Toutes** ne contiennent que
+  `chapter_one_map` + `chapter_two_map` (chap. 1‑2) ; les chap. **3→29 ont TOUJOURS été du CDN**,
+  même en **1.0.2** (2015). Idem temple‑lobby / runes / crypt / etc. → **pas récupérable des APK**.
+
+### b) Liens/URLs présents dans le bytecode (testés en live via curl)
+`ServerType` + strings du dex donnent les hôtes de contenu. **Tous morts :**
+- `s3.amazonaws.com/qa-content.dragonsoulgame.com/{dev,qa1,qa2,trunk}/index.txt` → **`NoSuchBucket`** (bucket S3 supprimé).
+- `content.dragonsoulgame.com` / `backupcontent.dragonsoulgame.com` (les vrais hôtes LIVE, dé‑patchés du stock) → **no DNS** (sous‑domaines morts).
+- `dragonsoulgame.com` (site principal) → **vivant** mais **catch‑all 301 → homepage** (aucun contenu servi ; `/live/index.txt`, `/update/…` redirigent tous vers `/`).
+- **Wayback Machine** (`archive.org/wayback/available`) → **aucun snapshot** de `content.*`, `backupcontent.*`, ni du bucket S3. (CDX `web.archive.org/cdx` = bloqué par la politique egress de l'env.)
+
+### c) Seul contenu DLC réellement récupéré (local, hors serveur à ne pas réutiliser)
+- `world_additional_heroes.zip` = **art des héros** (`world/units/hero_*.atlas/.etc1/.skel`) — **réel**,
+  mais **ne couvre PAS** les écrans qui crashent (ni campaign_maps, ni temple).
+
+### Conclusion (verrouillée)
+L'art des écrans à contenu externe (campagne 3+, Temple, Runes, Crypt, Expédition, Boss Pit, War)
+est **définitivement perdu** (CDN mort, buckets supprimés, non archivé). ⇒ le seul chemin honnête
+= **atlas placeholder peuplé** (régions réelles du bytecode → texture placeholder visible),
+dégradation gracieuse documentée, **jamais** l'atlas vide (= rustine qui crashe au lookup).
+Le vrai art des **héros** (world_additional_heroes.zip) reste dispo pour compléter les portraits.
+
 ## Verrou #3 — atlas de feature dynamiques (`UIHelper.loadDynamicUI`) — reversé 2026‑07‑06
 Distinct du gate de boot : chaque **écran de feature** charge son atlas externe à l'ouverture.
 `UIHelper.loadDynamicUI(path, boolean optional)` (bytecode) :
