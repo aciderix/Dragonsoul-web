@@ -120,6 +120,43 @@ Colonnes : `EXP_TO_NEXT_LEVEL  MAX_HERO_LEVEL  MAX_STAMINA  STAMINA_GAIN_ON_LEVE
    par le jeu (le snapshot existant), jamais l'injection de valeurs.
 4. La persistance snapshot capture ensuite l'état **réel** produit par le jeu.
 
+## 7. Principe : le serveur SOURCE tout depuis les classes/tables du jeu (validé)
+
+**Idée** (validée en runtime le 2026‑07‑06) : le serveur tourne déjà avec le classpath du jeu
+(`game-remapped.jar` + `apk-resources`), donc au lieu de **réécrire à la main** des données du
+jeu (hallucination) ou de les figer en dur, il **appelle directement les classes de données du
+jeu**, qui lisent les vrais `.tab`. Preuve : `TeamLevelStats.getMaxStamina(1)` renvoie **60**
+(2→62, gain/level 20) depuis un JVM nu — identique à `teamlevelstats.tab`.
+
+- **Fidélité parfaite, zéro transcription** : la classe EST la source de vérité (pas de copie
+  qui dérive). Mieux que « extraire vers des fichiers ».
+- **Fondation anti‑cheat** : le futur serveur autoritaire recalculera coûts/loot/combat avec
+  **exactement** les mêmes tables/classes → toute valeur d'un client qui diverge = triche.
+- **Règle** : partout où l'on met une valeur de jeu, préférer un appel à la classe du jeu
+  (`TeamLevelStats`, `CampaignStats`, `ItemStats`, `StaminaStats`, `ChestHelper`, sim de
+  combat…) plutôt qu'une constante.
+
+### ⚠️ Honnêteté sur la portée — « tous les aspects sans exception » n'est PAS acquis d'office
+La **méthode** peut couvrir *toutes* les données du jeu, mais l'état actuel ne couvre pas encore
+tout. À distinguer :
+- ✅ **Couvert maintenant** : état de départ = ressources (stamina via `TeamLevelStats`,
+  or/diamants 0/0) + roster canonique (Dragon Lady + Unstable Understudy).
+- ❓ **Non encore vérifié** (à lever, ne pas prétendre acquis) :
+  - étoiles/rareté **exactes** des 2 héros de départ (on a supposé niv.1 / WHITE / 1★) ;
+  - le tuto **joue‑t‑il depuis step 0** dans notre port (combat d'intro scripté) ;
+  - autres champs que le serveur d'origine posait à la création (lineups d'autres modes,
+    flags initiaux, VIP…) — on init les collections vides, à auditer.
+- 🔭 **Futur (pas fait)** : combat/loot/progression sont **encore autoritatifs‑CLIENT** ; le
+  serveur ne les **calcule** pas encore. Le miroir complet = **serveur autoritaire** (à venir).
+
+### Garantir la complétude = AUDIT, pas une affirmation
+Pour tendre vers « zéro invention » de façon **vérifiable** :
+- [ ] Inventorier **chaque constante de jeu codée en dur** (serveur + launcher) et la remplacer
+      par un appel à la classe/table du jeu.
+- [ ] Lever les 3 points « non vérifiés » ci‑dessus (dont un test tuto step 0 réel).
+- [ ] Tenir cette checklist à jour : la complétude se **prouve** point par point, elle ne se
+      décrète pas.
+
 ## 5. TODO — automatisation du pilotage en DEV (économiser contexte / captures)
 
 > **DEV uniquement**, jamais en prod (le vrai joueur pilote lui‑même). But : réduire le

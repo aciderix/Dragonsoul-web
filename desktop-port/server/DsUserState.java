@@ -16,6 +16,7 @@ import com.perblue.rpg.network.messages.Rarity;
 import com.perblue.rpg.network.messages.TutorialAct;
 import com.perblue.rpg.network.messages.TutorialActType;
 import com.perblue.rpg.game.tutorial.TutorialHelper;
+import com.perblue.rpg.game.data.misc.TeamLevelStats;
 
 /**
  * Builds a complete, coherent NEW-PLAYER state and attaches it to a BootData, using
@@ -58,7 +59,7 @@ final class DsUserState {
         basic.creationTime = serverTime;
         basic.userLastActive = serverTime;
         ui.basicInfo = basic;
-        ui.diamonds = 500;
+        ui.diamonds = 0;
         ui.shardID = 1;
         ui.teamPower = 0;
         ui.teamPowerRank = 0;
@@ -80,52 +81,55 @@ final class DsUserState {
         ux.admin = Boolean.FALSE;
         ux.moderator = Boolean.FALSE;
 
-        // Starting resources (real ResourceType enum constants).
+        // Starting resources — sourced from the GAME'S OWN data (no invented values,
+        // see STARTING_STATE.md). A brand-new account starts with 0 gold / 0 diamonds;
+        // stamina is the team-level-1 cap read from teamlevelstats.tab via the game's
+        // own TeamLevelStats accessor (the server links the game jar + apk-resources, so
+        // it reuses the exact table the client reads — the basis for the authoritative
+        // server's anti-cheat: same tables => any client claim that disagrees is a cheat).
         @SuppressWarnings("unchecked")
         Map<ResourceType, Integer> res = (Map<ResourceType, Integer>) getField(ux, "resources");
-        res.put(ResourceType.GOLD, 100000);
-        res.put(ResourceType.DIAMONDS, 500);
-        res.put(ResourceType.FREE_DIAMONDS, 500);
-        res.put(ResourceType.STAMINA, 120);
+        res.put(ResourceType.GOLD, 0);
+        res.put(ResourceType.DIAMONDS, 0);
+        res.put(ResourceType.FREE_DIAMONDS, 0);
+        res.put(ResourceType.STAMINA, TeamLevelStats.getMaxStamina(1));
         res.put(ResourceType.TEAM_XP, 0);
         res.put(ResourceType.POWER_POINTS, 0);
 
-        // The game's expected first-launch mechanism (reversed from the bytecode):
-        // a genuine new account has the INTRO tutorial IN PROGRESS (step 0) and NO
-        // heroes — the tutorial itself grants the first hero and sets the
-        // CAMPAIGN_UNLOCKED flag. An ABSENT tutorial act reads as "completed"
+        // Canonical STARTING ROSTER — mirror of the original server's account creation.
+        // Reversed from the bytecode + confirmed by the game's first-30-min flow
+        // (STARTING_STATE.md): a new account already owns DRAGON_LADY + UNSTABLE_UNDERSTUDY
+        // BEFORE the tutorial grants the Centaur (via the chest) and before Electroyeti is
+        // unlocked through chapter 1. These are NOT granted client-side (the intro combat
+        // only builds scripted CombatSimHelper units), so the server must provide them.
+        // Level 1 / WHITE / 1 star is the base; the game computes every derived stat from
+        // its own tables at runtime — we invent nothing.
+        UnitType[] starters = { UnitType.DRAGON_LADY, UnitType.UNSTABLE_UNDERSTUDY };
+        @SuppressWarnings("unchecked")
+        Map<UnitType, HeroData> heroes = (Map<UnitType, HeroData>) getField(ux, "heroes");
+        int heroNum = 1;
+        for (UnitType t : starters) heroes.put(t, hero(t, heroNum++));
+        @SuppressWarnings("unchecked")
+        Map<HeroLineupType, HeroLineup> lineups =
+            (Map<HeroLineupType, HeroLineup>) getField(ux, "heroLineups");
+        HeroLineup campaign = new HeroLineup();
+        campaign.heroes = new ArrayList<>(Arrays.asList(starters));
+        lineups.put(HeroLineupType.NORMAL_CAMPAIGN, campaign);
+
+        // INTRO tutorial IN PROGRESS. An ABSENT tutorial act reads as "completed"
         // (TutorialHelper.completedTutorialAct returns true when getTutorialAct==null),
-        // so we must seed the INTRO act present-and-unfinished for the tutorial to run.
-        // DS_GRANT_HEROES=true instead skips the tutorial and hands a post-tutorial
-        // roster (for testing menus without playing the tutorial).
+        // so we seed the INTRO act present-and-unfinished for the tutorial to run.
+        // Default step 0 = the real start (intro combat). ds.tutStep is a DEV shortcut to
+        // jump to a later step (e.g. 41 = open chest screen) to iterate without replaying
+        // the intro — kept honest now that the starting roster is granted at creation, so
+        // skipping steps no longer loses heroes (STARTING_STATE.md §2/§4).
         @SuppressWarnings("unchecked")
         List<TutorialAct> acts = (List<TutorialAct>) getField(ux, "tutorialActs");
-        boolean grantHeroes = Boolean.getBoolean("ds.grantHeroes");
-        if (grantHeroes) {
-            UnitType[] starters = {
-                UnitType.CLAW_MAN, UnitType.AQUATIC_MAN, UnitType.CENTAUR_OF_ATTENTION,
-                UnitType.ANGELIC_HERALD, UnitType.CRIMSON_WITCH,
-            };
-            @SuppressWarnings("unchecked")
-            Map<UnitType, HeroData> heroes = (Map<UnitType, HeroData>) getField(ux, "heroes");
-            int heroNum = 1;
-            for (UnitType t : starters) heroes.put(t, hero(t, heroNum++));
-            @SuppressWarnings("unchecked")
-            Map<HeroLineupType, HeroLineup> lineups =
-                (Map<HeroLineupType, HeroLineup>) getField(ux, "heroLineups");
-            HeroLineup campaign = new HeroLineup();
-            campaign.heroes = new ArrayList<>(Arrays.asList(starters));
-            lineups.put(HeroLineupType.NORMAL_CAMPAIGN, campaign);
-        } else {
-            // Fresh player: INTRO tutorial in progress (step 0), no heroes.
-            // ds.tutStep lets tests jump straight to a later step (e.g. 41 = open
-            // chest screen) to iterate on server responses without replaying combat.
-            TutorialAct intro = new TutorialAct();
-            intro.type = TutorialActType.INTRO;
-            intro.step = Integer.getInteger("ds.tutStep", 0);
-            intro.version = TutorialHelper.getMaxVersion(TutorialActType.INTRO);
-            acts.add(intro);
-        }
+        TutorialAct intro = new TutorialAct();
+        intro.type = TutorialActType.INTRO;
+        intro.step = Integer.getInteger("ds.tutStep", 0);
+        intro.version = TutorialHelper.getMaxVersion(TutorialActType.INTRO);
+        acts.add(intro);
 
         return new DsStore.State(ui, ux);
     }
