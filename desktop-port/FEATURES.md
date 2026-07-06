@@ -81,19 +81,38 @@ depuis l'intérieur d'un écran ne bascule pas proprement (écrans identiques). 
 | Coliseum | ✅ (loading) | s'ouvre (Fights 5/5) mais adversaires « Loading… » (serveur solo = pas d'adversaires) |
 | Guilds | ⚠️ vide | `Recommended Guilds` s'ouvre mais **envoie `ListRecommendedGuilds1`** que le serveur n'answer pas → liste vide (solo : pas d'autres joueurs) |
 | Runes | ✅ gated | « Runes coming in a future update » = **content‑gated** par le shard (normal) |
-| **Temple** | ❌ | manque **`ui/external_temple.atlas`** (contenu téléchargeable perdu) → **download‑loop** → « Content Update Failed » → reload. Pattern CONTENT_GATE (cf. markers run-desktop.sh) |
+| **Temple** | ❌ | manque **`ui/external_temple.atlas`** (contenu téléchargeable perdu). `TempleLobbyScreen` → `loadRequiredDynamicUI` → **download‑loop**. Fix = **atlas placeholder peuplé** (voir « Fix contenu externe » ci‑dessous), PAS un atlas vide (crashe au lookup de région) |
 | Fight Pit | ? | `nav` a montré MainMenuScreen (à re‑tester avec `home`+wait) |
 | Trader / Boss Pit / The Mountain / Contests / Events / Sign‑In / Rankings / Items | … | à balayer (home+nav+tutinfo) |
 
 ### Chantiers identifiés
 1. **Prompt « What's your new name? » = VRAIE feature** (flag `FREE_NAME_CHANGE`, apparaît
-   pour les features sociales). **Fix propre (fait)** : serveur gère `SetPlayerName` → le nom
-   est enregistré et **persiste** via le snapshot ; le joueur définit son nom une fois. **Pas
-   une rustine.** (Ancien texte) (nouveau compte, nom = « Player » / firstBoot) — bloque
-   la 1ʳᵉ interaction. Root‑fix dans `DsUserState` (nom réel / flag) ou dismiss au boot.
-2. **Features à contenu externe manquant** (Temple → `external_temple.atlas`, sans doute
-   d'autres) : ajouter des **markers** (comme external_skins/items/units) pour éviter le
-   download‑loop ; l'UI se dégrade (textures manquantes) mais ne boucle plus.
+   pour les features sociales quand le joueur n'a pas encore choisi de nom). **Fix propre
+   (fait)** : le serveur gère `SetPlayerName` (`DsGame.handleSetPlayerName`) → le nom est
+   enregistré sur `state.userInfo.basicInfo.name` et **persiste** via le snapshot du launcher ;
+   le joueur définit son nom une fois et il est conservé au reboot. **Pas une rustine** — c'est
+   le mécanisme réel du jeu (nouveau compte → changement de nom gratuit). La modale est
+   **conditionnelle/timing‑dépendante** (n'apparaît que pour certaines destinations sociales),
+   donc pas reproductible à volonté ; `nav CHESTS`/`nav COLISEUM` s'ouvrent sans la modale.
+2. **Features à contenu externe manquant** (Temple → `external_temple.atlas`, + Events,
+   Challenges, Crypt, Expeditions, War, maps…). Mécanisme reversé
+   (`UIHelper.loadDynamicUI(path, optional)`) : `assetExists`→`load`→si `!exists||!loaded`
+   pose `missingAdditionalWorld=true` **et si required (`optional=false`) →
+   `setShouldRestart(true)`** = la download‑loop. `loadOptionalDynamicUI` dégrade en silence.
+   - ⚠️ **Un atlas VIDE ne suffit PAS** (testé 2026‑07‑06, c'est une **rustine**) : il passe
+     `assetExists`/`isLoaded` donc casse la boucle, **mais** le screen fait ensuite
+     `skin.getDrawable("external_temple/…/temple_outside")` → l'atlas vide n'a **aucune
+     région** → exception **dans le thread de rendu** → **crash du jeu** (pas juste un écran
+     raté). **Et** il **régresse** les atlas à repli optionnel (`external_items/skills/runes/
+     hero_tags`) : absents, le jeu renvoie un placeholder `icon_question_mark` ; marqués vides,
+     `loadOptional`→true puis lookup direct → crash. ⇒ **ne marquer que les atlas required**,
+     et **jamais vides**.
+   - ✅ **Fix propre** : **atlas placeholder PEUPLÉ** = les **vrais noms de régions** requis par
+     le screen (extraits du bytecode/`.tab`) → une **texture placeholder** (tuile « missing »).
+     Le screen **rend** (art manquant visible mais fonctionnel), zéro crash, zéro logique
+     truquée — seul l'**art** perdu est substitué (honnête, cf. CONTENT_GATE.md option 1).
+   - 🛡️ **Robustesse dev** (complémentaire, pas un substitut) : envelopper le rendu du pilote
+     pour qu'un screen défaillant ne tue pas le process.
 3. **Features à données serveur** (Guilds `ListRecommendedGuilds`, Rankings, boutiques…) :
    répondre côté serveur (fonctionnel) ou accepter l'état vide/solo. Pour un serveur **solo
    local**, « marche » = l'écran s'ouvre sans crash avec un état vide cohérent.

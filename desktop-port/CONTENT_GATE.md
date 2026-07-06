@@ -46,3 +46,30 @@ L'APK embarque ~22 héros de base ; ces repères sont du contenu *additionnel* t
 ## Reco
 - Court terme (cet APK) : option 1 (repères minimaux + tolérance) — travail borné.
 - Long terme / plus propre : option 2 (version antérieure) à évaluer.
+
+## Verrou #3 — atlas de feature dynamiques (`UIHelper.loadDynamicUI`) — reversé 2026‑07‑06
+Distinct du gate de boot : chaque **écran de feature** charge son atlas externe à l'ouverture.
+`UIHelper.loadDynamicUI(path, boolean optional)` (bytecode) :
+1. `assetExists(path)` → si présent et pas chargé : `load(path, TextureAtlas)` + `finishLoading()`.
+2. re‑check `exists && loaded`. Si **KO** → pose pref `missingAdditionalWorld=true`, **et si
+   `optional==false` (required) → `RPGMain.setShouldRestart(true)`** = **download‑loop**.
+- `loadRequiredDynamicUI(path)` = `optional:false` → **boucle** sur miss (ex. Temple →
+  `TempleLobbyScreen`). `loadOptionalDynamicUI(path)` = `optional:true` → **dégrade** (renvoie
+  false, le jeu utilise un placeholder, ex. `icon_question_mark` pour les icônes items/skills).
+
+### ⚠️ Piège : l'atlas VIDE est une rustine (testé, rejeté)
+Marquer l'atlas manquant par un **fichier vide** fait passer `assetExists`/`isLoaded` (casse la
+boucle), **mais** :
+- le screen fait ensuite `skin.getDrawable("<atlas>/<region>")` → l'atlas vide n'a **aucune
+  région** → **exception dans le thread de rendu → crash du process** (pire que la boucle, qui
+  laissait le jeu vivant). Vécu sur Temple (`temple_outside` introuvable).
+- **régression** sur les atlas à repli optionnel (`external_items/skills/runes/hero_tags`) :
+  absents, le repli natif marche ; marqués vides, `loadOptional`→true puis lookup → crash.
+
+### ✅ Fix propre — atlas placeholder PEUPLÉ (option 1 faite correctement)
+Construire un atlas **valide** contenant les **vrais noms de régions** que le screen requiert
+(extraits du bytecode/`.tab` — source de vérité), toutes pointant vers **une** texture
+placeholder (tuile « missing » 1×1 ou visible). Le screen **rend** en dégradé (art perdu
+substitué), **sans crash**, **sans logique truquée**. Ne marquer QUE les atlas **required** ;
+laisser les **optional** absents (le jeu gère). Aucun atlas ne ship dans l'APK (tous étaient du
+contenu téléchargé) → un placeholder ne shadow jamais un vrai atlas.
