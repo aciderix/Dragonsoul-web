@@ -306,20 +306,50 @@ public final class DsDriver {
 
     /** One hands-off pilot tick. Priority: a showing tutorial arrow (guided step, incl.
      *  the intro combat's scripted casts) -> click it; else if we're in a free combat
-     *  screen -> drive it (fast-forward/AUTO/continue); else advance any dialogue. */
+     *  screen -> drive it (fast-forward/AUTO/continue); else the rare no-pointer action
+     *  step; else advance any dialogue. */
     private void autoTutStep() {
         try {
             com.perblue.rpg.RPGMain g = host.game();
             if (g == null || g.getYourUser() == null) return;
+            com.perblue.rpg.game.objects.User u = g.getYourUser();
+            refreshTut(u);   // recompute pointers/narrators for the CURRENT step (avoid staleness)
             if (com.perblue.rpg.game.tutorial.TutorialHelper.isAnyPointerShowing()) { tapArrow(); return; }
             com.perblue.rpg.ui.screens.BaseScreen sc = g.getScreenManager().getScreen();
             if (sc instanceof com.perblue.rpg.ui.screens.AttackScreen) {
                 combatStep((com.perblue.rpg.ui.screens.AttackScreen) sc); return;
             }
+            if (noPointerActionStep(g, u, sc)) return;
             advanceNarrator();
         } catch (Throwable t) {
             System.out.println("[driver] autotut error: " + t);
         }
+    }
+
+    /** Force the tutorial to recompute its pointers/narrators for the current step, so we
+     *  never read a stale target left over from the previous step (which would make
+     *  taparrow click the wrong actor right after a transition). */
+    private void refreshTut(com.perblue.rpg.game.objects.User u) {
+        try {
+            com.perblue.rpg.game.tutorial.TutorialHelper.markPointersAndNarratorsDirty();
+            com.perblue.rpg.game.tutorial.TutorialHelper.getPointers(u); // triggers the recompute
+        } catch (Throwable ignore) {}
+    }
+
+    /** Handle the rare guided steps that expect a tap on a specific element the tutorial
+     *  does NOT emit a pointer for. Currently: INTRO step 59 (S_OPEN_FIRST_LEVEL) — the
+     *  campaign level-1 node, resolved by its game-assigned tutorial name (no pixels). */
+    private boolean noPointerActionStep(com.perblue.rpg.RPGMain g,
+            com.perblue.rpg.game.objects.User u, com.perblue.rpg.ui.screens.BaseScreen sc) {
+        if (!(sc instanceof com.perblue.rpg.ui.screens.CampaignChooserScreen)) return false;
+        com.perblue.rpg.game.objects.IUserTutorialAct intro =
+                u.getTutorialAct(com.perblue.rpg.network.messages.TutorialActType.INTRO);
+        if (intro == null || intro.getStep() != 59) return false;   // S_OPEN_FIRST_LEVEL
+        com.badlogic.gdx.scenes.scene2d.i stage = g.getStage();
+        if (stage == null) return false;
+        com.badlogic.gdx.scenes.scene2d.b node = searchActor(stage.i(), "CAMPAIGN_SCREEN_LEVEL_1");
+        if (node == null || !node.isVisible()) return false;
+        return tapActorCenter(node, "campaign level-1 node");
     }
 
     /** The scene2d actor the first live tutorial pointer points at (or null). Prefers the

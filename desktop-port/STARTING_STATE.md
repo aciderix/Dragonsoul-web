@@ -205,13 +205,17 @@ est sur un `AttackScreen`, `combatStep()` :
 Les boutons/labels sont résolus par réflexion (`fastForwardButton`, `autoButton`,
 `tapToContinueLabel`) et cliqués via le même calcul de coords que `taparrow`.
 
-**Validé bout en bout (2026‑07‑06)** : depuis un **nouveau joueur canonique**, `autotut 40` a
-piloté **tout le tuto step 0 → step 71** hands‑off (combat d'intro, coffre→Centaure, équip
-Couronne, campagne, **combat 1‑1 gagné en auto** : `campaignLevels=1`, gold 422, stamina 54,
-3 héros), aboutissant au point de reprise **post‑1‑1 / flèche sur 1‑2**. Seul geste manuel :
-un tap connu du **nœud 1‑1 à step 59** (le pointeur `CAMPAIGN_SCREEN_LEVEL_1` n'est pas exposé
-par `getPointers` sur `CampaignChooserScreen`).
+**Zéro tap manuel — 2 fixes (2026‑07‑06)** :
+- **Staleness du cache** (cause générale) : à chaque transition d'étape, `getPointers`
+  pouvait renvoyer la cible de l'étape *précédente* → clic sur le mauvais acteur. Fix :
+  `TutorialHelper.markPointersAndNarratorsDirty()` + `getPointers(u)` **avant chaque lecture**
+  (dans `autotut`) → pointeurs toujours à jour, **à toutes les étapes**.
+- **Étape d'action sans flèche** (step 59 `S_OPEN_FIRST_LEVEL`, la **seule** du tuto INTRO :
+  le jeu n'émet **aucun** pointeur, il attend un tap sur le nœud 1‑1). Fix : `noPointerActionStep`
+  résout le nœud **par son nom de tuto** `CAMPAIGN_SCREEN_LEVEL_1` (posé par `CampaignMapView.
+  setTutorialName`) et le tape — pas de pixel. Motif réutilisable pour d'éventuels cas futurs.
 
-**Reste (mineur)** :
-- [ ] Résoudre proprement le nœud de niveau campagne à step 59 (ex. `markPointersAndNarrators
-      Dirty()` avant lecture, ou recherche stage du nœud) pour supprimer le dernier tap manuel.
+**Validé bout en bout** : depuis un **nouveau joueur canonique**, `autotut 40` **seul** (aucun
+tap manuel) pilote tout le tuto step 0 → **1‑1 gagné** (`campaignLevels=1`, gold 422, stamina
+54, 3 héros), point de reprise **post‑1‑1 / flèche sur 1‑2**. Le fallback a bien tapé le nœud
+1‑1 (`campaign level-1 node -> screen=(180,508)`).
