@@ -238,36 +238,85 @@ public final class DsDriver {
             }
             com.badlogic.gdx.scenes.scene2d.b actor = firstPointerTarget(g, u);
             if (actor == null) { System.out.println("[tut] taparrow: target actor not resolved"); return; }
-            com.badlogic.gdx.scenes.scene2d.i stage = actor.getStage();
-            if (stage == null) { System.out.println("[tut] taparrow: actor not on a stage"); return; }
-            // actor centre in stage coordinates
-            com.badlogic.gdx.math.p c = actor.localToStageCoordinates(
-                    new com.badlogic.gdx.math.p(actor.getWidth() / 2f, actor.getHeight() / 2f));
-            float tx = c.b, ty = c.c;                 // p.b = x, p.c = y
-            // calibrate: map the two screen corners into stage space, then invert linearly
-            final int W = 1280, H = 720;              // fixed dev window
-            com.badlogic.gdx.math.p s0 = stage.a(new com.badlogic.gdx.math.p(0, 0));
-            com.badlogic.gdx.math.p s1 = stage.a(new com.badlogic.gdx.math.p(W, H));
-            int sx = Math.round((tx - s0.b) / (s1.b - s0.b) * W);
-            int sy = Math.round((ty - s0.c) / (s1.c - s0.c) * H);
-            sx = Math.max(0, Math.min(W - 1, sx));
-            sy = Math.max(0, Math.min(H - 1, sy));
-            System.out.println("[tut] taparrow actor=" + actor.getTutorialName()
-                    + " stage=(" + tx + "," + ty + ") -> screen=(" + sx + "," + sy + ")");
-            input.touchDown(sx, sy, 0); input.touchUp(sx, sy, 0);
+            tapActorCenter(actor, "taparrow " + actor.getTutorialName());
         } catch (Throwable t) {
             System.out.println("[driver] taparrow error: " + t);
             t.printStackTrace(System.out);
         }
     }
 
-    /** One hands-off tutorial tick: click a showing arrow, else advance a dialogue. */
+    /** Inject a tap at a scene2d actor's on-screen centre. Maps the actor's stage centre
+     *  to screen pixels by self-calibrating the linear stage<-screen transform (sample the
+     *  two screen corners through Stage.a() = screen->stage, then invert) — handles any
+     *  viewport scale / Y-flip without a hard-coded design resolution. */
+    private boolean tapActorCenter(com.badlogic.gdx.scenes.scene2d.b actor, String label) {
+        com.badlogic.gdx.scenes.scene2d.i stage = actor.getStage();
+        if (stage == null) { System.out.println("[tut] " + label + ": actor not on a stage"); return false; }
+        com.badlogic.gdx.math.p c = actor.localToStageCoordinates(
+                new com.badlogic.gdx.math.p(actor.getWidth() / 2f, actor.getHeight() / 2f));
+        float tx = c.b, ty = c.c;                 // p.b = x, p.c = y
+        final int W = 1280, H = 720;              // fixed dev window
+        com.badlogic.gdx.math.p s0 = stage.a(new com.badlogic.gdx.math.p(0, 0));
+        com.badlogic.gdx.math.p s1 = stage.a(new com.badlogic.gdx.math.p(W, H));
+        int sx = Math.round((tx - s0.b) / (s1.b - s0.b) * W);
+        int sy = Math.round((ty - s0.c) / (s1.c - s0.c) * H);
+        sx = Math.max(0, Math.min(W - 1, sx));
+        sy = Math.max(0, Math.min(H - 1, sy));
+        System.out.println("[tut] " + label + " -> screen=(" + sx + "," + sy + ")");
+        input.touchDown(sx, sy, 0); input.touchUp(sx, sy, 0);
+        return true;
+    }
+
+    /** Drive a combat screen with the game's OWN controls (no pixels): advance the
+     *  between-wave "Tap to Continue", and turn on fast-forward + AUTO (idempotent via
+     *  isFastForward()/Button.isChecked()) so heroes auto-cast and waves auto-chain. */
+    private void combatStep(com.perblue.rpg.ui.screens.AttackScreen as) {
+        try {
+            // 1. between-wave wait: if the "Tap to Continue" label is up, tap it to advance
+            com.badlogic.gdx.scenes.scene2d.b lbl = fieldActor(as, "tapToContinueLabel");
+            if (lbl != null && lbl.isVisible() && lbl.getParent() != null) {
+                tapActorCenter(lbl, "combat continue"); return;
+            }
+            // 2. enable fast-forward (2x) once
+            if (!as.isFastForward()) {
+                com.badlogic.gdx.scenes.scene2d.b ff = fieldActor(as, "fastForwardButton");
+                if (ff != null && ff.isVisible()) { tapActorCenter(ff, "combat fastforward"); return; }
+            }
+            // 3. enable AUTO (auto-cast skills) once
+            com.badlogic.gdx.scenes.scene2d.b auto = fieldActor(as, "autoButton");
+            if (auto instanceof com.badlogic.gdx.scenes.scene2d.ui.Button
+                    && auto.isVisible()
+                    && !((com.badlogic.gdx.scenes.scene2d.ui.Button) auto).isChecked()) {
+                tapActorCenter(auto, "combat auto");
+            }
+        } catch (Throwable t) {
+            System.out.println("[driver] combat error: " + t);
+        }
+    }
+
+    /** Reflectively read an actor-typed field from an AttackScreen (private UI fields). */
+    private com.badlogic.gdx.scenes.scene2d.b fieldActor(com.perblue.rpg.ui.screens.AttackScreen as, String name) {
+        try {
+            java.lang.reflect.Field f = com.perblue.rpg.ui.screens.AttackScreen.class.getDeclaredField(name);
+            f.setAccessible(true);
+            Object v = f.get(as);
+            return (v instanceof com.badlogic.gdx.scenes.scene2d.b) ? (com.badlogic.gdx.scenes.scene2d.b) v : null;
+        } catch (Throwable t) { return null; }
+    }
+
+    /** One hands-off pilot tick. Priority: a showing tutorial arrow (guided step, incl.
+     *  the intro combat's scripted casts) -> click it; else if we're in a free combat
+     *  screen -> drive it (fast-forward/AUTO/continue); else advance any dialogue. */
     private void autoTutStep() {
         try {
             com.perblue.rpg.RPGMain g = host.game();
             if (g == null || g.getYourUser() == null) return;
-            if (com.perblue.rpg.game.tutorial.TutorialHelper.isAnyPointerShowing()) tapArrow();
-            else advanceNarrator();
+            if (com.perblue.rpg.game.tutorial.TutorialHelper.isAnyPointerShowing()) { tapArrow(); return; }
+            com.perblue.rpg.ui.screens.BaseScreen sc = g.getScreenManager().getScreen();
+            if (sc instanceof com.perblue.rpg.ui.screens.AttackScreen) {
+                combatStep((com.perblue.rpg.ui.screens.AttackScreen) sc); return;
+            }
+            advanceNarrator();
         } catch (Throwable t) {
             System.out.println("[driver] autotut error: " + t);
         }

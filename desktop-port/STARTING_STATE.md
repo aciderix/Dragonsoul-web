@@ -195,7 +195,23 @@ getHeight/localToStageCoordinates/getStage/getTutorialName` sont appelables dire
   Couronne → campagne (step 59)**, entièrement hands‑off, zéro capture. Coords confirmées par
   l'avancée du step à chaque clic.
 
+**Combat intégré au pipeline — ✅ fait & validé.** `autotut` gère maintenant AUSSI le combat
+via les **contrôles du jeu** (pas de pixels) : si aucune flèche de tuto n'est affichée et qu'on
+est sur un `AttackScreen`, `combatStep()` :
+- tape le label **« Tap to Continue »** (`AttackScreen.tapToContinueLabel`, quand `isVisible()`)
+  pour enchaîner les vagues ;
+- active le **fast‑forward** (idempotent via `isFastForward()`) et l'**AUTO** (auto‑cast,
+  idempotent via `Button.isChecked()`).
+Les boutons/labels sont résolus par réflexion (`fastForwardButton`, `autoButton`,
+`tapToContinueLabel`) et cliqués via le même calcul de coords que `taparrow`.
+
+**Validé bout en bout (2026‑07‑06)** : depuis un **nouveau joueur canonique**, `autotut 40` a
+piloté **tout le tuto step 0 → step 71** hands‑off (combat d'intro, coffre→Centaure, équip
+Couronne, campagne, **combat 1‑1 gagné en auto** : `campaignLevels=1`, gold 422, stamina 54,
+3 héros), aboutissant au point de reprise **post‑1‑1 / flèche sur 1‑2**. Seul geste manuel :
+un tap connu du **nœud 1‑1 à step 59** (le pointeur `CAMPAIGN_SCREEN_LEVEL_1` n'est pas exposé
+par `getPointers` sur `CampaignChooserScreen`).
+
 **Reste (mineur)** :
-- [ ] auto‑clic **`>>` / vague suivante** en combat **non‑tuto** (ex. rejouer 1‑1 hors tuto) —
-      le combat du tuto est déjà piloté par `taparrow`. Sur le modèle `autotap`.
-- Bénéfice atteint : piloter le tuto entier avec ~2 commandes et zéro capture.
+- [ ] Résoudre proprement le nœud de niveau campagne à step 59 (ex. `markPointersAndNarrators
+      Dirty()` avant lecture, ou recherche stage du nœud) pour supprimer le dernier tap manuel.
