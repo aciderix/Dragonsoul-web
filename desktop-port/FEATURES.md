@@ -66,23 +66,33 @@ directement sur l'écran, **zéro pixel**. (Verrouillé → upsell du jeu = norm
 - ⚠️ **BOSS_PIT** via `nav` n'a pas navigué (bloqué par la modale, ou besoin d'un paramètre
   boss). À re‑tester une fois la modale gérée.
 
-## Catalogue (en cours)
-| Feature | Statut | Notes / cause |
+## Méthode fiable (validée)
+`home` (retour hub via `popToScreen(MainMenuScreen)`) **entre chaque** `nav` — sinon la nav
+depuis l'intérieur d'un écran ne bascule pas proprement (écrans identiques). Puis `nav <DEST>`
++ `tutinfo` (confirme la **classe d'écran**, pas le pixel) + screenshot.
+
+## Catalogue (dev player niv. 61)
+| Feature | Statut | Écran / cause |
 |---|---|---|
-| Campaign | ✅ | tuto + campagne auto (voir CAMPAIGN.md), mur team‑building à 1‑4 |
-| Chests | ✅ | coffre du tuto OK (ack serveur) ; à revérifier hors tuto |
-| Heroes | … | |
-| Items | … | |
-| Enchanting | … | |
-| Trader | … | |
-| Boss Pit | … | |
-| Fight Pit | … | |
-| Coliseum | … | |
-| Guilds | … | |
-| Temple | … | |
-| Events | … | |
-| Sign‑In | … | |
-| Rankings | … | |
-| The Mountain | … | |
-| Contests | … | |
-| Mailbox / Medals / Quests | … | |
+| Campaign | ✅ | tuto + campagne auto (CAMPAIGN.md) ; mur team‑building à 1‑4 |
+| Chests | ✅ | coffre tuto OK (ack serveur) |
+| Heroes (HERO_MANAGEMENT) | ✅ | rend OK, stats calculées par le jeu |
+| Enchanting | ✅ (vide) | écran OK, « No Items Available » (dev sans matériaux) |
+| Coliseum | ✅ | `ArenaLeagueScreen` s'ouvre |
+| Guilds | ⚠️ vide | `Recommended Guilds` s'ouvre mais **envoie `ListRecommendedGuilds1`** que le serveur n'answer pas → liste vide (solo : pas d'autres joueurs) |
+| Runes | ✅ gated | « Runes coming in a future update » = **content‑gated** par le shard (normal) |
+| **Temple** | ❌ | manque **`ui/external_temple.atlas`** (contenu téléchargeable perdu) → **download‑loop** → « Content Update Failed » → reload. Pattern CONTENT_GATE (cf. markers run-desktop.sh) |
+| Fight Pit | ? | `nav` a montré MainMenuScreen (à re‑tester avec `home`+wait) |
+| Trader / Boss Pit / The Mountain / Contests / Events / Sign‑In / Rankings / Items | … | à balayer (home+nav+tutinfo) |
+
+### Chantiers identifiés
+1. **Prompt « What's your new name? »** (nouveau compte, nom = « Player » / firstBoot) — bloque
+   la 1ʳᵉ interaction. Root‑fix dans `DsUserState` (nom réel / flag) ou dismiss au boot.
+2. **Features à contenu externe manquant** (Temple → `external_temple.atlas`, sans doute
+   d'autres) : ajouter des **markers** (comme external_skins/items/units) pour éviter le
+   download‑loop ; l'UI se dégrade (textures manquantes) mais ne boucle plus.
+3. **Features à données serveur** (Guilds `ListRecommendedGuilds`, Rankings, boutiques…) :
+   répondre côté serveur (fonctionnel) ou accepter l'état vide/solo. Pour un serveur **solo
+   local**, « marche » = l'écran s'ouvre sans crash avec un état vide cohérent.
+4. `RejectedExecutionException` (executor de connexion Terminated) — bénin ici (les envois
+   passent : `ListRecommendedGuilds1` reçu), mais à garder à l'œil.

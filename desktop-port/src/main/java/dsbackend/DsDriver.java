@@ -175,6 +175,7 @@ public final class DsDriver {
             case "taparrow": tapArrow(); break;          // click the current yellow-arrow target
             case "combatinfo": combatInfo(); break;       // diagnose the combat-drive state
             case "nav": navTo(arg.trim()); break;         // navigate to a feature by name (headless)
+            case "home": goHome(); break;                 // pop back to the hub (MainMenuScreen)
             case "autotut": {                             // "autotut [P]" | "autotut off"
                 if (arg.trim().equalsIgnoreCase("off")) { autoTutPeriod = 0; break; }
                 autoTutPeriod = arg.trim().isEmpty() ? 40 : Integer.parseInt(arg.trim());
@@ -330,6 +331,17 @@ public final class DsDriver {
     /** Navigate straight to a feature screen by the game's OWN nav enum — headless, no
      *  pixels. `nav ENCHANTING`, `nav FIGHT_PIT`, `nav HERO_MANAGEMENT`, ... Locked features
      *  route to the game's upsell (correct behaviour). Runs on the render thread (safe). */
+    /** Return to the hub so the next nav starts from a clean state (navigating from inside
+     *  a feature screen doesn't switch cleanly). */
+    private void goHome() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g != null) g.getScreenManager().popToScreen(com.perblue.rpg.ui.screens.MainMenuScreen.class);
+        } catch (Throwable t) {
+            System.out.println("[nav] home error: " + t);
+        }
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void navTo(String destName) {
         try {
