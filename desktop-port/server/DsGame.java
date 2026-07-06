@@ -117,12 +117,32 @@ public final class DsGame {
             handleRequestChestAcknowledgement(wrapper, out);
         } else if (name.equals(com.perblue.rpg.network.messages.SetPlayerName.getFullName_Static())) {
             handleSetPlayerName((com.perblue.rpg.network.messages.SetPlayerName) msg);
+        } else if (name.equals(com.perblue.rpg.network.messages.ErrorReport.getFullName_Static())) {
+            handleErrorReport((com.perblue.rpg.network.messages.ErrorReport) msg);
         }
         // Progression is persisted by the LAUNCHER snapshotting the client's live state
         // (DsSnapshot) into this same save file — the client is authoritative-local, so a
         // full snapshot is exact where reconstructing from notifications would be partial
         // (see PROGRESS.md / SERVER_DESIGN.md). The server only loads. DsProgress is kept
         // for the future authoritative server (which will mirror the game's own logic).
+    }
+
+    /**
+     * The client ships us a crash/error report (ErrorReport1) as fire-and-forget telemetry —
+     * its reportData map carries the exception class, message and stack trace. The real game
+     * client (e.g. on a phone) sends this exactly when it hits a client-side crash, so dumping
+     * it here is our window into crashes we can't see directly (e.g. the campaign chapter-view
+     * crash). No response is expected; we only surface it in the server log.
+     */
+    private void handleErrorReport(com.perblue.rpg.network.messages.ErrorReport er) {
+        System.out.println("[game]   *** ErrorReport from client ***");
+        System.out.println("[game]     platform=" + er.platform + " time=" + er.errorTime
+                + " device=" + er.deviceID);
+        if (er.reportData != null) {
+            for (java.util.Map.Entry<String, String> e : er.reportData.entrySet()) {
+                System.out.println("[game]     " + e.getKey() + " = " + e.getValue());
+            }
+        }
     }
 
     /**
