@@ -97,13 +97,18 @@ public final class DsSnapshot {
             }
             extra.tutorialActs = acts;
 
-            // Campaign — every attempted level across all difficulties.
+            // Campaign — every attempted level across all difficulties. The plural
+            // getCampaignLevels(ct, ch) can miss a just-won level (its status is created
+            // lazily); the singular getCampaignLevel(ct, ch, level) is the game's own
+            // get-or-create accessor and returns the object the win-handler updated.
             List<CampaignLevelStatus> statuses = new ArrayList<>();
             for (CampaignType ct : CampaignType.valuesCached()) {
                 int chapters = CampaignStats.getNumChapters(ct);
                 for (int ch = 0; ch < chapters; ch++) {
-                    for (ClientCampaignLevelStatus s : user.getCampaignLevels(ct, ch)) {
-                        if (s.getStars() <= 0 && s.getTotalWins() <= 0) continue;
+                    int levels = CampaignStats.getNumLevels(ct, ch);
+                    for (int lv = 0; lv < levels; lv++) {
+                        ClientCampaignLevelStatus s = user.getCampaignLevel(ct, ch, lv);
+                        if (s == null || (s.getStars() <= 0 && s.getTotalWins() <= 0)) continue;
                         CampaignLevelStatus cls = new CampaignLevelStatus();
                         cls.campaignType = s.getCampaignType();
                         cls.chapter = s.getChapter();

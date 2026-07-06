@@ -425,11 +425,21 @@ UserTutorialAct) → `getExtra()` est périmé pour ces champs.
   construit le `BootData` depuis cet état. Ne fait plus d'application incrémentale ; le
   **launcher est l'unique writer** (client autoritatif-local ⇒ snapshot exact >
   reconstruction partielle). `DsProgress` conservé pour le futur serveur autoritatif.
-- **Vérifié bout en bout** (2026‑07‑06) : boot neuf (gold=100000/stamina=120/diamants=500,
-  0 héros) → pilotage du coffre (Centaure accordé, `RequestChestAcknowledgement`→`Ack`) →
-  snapshot `heroes=1` → **redémarrage sans re-pilotage** → serveur « resumed saved player
-  gold=100000 stamina=120 diamonds=500 heroes=1 » et le client reconstruit le Centaure.
-  Le garde-fou supprime bien le snapshot transitoire à zéro.
+- **Campagne — accessor singulier** : la campagne se lit via
+  `user.getCampaignLevel(ct, ch, level)` (get‑or‑create du jeu, borné par
+  `CampaignStats.getNumLevels`), **pas** le pluriel `getCampaignLevels(ct, ch)` qui rate un
+  niveau juste gagné (statut créé paresseusement) → sinon `campaignLevels=0` malgré la
+  victoire affichée.
+- **Vérifié bout en bout** (2026‑07‑06) : boot neuf (gold=100000/stamina=120, 0 héros) →
+  coffre (Centaure, `RequestChestAcknowledgement`→`Ack`) → équipement (Couronne, Power
+  82→86) → campagne **1‑1 gagnée 3★** (récompense or **x422** ⇒ gold 100422, stamina
+  120‑6=**114** — pile les valeurs signalées) → **redémarrages sans re‑pilotage** : le
+  serveur « resumed saved player », et le client reconstruit **gold/stamina/diamants +
+  Centaure (niveau + Couronne, Power persistant) + 1‑1 à 3★ avec 1‑2 débloqué**. Le
+  garde‑fou supprime le snapshot transitoire à zéro.
+- **Point de reprise atteint** : post‑1‑1, flèche sur **1‑2** (prochain combat du tuto —
+  la défaite scriptée « monter une équipe »). État complet persistant ⇒ plus besoin de
+  re‑piloter le tuto à chaque session.
 
 ### Reprise / test
 `run-both.sh` lance serveur+jeu dans **un seul process** (le harness tue la tâche
