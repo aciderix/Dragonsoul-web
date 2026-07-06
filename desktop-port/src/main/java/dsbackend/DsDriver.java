@@ -29,6 +29,7 @@ import java.util.List;
  *                      UIComponentName, dialogue text) — know what's on screen, no capture
  *   narr               advance a showing tutorial dialogue once (headless Tap to Continue)
  *   autonarr [P]|off   auto-advance dialogues every P frames (default 20) until "off"
+ *   taparrow           click the actor the tutorial's yellow arrow points at (no pixels)
  *   screenshot [FILE]  capture the framebuffer (default build/shot.png)
  *   quit               stop the app
  *   # ...              comment
@@ -64,6 +65,11 @@ public final class DsDriver {
     // don't have to blind-tap through cutscenes. Rate-limited to every autoNarrPeriod frames.
     private int autoNarrPeriod = 0;
 
+    // AUTO-TUT: fully headless tutorial pilot. Every autoTutPeriod frames: if a yellow
+    // arrow is showing, click its target (taparrow); else advance any dialogue. Drives
+    // the guided tutorial hands-off (combat action-steps still need autotap for skills).
+    private int autoTutPeriod = 0;
+
     public DsDriver(DsInput input, Host host, List<String> lines) {
         this.input = input; this.host = host; this.liveFile = null;
         for (String line : lines) {
@@ -88,6 +94,8 @@ public final class DsDriver {
         }
         // Auto-narrator: advance any showing tutorial dialogue on its period.
         if (autoNarrPeriod > 0 && frame % autoNarrPeriod == 0) advanceNarrator();
+        // Auto-tut: pilot the guided tutorial hands-off (click arrows, pass dialogues).
+        if (autoTutPeriod > 0 && frame % autoTutPeriod == 0) autoTutStep();
         if (liveFile != null) { pollLive(frame); return; }
         while (idx < cmds.size() && frame >= resumeAt) {
             if (exec(cmds.get(idx++), frame)) return; // wait/quit yields control
@@ -153,6 +161,12 @@ public final class DsDriver {
             }
             case "tutinfo": tutInfo(); break;            // print in-memory tutorial/UI state
             case "narr": advanceNarrator(); break;       // advance a showing dialogue once
+            case "taparrow": tapArrow(); break;          // click the current yellow-arrow target
+            case "autotut": {                             // "autotut [P]" | "autotut off"
+                if (arg.trim().equalsIgnoreCase("off")) { autoTutPeriod = 0; break; }
+                autoTutPeriod = arg.trim().isEmpty() ? 40 : Integer.parseInt(arg.trim());
+                break;
+            }
             case "autonarr": {                            // "autonarr [P]" | "autonarr off"
                 if (arg.trim().equalsIgnoreCase("off")) { autoNarrPeriod = 0; break; }
                 autoNarrPeriod = arg.trim().isEmpty() ? 20 : Integer.parseInt(arg.trim());
@@ -205,6 +219,100 @@ public final class DsDriver {
         } catch (Throwable t) {
             System.out.println("[driver] narr error: " + t);
         }
+    }
+
+    /** Click the actor the tutorial's yellow arrow currently points at — resolved from
+     *  the game's OWN live pointers (BaseScreen.questPointers -> TutorialPointer.getTarget),
+     *  no pixel reading. The actor's stage-space centre is mapped to screen pixels by
+     *  self-calibrating the (linear) stage<-screen map: we sample the two screen corners
+     *  through Stage.a() (screen->stage) and invert, so any viewport scale / Y-flip is
+     *  handled without hard-coding the design resolution. */
+    private void tapArrow() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null) return;
+            com.perblue.rpg.game.objects.User u = g.getYourUser();
+            if (u == null) return;
+            if (!com.perblue.rpg.game.tutorial.TutorialHelper.isAnyPointerShowing()) {
+                System.out.println("[tut] taparrow: no pointer showing"); return;
+            }
+            com.badlogic.gdx.scenes.scene2d.b actor = firstPointerTarget(g, u);
+            if (actor == null) { System.out.println("[tut] taparrow: target actor not resolved"); return; }
+            com.badlogic.gdx.scenes.scene2d.i stage = actor.getStage();
+            if (stage == null) { System.out.println("[tut] taparrow: actor not on a stage"); return; }
+            // actor centre in stage coordinates
+            com.badlogic.gdx.math.p c = actor.localToStageCoordinates(
+                    new com.badlogic.gdx.math.p(actor.getWidth() / 2f, actor.getHeight() / 2f));
+            float tx = c.b, ty = c.c;                 // p.b = x, p.c = y
+            // calibrate: map the two screen corners into stage space, then invert linearly
+            final int W = 1280, H = 720;              // fixed dev window
+            com.badlogic.gdx.math.p s0 = stage.a(new com.badlogic.gdx.math.p(0, 0));
+            com.badlogic.gdx.math.p s1 = stage.a(new com.badlogic.gdx.math.p(W, H));
+            int sx = Math.round((tx - s0.b) / (s1.b - s0.b) * W);
+            int sy = Math.round((ty - s0.c) / (s1.c - s0.c) * H);
+            sx = Math.max(0, Math.min(W - 1, sx));
+            sy = Math.max(0, Math.min(H - 1, sy));
+            System.out.println("[tut] taparrow actor=" + actor.getTutorialName()
+                    + " stage=(" + tx + "," + ty + ") -> screen=(" + sx + "," + sy + ")");
+            input.touchDown(sx, sy, 0); input.touchUp(sx, sy, 0);
+        } catch (Throwable t) {
+            System.out.println("[driver] taparrow error: " + t);
+            t.printStackTrace(System.out);
+        }
+    }
+
+    /** One hands-off tutorial tick: click a showing arrow, else advance a dialogue. */
+    private void autoTutStep() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null || g.getYourUser() == null) return;
+            if (com.perblue.rpg.game.tutorial.TutorialHelper.isAnyPointerShowing()) tapArrow();
+            else advanceNarrator();
+        } catch (Throwable t) {
+            System.out.println("[driver] autotut error: " + t);
+        }
+    }
+
+    /** The scene2d actor the first live tutorial pointer points at (or null). Prefers the
+     *  screen's resolved pointers; falls back to a name search over the WHOLE stage so
+     *  targets inside modal overlays (e.g. the New-Hero reveal close button) also resolve. */
+    private com.badlogic.gdx.scenes.scene2d.b firstPointerTarget(
+            com.perblue.rpg.RPGMain g, com.perblue.rpg.game.objects.User u) throws Exception {
+        com.perblue.rpg.ui.screens.BaseScreen sc = g.getScreenManager().getScreen();
+        if (sc != null) {
+            java.lang.reflect.Field f = com.perblue.rpg.ui.screens.BaseScreen.class.getDeclaredField("questPointers");
+            f.setAccessible(true);
+            Object arr = f.get(sc);
+            if (arr instanceof Iterable) for (Object o : (Iterable<?>) arr) {
+                if (o == null) continue;
+                com.badlogic.gdx.scenes.scene2d.b tgt =
+                        ((com.perblue.rpg.ui.widgets.TutorialPointer) o).getTarget();
+                if (tgt != null) return tgt;
+            }
+        }
+        // Fallback: match the pointer's actor-tutorial-name anywhere on the stage.
+        com.badlogic.gdx.scenes.scene2d.i stage = g.getStage();
+        if (stage == null) return null;
+        for (com.perblue.rpg.game.tutorial.TutorialPointerInfo pi
+                : com.perblue.rpg.game.tutorial.TutorialHelper.getPointers(u)) {
+            if (pi == null) continue;
+            com.badlogic.gdx.scenes.scene2d.b a = searchActor(stage.i(), pi.getActorTutorialName());
+            if (a != null) return a;
+        }
+        return null;
+    }
+
+    /** Depth-first search for an actor by its scene2d tutorial name. */
+    private com.badlogic.gdx.scenes.scene2d.b searchActor(com.badlogic.gdx.scenes.scene2d.b a, String name) {
+        if (a == null || name == null) return null;
+        if (name.equals(a.getTutorialName())) return a;
+        if (a instanceof com.badlogic.gdx.scenes.scene2d.e) {
+            for (Object ch : (Iterable<?>) ((com.badlogic.gdx.scenes.scene2d.e) a).getChildren()) {
+                com.badlogic.gdx.scenes.scene2d.b r = searchActor((com.badlogic.gdx.scenes.scene2d.b) ch, name);
+                if (r != null) return r;
+            }
+        }
+        return null;
     }
 
     /** Print the current in-memory tutorial/UI state — active tutorial step, the
