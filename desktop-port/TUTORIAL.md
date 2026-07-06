@@ -93,3 +93,27 @@ récompense d'ouverture de coffre = le **Centaure**), puis équipement et combat
 - À `S_DONE`, `CAMPAIGN_UNLOCKED` est posé → la campagne devient accessible normalement.
 - Méthodes scriptées de l'acte : `startCombat1()`, `startCombat2()`, `pushInterludeScreen()`,
   `pushStartScreen()`, `playDeathScene()`, `hasCentaurRigged()`, `hasCrownEquiped()`.
+
+## ✅ STATUT (2026‑07‑06) — INTRO joué de bout en bout
+Les blocages ci‑dessus sont **résolus** : le serveur répond au coffre
+(`RequestChestAcknowledgement`→`ChestAcknowledgement`), et le nouveau joueur canonique a le
+**roster de départ** (Dragon Lady + Unstable Understudy) + ressources **0 or / 0 diamants /
+60 stamina** (cf. STARTING_STATE.md). Précision : les 2 héros de départ viennent de la
+**création de compte** (serveur), le **Centaure** est le premier héros *octroyé par le tuto*
+(coffre). Le pilote `autotut` (DsDriver) traverse **tout l'INTRO step 0 → 72 hands‑off** (1‑1
+gagné inclus), seul le nœud 1‑1 à step 59 est résolu par nom (`CAMPAIGN_SCREEN_LEVEL_1`).
+
+## Vue d'ensemble — le « tuto » n'est pas un bloc unique
+`IntroTutorialActV1` (72 étapes) = l'**onboarding**, finit en ouvrant 1‑2. Ensuite ~27
+**mini‑tutos de features** se déclenchent au déblocage, chacun avec son `getMaxStep()` :
+
+| Acte | steps | Acte | steps | Acte | steps |
+|---|---|---|---|---|---|
+| **IntroTutorialActV1** | **72** | RuneShrineActV1 | 13 | PowerPointsActV1 | 9 |
+| GuildWarActV1 | 12 | UnlockHeroActV1 | 12 | RunesActV1 | 9 |
+| MysticClosetActV1 | 11 | TempleInvite/Yours | 9 | BossPitActV1 | 8 |
+| Crafting/Enchanting/Evolving/CryptRaid/LegQuestStory | 7 | Arena/RuneFusion/DailyQuest | 6 | Achievements/Promote/PowerUse/MysticClosetV2 | 4 |
+| LegQuestInfo/AutoFight/Equipping | 2 | IntroTutorialActV0 | 1 | Story/BossStory | ∞ (événements) |
+
+→ **~250 étapes discrètes** au total (hors 2 actes « histoire » ouverts). Chaque mini‑tuto
+guide une feature au déblocage (arène, craft, runes, boss pit, guilde…).
