@@ -45,6 +45,27 @@ jeu (le jeu recalcule stamina/max‑hero‑level depuis `teamlevelstats.tab` pou
 - Écran **Player/Options** (avatar) : ✅ rend OK. ⚠️ « Account Date 1969/12/31 » (creationTime
   cosmétique à corriger). Server affiché = « Foam Finger (1) » (shard 1). Version 2.22.0.
 
+## 🧭 Navigation headless — `UINavHelper.navigateTo(Destination)` (outil)
+Le jeu a un enum **`UINavHelper$Destination`** (CAMPAIGN, ENCHANTING, FIGHT_PIT, BOSS_PIT,
+GUILDS, COLISEUM, TEMPLE, RANKINGS, RUNES, MERCHANT, HERO_MANAGEMENT, EVENTS, SIGN_IN,
+ALCHEMY, BAZAAR, BLACK_MARKET, EXPEDITION, CRYPT, MOUNTAIN, CONTESTS, SKINS, VIP…) et
+`navigateTo(Destination, source, args…)`. Commande DsDriver **`nav <DEST>`** → saute
+directement sur l'écran, **zéro pixel**. (Verrouillé → upsell du jeu = normal.)
+
+### Découvertes du 1er balayage (dev player niv. 61, tutStep=72)
+- ✅ **HERO_MANAGEMENT (Heroes)** : rend OK (Dragon Lady 85, Unstable Understudy 80).
+- ✅ **ENCHANTING** : l'écran s'ouvre (« Materials / No Items Available » = vide, normal pour
+  un joueur sans matériaux).
+- ⚠️ **Prompt « What's your new name? »** : modale de **nouveau compte** (nom = placeholder
+  « Player ») qui **bloque la nav** tant qu'on ne la ferme pas. → à gérer (donner un vrai nom
+  au joueur, ou flag « nom choisi », ou la dismisser au boot).
+- ⚠️ **`RejectedExecutionException`** (WARNING) : un task de la connexion client
+  (`com.perblue.a.a.k`) rejeté car l'executor est **Terminated** → risque pour les features
+  qui **envoient** au serveur (fetch de données). À investiguer (l'executor de la connexion
+  se ferme‑t‑il après le boot ? cassé par le skip tutStep=72 ?).
+- ⚠️ **BOSS_PIT** via `nav` n'a pas navigué (bloqué par la modale, ou besoin d'un paramètre
+  boss). À re‑tester une fois la modale gérée.
+
 ## Catalogue (en cours)
 | Feature | Statut | Notes / cause |
 |---|---|---|

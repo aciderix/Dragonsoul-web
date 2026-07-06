@@ -174,6 +174,7 @@ public final class DsDriver {
             case "narr": advanceNarrator(); break;       // advance a showing dialogue once
             case "taparrow": tapArrow(); break;          // click the current yellow-arrow target
             case "combatinfo": combatInfo(); break;       // diagnose the combat-drive state
+            case "nav": navTo(arg.trim()); break;         // navigate to a feature by name (headless)
             case "autotut": {                             // "autotut [P]" | "autotut off"
                 if (arg.trim().equalsIgnoreCase("off")) { autoTutPeriod = 0; break; }
                 autoTutPeriod = arg.trim().isEmpty() ? 40 : Integer.parseInt(arg.trim());
@@ -323,6 +324,28 @@ public final class DsDriver {
             }
         } catch (Throwable t) {
             System.out.println("[driver] combat error: " + t);
+        }
+    }
+
+    /** Navigate straight to a feature screen by the game's OWN nav enum — headless, no
+     *  pixels. `nav ENCHANTING`, `nav FIGHT_PIT`, `nav HERO_MANAGEMENT`, ... Locked features
+     *  route to the game's upsell (correct behaviour). Runs on the render thread (safe). */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void navTo(String destName) {
+        try {
+            Class<?> destClass = Class.forName("com.perblue.rpg.ui.UINavHelper$Destination");
+            Object d = Enum.valueOf((Class<Enum>) destClass, destName.toUpperCase());
+            Class<?> navHelper = Class.forName("com.perblue.rpg.ui.UINavHelper");
+            java.lang.reflect.Method navigateTo =
+                    navHelper.getMethod("navigateTo", destClass, String.class, String[].class);
+            navigateTo.invoke(null, d, "dev", new String[0]);
+            System.out.println("[nav] -> " + d);
+        } catch (IllegalArgumentException iae) {
+            System.out.println("[nav] unknown destination '" + destName + "'");
+        } catch (Throwable t) {
+            Throwable c = (t instanceof java.lang.reflect.InvocationTargetException && t.getCause() != null)
+                    ? t.getCause() : t;
+            System.out.println("[nav] error for '" + destName + "': " + c);
         }
     }
 
