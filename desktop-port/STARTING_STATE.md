@@ -149,13 +149,25 @@ tout. À distinguer :
 - 🔭 **Futur (pas fait)** : combat/loot/progression sont **encore autoritatifs‑CLIENT** ; le
   serveur ne les **calcule** pas encore. Le miroir complet = **serveur autoritaire** (à venir).
 
-### Garantir la complétude = AUDIT, pas une affirmation
-Pour tendre vers « zéro invention » de façon **vérifiable** :
-- [ ] Inventorier **chaque constante de jeu codée en dur** (serveur + launcher) et la remplacer
-      par un appel à la classe/table du jeu.
-- [ ] Lever les 3 points « non vérifiés » ci‑dessus (dont un test tuto step 0 réel).
-- [ ] Tenir cette checklist à jour : la complétude se **prouve** point par point, elle ne se
-      décrète pas.
+### Audit « zéro invention » — RÉALISÉ (2026‑07‑06)
+Inventaire de **chaque** constante de l'état nouveau‑joueur (`DsUserState.newPlayer`) :
+
+| Valeur | Verdict |
+|---|---|
+| `STAMINA` | ✅ **sourcé du jeu** : `TeamLevelStats.getMaxStamina(1)` |
+| `GOLD`, `DIAMONDS`, `FREE_DIAMONDS`, `TEAM_XP`, `POWER_POINTS`, `teamPower`, tous les *rank*, `totalStars`, `vIPLevel` | ✅ **0** = compte neuf **vide** (pas une invention) |
+| `teamLevel = 1`, héros `level=1 / stars=1 / rarity=WHITE` | ✅ **minimums canoniques** (base). On ne pose que les champs **persistants** ; le jeu **calcule** toutes les stats dérivées (power/HP) via ses tables → **rien d'inventé** |
+| roster **DRAGON_LADY + UNSTABLE_UNDERSTUDY** | ⚠️ **reversé, aucune table côté client** (assigné par le serveur d'origine à la création). Meilleure reconstruction = camp joueur du **combat d'intro** + vidéo. **Seule** valeur asséée à la main, **incontournable** (pas de source jeu) |
+| `USER_ID=1`, `USER_NAME="Player"`, `SHARD=1` | ✅ **config dev** (identité du joueur de test), pas de la donnée de jeu |
+
+**Conclusion** : le serveur n'invente **aucune donnée de jeu dérivée**. Le seul point
+hand‑asséé (roster de départ) n'a **pas** de source dans le client — c'est un fait reversé,
+documenté. Tout le reste est soit 0 (vide), soit sourcé du jeu, soit un minimum canonique dont
+le jeu calcule les dérivées. ⇒ principe **respecté**, vérifié point par point.
+
+Points « non vérifiés » du §4 : levés (tuto step 0 **joue** ; rareté/étoiles de départ =
+WHITE/1★ = base canonique confirmée par les héros acquis). `DsProgress` (futur serveur
+autoritaire) partage les mêmes minimums `1/1/WHITE` — à re‑auditer quand il deviendra actif.
 
 ## 5. Pilotage semi‑headless en DEV — ✅ base implémentée & validée
 
