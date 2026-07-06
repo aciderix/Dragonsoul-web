@@ -26,20 +26,41 @@
 3. **Montée en difficulté** — boss plus coriaces (dragons) ⇒ probable besoin de **renforcer
    l'équipe** (niveaux via XP de combat, soulstones, équipement), ce que le jeu attend.
 
-## Verdict
-Compléter le chapitre 1 est **faisable** (rien de cassé, équipe gagne les premiers niveaux),
-mais **pas une vérif rapide** : c'est un vrai run nécessitant (a) le navigateur de campagne,
-(b) du temps (1x), (c) peut‑être du team‑building aux murs.
+## ✅ Navigateur `autocampaign` + combatStep — implémentés & validés (2026‑07‑06)
+- **Quirk combatStep réglé** : le vrai bouton d'avancement de vague est **`nextStageButton`**
+  (pas `tapToContinueLabel`, qui n'existe que pendant le tuto). Gate `!isDisabled()` pour ne
+  taper qu'entre les vagues et **caster** pendant (portraits `ATTACK_SCREEN_HERO_BUTTON<i>`).
+  FF ignoré si verrouillé (`FFButtonState != AVAILABLE`).
+- **`autocampaign [P]|off`** : dispatch par écran, **par les acteurs du jeu** (zéro pixel) —
+  `CampaignChooserScreen` → nœud du **niveau non‑complété le plus bas** (via `CampaignMapView.
+  nodes`, champs `level`/`starsEarned` de `MapNode`) ; `CampaignBattleInfoScreen` →
+  `CAMPAIGN_BATTLE_INFO_CONTINUE` ; `HeroChooserScreen` → `HERO_CHOOSER_FIGHT_BUTTON` ;
+  combat → `combatStep` ; victoire → `VICTORY_CONTINUE_BUTTON`.
+- **Détection de mur** : si aucun progrès pendant ~150 ticks (bloqué sur l'écran de défaite),
+  `autocampaign` s'arrête et loggue le mur.
+- **Validé** : `autocampaign` a gagné **1‑1, 1‑2, 1‑3** en auto (gold 2285), ciblé 1‑4.
+
+## 🧱 MUR confirmé à 1‑4 (boss Dragon)
+L'équipe canonique de départ (Dragon Lady + Unstable Understudy + Centaure, niveaux bas)
+**perd 1‑4** — écran **Defeat** avec les conseils **du jeu** : « **Evolve Your Heroes**
+(Soulstones) » / « **Equip More Gear** ». C'est un **gate de progression voulu** : le jeu
+attend qu'on **renforce l'équipe** avant 1‑4.
+
+## Verdict (mis à jour)
+- **Automatisation** : ✅ le navigateur + le combat auto marchent (1‑1→1‑3 gagnés seuls).
+- **Compléter le chapitre 1 avec l'équipe de départ** : ❌ **impossible tel quel** — mur dur à
+  **1‑4** (boss Dragon). Il faut du **team‑building** (évoluer/équiper/monter de niveau via
+  soulstones/gear/XP), exactement ce que le jeu demande. C'est donc faisable **après** avoir
+  automatisé (ou fait manuellement) le renforcement d'équipe — pas avant.
 
 ## TODO
-- [ ] **Navigateur de campagne** (`autocampaign`) : sur `CampaignChooserScreen` → taper le
-      prochain niveau dispo (résoudre le nœud par nom/`CampaignMapView`), puis
-      `CampaignBattleInfoScreen` → continue, `HeroChooser` → Fight, laisser `combatStep`
-      gérer le combat, écran de victoire → continue, boucler. **Sans pixels** (par noms
-      d'acteurs), comme le reste du pilote.
-- [ ] **Quirk `combatStep` post‑tuto** : il pilote le combat **pendant** le tuto (1‑1) mais
-      n'a pas déclenché seul sur **1‑2** (pilotage manuel a marché). À diagnostiquer (autotut
-      actif ? détection `AttackScreen` au bon tick ? label `tapToContinueLabel` visible ?).
-- [ ] **Renfort d'équipe automatisable** si mur : évoluer/monter les héros, invoquer via
-      soulstones — en réutilisant les mécaniques du jeu (jamais de valeurs inventées).
-- [ ] (fait) FF gaté TL30 → `combatStep` ne clique FF que si `FFButtonState==AVAILABLE`.
+- [x] **Navigateur de campagne** (`autocampaign`) — fait & validé (voir ci‑dessus).
+- [x] **Quirk `combatStep`** — réglé (`nextStageButton` au lieu de `tapToContinueLabel`).
+- [x] FF gaté TL30 → `combatStep` ne clique FF que si `FFButtonState==AVAILABLE`.
+- [ ] **Renfort d'équipe automatisable** (pour passer 1‑4) : évoluer/équiper/monter les héros
+      via **les mécaniques du jeu** (soulstones, gear, XP), jamais de valeurs inventées.
+      C'est le **prérequis** pour compléter le chapitre 1.
+- [ ] **Dismiss propre de l'écran de défaite** (`UI$defeat_tips`, pas de nom de tuto sur son
+      « Continue ») — pour l'instant on **détecte le mur et on s'arrête** (150 ticks).
+- [ ] **Scroll de carte** pour les niveaux plus loin (1‑10+) hors écran : le tap du nœud est
+      clampé à l'écran s'il est hors‑vue → il faudra scroller la `CampaignMapView` d'abord.

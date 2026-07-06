@@ -30,6 +30,9 @@ import java.util.List;
  *   narr               advance a showing tutorial dialogue once (headless Tap to Continue)
  *   autonarr [P]|off   auto-advance dialogues every P frames (default 20) until "off"
  *   taparrow           click the actor the tutorial's yellow arrow points at (no pixels)
+ *   autotut [P]|off    fully pilot the guided tutorial (arrows + dialogues + combat)
+ *   autocampaign [P]|off  pilot the post-tutorial campaign (pick level, fight, continue)
+ *   combatinfo         diagnose the combat-drive state (screen, FF, auto, next-stage)
  *   screenshot [FILE]  capture the framebuffer (default build/shot.png)
  *   quit               stop the app
  *   # ...              comment
@@ -70,6 +73,12 @@ public final class DsDriver {
     // the guided tutorial hands-off (combat action-steps still need autotap for skills).
     private int autoTutPeriod = 0;
 
+    // AUTO-CAMPAIGN: pilot the post-tutorial campaign hands-off. Every autoCampaignPeriod
+    // frames, dispatch on the current screen: pick the recommended level, continue through
+    // the battle-info / hero-chooser, let combatStep win the fight, and continue past victory.
+    private int autoCampaignPeriod = 0;
+    private int campaignStuckTicks = 0;   // ticks with no navigation progress (wall detection)
+
     public DsDriver(DsInput input, Host host, List<String> lines) {
         this.input = input; this.host = host; this.liveFile = null;
         for (String line : lines) {
@@ -96,6 +105,8 @@ public final class DsDriver {
         if (autoNarrPeriod > 0 && frame % autoNarrPeriod == 0) advanceNarrator();
         // Auto-tut: pilot the guided tutorial hands-off (click arrows, pass dialogues).
         if (autoTutPeriod > 0 && frame % autoTutPeriod == 0) autoTutStep();
+        // Auto-campaign: pilot the post-tutorial campaign hands-off.
+        if (autoCampaignPeriod > 0 && frame % autoCampaignPeriod == 0) campaignStep();
         if (liveFile != null) { pollLive(frame); return; }
         while (idx < cmds.size() && frame >= resumeAt) {
             if (exec(cmds.get(idx++), frame)) return; // wait/quit yields control
@@ -162,9 +173,16 @@ public final class DsDriver {
             case "tutinfo": tutInfo(); break;            // print in-memory tutorial/UI state
             case "narr": advanceNarrator(); break;       // advance a showing dialogue once
             case "taparrow": tapArrow(); break;          // click the current yellow-arrow target
+            case "combatinfo": combatInfo(); break;       // diagnose the combat-drive state
             case "autotut": {                             // "autotut [P]" | "autotut off"
                 if (arg.trim().equalsIgnoreCase("off")) { autoTutPeriod = 0; break; }
                 autoTutPeriod = arg.trim().isEmpty() ? 40 : Integer.parseInt(arg.trim());
+                break;
+            }
+            case "autocampaign": {                        // "autocampaign [P]" | "autocampaign off"
+                if (arg.trim().equalsIgnoreCase("off")) { autoCampaignPeriod = 0; break; }
+                autoCampaignPeriod = arg.trim().isEmpty() ? 40 : Integer.parseInt(arg.trim());
+                campaignStuckTicks = 0;
                 break;
             }
             case "autonarr": {                            // "autonarr [P]" | "autonarr off"
@@ -267,33 +285,69 @@ public final class DsDriver {
         return true;
     }
 
-    /** Drive a combat screen with the game's OWN controls (no pixels): advance the
-     *  between-wave "Tap to Continue", and turn on fast-forward + AUTO (idempotent via
-     *  isFastForward()/Button.isChecked()) so heroes auto-cast and waves auto-chain. */
+    /** Drive a combat screen with the game's OWN actors (no blind pixels): advance to the
+     *  next wave via nextStageButton when it's up, turn on fast-forward (only if unlocked)
+     *  and AUTO if present, and cast hero skills by tapping the hero portraits (which carry
+     *  the ATTACK_SCREEN_HERO_BUTTON<i> tutorial names) — a ready skill fires, others no-op. */
     private void combatStep(com.perblue.rpg.ui.screens.AttackScreen as) {
         try {
-            // 1. between-wave wait: if the "Tap to Continue" label is up, tap it to advance
-            com.badlogic.gdx.scenes.scene2d.b lbl = fieldActor(as, "tapToContinueLabel");
-            if (lbl != null && lbl.isVisible() && lbl.getParent() != null) {
-                tapActorCenter(lbl, "combat continue"); return;
+            // 1. between waves: the ">>" continue is nextStageButton (the tap-to-continue TEXT
+            //    label only shows during the tutorial, so don't rely on it). It's always present
+            //    but only ENABLED while waiting between waves, so gate on !isDisabled() — that
+            //    way we advance between waves and fall through to casting skills during a wave.
+            com.badlogic.gdx.scenes.scene2d.b next = fieldActor(as, "nextStageButton");
+            if (next instanceof com.badlogic.gdx.scenes.scene2d.ui.Button && next.isVisible()
+                    && next.getParent() != null
+                    && !((com.badlogic.gdx.scenes.scene2d.ui.Button) next).isDisabled()) {
+                tapActorCenter(next, "combat next-stage"); return;
             }
-            // 2. enable fast-forward (2x) once — ONLY if actually unlocked (it gates behind
-            //    Team Level 30 / VIP; clicking it while locked just spams an upsell tooltip).
-            //    Compare the FFButtonState by name to avoid referencing the package-private enum.
+            // 2. fast-forward (2x) — only if unlocked (gates behind Team Level 30 / VIP).
             Object ffState = as.getFastForwardButtonState();
             if (!as.isFastForward() && ffState != null && "AVAILABLE".equals(ffState.toString())) {
                 com.badlogic.gdx.scenes.scene2d.b ff = fieldActor(as, "fastForwardButton");
                 if (ff != null && ff.isVisible()) { tapActorCenter(ff, "combat fastforward"); return; }
             }
-            // 3. enable AUTO (auto-cast skills) once
+            // 3. AUTO (auto-cast) if the button exists and isn't already on.
             com.badlogic.gdx.scenes.scene2d.b auto = fieldActor(as, "autoButton");
-            if (auto instanceof com.badlogic.gdx.scenes.scene2d.ui.Button
-                    && auto.isVisible()
+            if (auto instanceof com.badlogic.gdx.scenes.scene2d.ui.Button && auto.isVisible()
                     && !((com.badlogic.gdx.scenes.scene2d.ui.Button) auto).isChecked()) {
-                tapActorCenter(auto, "combat auto");
+                tapActorCenter(auto, "combat auto"); return;
+            }
+            // 4. cast skills: tap each present hero portrait (ready skills fire, others no-op).
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null || g.getStage() == null) return;
+            com.badlogic.gdx.scenes.scene2d.b root = g.getStage().i();
+            for (int i = 0; i < 5; i++) {
+                com.badlogic.gdx.scenes.scene2d.b hb = searchActor(root, "ATTACK_SCREEN_HERO_BUTTON" + i);
+                if (hb != null && hb.isVisible()) tapActorCenter(hb, "combat cast H" + i);
             }
         } catch (Throwable t) {
             System.out.println("[driver] combat error: " + t);
+        }
+    }
+
+    /** Dump the combat-drive decision inputs for the current screen (diagnostic). */
+    private void combatInfo() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null || g.getYourUser() == null) { System.out.println("[combat] no game/user"); return; }
+            com.perblue.rpg.ui.screens.BaseScreen sc = g.getScreenManager().getScreen();
+            System.out.println("[combat] screen=" + (sc == null ? "null" : sc.getClass().getSimpleName())
+                    + " isAttackScreen=" + (sc instanceof com.perblue.rpg.ui.screens.AttackScreen)
+                    + " pointerShowing=" + com.perblue.rpg.game.tutorial.TutorialHelper.isAnyPointerShowing());
+            if (!(sc instanceof com.perblue.rpg.ui.screens.AttackScreen)) return;
+            com.perblue.rpg.ui.screens.AttackScreen as = (com.perblue.rpg.ui.screens.AttackScreen) sc;
+            com.badlogic.gdx.scenes.scene2d.b lbl = fieldActor(as, "tapToContinueLabel");
+            com.badlogic.gdx.scenes.scene2d.b auto = fieldActor(as, "autoButton");
+            System.out.println("[combat]   FF isFast=" + as.isFastForward()
+                    + " state=" + as.getFastForwardButtonState());
+            System.out.println("[combat]   tapToContinueLabel: " + (lbl == null ? "null"
+                    : "visible=" + lbl.isVisible() + " parent=" + (lbl.getParent() != null)));
+            System.out.println("[combat]   autoButton: " + (auto == null ? "null"
+                    : "visible=" + auto.isVisible() + " checked="
+                      + ((com.badlogic.gdx.scenes.scene2d.ui.Button) auto).isChecked()));
+        } catch (Throwable t) {
+            System.out.println("[combat] info error: " + t); t.printStackTrace(System.out);
         }
     }
 
@@ -327,6 +381,92 @@ public final class DsDriver {
         } catch (Throwable t) {
             System.out.println("[driver] autotut error: " + t);
         }
+    }
+
+    /** One hands-off campaign tick: pick the recommended level and drive the fight flow,
+     *  all by the game's OWN actors/API (no blind pixels). Screen dispatch:
+     *   victory overlay -> VICTORY_CONTINUE_BUTTON; combat -> combatStep; battle-info ->
+     *   CAMPAIGN_BATTLE_INFO_CONTINUE; hero-chooser -> HERO_CHOOSER_FIGHT_BUTTON; map ->
+     *   CampaignMapView.getPointerNode(0) (the recommended node) — null => chapter done. */
+    private void campaignStep() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null || g.getYourUser() == null || g.getStage() == null) return;
+            // Wall detection: if the navigator makes no progress for a long time (e.g. it's
+            // stuck on a defeat screen because the team can't beat this level), stop instead
+            // of hanging. A winnable combat resets this when it reaches victory / the next level.
+            if (++campaignStuckTicks > 150) {
+                System.out.println("[campaign] no progress for ~" + campaignStuckTicks
+                        + " ticks — likely a team-building wall (the game's own tip: Evolve Heroes /"
+                        + " Equip More Gear). Stopping autocampaign.");
+                autoCampaignPeriod = 0; campaignStuckTicks = 0; return;
+            }
+            com.badlogic.gdx.scenes.scene2d.b root = g.getStage().i();
+            com.perblue.rpg.ui.screens.BaseScreen sc = g.getScreenManager().getScreen();
+            // victory overlay can sit on top of the combat screen — handle it first
+            com.badlogic.gdx.scenes.scene2d.b victory = searchActor(root, "VICTORY_CONTINUE_BUTTON");
+            if (victory != null && victory.isVisible() && victory.getParent() != null) {
+                campaignStuckTicks = 0; tapActorCenter(victory, "campaign victory"); return;
+            }
+            if (sc instanceof com.perblue.rpg.ui.screens.AttackScreen) {
+                combatStep((com.perblue.rpg.ui.screens.AttackScreen) sc); return;
+            }
+            if (sc instanceof com.perblue.rpg.ui.screens.CampaignBattleInfoScreen) {
+                com.badlogic.gdx.scenes.scene2d.b c = searchActor(root, "CAMPAIGN_BATTLE_INFO_CONTINUE");
+                if (c != null && c.isVisible()) { campaignStuckTicks = 0; tapActorCenter(c, "campaign battle-info continue"); }
+                return;
+            }
+            if (sc instanceof com.perblue.rpg.ui.screens.HeroChooserScreen) {
+                com.badlogic.gdx.scenes.scene2d.b f = searchActor(root, "HERO_CHOOSER_FIGHT_BUTTON");
+                if (f != null && f.isVisible()) { campaignStuckTicks = 0; tapActorCenter(f, "campaign fight"); }
+                return;
+            }
+            if (sc instanceof com.perblue.rpg.ui.screens.CampaignChooserScreen) {
+                com.badlogic.gdx.scenes.scene2d.b mv =
+                        searchActorByType(root, com.perblue.rpg.ui.widgets.campaign.CampaignMapView.class);
+                if (mv == null) return;
+                // The next level = the lowest-level node not yet completed (starsEarned<=0).
+                // getPointerNode(i) is only node index i (=level 1), so pick from the node list.
+                java.lang.reflect.Field nf =
+                        com.perblue.rpg.ui.widgets.campaign.CampaignMapView.class.getDeclaredField("nodes");
+                nf.setAccessible(true);
+                Object nodes = nf.get(mv);
+                java.lang.reflect.Field lvF =
+                        com.perblue.rpg.ui.widgets.campaign.MapNode.class.getDeclaredField("level");
+                java.lang.reflect.Field stF =
+                        com.perblue.rpg.ui.widgets.campaign.MapNode.class.getDeclaredField("starsEarned");
+                lvF.setAccessible(true); stF.setAccessible(true);
+                com.perblue.rpg.ui.widgets.campaign.MapNode best = null; int bestLevel = Integer.MAX_VALUE;
+                if (nodes instanceof Iterable) for (Object o : (Iterable<?>) nodes) {
+                    if (o == null) continue;
+                    com.perblue.rpg.ui.widgets.campaign.MapNode n =
+                            (com.perblue.rpg.ui.widgets.campaign.MapNode) o;
+                    int lv = lvF.getInt(n), st = stF.getInt(n);
+                    if (st <= 0 && lv < bestLevel) { bestLevel = lv; best = n; }
+                }
+                if (best == null) {
+                    System.out.println("[campaign] chapter complete (all levels done). Stopping autocampaign.");
+                    autoCampaignPeriod = 0; return;
+                }
+                campaignStuckTicks = 0;
+                tapActorCenter(best, "campaign level " + bestLevel);
+            }
+        } catch (Throwable t) {
+            System.out.println("[driver] campaign error: " + t);
+        }
+    }
+
+    /** Depth-first search for the first actor that is an instance of the given type. */
+    private com.badlogic.gdx.scenes.scene2d.b searchActorByType(com.badlogic.gdx.scenes.scene2d.b a, Class<?> type) {
+        if (a == null) return null;
+        if (type.isInstance(a)) return a;
+        if (a instanceof com.badlogic.gdx.scenes.scene2d.e) {
+            for (Object ch : (Iterable<?>) ((com.badlogic.gdx.scenes.scene2d.e) a).getChildren()) {
+                com.badlogic.gdx.scenes.scene2d.b r = searchActorByType((com.badlogic.gdx.scenes.scene2d.b) ch, type);
+                if (r != null) return r;
+            }
+        }
+        return null;
     }
 
     /** Force the tutorial to recompute its pointers/narrators for the current step, so we
