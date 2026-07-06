@@ -158,6 +158,7 @@ Inventaire de **chaque** constante de l'état nouveau‑joueur (`DsUserState.new
 | `GOLD`, `DIAMONDS`, `FREE_DIAMONDS`, `TEAM_XP`, `POWER_POINTS`, `teamPower`, tous les *rank*, `totalStars`, `vIPLevel` | ✅ **0** = compte neuf **vide** (pas une invention) |
 | `teamLevel = 1`, héros `level=1 / stars=1 / rarity=WHITE` | ✅ **minimums canoniques** (base). On ne pose que les champs **persistants** ; le jeu **calcule** toutes les stats dérivées (power/HP) via ses tables → **rien d'inventé** |
 | roster **DRAGON_LADY + UNSTABLE_UNDERSTUDY** | ⚠️ **reversé, aucune table côté client** (assigné par le serveur d'origine à la création). Meilleure reconstruction = camp joueur du **combat d'intro** + vidéo. **Seule** valeur asséée à la main, **incontournable** (pas de source jeu) |
+| **skills des starters** | ✅ **sourcé du jeu** : `DsUserState.initSkills` **mirroir** de `HeroHelper.initSkills` via `SkillStats` → skill de base niv.1 (`DRAGON_LADY_1`, `UNSTABLE_UNDERSTUDY_1`). Corrige le bug « skill non lançable » (map `skills` était vide, cf. REAL_DEVICE_TEST.md §1) |
 | `USER_ID=1`, `USER_NAME="Player"`, `SHARD=1` | ✅ **config dev** (identité du joueur de test), pas de la donnée de jeu |
 
 **Conclusion** : le serveur n'invente **aucune donnée de jeu dérivée**. Le seul point

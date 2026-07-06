@@ -151,7 +151,34 @@ final class DsUserState {
         h.heroNum = heroNum;
         h.isLegendary = Boolean.FALSE;
         h.isMercenary = Boolean.FALSE;
+        initSkills(h);
         return h;
+    }
+
+    /**
+     * Mirror of the game's HeroHelper.initSkills(hero, allowOrange=false): grant level 1 to
+     * every skill that BELONGS to this hero (SkillStats.getUnitType == type) and is unlocked at
+     * its rarity (SkillStats.getRarity != DEFAULT, != ORANGE, and rarity.ordinal <=
+     * hero.rarity.ordinal). The game's real hero-grant flow (HeroHelper.unlock -> initSkills)
+     * does this for EVERY hero it hands out — including the Centaur from the tutorial chest — so
+     * their active skill is level 1 and castable. Our injected starter heroes bypassed that flow
+     * and left `skills` EMPTY, so their active skill was level 0: in combat the energy bar fills
+     * but tapping the portrait casts nothing (HeroHelper.copySkillsToUnitData copies no skill).
+     * We reproduce the exact game logic via the game's own SkillStats table — no invented values.
+     * For a WHITE 1-star hero this grants the basic skill (e.g. DRAGON_LADY_1 / UNSTABLE_UNDERSTUDY_1).
+     */
+    @SuppressWarnings("unchecked")
+    private static void initSkills(HeroData h) throws Exception {
+        Map<com.perblue.rpg.network.messages.SkillType, Integer> skills =
+            (Map<com.perblue.rpg.network.messages.SkillType, Integer>) getField(h, "skills");
+        for (com.perblue.rpg.network.messages.SkillType st
+                : com.perblue.rpg.network.messages.SkillType.valuesCached()) {
+            Rarity r = com.perblue.rpg.game.data.unit.skill.SkillStats.getRarity(st);
+            if (r == Rarity.DEFAULT || r == Rarity.ORANGE) continue;
+            if (com.perblue.rpg.game.data.unit.skill.SkillStats.getUnitType(st) != h.type) continue;
+            if (r.ordinal() > h.rarity.ordinal()) continue;
+            skills.put(st, 1);
+        }
     }
 
     /** Set every Map field to a new HashMap and every List field to a new ArrayList. */
