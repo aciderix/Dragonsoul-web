@@ -63,15 +63,62 @@ lui‑même ressources + héros + tuto. La voie propre :
   déjà avancée par le jeu), mais **jamais** en injectant des valeurs à la main.
 - La persistance snapshot (déjà en place) capture ensuite l'état **réel** produit par le jeu.
 
-## 4. Étude bytecode (à remplir — vérité du code)
+## 4. Étude bytecode — FINDINGS (vérité du code, 2026‑07‑06)
 
-- [ ] Où le jeu initialise les ressources d'un **nouveau joueur** (0 or / 0 diamants /
-      60 stamina, cap 60) ?
-- [ ] Où/quand le tuto **accorde** Dragon Lady & Unstable Understudy (UnitType + étape) ?
-- [ ] Comment se déroulent les **premières étapes** du tuto (step 0 → coffre) : combat
-      initial scripté avec l'équipe de départ ?
-- [ ] Mécanique d'**augmentation du cap de stamina** (niveau de compte ? bâtiment ?).
-- [ ] Confirmer que **rien** ne bloquait le tuto depuis step 0 (raison initiale du saut à 41).
+### Carte des étapes de `IntroTutorialActV1` (nos `tutStep` correspondent EXACTEMENT)
+- `S_INITAL = 0` → **combat d'intro** (steps 1‑17 : `S_INTRO_COMBAT_*`, PRE_WAIT/DIALOG/CAST_1‑4/WAIT/VFX)
+- steps 18‑28 = `S_TEMP_COMBAT_*` (2ᵉ phase de combat scriptée)
+- steps 29‑33 = `S_INTERLUDE_DIALOG_A..E` ; **`P_LAST_STEP_OF_INTERLUDE = 40`**
+- **`S_OPEN_CHEST_SCREEN = 41`** ⇐ **notre `-Dds.tutStep=41` atterrit ici**, on shunte 0‑40.
+- 42‑57 = coffres (or → Centaure à `S_CLOSE_CENTAUR=56`, argent, héros)
+- 58‑70 = campagne 1‑1 (open/select/battle/victory) ; 71 remark ; **`S_DONE=72`**
+
+### Les héros de départ ne sont PAS accordés côté client
+- Dans le combat d'intro, Dragon Lady / Unstable Understudy / Electroyeti sont fabriqués par
+  **`CombatSimHelper.createUnitData(UnitType, Rarity, level, …)`** → **unités de combat
+  scriptées** (avec `setIsBoss`, `setHPMultiplier`), **pas** un ajout au roster réel.
+- **Aucun** `User.addHero / unlockHero` dans le tuto d'intro. **Aucune** .tab « starter heroes ».
+- ⇒ Le roster de départ (Dragon Lady + Unstable Understudy) venait de la **création de compte
+  côté SERVEUR** (serveurs morts). **C'est à NOUS de le refléter** dans `DsUserState`
+  (source de vérité : le camp joueur du combat d'intro **+** la vidéo).
+
+### Ressources & cap de stamina = `teamlevelstats.tab` (niveau de compte)
+Colonnes : `EXP_TO_NEXT_LEVEL  MAX_HERO_LEVEL  MAX_STAMINA  STAMINA_GAIN_ON_LEVEL  POOL_EXP_PER_STAMINA`
+| Team level | MAX_STAMINA | STAMINA_GAIN_ON_LEVEL |
+|---|---|---|
+| 1 | **60** | 0 |
+| 2 | 62 | 20 |
+| 3 | 63 | 20 |
+- ⇒ départ **60/60** (niveau 1) ; à la montée de niveau : **+20 stamina** et cap→62 (colle
+  pile avec l'observé 95→115 et max 60→62). Le jeu **lit déjà** cette table (content‑sync).
+- Or/diamants de départ = **0/0** (map `resources` vide par défaut, pas de table).
+
+### Débloquer des héros = soulstones (progression), pas le loot d'items de campagne
+- `normalCampaign.tab` : les héros apparaissent surtout comme **ennemis** (ex. `[boss]ELECTROYETI`
+  en 0‑1 = notre 1‑2 !) ; le loot de campagne = **items** (PAPER_CROWN…), pas des héros.
+- L'ajout au roster (Centaure au coffre, Electroyeti au fil du chap. 1) passe par les
+  **soulstones/coffres** — mécanique séparée. Centaure = `ChestHelper` truqué (step 56).
+
+### ⚠️ Risque ouvert (raison probable du saut à 41)
+- [ ] **Le tuto joue‑t‑il correctement depuis step 0 dans NOTRE port ?** Le combat d'intro
+      (1‑17) est un combat scripté ; à **tester** headless. C'était sans doute la raison du
+      raccourci `tutStep=41`. À valider avant de fonder la résolution dessus.
+
+## 6. Plan de résolution (proposé — respecter PRINCIPLES)
+
+1. **`DsUserState.newPlayer` = état canonique** (miroir du serveur d'origine, zéro invention) :
+   - ressources : `gold=0, diamonds=0, stamina=60`, **team level = 1** (stamina = MAX_STAMINA(1)
+     lu via la classe de stats du jeu, pas en dur).
+   - roster : **Dragon Lady + Unstable Understudy** en `HeroData` niveau 1 / rareté WHITE,
+     construits via la **fabrique du jeu** (pas des stats à la main) ; laisser le jeu calculer
+     la puissance depuis ses tables.
+   - **tutorial acts vides** ⇒ le tuto démarre à **step 0** ; **retirer** le seed `tutStep=41`
+     du chemin par défaut.
+2. **Tester** que l'INTRO joue depuis step 0 (combat d'intro compris). Si un point bloque, le
+   traiter proprement (shim fonctionnel), **sans** revenir à un état inventé.
+3. Garder un raccourci dev **honnête & séparé** = **reprendre une save réelle** déjà avancée
+   par le jeu (le snapshot existant), jamais l'injection de valeurs.
+4. La persistance snapshot capture ensuite l'état **réel** produit par le jeu.
 
 ## 5. TODO — automatisation du pilotage en DEV (économiser contexte / captures)
 
