@@ -27,9 +27,8 @@ public final class DsGame {
     private final Method readMessage;           // MessageFactory.readMessage(reader)
     private final Object messageFactory;
 
-    private final DsStore store;                // player-progression persistence
+    private final DsStore store;                // player-progression persistence (load)
     private DsStore.State state;                // this connection's live player state
-    private final DsProgress progress = new DsProgress();
 
     public DsGame() throws Exception {
         this(new File(System.getProperty("ds.saveDir", "build/run/save")));
@@ -93,7 +92,14 @@ public final class DsGame {
                 store.save(DsUserState.USER_ID, state);
                 System.out.println("[game]   new player created + saved");
             } else {
-                System.out.println("[game]   resumed saved player");
+                java.util.Map<com.perblue.rpg.network.messages.ResourceType, Integer> res =
+                        state.userExtra != null ? state.userExtra.resources : null;
+                System.out.println("[game]   resumed saved player"
+                        + (res == null ? "" :
+                          " gold=" + res.get(com.perblue.rpg.network.messages.ResourceType.GOLD)
+                        + " stamina=" + res.get(com.perblue.rpg.network.messages.ResourceType.STAMINA)
+                        + " diamonds=" + res.get(com.perblue.rpg.network.messages.ResourceType.DIAMONDS)
+                        + " heroes=" + (state.userExtra.heroes == null ? 0 : state.userExtra.heroes.size())));
             }
             com.perblue.rpg.network.messages.BootData boot = new com.perblue.rpg.network.messages.BootData();
             boot.serverTime = now;
@@ -109,13 +115,12 @@ public final class DsGame {
             send(boot, msg, wrapper, out, "BootData");
         } else if (name.equals(com.perblue.rpg.network.messages.RequestChestAcknowledgement.getFullName_Static())) {
             handleRequestChestAcknowledgement(wrapper, out);
-        } else if (state != null && progress.apply(msg, state)) {
-            // A progression notification (ChangeTutorialStep / BuyChests / CampaignAttack
-            // / HeroLineupUpdate / Action) mutated the player state — persist it so the
-            // change survives a reconnect/restart.
-            store.save(DsUserState.USER_ID, state);
         }
-        // else: LoadTime / PerfReport / Ping / … — telemetry, nothing to persist or reply.
+        // Progression is persisted by the LAUNCHER snapshotting the client's live state
+        // (DsSnapshot) into this same save file — the client is authoritative-local, so a
+        // full snapshot is exact where reconstructing from notifications would be partial
+        // (see PROGRESS.md / SERVER_DESIGN.md). The server only loads. DsProgress is kept
+        // for the future authoritative server (which will mirror the game's own logic).
     }
 
     /**

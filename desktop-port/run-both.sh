@@ -9,6 +9,9 @@ set -e
 cd "$(dirname "$0")"
 SRV_LOG="${SRV_LOG:-build/run/srv.log}"
 GAME_LOG="${GAME_LOG:-build/run/game.log}"
+# The game snapshots the live player state to the SAME file the server loads from
+# (server default ds.saveDir=build/run/save, user id 1). Both processes agree here.
+export DS_SAVE_FILE="${DS_SAVE_FILE:-build/run/save/user-1.dat}"
 mkdir -p build/run
 
 # Clean any stragglers so the port and display are free.

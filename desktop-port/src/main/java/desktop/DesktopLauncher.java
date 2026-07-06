@@ -194,6 +194,11 @@ public final class DesktopLauncher {
         final boolean[] contentProbed = { false }; // one-shot DS_PROBE_CONTENT guard
         final boolean[] contentSynced = { false }; // one-shot shard-content sync guard
         final int contentShard = Integer.getInteger("DS_CONTENT_SHARD", 1); // match server SHARD
+        // DEV persistence: snapshot the client's live state to the server's save file
+        // (DS_SAVE_FILE) periodically and on exit, so a reconnect resumes exactly.
+        final File saveFile = System.getProperty("DS_SAVE_FILE") != null
+                ? new File(System.getProperty("DS_SAVE_FILE")) : null;
+        final DsSnapshot snapshot = saveFile != null ? new DsSnapshot() : null;
         DsDriver driver = null;
         DsDriver.Host driverHost = new DsDriver.Host() {
             public void screenshot(String file) { pendingShot[0] = file; }
@@ -270,6 +275,10 @@ public final class DesktopLauncher {
                     }
                 } catch (Throwable t) { System.out.println("[launcher] content sync failed: " + t); }
             }
+            // Periodic full-state snapshot (every ~15s once logged in).
+            if (snapshot != null && frames > 0 && frames % 300 == 0 && game.getYourUser() != null) {
+                snapshot.save(game, saveFile);
+            }
             if (Boolean.getBoolean("DS_TRACE_SCREEN") && frames % 200 == 0) traceScreen(game, frames);
             if (Boolean.getBoolean("DS_TRACE_USER") && frames == maxFrames - 1) traceUser(game);
             if (Boolean.getBoolean("DS_PROBE_CONTENT") && !contentProbed[0] && frames == 150) {
@@ -284,6 +293,11 @@ public final class DesktopLauncher {
             if (driver != null && driver.isDone() && maxFrames == 0) break;
         }
         if (Boolean.getBoolean("DS_TRACE_SCREEN")) traceScreen(game, frames);
+        // Final snapshot before shutdown so nothing since the last periodic save is lost.
+        if (snapshot != null && game.getYourUser() != null) {
+            snapshot.save(game, saveFile);
+            System.out.println("[launcher] final snapshot -> " + saveFile);
+        }
         System.out.println("[launcher] ran " + frames + " frames, disposing");
         try { game.dispose(); } catch (Throwable t) { t.printStackTrace(System.out); }
         glfwDestroyWindow(win);

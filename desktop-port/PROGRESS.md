@@ -374,7 +374,7 @@ cat scripts/replay-intro-to-1-1.cmd >> <live.cmd>
 - **Persistance serveur (SQLite)** → l'état survit aux redémarrages.
 
 ---
-## 💾 Persistance de progression joueur (en cours — snapshot en phase dev)
+## 💾 Persistance de progression joueur (snapshot dev — ✅ implémenté & vérifié)
 
 **But** : sauvegarder TOUT l'état joueur (gold/stamina/diamants, héros, équipement,
 campagne, tuto, lineups, flags) pour reprendre exactement, sans re-piloter.
@@ -407,6 +407,29 @@ UserTutorialAct) → `getExtra()` est périmé pour ces champs.
   plus que **charger**. → état **exact et complet**.
 - **Plus tard → serveur autoritatif en MIROIR du code du jeu** (recalcul coûts/loot/combat
   via les classes du jeu, zéro invention). Plus fidèle, plus lourd.
+
+### Implémenté & vérifié — `DsSnapshot` (launcher) + `DsGame` load-only
+- `DsSnapshot.save(RPGMain, File)` : deep-copy de `getExtra()` (writer→bytes→reader du jeu),
+  puis **écrase** héros/tuto/campagne par les convertisseurs/getters **du jeu** —
+  `ClientNetworkStateConverter.getHeroData(UnitData)`, `IUserTutorialAct` getters,
+  `ClientCampaignLevelStatus` getters — zéro valeur inventée. En-tête `UserInfo` via
+  `getBasicUserInfo(User)`. Écrit au format `DsStore` (`[len][UserInfo][len][UserExtra]`,
+  writeAll du jeu, tmp+rename atomique).
+- **Garde-fou de readiness** : `getYourUser()` peut renvoyer un `User` *avant* que le
+  `BootData` l'ait peuplé (map `resources` vide) → un snapshot alors écrirait des zéros et
+  corromprait la save. On skippe tant que `getExtra().resources` est vide (un joueur loggé
+  a toujours une map peuplée). Sans ça : premier snapshot post-boot = `gold=0 heroes=0`.
+- **`nullSafeStrings`** : `packString` refuse `null` ; on met à `""` les champs `String`
+  publics restés nuls dans l'en-tête fraîchement construit (`creationTimeServerTxt`, etc.).
+- `DsGame` : à `ClientInfo`, **charge** la save si elle existe (sinon crée+sauve un neuf) et
+  construit le `BootData` depuis cet état. Ne fait plus d'application incrémentale ; le
+  **launcher est l'unique writer** (client autoritatif-local ⇒ snapshot exact >
+  reconstruction partielle). `DsProgress` conservé pour le futur serveur autoritatif.
+- **Vérifié bout en bout** (2026‑07‑06) : boot neuf (gold=100000/stamina=120/diamants=500,
+  0 héros) → pilotage du coffre (Centaure accordé, `RequestChestAcknowledgement`→`Ack`) →
+  snapshot `heroes=1` → **redémarrage sans re-pilotage** → serveur « resumed saved player
+  gold=100000 stamina=120 diamonds=500 heroes=1 » et le client reconstruit le Centaure.
+  Le garde-fou supprime bien le snapshot transitoire à zéro.
 
 ### Reprise / test
 `run-both.sh` lance serveur+jeu dans **un seul process** (le harness tue la tâche
