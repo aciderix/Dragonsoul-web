@@ -115,12 +115,32 @@ public final class DsGame {
             send(boot, msg, wrapper, out, "BootData");
         } else if (name.equals(com.perblue.rpg.network.messages.RequestChestAcknowledgement.getFullName_Static())) {
             handleRequestChestAcknowledgement(wrapper, out);
+        } else if (name.equals(com.perblue.rpg.network.messages.SetPlayerName.getFullName_Static())) {
+            handleSetPlayerName((com.perblue.rpg.network.messages.SetPlayerName) msg);
         }
         // Progression is persisted by the LAUNCHER snapshotting the client's live state
         // (DsSnapshot) into this same save file — the client is authoritative-local, so a
         // full snapshot is exact where reconstructing from notifications would be partial
         // (see PROGRESS.md / SERVER_DESIGN.md). The server only loads. DsProgress is kept
         // for the future authoritative server (which will mirror the game's own logic).
+    }
+
+    /**
+     * Name-change (the game's real "set your name" feature: new players get a free change,
+     * UserFlag.FREE_NAME_CHANGE, and the client shows ChangeNamePrompt). When the player
+     * confirms, the client updates its own name + consumes the flag optimistically and sends
+     * us SetPlayerName. We record it on the server's live state for consistency; the LAUNCHER
+     * snapshot then persists the client's updated name/flag to the save, so the player sets
+     * their name once and it sticks (no rustine — the feature works end to end).
+     */
+    private void handleSetPlayerName(com.perblue.rpg.network.messages.SetPlayerName msg) {
+        String newName = msg.name;
+        if (newName == null || newName.isEmpty()) return;
+        if (state != null && state.userInfo != null && state.userInfo.basicInfo != null) {
+            state.userInfo.basicInfo.previousName = state.userInfo.basicInfo.name;
+            state.userInfo.basicInfo.name = newName;
+        }
+        System.out.println("[game]   SetPlayerName -> \"" + newName + "\" (recorded)");
     }
 
     /**

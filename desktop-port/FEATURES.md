@@ -75,10 +75,10 @@ depuis l'intérieur d'un écran ne bascule pas proprement (écrans identiques). 
 | Feature | Statut | Écran / cause |
 |---|---|---|
 | Campaign | ✅ | tuto + campagne auto (CAMPAIGN.md) ; mur team‑building à 1‑4 |
-| Chests | ✅ | coffre tuto OK (ack serveur) |
+| Chests | ✅ | Purple/Gold/Silver « Free Now! » — rend OK |
 | Heroes (HERO_MANAGEMENT) | ✅ | rend OK, stats calculées par le jeu |
 | Enchanting | ✅ (vide) | écran OK, « No Items Available » (dev sans matériaux) |
-| Coliseum | ✅ | `ArenaLeagueScreen` s'ouvre |
+| Coliseum | ✅ (loading) | s'ouvre (Fights 5/5) mais adversaires « Loading… » (serveur solo = pas d'adversaires) |
 | Guilds | ⚠️ vide | `Recommended Guilds` s'ouvre mais **envoie `ListRecommendedGuilds1`** que le serveur n'answer pas → liste vide (solo : pas d'autres joueurs) |
 | Runes | ✅ gated | « Runes coming in a future update » = **content‑gated** par le shard (normal) |
 | **Temple** | ❌ | manque **`ui/external_temple.atlas`** (contenu téléchargeable perdu) → **download‑loop** → « Content Update Failed » → reload. Pattern CONTENT_GATE (cf. markers run-desktop.sh) |
@@ -86,7 +86,10 @@ depuis l'intérieur d'un écran ne bascule pas proprement (écrans identiques). 
 | Trader / Boss Pit / The Mountain / Contests / Events / Sign‑In / Rankings / Items | … | à balayer (home+nav+tutinfo) |
 
 ### Chantiers identifiés
-1. **Prompt « What's your new name? »** (nouveau compte, nom = « Player » / firstBoot) — bloque
+1. **Prompt « What's your new name? » = VRAIE feature** (flag `FREE_NAME_CHANGE`, apparaît
+   pour les features sociales). **Fix propre (fait)** : serveur gère `SetPlayerName` → le nom
+   est enregistré et **persiste** via le snapshot ; le joueur définit son nom une fois. **Pas
+   une rustine.** (Ancien texte) (nouveau compte, nom = « Player » / firstBoot) — bloque
    la 1ʳᵉ interaction. Root‑fix dans `DsUserState` (nom réel / flag) ou dismiss au boot.
 2. **Features à contenu externe manquant** (Temple → `external_temple.atlas`, sans doute
    d'autres) : ajouter des **markers** (comme external_skins/items/units) pour éviter le
