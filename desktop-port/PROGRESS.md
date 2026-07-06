@@ -372,3 +372,43 @@ cat scripts/replay-intro-to-1-1.cmd >> <live.cmd>
 - **Seed d'état post‑1‑1** (Centaure niv.3 + couronne + 1‑1 à 3 étoiles + acte tuto
   au bon point) → vrai « saut direct » comme `ds.tutStep=41`.
 - **Persistance serveur (SQLite)** → l'état survit aux redémarrages.
+
+---
+## 💾 Persistance de progression joueur (en cours — snapshot en phase dev)
+
+**But** : sauvegarder TOUT l'état joueur (gold/stamina/diamants, héros, équipement,
+campagne, tuto, lineups, flags) pour reprendre exactement, sans re-piloter.
+
+### Fait (WIP, commit « player-progression persistence »)
+- `DsStore` : sauve/charge `UserInfo`+`UserExtra` par joueur, via le **writer/reader du
+  jeu** (octets identiques au wire). Chargement au boot, save à chaque changement.
+- `DsGame` : à `ClientInfo`, charge le joueur sauvé (ou en crée+sauve un neuf), et
+  construit le `BootData` depuis cet état.
+- `DsUserState` : scindé en `newPlayer(serverTime)` (retourne l'état) + `attachBootFields`.
+- `DsProgress` : applique les notifs du client (`ChangeTutorialStep`, `BuyChests`,
+  `CampaignAttack`, `HeroLineupUpdate`) à l'état stocké. **Vérifié** : Centaure,
+  complétion 1‑1 (`CampaignAttack`, indexé **chapitre 0 / niveau 0** — 0‑based !),
+  étape de tuto et lineup **persistent** au redémarrage.
+
+### Limite structurelle constatée
+Le client est **autoritatif-local** et n'envoie jamais ses ressources exactes (le vrai
+serveur DragonSoul était autoritatif/anti-triche). Donc l'approche « appliquer les
+notifs » est **partielle** : `gold` (100422→100000) et `stamina` (114→120) dérivent, et
+le tuto ne reprend pas pile. Reversé : le client range **les ressources** en write-through
+dans `UserExtra.resources` (donc `User.getExtra()` est à jour pour ça) mais **héros /
+campagne / tuto** en objets runtime séparés (UnitData / ClientCampaignLevelStatus /
+UserTutorialAct) → `getExtra()` est périmé pour ces champs.
+
+### Décision (cf. PRINCIPLES §6)
+- **Phase dev → snapshot de l'état vivant du client.** Le launcher (couche plateforme, a
+  accès à l'objet `User` autoritatif) construit un `UserExtra` complet = `getExtra()`
+  (bon pour ressources/flags) **+** reconstruit héros/campagne/tuto depuis les getters
+  runtime, et écrit la save directement (serveur+jeu = même disque). Le serveur ne fait
+  plus que **charger**. → état **exact et complet**.
+- **Plus tard → serveur autoritatif en MIROIR du code du jeu** (recalcul coûts/loot/combat
+  via les classes du jeu, zéro invention). Plus fidèle, plus lourd.
+
+### Reprise / test
+`run-both.sh` lance serveur+jeu dans **un seul process** (le harness tue la tâche
+d'arrière-plan la plus ancienne quand une nouvelle démarre — sinon le serveur mourait).
+Save dans `build/run/save/user-<id>.dat` (`-Dds.saveDir` pour changer).

@@ -110,3 +110,31 @@ Fichier JSON hébergé à une URL configurable (ex. GitHub raw). Tableau d'entr�
   (décentralisé). Ajouter un serveur = éditer le JSON (PR pour une liste git).
 - Le JSON n'annonce qu'une adresse (aucun pouvoir de compromission) ; rejoindre exige
   le mot de passe si le serveur en a un ; jamais de connexion automatique.
+
+---
+## Persistance de l'état joueur (ajout)
+
+Le serveur détient/charge l'état complet du joueur (`UserInfo`+`UserExtra` : gold,
+stamina, diamants, héros, équipement, campagne, tuto, lineups, flags…) et le renvoie
+dans `BootData` à la reconnexion. Sérialisation via les **classes du jeu** (octets
+identiques au wire — cf. PRINCIPLES §3). Fichier par joueur : `build/run/save/user-<id>.dat`.
+
+**Contrainte clé (reversée) :** le client est **autoritatif-local** — il calcule
+rolls/combat/ressources et n'envoie que des **notifications** ; il n'upload jamais ses
+ressources exactes (anti-triche du jeu d'origine). Donc reconstruire l'état côté serveur
+uniquement depuis les notifs est **structurellement partiel**.
+
+### Stratégie en deux temps
+1. **Phase dev — snapshot de l'état vivant du client (retenu).**
+   Le launcher lit l'objet `User` autoritatif et écrit la save : `getExtra()` (à jour
+   pour ressources/flags, write-through) + reconstruction héros/campagne/tuto depuis les
+   getters runtime (`getHeroes()`, `getCampaignLevels()`, `getTutorialActs()`). Le
+   serveur ne fait que charger. → **complet et exact**, faible effort.
+2. **Prod — serveur autoritatif en miroir du code du jeu.**
+   Le serveur applique chaque action via les **calculs du jeu** (coûts de coffre,
+   loot, stamina, résultat de combat, grants) → il détient la vérité comme le vrai
+   DragonSoul. Aucune règle réinventée : on appelle/mirroir les helpers du jeu
+   (`ChestHelper`, `CampaignHelper`, `UserHelper`…). Plus lourd, fait plus tard.
+
+Le format de save et le chargement (`DsStore`) sont communs aux deux : seul le
+producteur des écritures change (launcher-snapshot → serveur-autoritatif).
