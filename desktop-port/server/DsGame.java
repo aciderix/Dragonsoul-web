@@ -27,7 +27,16 @@ public final class DsGame {
     private final Method readMessage;           // MessageFactory.readMessage(reader)
     private final Object messageFactory;
 
+    private final DsStore store;                // player-progression persistence
+    private DsStore.State state;                // this connection's live player state
+    private final DsProgress progress = new DsProgress();
+
     public DsGame() throws Exception {
+        this(new File(System.getProperty("ds.saveDir", "build/run/save")));
+    }
+
+    public DsGame(File saveDir) throws Exception {
+        store = new DsStore(saveDir);
         readerClass = Class.forName("com.perblue.a.a.a.a");
         writerClass = Class.forName("com.perblue.a.a.a.b");
         readerCtor = readerClass.getConstructor(byte[].class);
@@ -74,20 +83,39 @@ public final class DsGame {
         String name = msg.getFullName();
         if (name.equals(com.perblue.rpg.network.messages.ClientInfo.getFullName_Static())) {
             System.out.println("[game]   ClientInfo = " + msg);
-            com.perblue.rpg.network.messages.BootData boot = new com.perblue.rpg.network.messages.BootData();
             long now = System.currentTimeMillis();
+            // Load the persisted player (full state: gold/stamina/heroes/campaign/
+            // tutorial/…) or create+save a brand-new one. Reconnecting resumes exactly.
+            boolean firstBoot = !store.exists(DsUserState.USER_ID);
+            state = store.load(DsUserState.USER_ID);
+            if (state == null) {
+                state = DsUserState.newPlayer(now);
+                store.save(DsUserState.USER_ID, state);
+                System.out.println("[game]   new player created + saved");
+            } else {
+                System.out.println("[game]   resumed saved player");
+            }
+            com.perblue.rpg.network.messages.BootData boot = new com.perblue.rpg.network.messages.BootData();
             boot.serverTime = now;
-            boot.firstBoot = Boolean.TRUE;
+            boot.firstBoot = firstBoot ? Boolean.TRUE : Boolean.FALSE;
             boot.updateAvailable = Boolean.FALSE;
-            DsUserState.populate(boot, now);
+            boot.userInfo = state.userInfo;
+            boot.userExtra = state.userExtra;
+            com.perblue.rpg.network.messages.PrivateUserInfo pui =
+                    new com.perblue.rpg.network.messages.PrivateUserInfo();
+            pui.email = "";
+            boot.privateUserInfo = pui;
+            DsUserState.attachBootFields(boot);
             send(boot, msg, wrapper, out, "BootData");
         } else if (name.equals(com.perblue.rpg.network.messages.RequestChestAcknowledgement.getFullName_Static())) {
             handleRequestChestAcknowledgement(wrapper, out);
+        } else if (state != null && progress.apply(msg, state)) {
+            // A progression notification (ChangeTutorialStep / BuyChests / CampaignAttack
+            // / HeroLineupUpdate / Action) mutated the player state — persist it so the
+            // change survives a reconnect/restart.
+            store.save(DsUserState.USER_ID, state);
         }
-        // else: BuyChests (client→server notification: loot is rolled locally by
-        // ChestHelper, no client-side receive-handler exists, so nothing to reply),
-        // ChangeTutorialStep / LoadTime / PerfReport / Ping / Action(...) — no blocking
-        // response needed yet (added as the tutorial reaches them).
+        // else: LoadTime / PerfReport / Ping / … — telemetry, nothing to persist or reply.
     }
 
     /**

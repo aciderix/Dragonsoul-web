@@ -37,7 +37,18 @@ final class DsUserState {
     // UserInfo.shardID so the client's shard view is coherent.
     static final int SHARD = 1;
 
-    static void populate(BootData boot, long serverTime) throws Exception {
+    /** Boot fields that must be set on EVERY BootData (new or loaded player): which
+     *  content shard to load, and the inline stat-data map (empty = load .tab from
+     *  classpath). See the long note below on why the client also force-syncs the shard. */
+    static void attachBootFields(BootData boot) throws Exception {
+        Server srv = new Server();
+        srv.shardID = SHARD;
+        boot.currentServer = srv;
+        boot.statData = new HashMap<>();
+    }
+
+    /** Build a brand-new player's full state (UserInfo + UserExtra). */
+    static DsStore.State newPlayer(long serverTime) throws Exception {
         UserInfo ui = new UserInfo();
         BasicUserInfo basic = new BasicUserInfo();
         basic.iD = USER_ID;
@@ -116,26 +127,7 @@ final class DsUserState {
             acts.add(intro);
         }
 
-        PrivateUserInfo pui = new PrivateUserInfo();
-        pui.email = "";
-
-        boot.userInfo = ui;
-        boot.userExtra = ux;
-        boot.privateUserInfo = pui;
-
-        // The client's handleBootData does:
-        //   SyncStatDataClientHelper.updateStats(currentServer.shardID, statData)
-        // which drives ShardStats.a(shard, statData) -> parses content.<shard>.tab (the
-        // per-shard content table: available heroes, gold/soul chest hero pools). We
-        // declare our shard here; the real content.<shard>.tab is bundled in the APK
-        // resources and loaded from the classpath (statData stays empty — no inline
-        // override needed). The platform layer (DesktopLauncher) also force-syncs this
-        // shard after boot, because the shardID does not reliably survive the client's
-        // BootData decode of this de-obfuscated build (see PROGRESS.md / content sync).
-        Server srv = new Server();
-        srv.shardID = SHARD;
-        boot.currentServer = srv;
-        boot.statData = new HashMap<>();
+        return new DsStore.State(ui, ux);
     }
 
     /** A level-1, 1-star, common hero with all its sub-collections initialised. */
