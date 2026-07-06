@@ -54,7 +54,12 @@ final class DsUserState {
         BasicUserInfo basic = new BasicUserInfo();
         basic.iD = USER_ID;
         basic.name = USER_NAME;
-        basic.teamLevel = 1;
+        // Canonical start = team level 1. DEV override -Dds.teamLevel=N boosts it to unlock
+        // features gated behind higher levels (Unlockables table) for testing screens
+        // headlessly — dev CONFIG, not invented game data (the game recomputes stamina /
+        // max-hero-level from teamlevelstats.tab for this level).
+        int teamLevel = Math.max(1, Integer.getInteger("ds.teamLevel", 1));
+        basic.teamLevel = teamLevel;
         basic.vIPLevel = 0;
         basic.creationTime = serverTime;
         basic.userLastActive = serverTime;
@@ -92,7 +97,7 @@ final class DsUserState {
         res.put(ResourceType.GOLD, 0);
         res.put(ResourceType.DIAMONDS, 0);
         res.put(ResourceType.FREE_DIAMONDS, 0);
-        res.put(ResourceType.STAMINA, TeamLevelStats.getMaxStamina(1));
+        res.put(ResourceType.STAMINA, TeamLevelStats.getMaxStamina(teamLevel));
         res.put(ResourceType.TEAM_XP, 0);
         res.put(ResourceType.POWER_POINTS, 0);
 
