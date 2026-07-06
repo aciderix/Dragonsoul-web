@@ -157,19 +157,34 @@ Pour tendre vers « zéro invention » de façon **vérifiable** :
 - [ ] Tenir cette checklist à jour : la complétude se **prouve** point par point, elle ne se
       décrète pas.
 
-## 5. TODO — automatisation du pilotage en DEV (économiser contexte / captures)
+## 5. Pilotage semi‑headless en DEV — ✅ base implémentée & validée
 
-> **DEV uniquement**, jamais en prod (le vrai joueur pilote lui‑même). But : réduire le
-> nombre de captures d'écran et de tours pour piloter le jeu pendant nos tests.
+> **DEV uniquement**, jamais en prod (le vrai joueur pilote lui‑même). But : lire l'état
+> réel du jeu **en mémoire** (pas de pixels) pour savoir quoi faire, et réduire captures/tours.
 
-- [ ] **Auto‑clic sur `>>` (passer à la vague suivante)** : sur le modèle de l'auto‑cast des
-      skills (`autotap` sur le portrait), ajouter un auto‑clic sur le bouton **« Tap to
-      Continue » / `>>`** entre les vagues de combat, pour enchaîner sans intervention.
-- [ ] **Détection robuste de l'action attendue (flèche jaune)** pour l'automatiser aussi :
-      repérer de façon fiable la cible que le tuto met en avant (flèche jaune / **point
-      rouge** sur les boutons) et cliquer dessus — **tant que ça ne casse rien** (doit
-      permettre d'aller **équiper / améliorer les héros**, pas seulement enchaîner les
-      combats). Idéalement lire l'état du jeu (objet UI / tuto en mémoire) plutôt que le
-      pixel, pour la robustesse.
-- Bénéfice : piloter des séquences longues (finir un chapitre, refaire le tuto proprement)
-  avec très peu de captures et de tours.
+**Mécanisme (vérité du code)** : le tuto expose tout via `TutorialHelper` (statique, appelé
+avec `RPGMain.getYourUser()`), sans lire l'écran :
+- `getPointers(user)` → `TutorialPointerInfo` (`getPointAt()` = `UIComponentName`,
+  `getActorTutorialName()` = nom d'acteur scene2d) — **la cible de la flèche jaune**.
+- `isAnyPointerShowing()`, `isNarratorShowing(user)`, `getNarrators(user)` (texte).
+- `autoProgressNarrator()` — **passe un dialogue** headless.
+- `RPGMain.getScreenManager().getScreen()` → écran courant ; `BaseScreen.questPointers` →
+  `TutorialPointer.getTarget()` → l'acteur réel (pour un clic aux coords, cf. next step).
+
+**Commandes `DsDriver` ajoutées** (`tutinfo`, `narr`, `autonarr [P]|off`) — **testées** :
+```
+[tut] screen=TutorialAttackScreen INTRO(step=7)
+[tut]   narrator@LOWER_LEFT: Call my Dragon Missile now!
+[tut]   pointAt=ATTACK_SCREEN_HERO_BUTTON actor=ATTACK_SCREEN_HERO_BUTTON4
+```
+`autonarr` a fait défiler seul l'intro (step 2→4→6→7) sans capture ni tap. On connaît écran +
+étape + texte + composant exact à cliquer.
+
+**Prochaine incrément** :
+- [ ] `taparrow` : cliquer l'acteur cible (via `questPointers→getTarget()` puis coords écran).
+      ⚠️ touche l'API scene2d **obfusquée** (`Actor` = `…scene2d.b`, `localToStageCoordinates`
+      renommé) → à faire proprement (réflexion sur noms obfusqués, ou table
+      `UIComponentName → coords`). D'ici là, `tutinfo` donne déjà le composant et on tape aux
+      coords connues.
+- [ ] auto‑clic **`>>` / vague suivante** en combat (élément non‑tuto), sur le modèle `autotap`.
+- Bénéfice : piloter des séquences longues avec très peu de captures.

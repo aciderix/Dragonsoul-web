@@ -203,6 +203,7 @@ public final class DesktopLauncher {
         DsDriver.Host driverHost = new DsDriver.Host() {
             public void screenshot(String file) { pendingShot[0] = file; }
             public void stop() { stopFlag[0] = true; }
+            public com.perblue.rpg.RPGMain game() { return game; }
         };
         String liveFile = System.getProperty("DS_LIVE_FILE");
         String scriptPath = System.getProperty("DS_SCRIPT");

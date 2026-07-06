@@ -25,12 +25,22 @@ import java.util.List;
  *   wait N             advance N frames before running the next command
  *   autotap X Y [P]    auto-fire a tap at (X,Y) every P frames (default 20) until
  *                      "autotap off" — headless skill auto-cast in combat
+ *   tutinfo            print the in-memory tutorial state (step, yellow-arrow target
+ *                      UIComponentName, dialogue text) — know what's on screen, no capture
+ *   narr               advance a showing tutorial dialogue once (headless Tap to Continue)
+ *   autonarr [P]|off   auto-advance dialogues every P frames (default 20) until "off"
  *   screenshot [FILE]  capture the framebuffer (default build/shot.png)
  *   quit               stop the app
  *   # ...              comment
  */
 public final class DsDriver {
-    public interface Host { void screenshot(String file); void stop(); }
+    public interface Host {
+        void screenshot(String file);
+        void stop();
+        /** The live RPGMain, for reading in-memory tutorial/UI state (semi-headless
+         *  driving). May be null before the game is created. */
+        com.perblue.rpg.RPGMain game();
+    }
 
     private final DsInput input;
     private final Host host;
@@ -48,6 +58,11 @@ public final class DsDriver {
     // Used to auto-cast a hero's skill in combat (tap the portrait whenever the skill
     // is ready) without a real-time view — a headless "auto" mode.
     private int autoX = -1, autoY = -1, autoPeriod = 0;
+
+    // AUTO-NARRATOR: while on, auto-advance tutorial dialogues ("Tap to Continue")
+    // headlessly by calling the game's own TutorialHelper.autoProgressNarrator(), so we
+    // don't have to blind-tap through cutscenes. Rate-limited to every autoNarrPeriod frames.
+    private int autoNarrPeriod = 0;
 
     public DsDriver(DsInput input, Host host, List<String> lines) {
         this.input = input; this.host = host; this.liveFile = null;
@@ -71,6 +86,8 @@ public final class DsDriver {
         if (autoPeriod > 0 && frame % autoPeriod == 0) {
             input.touchDown(autoX, autoY, 0); input.touchUp(autoX, autoY, 0);
         }
+        // Auto-narrator: advance any showing tutorial dialogue on its period.
+        if (autoNarrPeriod > 0 && frame % autoNarrPeriod == 0) advanceNarrator();
         if (liveFile != null) { pollLive(frame); return; }
         while (idx < cmds.size() && frame >= resumeAt) {
             if (exec(cmds.get(idx++), frame)) return; // wait/quit yields control
@@ -134,6 +151,13 @@ public final class DsDriver {
                 autoPeriod = t.length > 2 ? Integer.parseInt(t[2]) : 20;
                 break;
             }
+            case "tutinfo": tutInfo(); break;            // print in-memory tutorial/UI state
+            case "narr": advanceNarrator(); break;       // advance a showing dialogue once
+            case "autonarr": {                            // "autonarr [P]" | "autonarr off"
+                if (arg.trim().equalsIgnoreCase("off")) { autoNarrPeriod = 0; break; }
+                autoNarrPeriod = arg.trim().isEmpty() ? 20 : Integer.parseInt(arg.trim());
+                break;
+            }
             case "screenshot": host.screenshot(arg.isEmpty() ? "build/shot.png" : arg.trim()); break;
             case "quit": done = true; host.stop(); return true;
             default: System.out.println("[driver] unknown cmd: " + op);
@@ -164,6 +188,62 @@ public final class DsDriver {
             case "UP": return 19;
             case "DOWN": return 20;
             default: System.out.println("[driver] unknown key: " + name); return -1;
+        }
+    }
+
+    /** Advance a showing tutorial dialogue via the game's OWN narrator progression
+     *  (headless "Tap to Continue"), no-op if none is showing. */
+    private void advanceNarrator() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null) return;
+            com.perblue.rpg.game.objects.User u = g.getYourUser();
+            if (u == null) return;
+            if (com.perblue.rpg.game.tutorial.TutorialHelper.isNarratorShowing(u)) {
+                com.perblue.rpg.game.tutorial.TutorialHelper.autoProgressNarrator();
+            }
+        } catch (Throwable t) {
+            System.out.println("[driver] narr error: " + t);
+        }
+    }
+
+    /** Print the current in-memory tutorial/UI state — active tutorial step, the
+     *  yellow-arrow targets (UIComponentName + text) and any showing dialogue — so we
+     *  know exactly what the game expects next WITHOUT a screenshot. Read-only. */
+    private void tutInfo() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null) { System.out.println("[tut] no game"); return; }
+            com.perblue.rpg.game.objects.User u = g.getYourUser();
+            if (u == null) { System.out.println("[tut] no user (not booted)"); return; }
+            StringBuilder sb = new StringBuilder("[tut]");
+            try {
+                com.perblue.rpg.ui.screens.BaseScreen sc = g.getScreenManager().getScreen();
+                sb.append(" screen=").append(sc == null ? "null" : sc.getClass().getSimpleName());
+            } catch (Throwable ignore) {}
+            for (com.perblue.rpg.network.messages.TutorialActType t
+                    : com.perblue.rpg.network.messages.TutorialActType.valuesCached()) {
+                com.perblue.rpg.game.objects.IUserTutorialAct a = u.getTutorialAct(t);
+                if (a == null) continue;
+                sb.append(" ").append(t).append("(step=").append(a.getStep()).append(")");
+            }
+            System.out.println(sb.toString());
+            boolean narr = com.perblue.rpg.game.tutorial.TutorialHelper.isNarratorShowing(u);
+            System.out.println("[tut] narratorShowing=" + narr);
+            if (narr) for (com.perblue.rpg.game.tutorial.Narrator n
+                    : com.perblue.rpg.game.tutorial.TutorialHelper.getNarrators(u)) {
+                if (n != null) System.out.println("[tut]   narrator@" + n.getLocation() + ": " + n.getText());
+            }
+            boolean ptr = com.perblue.rpg.game.tutorial.TutorialHelper.isAnyPointerShowing();
+            System.out.println("[tut] pointerShowing=" + ptr);
+            for (com.perblue.rpg.game.tutorial.TutorialPointerInfo p
+                    : com.perblue.rpg.game.tutorial.TutorialHelper.getPointers(u)) {
+                if (p != null) System.out.println("[tut]   pointAt=" + p.getPointAt()
+                        + " actor=" + p.getActorTutorialName() + " text=" + p.getPointerText());
+            }
+        } catch (Throwable t) {
+            System.out.println("[driver] tutinfo error: " + t);
+            t.printStackTrace(System.out);
         }
     }
 }
