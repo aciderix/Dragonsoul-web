@@ -79,6 +79,14 @@ public final class DsDriver {
     private int autoCampaignPeriod = 0;
     private int campaignStuckTicks = 0;   // ticks with no navigation progress (wall detection)
 
+    // WAIT-LOADED: the game loads screens ASYNC — getScreen() returns the newly-pushed
+    // screen (so tutinfo sees it) while ScreenManager.render() keeps drawing the PREVIOUS
+    // screen until the new one's LoadState==CREATED. A fixed `wait` can therefore screenshot
+    // the OLD screen (the hub) instead of the target. `waitloaded` yields until the current
+    // top screen is CREATED (+ a short settle for the transition curtain), or a timeout.
+    // -1 = not waiting; >=0 = deadline frame (timeout safety so a broken screen can't hang us).
+    private long waitLoadedDeadline = -1;
+
     public DsDriver(DsInput input, Host host, List<String> lines) {
         this.input = input; this.host = host; this.liveFile = null;
         for (String line : lines) {
@@ -135,6 +143,18 @@ public final class DsDriver {
         }
         // 2. Honour a pending `wait N`: hold the buffered commands until it elapses.
         if (frame < resumeAt) return;
+        // 2b. Honour a pending `waitloaded`: hold until the current top screen finishes
+        //     async creation (CREATED/ERROR) so the next screenshot captures the screen the
+        //     game is actually rendering, not the previous one. On ready, settle a few frames
+        //     for the transition curtain + first paint, then resume.
+        if (waitLoadedDeadline >= 0) {
+            if (frame >= waitLoadedDeadline || screenReady()) {
+                waitLoadedDeadline = -1;
+                resumeAt = frame + 15;
+                return;
+            }
+            return;
+        }
         // 3. Drain complete buffered lines. `wait`/`quit` yield the frame; the rest of
         //    the buffer stays and is drained on a later frame (no new bytes required).
         int nl;
@@ -191,6 +211,10 @@ public final class DsDriver {
                 if (arg.trim().equalsIgnoreCase("off")) { autoNarrPeriod = 0; break; }
                 autoNarrPeriod = arg.trim().isEmpty() ? 20 : Integer.parseInt(arg.trim());
                 break;
+            }
+            case "waitloaded": { // yield until the current screen finishes async-loading (CREATED)
+                long t = arg.trim().isEmpty() ? 900 : Long.parseLong(arg.trim());
+                waitLoadedDeadline = frame + t; return true;
             }
             case "screenshot": host.screenshot(arg.isEmpty() ? "build/shot.png" : arg.trim()); break;
             case "quit": done = true; host.stop(); return true;
@@ -340,6 +364,21 @@ public final class DsDriver {
         } catch (Throwable t) {
             System.out.println("[nav] home error: " + t);
         }
+    }
+
+    /** True when the current top screen has finished async creation (LoadState.CREATED, or
+     *  ERROR — don't hang on a broken screen). The game renders the PREVIOUS screen until the
+     *  pushed one is CREATED, so `waitloaded` polls this before a screenshot to avoid capturing
+     *  the old screen. Modals leave the top screen = the (already-CREATED) hub → ready at once. */
+    private boolean screenReady() {
+        try {
+            com.perblue.rpg.RPGMain g = host.game();
+            if (g == null) return true;
+            com.perblue.rpg.ui.screens.BaseScreen sc = g.getScreenManager().getScreen();
+            if (sc == null) return true;
+            String st = String.valueOf(sc.getLoadState());
+            return st.equals("CREATED") || st.equals("ERROR");
+        } catch (Throwable t) { return true; }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
