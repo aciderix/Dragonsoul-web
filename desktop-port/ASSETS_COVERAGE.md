@@ -36,8 +36,20 @@ Icônes (dégradent déjà en « ? » via `loadOptionalDynamicUI`) : `external_i
 `external_units`, `external_skins`, `external_hero_tags`, `external_flags`, `external_challenges`,
 `external_events`, `external_narrator`, `external_how_to_play`.
 
-## Cible de la fouille multi‑versions (apk.dog)
-Chercher dans **toutes** les versions d'APK dispo : les **~30 squelettes de héros** ci‑dessus, et
-tout `external_*.atlas` (fonds d'écran). Rappel (VERSIONS.md) : le contenu externe a **toujours** été
-CDN même en 1.0.2 — donc chances faibles côté atlas d'écran, mais les **squelettes de héros** peuvent
-être bundlés différemment selon les versions → ça vaut le coup de vérifier.
+## Fouille multi‑versions (apk.dog) — ❌ PROUVÉE INUTILE (2026‑07‑07)
+Vérifié sur **4 versions couvrant toute la vie du jeu** (1.0.2 = 2015 → 2.22.0 = 2019, qu'on a en
+local) :
+- **Les 4 bundlent EXACTEMENT les mêmes 14 squelettes de héros** (diff = 0). Aucune version n'a un
+  héros que Fixed2 n'a pas.
+- **Manifestes d'assets** : `2.22.0‑stock ≡ Fixed2` (diff 0 — Fixed2 = stock 2.22.0 + patch
+  ServerType). Fixed2/2.22.0 est la version la **plus riche** (569 assets) ; les plus vieilles en
+  ont **moins** (2.21.4 = 545, 1.0.2 = 387). Aucune version ne bundle un `external_*`/hero/map/temple
+  que Fixed2 n'a pas.
+- ⇒ Sur **tout** le cycle de vie : mêmes 14 héros, zéro atlas externe, la version qu'on a déjà
+  (Fixed2) = la plus complète. **Les ~30 héros manquants + tous les atlas d'écran ont TOUJOURS été
+  du CDN**, dans **chaque** version.
+
+**Conclusion** : télécharger les ~13 autres versions apk.dog = **inutile** (elles se situent entre
+des versions déjà identiques côté art bundlé). Seules sources d'art manquant = **dumps CDN**
+récupérés (comme `world_additional_heroes.zip`, qui a déjà comblé 50 héros). Méthode de dl apk.dog
+notée dans VERSIONS.md si jamais besoin, mais **sans objet** ici.
