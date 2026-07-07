@@ -28,6 +28,21 @@ umlaut_the_first, dark_hero, claw_man (CLAW_MAN)
 **Note** : un squelette de héros sert **aussi** pour sa version **ennemi** en campagne → chaque
 héros couvert couvre aussi l'ennemi correspondant.
 
+### ⚠️ Test d'intégration d'UN héros (MEDUSA) — 2026‑07‑07 : squelette OK, combat KO
+Placé `world/units/hero_medusa.*` (du zip) + ajouté MEDUSA au roster (temporaire) :
+- ✅ **Menus/portraits** : Medusa **rend parfaitement** (HeroChooser « Choose Your Heroes! » —
+  visage vert cheveux‑serpents), identique aux héros de base. Le **squelette** suffit pour le portrait.
+- ❌ **Combat** : **crash** — `Asset not loaded: world/particles/hero_medusa.atlas`. Chaque héros a
+  **DEUX** atlas requis : `world/units/hero_X.*` (corps, **présent** dans le zip) **ET**
+  `world/particles/hero_X.atlas` (**VFX de skills**, **ABSENT** du zip). Les 14 de base ont leurs
+  particules dans l'APK ; le zip en a **0/50**.
+- ⇒ **Le zip est à moitié complet** : les 50 héros sont **utilisables en menu** mais **plantent en
+  combat** faute de leurs particules (elles aussi perdues, CDN). Pour les rendre **jouables en
+  combat** : soit leurs `world/particles/hero_X.atlas` (irrécupérables), soit un **atlas placeholder
+  de particules** peuplé des régions que le squelette référence (dégradation = pas/peu de VFX, mais
+  pas de crash) — **même technique que le chantier placeholder (A)**. Donc **A est le socle** : il
+  débloque à la fois les écrans (campagne 3+, Temple) **et** le combat des héros récupérés.
+
 ## Écrans / fonds à contenu externe (atlas UI) — art perdu (cf. CONTENT_GATE.md)
 Non couvrables (CDN mort) → placeholder atlas :
 `external_campaign_maps` (cartes chap. 3+), `external_temple`, `external_runes`, `external_crypt`,
