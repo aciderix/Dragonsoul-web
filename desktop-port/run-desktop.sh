@@ -31,6 +31,12 @@ mkdir -p "$MRK/ETC/XHDPI/world/units" "$MRK/ETC/XHDPI/ui" "$MRK/sound"
 : > "$MRK/ETC/XHDPI/ui/external_skins.atlas"
 : > "$MRK/sound/war_you_won_broken_shield.ogg"
 
+# Recovered real assets that the game (2.22.0) still references but dropped from its bundle.
+# combat_stun.ogg (the stun SFX, referenced by 4 game classes) shipped only in 1.0.2 (2015) and
+# was later CDN-only; mined back from that version. Copy the committed real file into the content
+# dir so the game plays it instead of silently missing it. See ASSETS_COVERAGE.md.
+[ -d recovered-assets ] && cp -rn recovered-assets/* "$MRK/" 2>/dev/null || true
+
 # classpath resources (real game data): the APK's .tab/.properties/.glsl live at
 # classpath root (com/perblue/...), loaded via ClassLoader.getResourceAsStream.
 # dex2jar dropped them, so extract everything that isn't assets/res/lib/dex.

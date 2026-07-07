@@ -53,3 +53,20 @@ local) :
 des versions déjà identiques côté art bundlé). Seules sources d'art manquant = **dumps CDN**
 récupérés (comme `world_additional_heroes.zip`, qui a déjà comblé 50 héros). Méthode de dl apk.dog
 notée dans VERSIONS.md si jamais besoin, mais **sans objet** ici.
+
+### Minage EXHAUSTIF des 26 versions (2026‑07‑07) — 1.0.2 → 2.22.0 + iOS
+Diff normalisé (densité/langue neutralisées) de **toutes** les versions vs 2.22.0 :
+- **6 assets seulement** existent dans une ancienne version et **pas** dans 2.22.0 :
+  `sound/combat_stun.ogg`, `ui/logo_gradient_bg.png`, `world/particles/thought_bubble_icons.atlas`
+  (+etc1), `world/units/monster_wraith0.skel`, `monster_wraith1.skel`.
+- **Référencés par le code 2.22.0 ?** Seul **`combat_stun.ogg`** l'est (4 classes) → **récupéré** de
+  1.0.2 dans `recovered-assets/sound/` (le jeu le rejoue au lieu d'un silence). Les 5 autres = **0
+  référence** (obsolètes) → ignorés.
+- **iOS (IPA)** : mêmes 14 héros, aucun `external_*`, textures PVRTC. Rien de neuf.
+- **Zéro** `external_*` / `chapter_*map` dans **tout** le corpus 26 versions + iOS.
+- 2.22.0 a **194 assets de plus** que 1.0.2 → notre version est la **plus riche** (quasi‑sur‑ensemble).
+
+**Verdict FINAL (verrouillé)** : l'art manquant (30 héros + atlas d'écran) est **irrécupérable** —
+absent de **toutes** les versions Android (26), de l'**iOS**, des 2 repos, de tous les buckets S3 et
+de Wayback. C'était du CDN, mort. **Seul gain du minage = `combat_stun.ogg`.** On construit avec ce
+qu'on a (63/93 héros + campagne + tuto).
